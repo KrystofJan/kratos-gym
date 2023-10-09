@@ -1,20 +1,15 @@
 const express = require('express');
-const app = express();
+const dbHandler = require('./dbHandler/DatabaseHandler.js');
+const apiLogger = require('./ApiLoggerLogic/ApiLogger');
 const mysql = require('mysql2');
+const app = express();
 const PORT = 8080;
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'admin',
-    password: 'admin',
-    database: 'Kratos',
-  });
-db.connect((err) =>{
-    if(err){
-        console.log("an error occured while trying to connect to the database!\nError: "+ err);
-    }
-    console.log('Connected to the MySQL database');
-});
+// db connect
+const handler = new dbHandler();
+
+handler.dbConnect();
+
 app.use(express.json());
 
 
@@ -23,26 +18,23 @@ app.listen(
     () => console.log(`Running on http://localhost:${PORT}`)
 );
 
-app.get('reservations', (request, response) => {})
-
 app.get('/api/reservations', (req, res) => {
     // Query the database to retrieve data
-    db.query('SELECT * FROM Reservation', (err, results) => {
-      if (err) {
-        console.error('Error querying the database:', err);
-        res.status(500).json({ error: 'Internal Server Error' });
-        return;
-      }
-      
-      res.json(results);
-    });
+      handler.dbSelectALlReservations(res, req);
+    
   });
-app.get('/tshirt',(request, response) =>
-{
-    response.status(200).send(
-        {
-            tshirt: 'asd',
-            size: 'xxl'
-        }
-    )
+
+
+app.get('/api/suggestMachines/:id', (req, res) => {
+  // db.query('SELECT * FROM Reservation', (err, results) => {
+  //   if (err) {
+  //     console.error('Error querying the database:', err);
+  //     apiLogger.logApi(err);
+  //     res.status(500).json({ error: 'Internal Server Error' });
+  //     return;
+  //   }
+    
+  //   res.json(results);
+  //   apiLogger.logApi("Get request on the Reservations endpoint was Successfull!")
+  // });
 });
