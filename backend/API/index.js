@@ -19,22 +19,9 @@ app.listen(
 );
 
 app.get('/api/reservations', (req, res) => {
-    // Query the database to retrieve data
-      handler.dbSelectALlReservations(res, req);
-    
-  });
-
+      handler.dbSelectALlReservations(res, req);    
+});
 
 app.get('/api/suggestMachines/:id', (req, res) => {
-  // db.query('SELECT * FROM Reservation', (err, results) => {
-  //   if (err) {
-  //     console.error('Error querying the database:', err);
-  //     apiLogger.logApi(err);
-  //     res.status(500).json({ error: 'Internal Server Error' });
-  //     return;
-  //   }
-    
-  //   res.json(results);
-  //   apiLogger.logApi("Get request on the Reservations endpoint was Successfull!")
-  // });
+    handler.dbRecommendMachine(res, req.params['id']);
 });

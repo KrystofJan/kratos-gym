@@ -33,7 +33,9 @@ create table WrkOutMachine(
     WrkOutMachineId int not null primary key auto_increment,
     MachineName varchar(64) not null,
     MaxWeight float,
-    MinWeight float
+    MinWeight float,
+    AvgTimeTaken int not null default 300,
+    PopularityScore int not null default 0
 );
 
 create table MachineExerciseTypes(

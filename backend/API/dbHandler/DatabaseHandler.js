@@ -29,10 +29,45 @@ class DatabaseHandler{
             }
 
             res.json(results);
-            console.log(handler.dbSelectALlReservations());
+
             apiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
         });
     }
 
+    dbRecommendMachine(res,id){
+        var reg = /^\d+$/;
+        if (!reg.test(id)){
+            console.error('Cannot use this ID', id);
+            res.status(500).json({ error: 'Cannot pass in id that\'s not a number! Id: '+ id });
+            apiLogger.logApi("Cannot use this WrkOutMachineId ! --" + id);
+            return;
+        }
+        this.db.query(
+        'SELECT wm.WrkOutMachineId, wm.MachineName, ET.ExerciseTypeName, ET.BodyPart, wm.PopularityScore '+
+        'FROM WrkOutMachine wm inner join MachineExerciseTypes met on wm.WrkOutMachineId = met.WrkOutMachineId ' +         
+        'inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId ' +
+        'Where ET.BodyPart in ( ' +
+            'select  DISTINCT BodyPart '+
+            'from MachineExerciseTypes met inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId '+
+            'where met.WrkOutMachineId = ' + id +') ' +
+        'and ET.Category in ( ' +
+            'select Category '+
+            'From MachineExerciseTypes met inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId '+
+            'Where met.WrkOutMachineId = ' + id + ') '+
+        'and wm.WrkOutMachineId != ' + id + ' ' +
+        'order by wm.PopularityScore desc ' +
+        'LIMIT 5'
+        ,(err, results) => {
+            if (err) {
+              console.error('Error querying the database:', err);
+              apiLogger.logApi(err);
+              res.status(500).json({ error: 'Internal Server Error' });
+              return;
+            }
+            res.json(results);
+
+            apiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
+        });
+    }
 }
 module.exports = DatabaseHandler;
