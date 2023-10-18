@@ -48,7 +48,9 @@ create table MachineExerciseTypes(
 
 create table WrkOutPlan(
     WrkOutPlanId int not null PRIMARY KEY auto_increment,
-    PlanName varchar(64) not null
+    PlanName varchar(64) not null,
+    UserId int not null,
+    foreign key (UserId) references User(UserId)
 );
 
 create table WrkOutPlanType(
@@ -62,6 +64,7 @@ create table WrkOutPlanType(
 create table WrkOutPlanMachines(
     WrkOutPlanId int not null,
     WrkOutMachineId int not null,
+    WrkOutTime DATETIME not null,
     sets int not null default 4,
     reps int not null default 8,
     FOREIGN KEY (WrkOutPlanId) references WrkOutPlan(WrkOutPlanId),
@@ -80,3 +83,19 @@ create table Reservation(
     FOREIGN KEY (TrainerId) references User(UserId),
     FOREIGN KEY (WrkoutPlanId) references WrkOutPlan(WrkOutPlanId)
 );
+
+create table WrkOutPlanPreset(
+    WrkOutPlanPresetId int not null primary key,
+    PresetName varchar(64) not null,
+    AuthorId int not null,
+    FOREIGN KEY (AuthorId) references User(UserId)
+)
+create table WrkOutPlanMachinesPreset(
+    WrkOutPlanMachinesPreset int not null,
+    WrkOutMachineId int not null,
+    sets int not null default 4,
+    reps int not null default 8,
+    FOREIGN KEY (WrkOutPlanMachinesPreset) references WrkOutPlan(WrkOutPlanId),
+    FOREIGN KEY (WrkOutMachineId) references WrkOutMachine(WrkOutMachineId),
+    PRIMARY KEY (WrkOutPlanMachinesPreset, WrkOutMachineId)
+)
