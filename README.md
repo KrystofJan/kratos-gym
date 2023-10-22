@@ -1,8 +1,9 @@
 # gym-reservation-system
-## Update Oct 18. 2023
+## Update Oct 22. 2023
 * Added AddCredits Procedure
 * Added DatabaseValidators class where all the validation is going to be in
 * Added get specific reservation endpoint
+  
 ## Update Oct 18. 2023
 * Added WrkOutTime to WekOutPlanMachine table for time suggestion
 * Added presets to db
