@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
 const apiLogger = require('../ApiLoggerLogic/ApiLogger');
-
+const Validators = require('./DatabaseValidators');
 class DatabaseHandler{
     constructor(){
         this.db = mysql.createConnection({
@@ -16,6 +16,14 @@ class DatabaseHandler{
                 apiLogger.logApi("an error occured while trying to connect to the database!\nError: "+ err);
             }
             apiLogger.logApi('Connected to the MySQL database');
+        });
+    }
+    dbDisconnect(){
+        this.db.end((err) => {
+            if(err){
+                apiLogger.logApi("an error occured while trying to disconnectiong to the database!\nError: "+ err);
+            }
+            apiLogger.logApi('Disconnected from the MySQL database');
         });
     }
 
@@ -35,8 +43,7 @@ class DatabaseHandler{
     }
 
     dbRecommendMachine(res,id){
-        var reg = /^\d+$/;
-        if (!reg.test(id)){
+        if(!Validators.validateNumericId(id)){
             console.error('Cannot use this ID', id);
             res.status(500).json({ error: 'Cannot pass in id that\'s not a number! Id: '+ id });
             apiLogger.logApi("Cannot use this WrkOutMachineId ! --" + id);
@@ -66,6 +73,25 @@ class DatabaseHandler{
             }
             res.json(results);
 
+            apiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
+        });
+    }
+
+    dbSelectSpecificReservation(res,id){
+        if(!Validators.validateNumericId(id)){
+            console.error('Cannot use this ID', id);
+            res.status(500).json({ error: 'Cannot pass in id that\'s not a number! Id: '+ id });
+            apiLogger.logApi("Cannot use this ReservationId ! --" + id);
+        }
+
+        this.db.query('SELECT * FROM Reservation WHERE ReservetionId = ' + id + ';', (err, results) => {
+            if (err) {
+              console.error('Error querying the database:', err);
+              apiLogger.logApi(err);
+              res.status(500).json({ error: 'Internal Server Error' });
+              return;
+            }
+            res.json(results);
             apiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
         });
     }

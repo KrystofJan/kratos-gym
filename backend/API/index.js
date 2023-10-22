@@ -22,6 +22,13 @@ app.get('/api/reservations', (req, res) => {
       handler.dbSelectALlReservations(res, req);    
 });
 
+app.get('/api/reservations/:id', (req, res) => {
+    handler.dbSelectSpecificReservation(res ,req.params['id']);
+})
+
+// app.get()
+
 app.get('/api/suggestMachines/:id', (req, res) => {
     handler.dbRecommendMachine(res, req.params['id']);
 });
+

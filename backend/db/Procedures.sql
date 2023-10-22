@@ -13,3 +13,19 @@ BEGIN
         end if;
     commit;
 end;
+
+DROP PROCEDURE IF EXISTS AddCredits;
+Create procedure if not exists AddCredits(In usrId int, In creditAmmout int)
+BEGIN
+    Declare oldCredits int;
+    DECLARE newCredits int;
+    START TRANSACTION ;
+        if creditAmmout <= 0 then
+            set oldCredits = (select credits from User where UserId = usrId);
+            set newCredits = oldCredits + creditAmmout;
+            Update User set User.credits = newCredits where UserId = usrId;
+        else
+            rollback;
+        end if;
+    commit;
+end;

@@ -98,4 +98,4 @@ create table WrkOutPlanMachinesPreset(
     FOREIGN KEY (WrkOutPlanMachinesPreset) references WrkOutPlan(WrkOutPlanId),
     FOREIGN KEY (WrkOutMachineId) references WrkOutMachine(WrkOutMachineId),
     PRIMARY KEY (WrkOutPlanMachinesPreset, WrkOutMachineId)
-)
+);
