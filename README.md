@@ -1,4 +1,8 @@
 # gym-reservation-system
+## Update Oct 24. 2023
+* Init Vue.js frontend
+* Added ```run.sh``` bash script that runs api and frontend at the same time
+
 ## Update Oct 22. 2023
 * Added AddCredits Procedure
 * Added DatabaseValidators class where all the validation is going to be in
