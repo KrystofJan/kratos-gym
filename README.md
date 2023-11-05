@@ -1,4 +1,10 @@
 # gym-reservation-system
+
+## Update Nov 5. 2023
+* Added HeroBanner, Footer and Appheader Components
+* Added basic Admin, AboutUs, Contacts, Home and Reservation Views
+* Dynamicaly changing content
+
 ## Update Oct 24. 2023
 * Init Vue.js frontend
 * Added ```run.sh``` bash script that runs api and frontend at the same time

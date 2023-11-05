@@ -3,7 +3,7 @@
 </script>
 
 <template>
-<h1>ADmin</h1>
+<h1>Admin</h1>
 </template>
 
 <style scoped>
