@@ -2,7 +2,8 @@
 export default{
   mathods: {
     toggleMenu(){
-      const menu = document.querySelector('')
+      const menu = document.querySelector('.NavMenu');
+      menu.classList.toggle("closed");
     }
   }
 }
@@ -14,7 +15,7 @@ export default{
         <h1>Kratos Gym</h1>
       </div>
       <nav class="NavMenu">
-        <div v-on:click="{}" class="exit">x</div>
+        <div v-on:click="toggleMenu()" class="exit">x</div>
         <div class="hamburger">
           <div class="line"></div>
           <div class="line"></div>

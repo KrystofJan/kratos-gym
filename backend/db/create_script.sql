@@ -34,7 +34,8 @@ create table WrkOutMachine(
     MachineName varchar(64) not null,
     MaxWeight float,
     MinWeight float,
-    AvgTimeTaken int not null default 300,
+    MaxPeople int not null default 2,
+    AvgTimeTaken int not null default 300, -- average after every reservation
     PopularityScore int not null default 0
 );
 
@@ -67,6 +68,8 @@ create table WrkOutPlanMachines(
     WrkOutTime DATETIME not null,
     sets int not null default 4,
     reps int not null default 8,
+    WrkOutStartTime datetime not null,
+    WrkOutEndTime datetime not null,
     FOREIGN KEY (WrkOutPlanId) references WrkOutPlan(WrkOutPlanId),
     FOREIGN KEY (WrkOutMachineId) references WrkOutMachine(WrkOutMachineId),
     PRIMARY KEY (WrkOutPlanId, WrkOutMachineId)

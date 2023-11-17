@@ -3,20 +3,14 @@ export default{
     data(){
         // change the structure to for and change the format of the return object
         return{
-            banner1: {
-              heading: "Reservations",
-              text: "Our gym works on a super modern online reservation system. You can make a reservation for yourself or multiple people! Create your reservation today and begin your self improvement journey!"
-            },
-            banner2: {
-              heading: "Trainers",
-              text: "We employ multiple trainers that can help you with your work out. You can pick one yourself, or one can be assigned to you."
-            },
-            banner3: {
-              heading: "Machinery",
-              text: "We strive for the most safe and effective work out. That means that we have both modern machines and oldschool machines that you will find in every gym!"
-            }
+            banners: {}
         }
-    }
+      },
+      created() {
+          fetch("../../siteContent/_hp-hero-banner-content.json") 
+              .then((res) => res.json())
+              .then((data) => this.banners = data);
+      } 
 }
 </script>
 
@@ -24,23 +18,23 @@ export default{
   
   <section class="HeroBanners">
     <article class="HeroBanners-banner">
-        <h3 class="HeroBanners-banner-heading">{{ this.banner1.heading }}</h3>
+        <h3 class="HeroBanners-banner-heading">{{ this.banners[0].heading }}</h3>
       <div class="HeroBanners-banner-content">
-        <p class="HeroBanners-banner-content-text">{{ this.banner1.text }}</p>
+        <p class="HeroBanners-banner-content-text">{{ this.banners[0].text }}</p>
       </div>
     </article>    
 
     <article class="HeroBanners-banner">
-        <h3 class="HeroBanners-banner-heading">{{ this.banner2.heading }}</h3>
+        <h3 class="HeroBanners-banner-heading">{{ this.banners[1].heading }}</h3>
       <div class="HeroBanners-banner-content">
-        <p class="HeroBanners-banner-content-text">{{ this.banner2.text }}</p>
+        <p class="HeroBanners-banner-content-text">{{ this.banners[1].text }}</p>
       </div>
     </article>
 
     <article class="HeroBanners-banner">
-        <h3 class="HeroBanners-banner-heading">{{ this.banner3.heading }}</h3>
+        <h3 class="HeroBanners-banner-heading">{{ this.banners[2].heading }}</h3>
       <div class="HeroBanners-banner-content">
-        <p class="HeroBanners-banner-content-text">{{ this.banner3.text }}</p>
+        <p class="HeroBanners-banner-content-text">{{ this.banners[2].text }}</p>
       </div>
     </article>
   </section>
