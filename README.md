@@ -1,5 +1,9 @@
 # gym-reservation-system
 
+## Update Nov 17. 2023
+* Added more functionality to db - canDisturb, TimeTaken etc.
+* Fetching data from separate files
+
 ## Update Nov 5. 2023
 * Added HeroBanner, Footer and Appheader Components
 * Added basic Admin, AboutUs, Contacts, Home and Reservation Views
