@@ -1,0 +1,9 @@
+{
+    "Address": "AddressId",
+    "Reservation": "ReservetionId",
+    "ExerciseType": "ExerciseTypeId",
+    "User": "UserId",
+    "WrkOutMachine": "WrkOutMachineId",
+    "WrkOutPlan": "WrkOutPlanId",
+    "WrkOutPlanPreset": "WrkOutPlanPresetId"
+}

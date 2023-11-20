@@ -1,4 +1,7 @@
 # gym-reservation-system
+## Update Nov 20. 2023
+* Refractoring -> Implemented models, which represent endpoint data. I also Access db with these models. Might put to a separate class later (for now I have 2 requests that work like this. get all Addresses and get reservation by ip)
+* Fetching db key names from json
 
 ## Update Nov 17. 2023
 * Added more functionality to db - canDisturb, TimeTaken etc.
