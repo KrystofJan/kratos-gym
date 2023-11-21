@@ -3,7 +3,7 @@ export default{
     data(){
         // change the structure to for and change the format of the return object
         return{
-            banners: {}
+            banners: []
         }
       },
       created() {
@@ -17,24 +17,10 @@ export default{
 <template>
   
   <section class="HeroBanners">
-    <article class="HeroBanners-banner">
-        <h3 class="HeroBanners-banner-heading">{{ this.banners[0].heading }}</h3>
+    <article class="HeroBanners-banner" v-for="banner in banners">
+      <h3 class="HeroBanners-banner-heading">{{ banner.heading }}</h3>
       <div class="HeroBanners-banner-content">
-        <p class="HeroBanners-banner-content-text">{{ this.banners[0].text }}</p>
-      </div>
-    </article>    
-
-    <article class="HeroBanners-banner">
-        <h3 class="HeroBanners-banner-heading">{{ this.banners[1].heading }}</h3>
-      <div class="HeroBanners-banner-content">
-        <p class="HeroBanners-banner-content-text">{{ this.banners[1].text }}</p>
-      </div>
-    </article>
-
-    <article class="HeroBanners-banner">
-        <h3 class="HeroBanners-banner-heading">{{ this.banners[2].heading }}</h3>
-      <div class="HeroBanners-banner-content">
-        <p class="HeroBanners-banner-content-text">{{ this.banners[2].text }}</p>
+        <p class="HeroBanners-banner-content-text">{{ banner.text }}</p>
       </div>
     </article>
   </section>

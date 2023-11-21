@@ -12,7 +12,7 @@ export default{
 <template>
     <header>
       <div id="header">
-        <h1>Kratos Gym</h1>
+        <img src="../assets/logo.svg" alt="KratosGym logo">
       </div>
       <nav class="NavMenu">
         <div v-on:click="toggleMenu()" class="exit">x</div>
@@ -35,7 +35,9 @@ export default{
             <router-link to="/contacts" class="menu-link">Contacts</router-link>
           </li>
         </ul>
-        <h2 class="NavMenu-item NavMenu-logo">Kratos</h2>
+        <div class="NavMenu-item NavMenu-logo">
+          <img src="../assets/logo.svg" alt="KratosLogo" height="35">
+        </div>
         <ul class="NavMenu-item NavMenu-list NavMenu-iconMenu">
           <li class="NavMenu-list-item NavMenu-iconMenu-item">
             <router-link to="/" class="menu-link">icon</router-link>
@@ -83,7 +85,7 @@ export default{
   width: 100%;
   background: #e2e2e2;
   
-  h1{
+  img{
     color: #2d2d2d;
     padding: 1rem;
     font-size: 3rem;
@@ -93,9 +95,9 @@ export default{
   }
 }
 
-
 .NavMenu{
   display: flex;
+  height: 6rem;
   width: 100%;
   justify-content: space-between;
   align-items: center;
@@ -127,11 +129,15 @@ export default{
   }
 
   &-logo{
+    opacity: 0;
+    transition: all .2s ease-in-out;
 
     @media (max-width: 1050px) {
       display: none;
+    }
   }
-  }
+
+
   &-list{
     display:flex;
     justify-content: stretch;
@@ -176,6 +182,27 @@ export default{
     @media (max-width: 1050px){   
       justify-content: center;
     }
+  }
+}
+
+.sticky{
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity:.9;
+  z-index: 99999;
+  background: white;
+  height: 4rem;
+  transition: .2s all ease-in-out;
+
+
+  &:hover{
+    opacity: 1;
+    height: 6rem;
+  }
+  
+  .NavMenu-logo{
+    opacity: 1;
   }
 }
 

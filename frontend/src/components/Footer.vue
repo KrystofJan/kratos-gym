@@ -2,7 +2,8 @@
 export default{
     data(){
         return{
-            footer_cols: {}
+            footer_cols: [],
+            linkTest: '/reservations'
         }
       },
       created() {
@@ -17,90 +18,16 @@ export default{
 <template>
     <footer class="FooterWrapper">
         <div class="Footer">
-            <!-- TODO Use v-for -->
-            <!-- <div class="Footer-col" v-for="{fc in footer_cols}">{{fc}}</div> -->
-            <div class="Footer-col">
-                <h3 class="Footer-col-heading">{{ this.footer_cols[0].footerColHeading }}</h3>
+            <div class="Footer-col" v-for="col in footer_cols">
+                <h3 class="Footer-col-heading">{{ col.footerColHeading }}</h3>
                 <ul class="Footer-col-links">
-                    <!-- Pass into separate -->
-                    <li class="FooterColItem">
-                        <router-link class="FooterColItem-link" to="{{ this.footer_cols[0].footerColLinks[0].link }}">
-                        {{ this.footer_cols[0].footerColLinks[0].text }}
-                        </router-link>
-                    </li>
-                    <li class="FooterColItem">
-                        <router-link class="FooterColItem-link" to="{{ this.footer_cols[0].footerColLinks[1].link }}">
-                        {{ this.footer_cols[0].footerColLinks[1].text }}
-                        </router-link>
-                    </li>
-
-                    <li class="FooterColItem">
-                        <router-link class="FooterColItem-link" to="{{ this.footer_cols[0].footerColLinks[2].link }}">
-                        {{ this.footer_cols[0].footerColLinks[2].text }}
-                        </router-link>
-                    </li>
-                    <li class="FooterColItem">
-                        <router-link class="FooterColItem-link" to="{{ this.footer_cols[0].footerColLinks[3].link }}">
-                        {{ this.footer_cols[0].footerColLinks[3].text }}
-                        </router-link>
-                    </li>
-                    <li class="FooterColItem">
-                        <router-link class="FooterColItem-link" to="{{ this.footer_cols[0].footerColLinks[4].link }}">
-                        {{ this.footer_cols[0].footerColLinks[4].text }}
-                        </router-link>
-                    </li>
-
-                    <li class="FooterColItem">
-                        <router-link class="FooterColItem-link" to="{{ this.footer_cols[0].footerColLinks[5].link }}">
-                        {{ this.footer_cols[0].footerColLinks[5].text }}
-                        </router-link>
-                    </li>
-
-                    <li class="FooterColItem">
-                        <router-link class="FooterColItem-link" to="{{ this.footer_cols[0].footerColLinks[6].link }}">
-                        {{ this.footer_cols[0].footerColLinks[6].text }}
+                    <li class="FooterColItem" v-for="link in col.footerColLinks">
+                        <router-link class="FooterColItem-link" :to="link.link">
+                        {{ link.text }}
                         </router-link>
                     </li>
                 </ul>
             </div>
-            <div class="Footer-col">
-                <h3 class="Footer-col-heading">{{ this.footer_cols[1].footerColHeading }}</h3>
-                <ul class="Footer-col-links">
-                    <!-- Pass into separate -->
-                    <li class="FooterColItem">
-                        <router-link class="FooterColItem-link" to="{{ this.footer_cols[1].footerColLinks[0].link }}">
-                        {{ this.footer_cols[1].footerColLinks[0].text }}
-                        </router-link>
-                    </li>
-                    <li class="FooterColItem">
-                        <router-link class="FooterColItem-link" to="{{ this.footer_cols[1].footerColLinks[1].link }}">
-                        {{ this.footer_cols[1].footerColLinks[1].text }}
-                        </router-link>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="Footer-col">
-                <h3 class="Footer-col-heading">{{ this.footer_cols[2].footerColHeading }}</h3>
-                <ul class="Footer-col-links">
-                    <!-- Pass into separate -->
-                    <li class="FooterColItem">
-                        <router-link class="FooterColItem-link" to="{{ this.footer_cols[2].footerColLinks[0].link }}">
-                        {{ this.footer_cols[2].footerColLinks[0].text }}
-                        </router-link>
-                    </li>
-                    <li class="FooterColItem">
-                        <router-link class="FooterColItem-link" to="{{ this.footer_cols[2].footerColLinks[1].link }}">
-                        {{ this.footer_cols[2].footerColLinks[1].text }}
-                        </router-link>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="copyright">
-            <div class="col">All rights reserved c2048</div>
-            <div class="col">Site made by Jan-Krystof Zahradnik</div>
-            <div class="col">Contact krystofjan.com for websites like this</div>
         </div>
     </footer>
 </template>
