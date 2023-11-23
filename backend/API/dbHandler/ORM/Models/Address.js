@@ -1,9 +1,6 @@
-const dbHandler = require('../../DatabaseHandler');
+const RelationalModel = require('./RelationalModel');
 
-class Address{
-
-    constructor(){
-    }
+class Address extends RelationalModel{
 
     constructFromJson(jsonData){
         this.street = jsonData.Street,
@@ -25,12 +22,11 @@ class Address{
     }
     
     getAll(res, req){
-        const handler = new dbHandler();
-        handler.dbConnect();
+        this.handler.dbConnect();
 
-        handler.dbSelectAll(res, "Address");
+        this.handler.dbSelectAll(res, "Address");
 
-        handler.dbDisconnect();
+        this.handler.dbDisconnect();
     }
 }
 module.exports = Address;

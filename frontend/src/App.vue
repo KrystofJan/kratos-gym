@@ -16,16 +16,16 @@ export default{
     stickyScroll(){
       const navbar = document.querySelector('.NavMenu');
 
-      const logoHeader = document.querySelector('#header');
-      if (window.scrollY > logoHeader.offsetHeight){
+      console.log(window.scrollY);
+      if (window.scrollY > navbar.offsetTop){
           navbar.classList.add('sticky');
-          console.log("eee");
-
       }
       else{
-          navbar.classList.remove('sticky');
-          console.log("aaa");
+        navbar.classList.remove('sticky');
       }
+    },
+    toggleMenu(){
+      console.log("esketit");
     }
   }
 }

@@ -1,10 +1,7 @@
 <script>
 export default{
   mathods: {
-    toggleMenu(){
-      const menu = document.querySelector('.NavMenu');
-      menu.classList.toggle("closed");
-    }
+    
   }
 }
 </script>
@@ -124,7 +121,7 @@ export default{
     cursor: pointer;
 
     @media (max-width: 1050px) {
-      display: block;
+      display: none;
     }
   }
 
