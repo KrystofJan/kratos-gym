@@ -22,11 +22,12 @@ class Address extends RelationalModel{
     }
     
     getAll(res, req){
-        this.handler.dbConnect();
+        // console.log(this.handler);
+        this.dbHandler.dbConnect();
 
-        this.handler.dbSelectAll(res, "Address");
+        this.dbHandler.dbSelectAll(res, "Address");
 
-        this.handler.dbDisconnect();
+        this.dbHandler.dbDisconnect();
     }
 }
 module.exports = Address;

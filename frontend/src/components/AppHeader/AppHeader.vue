@@ -9,7 +9,7 @@ export default{
 <template>
     <header>
       <div id="header">
-        <img src="../assets/logo.svg" alt="KratosGym logo">
+        <img src="../../assets/logo.svg" alt="KratosGym logo">
       </div>
       <nav class="NavMenu">
         <div v-on:click="toggleMenu()" class="exit">x</div>

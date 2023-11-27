@@ -20,6 +20,7 @@ create table User(
     LastOnline DATE not null,
     Password varchar(128) not null,
     AddressId int not null ,
+    credits int not null default 0,
     Foreign Key (AddressId) references Address(AddressId)
 );
 

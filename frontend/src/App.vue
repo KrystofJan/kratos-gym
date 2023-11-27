@@ -1,5 +1,5 @@
 <script>
-import AppHeader from './components/AppHeader.vue';
+import AppHeader from './components/AppHeader/AppHeader.vue';
 import Footer from './components/Footer.vue'
 export default{
   created () {
@@ -16,7 +16,6 @@ export default{
     stickyScroll(){
       const navbar = document.querySelector('.NavMenu');
 
-      console.log(window.scrollY);
       if (window.scrollY > navbar.offsetTop){
           navbar.classList.add('sticky');
       }

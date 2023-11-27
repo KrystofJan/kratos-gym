@@ -6,10 +6,10 @@ const dbKeys = require('./keys/table-keys.json');
 class DatabaseHandler{
     constructor(){
         this.db = mysql.createConnection({
-            host: 'localhost',
-            user: 'admin',
-            password: 'admin',
-            database: 'Kratos',
+            host: 'sql11.freemysqlhosting.net',
+            user: 'sql11663970',
+            password: 'twTx1wH3pI',
+            database: 'sql11663970',
           });
     }
     dbConnect(){
@@ -58,8 +58,9 @@ class DatabaseHandler{
 
             res.json(results);
 
-            const addr = new Address();
-            addr.constructFromJson(results[0]);
+            // Construct model
+            // const addr = new Address();
+            // addr.constructFromJson(results[0]);
 
             apiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
         });
