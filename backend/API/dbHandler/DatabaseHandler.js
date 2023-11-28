@@ -153,7 +153,7 @@ class DatabaseHandler{
                   res.status(500).json({ error: 'Internal Server Error' });
                   reject(err);
                 }
-                res.json(results);
+                // res.json(results);
                 resolve(results);
                 apiLogger.logApi("Get request on the " + tableName +" endpoint was Successfull!");
                 

@@ -9,7 +9,6 @@ class Address extends RelationalModel{
         this.country = jsonData.Country,
         this.buildingNumber = jsonData.BuildingNumber,
         this.apartmentNumber = jsonData.ApartmentNumber
-        console.log(this);
     }
     
     constructFromData(street, city, postalCode, country, buildingNumber, apartmentNumber){

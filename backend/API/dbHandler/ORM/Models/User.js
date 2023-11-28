@@ -1,23 +1,51 @@
 class User{
-    constructor(){
-    }
 
     constructFromJson(jsonData){
-        this.street = jsonData.Street,
-        this.city = jsonData.City,
-        this.postalCode = jsonData.PostalCode,
-        this.country = jsonData.Country,
-        this.buildingNumber = jsonData.BuildingNumber,
-        this.apartmentNumber = jsonData.ApartmentNumber
-        console.log(this);
+        this.userId = jsonData.UserId;
+        this.firstName = jsonData.FirstName;
+        this.lastName = jsonData.LastName;
+        this.role = jsonData.Role;
+        this.email = jsonData.Email;
+        this.phoneNumber = jsonData.PhoneNumber;
+        this.isActive = jsonData.IsActive;
+        this.createDate = jsonData.CreateDate;
+        this.lastOnline = jsonData.LastOnline;
+        this.password = jsonData.Password;
+        this.address = jsonData.Address;
+        this.credits = jsonData.credits;
     }
     
     constructFromData(street, city, postalCode, country, buildingNumber, apartmentNumber){
-        this.street = street;
-        this.city = city;
-        this.postalCode = postalCode;
-        this.country = country;
-        this.buildingNumber = buildingNumber;
-        this.apartmentNumber = apartmentNumber;
+        this.userId = userId;
+        this.firstName = firstName;
+        // TODO: Finish
+
+        // this.lastName = jsonData.LastName;
+        // this.role = jsonData.Role;
+        // this.email = jsonData.Email;
+        // this.phoneNumber = jsonData.PhoneNumber;
+        // this.isActive = jsonData.isActive;
+        // this.createDate = jsonData.CreateDate;
+        // this.lastOnline = jsonData.LastOnline;
+        // this.password = jsonData.Password;
+        // this.Address = jsonData.Address;
     }
+
+    constructJson(addr){
+        return{
+            "UserId": this.userId,
+            "FirstName": this.firstName,
+            "LastName": this.lastName,
+            "Role": this.role,
+            "Email": this.email,
+            "PhoneNumber": this.phoneNumber,
+            "IsActive": this.isActive,
+            "CreateDate": this.createDate,
+            "LastOnline": this.lastOnline,
+            "AddressId": (addr)? this.address:null,
+            "credits": this.credits
+        }
+    }
+    
 }
+module.exports = User;

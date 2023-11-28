@@ -34,7 +34,7 @@ app.get('/api/address', (req, res) => {
 
 app.get('/api/reservations/:id', (req, res) => {
     const reserv = new Reservation();
-    reserv.getId(res ,req.params['id']);
+    const resp = reserv.constructFromJson(reserv.getId(res ,req.params['id']));
 })
 
 // // app.get()
