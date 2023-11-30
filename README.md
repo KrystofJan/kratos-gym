@@ -1,4 +1,8 @@
 # gym-reservation-system
+## Update Nov 30. 2023
+* Refractored the whole backend
+* Fixed some issues in frontend
+
 ## Update Nov 21. 2023
 * Optimising frontend components
 * fixed footer links

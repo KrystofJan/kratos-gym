@@ -33,7 +33,7 @@ export default{
           </li>
         </ul>
         <div class="NavMenu-item NavMenu-logo">
-          <img src="../assets/logo.svg" alt="KratosLogo" height="35">
+          <img src="../../assets/logo.svg" alt="KratosLogo" height="35">
         </div>
         <ul class="NavMenu-item NavMenu-list NavMenu-iconMenu">
           <li class="NavMenu-list-item NavMenu-iconMenu-item">
