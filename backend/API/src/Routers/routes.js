@@ -3,7 +3,6 @@ const addressRouter = require('./AddressRouter');
 
 
 const setRoutes = (app) => {
-    console.log("sdsd");
 app.use('/api/reservations', reservationRouter);
 app.use('/api/address', addressRouter);
 }

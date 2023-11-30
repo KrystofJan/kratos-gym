@@ -1,6 +1,9 @@
 const express = require('express');
+const cors = require('cors');
 const router = require('./src/Routers/routes');
 const app = express();
+
+app.use(cors());
 
 router.setRoutes(app);
 
