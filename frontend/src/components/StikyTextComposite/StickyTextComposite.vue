@@ -1,19 +1,33 @@
-<script>
+<script setup>
 import StickyText from './Item/StickyText.vue';
-export default{
-    components: {
-        StickyText
+import { ref, onMounted } from 'vue';
+
+const TextData = ref([]);
+const isLoading = ref(true);
+
+const fetchData = async () => {
+    try{
+        const response = await fetch("../../siteContent/_hp-sticky-text-content.json");
+        const data = await response.json();
+        TextData.value = data;
     }
-}
+    catch (error){
+        console.error("Error fetching data", error);
+    }
+    finally{
+        isLoading.value = false;
+    }
+} 
+
+onMounted(fetchData);
 </script>
 
 <template>
-<section class="StyledText-wrapper">
-    <StickyText 
-        :id = 0
-    />
-    <StickyText :id = 1 />
-    <StickyText :id = 2 />
+    
+<section v-if="!isLoading" class="StyledText-wrapper">
+    <StickyText :data="TextData[0]"/>
+    <StickyText :data="TextData[1]"/>
+    <StickyText :data="TextData[2]"/>
 </section>
 </template>
 

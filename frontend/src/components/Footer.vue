@@ -1,17 +1,19 @@
-<script>
-export default{
-    data(){
-        return{
-            footer_cols: [],
-            linkTest: '/reservations'
-        }
-      },
-      created() {
-          fetch("../../siteContent/_footer-content.json") 
+<script setup>
+import { ref, onMounted } from 'vue';
+
+const footer_cols = ref([]);
+const linkTest= '/reservations';
+
+
+const fetchData = async () => {
+    fetch("../../siteContent/_footer-content.json") 
               .then((res) => res.json())
-              .then((data) => this.footer_cols = data);
-      } 
+              .then((data) => footer_cols.value = data)
+              .catch((e) => console.log(e));
 }
+
+
+onMounted(fetchData);
 
 </script>
 

@@ -1,4 +1,9 @@
 # gym-reservation-system
+## Update Dec 23. 2023
+* Added remote databse
+* Started writing the docs
+* Refractoring FE to use composition API
+
 ## Update Nov 30. 2023
 * Refractored the whole backend
 * Fixed some issues in frontend

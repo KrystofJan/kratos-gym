@@ -1,29 +1,20 @@
-<script>
-export default{
-    props: [
-        'id'
-    ],
-    created () {
-        window.addEventListener('scroll', this.stickyScrollText);
-    },
-    unmounted () {
-        window.removeEventListener('scroll', this.stickyScrollText);
-    },
-    methods: {
-        stickyScrollText(){
-            const comps = document.querySelector('.StickyText');
-            const texts = document.querySelector('.StickyText-text');
-            console.log(this.id)
-            const comp = comps[this.id];
-            const text = texts[this.id];
+<script setup>
+import { onMounted } from 'vue';
 
-            console.log(comp);
+const prop = defineProps(['data']);
+
+const setEventListeners = () => {
+    window.addEventListener('scroll', () => {
+        const comps = document.querySelectorAll('.StickyText');
+        for(const comp of comps){
+            const text = comp.querySelector(".StickyText-text");
             if (window.scrollY > comp.offsetTop && window.scrollY < comp.offsetTop + comp.offsetHeight - window.innerHeight){
                 text.classList.add('sticky');
             }
             else{
                 text.classList.remove('sticky');
             }
+
             if(window.scrollY > comp.offsetTop + comp.offsetHeight - window.innerHeight){
                 text.classList.add('rel');
             }
@@ -31,21 +22,24 @@ export default{
                 text.classList.remove('rel');
             }
         }
-    }
+
+    });
 }
+
+onMounted(setEventListeners);
 </script>
 
 <template>
     <article class="StickyText">
         <div class="StickyText-text">
             <div class="StickyText-text-content">
-                <h2>Heading</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos aliquid quidem voluptates exercitationem cupiditate veritatis asperiores eveniet doloribus, earum, quod nihil accusamus nam quisquam, sequi et provident qui dolorum debitis!</p>
-                <p>Incidunt inventore expedita porro, iste perferendis necessitatibus illum exercitationem cupiditate a quos mollitia sit alias minima velit, dolor culpa impedit cum cumque accusantium animi molestiae, recusandae laborum! Harum, sit quos?</p>
-                <p>Et quia neque saepe. Et, reiciendis est at veniam amet officia? Laboriosam aliquam vero maxime consequatur officia, tempora reiciendis totam doloribus, odit voluptatem labore ipsam, quidem nihil culpa vel dicta?</p>    
+                <h2>{{ data.heading }}</h2>
+                <div class="" v-html="data.content"></div>
             </div>
         </div>
-        <div class="StickyText-img"></div>
+        <div class="StickyText-img">
+            <img :src="data.img_path" alt="">
+        </div>
     </article>
 </template>
 
@@ -55,9 +49,16 @@ export default{
     background: black;
     z-index: 1;
     position: relative;
+    flex-direction: row;
+
+    &:nth-of-type(2n){
+        flex-direction: row-reverse;
+    }
 
     &-text{
-        width: 40%;
+        position: absolute;
+        top: 0;
+        width: 35%;
         background: white;
         height: 100vh;
         padding: 3rem;
@@ -66,13 +67,17 @@ export default{
         align-items: center;
         
         &-content{
-            background: red;
             height: fit-content;
         }
     }
 
     &-img{
-        min-height:300vh;
+        min-height: 150vh;
+        img{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
     }
     .sticky{
         position: fixed;
@@ -80,7 +85,7 @@ export default{
         transform: translateY(-50%);
     }
     .rel{
-        position: absolute;
+        top: unset;
         bottom: 0;
     }
 }

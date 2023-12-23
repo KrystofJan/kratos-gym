@@ -1,9 +1,5 @@
-<script>
-export default{
-  mathods: {
-    
-  }
-}
+<script setup>
+
 </script>
 
 <template>
@@ -66,6 +62,7 @@ export default{
   cursor: pointer;
   transition: all .2s ease-in-out;
   visibility: hidden;
+  
 
   @media (max-width: 1050px) {
     visibility: visible;
@@ -80,7 +77,7 @@ export default{
 }
 #header{
   width: 100%;
-  background: #e2e2e2;
+  background: linear-gradient(to right,#aeaeae, #e2e2e2, #aeaeae);
   
   img{
     color: #2d2d2d;

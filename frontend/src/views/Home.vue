@@ -1,12 +1,7 @@
-<script>
+<script setup>
 import HeroBanner from '../components/HeroBanner.vue';
 import StickyTextComposite from '../components/StikyTextComposite/StickyTextComposite.vue'
-export default{
-  components: {
-    HeroBanner,
-    StickyTextComposite
-  }
-}
+
 </script>
 
 <template>

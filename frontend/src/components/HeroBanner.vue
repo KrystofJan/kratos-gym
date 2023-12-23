@@ -1,17 +1,16 @@
-<script>
-export default{
-    data(){
-        // change the structure to for and change the format of the return object
-        return{
-            banners: []
-        }
-      },
-      created() {
-          fetch("../../siteContent/_hp-hero-banner-content.json") 
+<script setup>
+import { ref, onMounted } from 'vue';
+
+const banners = ref([]);
+
+
+const fetchData = async () => {
+  fetch("../../siteContent/_hp-hero-banner-content.json") 
               .then((res) => res.json())
-              .then((data) => this.banners = data);
-      } 
-}
+              .then((data) => banners.value = data);
+} 
+
+onMounted(fetchData);
 </script>
 
 <template>
@@ -21,6 +20,9 @@ export default{
       <h3 class="HeroBanners-banner-heading">{{ banner.heading }}</h3>
       <div class="HeroBanners-banner-content">
         <p class="HeroBanners-banner-content-text">{{ banner.text }}</p>
+      </div>
+      <div class="HeroBanners-banner-image">
+        <img :src="banner.img_path" alt="image">
       </div>
     </article>
   </section>
@@ -38,20 +40,24 @@ export default{
     justify-content: flex-end;
     overflow-y: hidden;
     position: relative;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
     width: 100%;
+    // position: relative;
+    
+    &-image{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
 
-    &:nth-of-type(1){
-      background: #0000ff;
+      img{
+        object-fit: cover;
+        object-position: right;
+        height: 100%;
+      }
     }
 
-    &:nth-of-type(2){
-      background: #0f0;
-    }
-
-    &:nth-of-type(3){
-      background: #ff0000;
-    }
 
     &-heading{
       position: absolute;
@@ -60,7 +66,11 @@ export default{
       transform: translate(-50%, -50%);
       opacity: 1;
       color: white;
-      transition: all 0.2s ease-in-out;
+      transition: all 0.3s ease-in-out;
+      background: rgba(23,23,23,0.8);
+      border-radius: .5rem;
+      padding: 1rem;
+      z-index: 2;
     }
 
     &-content{
@@ -71,9 +81,10 @@ export default{
       opacity: 0;
       transform: translateY(100%);
       filter: blur(0.5) invert(0.75);
-      background-color: rgba(23,23,23,0.3);
+      background-color: rgba(23,23,23,0.8);
       transition: all 0.3s ease-in-out; 
       height: 100%;
+      z-index: 3;
       
         &-text{
             padding: 1rem;

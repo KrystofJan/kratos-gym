@@ -86,7 +86,7 @@ class DatabaseHandler{
         'Where ET.BodyPart in ( ' +
             'select  DISTINCT BodyPart '+
             'from MachineExerciseTypes met inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId '+
-            'where met.WrkOutMachineId = ' + id +') ' +
+	        'where met.WrkOutMachineId = ' + id +') ' +
         'and ET.Category in ( ' +
             'select Category '+
             'From MachineExerciseTypes met inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId '+
