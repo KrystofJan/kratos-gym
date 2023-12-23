@@ -45,8 +45,8 @@ class DatabaseHandler{
 
     dbSelectSpecific(id, tableName){
         return new Promise((resolve, reject) => {
-            let pkey = dbKeys[tableName];
-            let resp = [];
+            const pkey = dbKeys[tableName];
+
             if(!Validators.validateNumericId(id)){
                 console.error('Cannot use this ID', id);
                 apiLogger.logApi("Cannot use this"+ pkey + " ! --" + id);
@@ -60,47 +60,48 @@ class DatabaseHandler{
                   reject({ error: 'Internal Server Error' });
                 }
 
-                resolve(results);
                 apiLogger.logApi("Get request on the " + tableName +" endpoint was Successfull!");
-                
+                resolve(results);
             });
             
         })
     }
 
-    dbRecommendMachine(res,id){
-        if(!Validators.validateNumericId(id)){
-            console.error('Cannot use this ID', id);
-            res.status(500).json({ error: 'Cannot pass in id that\'s not a number! Id: '+ id });
-            apiLogger.logApi("Cannot use this WrkOutMachineId ! --" + id);
-            return;
-        }
-        this.db.query(
-        'SELECT wm.WrkOutMachineId, wm.MachineName, ET.ExerciseTypeName, ET.BodyPart, wm.PopularityScore '+
-        'FROM WrkOutMachine wm inner join MachineExerciseTypes met on wm.WrkOutMachineId = met.WrkOutMachineId ' +         
-        'inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId ' +
-        'Where ET.BodyPart in ( ' +
-            'select  DISTINCT BodyPart '+
-            'from MachineExerciseTypes met inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId '+
-	        'where met.WrkOutMachineId = ' + id +') ' +
-        'and ET.Category in ( ' +
-            'select Category '+
-            'From MachineExerciseTypes met inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId '+
-            'Where met.WrkOutMachineId = ' + id + ') '+
-        'and wm.WrkOutMachineId != ' + id + ' ' +
-        'order by wm.PopularityScore desc ' +
-        'LIMIT 5'
-        ,(err, results) => {
-            if (err) {
-              console.error('Error querying the database:', err);
-              apiLogger.logApi(err);
-              res.status(500).json({ error: 'Internal Server Error' });
-              return;
-            }
-            res.json(results);
+    dbRecommendMachine(id){
+        return new Promise ( (resolve, reject) => {
+            const pkey = dbKeys["WrkOutMachine"];
 
-            apiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
-        });
+            if(!Validators.validateNumericId(id)){
+                console.error('Cannot use this ID', id);
+                apiLogger.logApi("Cannot use this"+ pkey + " ! --" + id);
+                reject({ error: 'Cannot pass in id that\'s not a number! Id: '+ id });
+            }
+            this.db.query(
+            'SELECT wm.WrkOutMachineId, wm.MachineName, ET.ExerciseTypeName, ET.BodyPart, wm.PopularityScore '+
+            'FROM WrkOutMachine wm inner join MachineExerciseTypes met on wm.WrkOutMachineId = met.WrkOutMachineId ' +         
+            'inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId ' +
+            'Where ET.BodyPart in ( ' +
+                'select  DISTINCT BodyPart '+
+                'from MachineExerciseTypes met inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId '+
+                'where met.WrkOutMachineId = ' + id +') ' +
+            'and ET.Category in ( ' +
+                'select Category '+
+                'From MachineExerciseTypes met inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId '+
+                'Where met.WrkOutMachineId = ' + id + ') '+
+            'and wm.WrkOutMachineId != ' + id + ' ' +
+            'order by wm.PopularityScore desc ' +
+            'LIMIT 5'
+            ,(err, results) => {
+                if (err) {
+                  console.error('Error querying the database:', err);
+                  apiLogger.logApi(err);
+                  reject({ error: 'Internal Server Error' });
+                }
+    
+                apiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
+                resolve(results);
+            });
+        });            
     }
 }
 module.exports = DatabaseHandler;
