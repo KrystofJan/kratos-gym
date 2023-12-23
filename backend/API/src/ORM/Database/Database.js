@@ -2,15 +2,11 @@ const mysql = require('mysql2');
 const apiLogger = require('../../ApiLoggerLogic/ApiLogger');
 const Validators = require('./DatabaseValidators');
 const dbKeys = require('./keys/table-keys.json');
+const config = require('../../Config/config.json');
 
 class DatabaseHandler{
     constructor(){
-        this.db = mysql.createConnection({
-            host: 'sql11.freemysqlhosting.net',
-            user: 'sql11663970',
-            password: 'twTx1wH3pI',
-            database: 'sql11663970',
-          });
+        this.db = mysql.createConnection(config.Database);
     }
     
     dbConnect(){
