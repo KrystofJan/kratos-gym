@@ -12,5 +12,27 @@ class UserDAO extends RelationalModel{
             console.log("Nastala chyba: " + error);
         }
     }
+    
+    async getValueIs (attrValue, attrName) {
+        try{
+            const result = await this.MakeDbRequest(() => this.dbHandler.dbSelectAttrIs(attrValue, attrName, "User"));
+            console.log("I want to die");
+            console.log(result);
+            return result;
+        }
+        catch(error){
+            console.log("Nastala chyba: " + error);
+        }
+    }
+
+    async post (body){
+        try{
+            const result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body, "User"));
+            return result;
+        }        
+        catch(error){
+            console.log("Nastala chyba: " + error);
+        }
+    }
 }
 module.exports = UserDAO;

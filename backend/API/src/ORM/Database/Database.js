@@ -27,7 +27,9 @@ class DatabaseHandler{
 
     dbSelectAll(tableName){
         return new Promise((resolve, reject) => {
-            this.db.query('SELECT * FROM ' + tableName, (err, results) => {
+            const command = `SELECT * FROM ${tableName}`;
+
+            this.db.query(command, (err, results) => {
                 if (err) {
                   console.error('Error querying the database:', err);
                   apiLogger.logApi(err);
@@ -55,18 +57,15 @@ class DatabaseHandler{
             values = values.slice(0, -2) + ')';
             console.log(data);
 
-            const command = 'Insert Into ' + tableName + '(' + dbInserts[tableName] + ') Values (?, ?)'; 
+            const command = `Insert Into ${tableName}(${dbInserts[tableName]} ) Values ${values}`; 
 
             this.db.query(command, data, (err, results) => {
                 if (err) {
                   console.error('Error querying the database:', err);
                   apiLogger.logApi(err);
-                  // res.status(500).json({ error: 'Internal Server Error' }); // move to controller
                   return reject({ error: 'Internal Server Error, check the logger for more context' });
                 }
     
-                // res.json(results); // move to controller
-            
                 apiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
                 resolve({
                     "Status": `Successfull post on ${tableName} endpoint`
@@ -74,6 +73,23 @@ class DatabaseHandler{
             });
         })
 
+    }
+
+    dbSelectAttrIs(attrValue, attrName, tableName){
+        return new Promise((resolve, reject) => {
+            const command = `Select * from ${tableName} where ${attrName} = '${attrValue}'`;
+
+            this.db.query(command, (err, results) => {
+                if (err) {
+                    console.error('Error querying the database:', err);
+                    apiLogger.logApi(err);
+                    reject({ error: 'Internal Server Error' });
+                  }
+  
+                  apiLogger.logApi("Get request on the " + tableName +" endpoint was Successfull!");
+                  resolve(results);
+            })
+        });
     }
 
     dbSelectSpecific(id, tableName){
@@ -85,8 +101,10 @@ class DatabaseHandler{
                 apiLogger.logApi("Cannot use this"+ pkey + " ! --" + id);
                 reject({ error: 'Cannot pass in id that\'s not a number! Id: '+ id });
             }
+
+            const command = `SELECT * FROM ${tableName} WHERE ${pkey} = ${id}`
     
-            this.db.query('SELECT * FROM '+ tableName + ' WHERE '+ pkey +' = ' + id + ';', (err, results) => {
+            this.db.query(command, (err, results) => {
                 if (err) {
                   console.error('Error querying the database:', err);
                   apiLogger.logApi(err);

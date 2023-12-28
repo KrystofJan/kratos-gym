@@ -4,15 +4,15 @@ class User{
         this.userId = jsonData.UserId;
         this.firstName = jsonData.FirstName;
         this.lastName = jsonData.LastName;
-        this.role = jsonData.Role;
+        this.role = (jsonData.Role)? jsonData.Role : 'c';
         this.email = jsonData.Email;
         this.phoneNumber = jsonData.PhoneNumber;
-        this.isActive = jsonData.IsActive;
-        this.createDate = jsonData.CreateDate;
-        this.lastOnline = jsonData.LastOnline;
+        this.isActive = (jsonData.IsActive) ? jsonData.IsActive : true;
+        this.createDate = (jsonData.CreateDate) ? jsonData.CreateDate : '';
+        this.lastOnline = (jsonData.LastOnline) ? jsonData.LastOnline : '';
         this.password = jsonData.Password;
         this.address = jsonData.Address;
-        this.credits = jsonData.credits;
+        this.credits = (jsonData.credits) ? jsonData.credits : 0;
     }
     
     constructFromData(street, city, postalCode, country, buildingNumber, apartmentNumber){

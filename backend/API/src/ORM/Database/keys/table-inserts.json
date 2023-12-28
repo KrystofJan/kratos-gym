@@ -1,3 +1,4 @@
 {
-    "WrkOutPlan": "PlanName, UserId"
+    "WrkOutPlan": "PlanName, UserId",
+    "User": "FirstName, LastName, Email, PhoneNumber, Password, AddressId"
 }
