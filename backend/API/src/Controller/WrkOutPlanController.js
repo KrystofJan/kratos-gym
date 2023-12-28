@@ -11,14 +11,14 @@ const getId = async (req,res,id) => {
         
         model.constructFromJson(wrkOutPlan);
         
-        const customerData = await userService.getId(wrkOutPlan.CustomerId);
-
+        const customerData = await userService.getId(wrkOutPlan.UserId);
+        
         const customer =  new userModel();
         customer.constructFromJson(
             customerData
         );
 
-        model.customer = customer.constructJson();
+        model.user = customer.constructJson();
         
         res.status(200).json(model.constructJson(wrkOutPlan));
     }
@@ -59,7 +59,29 @@ const getAll = async (req,res) => {
     }
 }
 
+const post = async (req, res) => {
+    try{
+        const body = req.body;
+
+        if (Array.isArray(body)){
+            for (const record of body){
+                const result = await wrkOutPlanService.post(record);
+            }
+            res.status(201).json({"status": "All"});
+        }
+        else{
+            const result = await wrkOutPlanService.post(body);
+            res.status(201).json(result);
+        }
+    }
+    catch(err) {
+        res.status(500).json(err);
+    }
+
+} 
+
 module.exports = {
     getId,
     getAll,
+    post,
 }

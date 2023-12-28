@@ -22,5 +22,15 @@ class WrkOutPlanDAO extends RelationalModel{
             console.log("Nastala chyba: " + error);
         }
     }
+
+    async post(body) {
+        try{
+            const result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body,"WrkOutPlan"));
+            return result;
+        }
+        catch(error){
+            console.log("Nastala chyba: " + error);
+        }
+    }
 }
 module.exports = WrkOutPlanDAO;

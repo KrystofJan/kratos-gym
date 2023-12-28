@@ -3,6 +3,7 @@ const apiLogger = require('../../ApiLoggerLogic/ApiLogger');
 const Validators = require('./DatabaseValidators');
 const dbKeys = require('./keys/table-keys.json');
 const config = require('../../Config/config.json');
+const dbInserts = require ('./keys/table-inserts.json');
 
 class DatabaseHandler{
     constructor(){
@@ -41,6 +42,38 @@ class DatabaseHandler{
             });
         })
         
+    }
+
+    dbPost(body, tableName){
+        return new Promise((resolve, reject) => {
+            const data = [];
+            let values = "(";
+            Object.keys(body).forEach(function(key) {
+                values += '?, ';
+                data.push(body[key]);
+            });
+            values = values.slice(0, -2) + ')';
+            console.log(data);
+
+            const command = 'Insert Into ' + tableName + '(' + dbInserts[tableName] + ') Values (?, ?)'; 
+
+            this.db.query(command, data, (err, results) => {
+                if (err) {
+                  console.error('Error querying the database:', err);
+                  apiLogger.logApi(err);
+                  // res.status(500).json({ error: 'Internal Server Error' }); // move to controller
+                  return reject({ error: 'Internal Server Error, check the logger for more context' });
+                }
+    
+                // res.json(results); // move to controller
+            
+                apiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
+                resolve({
+                    "Status": `Successfull post on ${tableName} endpoint`
+                });
+            });
+        })
+
     }
 
     dbSelectSpecific(id, tableName){

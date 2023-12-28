@@ -25,7 +25,7 @@ class WrkOutMachineDAO extends RelationalModel{
     async recommendMachine(id){
         try{
             const result = await this.MakeDbRequest(() => this.dbHandler.dbRecommendMachine(id));
-            return result[0];
+            return result;
         }
         catch(err){        
             console.error(err);

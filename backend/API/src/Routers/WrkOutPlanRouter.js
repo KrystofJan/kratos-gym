@@ -9,6 +9,10 @@ WrkOutPlanRouter.get('/', (req, res) => {
 
 WrkOutPlanRouter.get('/:id', (req, res) => {
     wrkOutPlanController.getId( req,res,req.params['id']);
+});
+
+WrkOutPlanRouter.post('/', (req, res) => {
+    wrkOutPlanController.post(req, res);
 })
 
 module.exports = WrkOutPlanRouter;

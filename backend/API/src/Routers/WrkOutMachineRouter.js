@@ -9,9 +9,10 @@ WrkOutMachineRouter.get('/', (req, res) => {
 
 WrkOutMachineRouter.get('/:id', (req, res) => {
     wrkOutMachineController.getId( req,res,req.params['id']);
-})
+});
+
 WrkOutMachineRouter.get('/recommend/:id', (req, res) => {
     wrkOutMachineController.recommendMachine( req,res,req.params['id']);
-})
+});
 
 module.exports = WrkOutMachineRouter;
