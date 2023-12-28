@@ -1,5 +1,6 @@
 <script setup>
-
+import { ref } from 'vue';
+const showLog = ref(false);
 </script>
 
 <template>
@@ -38,8 +39,16 @@
           <li class="NavMenu-list-item NavMenu-iconMenu-item">
             <router-link to="/" class="menu-link">icon</router-link>
           </li>
-          <li class="NavMenu-list-item NavMenu-iconMenu-item">
-            <router-link to="/" class="menu-link">icon</router-link>
+          <li class="NavMenu-list-item NavMenu-iconMenu-item" @click="showLog=!showLog">
+            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>
+            <ul v-if="showLog" class="NavMenu-login-dropdown">
+              <li>
+                <router-link to="/log-in" class="menu-link">Log in</router-link>
+              </li>
+              <li>
+                <router-link to="/register" class="menu-link">Register</router-link>
+              </li>
+            </ul>
           </li>
         </ul>
       </nav>
@@ -95,6 +104,7 @@
   width: 100%;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 
   @media (max-width: 1050px) {
     flex-direction: column;
@@ -131,6 +141,15 @@
     }
   }
 
+  &-login-dropdown{
+    position: absolute;
+    background: red;
+    bottom: 0;
+    right: 0;
+    transform: translateY(100%);
+    list-style-type: none;
+    z-index: 999;
+  }
 
   &-list{
     display:flex;
@@ -141,6 +160,7 @@
       list-style: none;
       display: inline-block;
       padding: 1.25rem;
+      cursor: pointer;
 
       .menu-link{
         color: blue;
