@@ -1,6 +1,17 @@
 <script setup>
 import { ref } from 'vue';
 const showLog = ref(false);
+
+
+const toggleMenu = () => {
+  const menu = document.querySelector('.NavMenu');
+  const exit = document.querySelector('.exit');
+  const hamburger = document.querySelector('.hamburger');
+
+  menu.classList.toggle('show-menu');
+  exit.classList.toggle('is-on');
+  hamburger.classList.toggle('is-on');
+}
 </script>
 
 <template>
@@ -10,7 +21,7 @@ const showLog = ref(false);
       </div>
       <nav class="NavMenu">
         <div v-on:click="toggleMenu()" class="exit">x</div>
-        <div class="hamburger">
+        <div class="hamburger is-on">
           <div class="line"></div>
           <div class="line"></div>
           <div class="line"></div>
@@ -60,7 +71,7 @@ const showLog = ref(false);
   position: absolute;
   right: 2rem;
   top: 2rem;
-  display: flex;
+  display: none;
   border: 1px solid white;
   height: 2rem;
   width: 2rem;
@@ -71,10 +82,10 @@ const showLog = ref(false);
   cursor: pointer;
   transition: all .2s ease-in-out;
   visibility: hidden;
-  
 
-  @media (max-width: 1050px) {
+  &.is-on{
     visibility: visible;
+    display: flex;
   }
   
   &:hover{
@@ -106,9 +117,16 @@ const showLog = ref(false);
   align-items: center;
   position: relative;
 
+  &.show-menu{
+    opacity: 1;
+    visibility:visible;
+  }
+
   @media (max-width: 1050px) {
     flex-direction: column;
     position: fixed;
+    opacity: 0;
+    visibility: hidden;
     top:0;
     left: 0;
     height: 100%;
@@ -126,10 +144,13 @@ const showLog = ref(false);
     right: 2rem;
     top: 2rem;
     cursor: pointer;
+    border: solid black 1px;
+    z-index: 99999999999;
 
-    @media (max-width: 1050px) {
-      display: none;
+    &.is-on{
+      display: block;
     }
+
   }
 
   &-logo{
@@ -212,11 +233,19 @@ const showLog = ref(false);
 
   &:hover{
     opacity: 1;
-    height: 6rem;
+
+    @media (min-width: 1051px){
+      height: 6rem;
+    }
   }
   
   .NavMenu-logo{
     opacity: 1;
+  }
+
+  @media (max-width: 1050px){
+      background: rgba(33,33,33,0.9);
+      height: 100vh;
   }
 }
 
