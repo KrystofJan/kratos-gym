@@ -1,15 +1,20 @@
 class ExerciseType{
-    constructor(){ }
 
     constructFromJson(jsonData){
+        this.exerciseTypeId = jsonData.ExerciseTypeId
         this.typeName = jsonData.ExerciseTypeName;
         this.category = jsonData.Category;
         this.bodyPart = jsonData.bodyPart;
     }
-    
-    constructFromData(typeName, category, bodyPart){
-        this.typeName = typeName;
-        this.category = category;
-        this.bodyPart = bodyPart;
+
+    constructJson(){
+        return {
+            "ExerciseTypeId": this.exerciseTypeId,
+            "TypeName": this.typeName,
+            "Category": this.category,
+            "BodyPart": this.bodyPart
+        }
     }
 }
+
+module.exports = ExerciseType;

@@ -19,7 +19,7 @@ class Address{
         this.apartmentNumber = apartmentNumber;
     }
 
-    constructJson(jsonData){
+    constructJson(){
         return {
             "AddressId": this.addressId,
             "Street": this.street,

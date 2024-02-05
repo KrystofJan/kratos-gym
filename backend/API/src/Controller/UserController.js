@@ -27,7 +27,6 @@ const loginAuth = async (req, res) => {
 const register = async (req, res) => {
     try{
         const body = req.body;
-        console.log(body);
         const result = await userService.register(body);
 
         res.status(201).json(result);
