@@ -1,4 +1,8 @@
 # gym-reservation-system
+## Update Feb 05. 2024
+* Adding MachineExerciseTypes and ExerciseType endpoints
+* Adding requests to WrkOutMachine and Address endpoints
+
 ## Update Dec 23. 2023
 * Added remote databse
 * Started writing the docs
