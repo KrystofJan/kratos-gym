@@ -22,6 +22,16 @@ class WrkOutMachineDAO extends RelationalModel{
         }
     }
 
+    async post (body){
+        try{
+            const result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body, "WrkOutMachine"));
+            return result;
+        }
+        catch(error){
+            console.log("Nastala chyba: " + error);
+        }
+    }
+
     async recommendMachine(id){
         try{
             const result = await this.MakeDbRequest(() => this.dbHandler.dbRecommendMachine(id));

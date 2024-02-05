@@ -38,7 +38,6 @@ const getId = async (req,res,id) => {
     }
 }
 
-
 const recommendMachine = async (req,res,id) => {
     try{
         const body = await wrkOutMachineService.recommendMachine(id);
@@ -57,8 +56,21 @@ const recommendMachine = async (req,res,id) => {
     }
 }
 
+const post = async (req, res) => {
+    try{
+        const body = req.body;
+        const result = await wrkOutMachineService.post(body);
+
+        res.status(201).json(result);
+    }
+    catch(err){
+        res.status(500).json(err);
+    }
+}
+
 module.exports = {
     getAll,
     getId,
     recommendMachine,
+    post,
 }

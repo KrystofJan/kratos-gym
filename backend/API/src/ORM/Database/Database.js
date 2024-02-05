@@ -47,7 +47,6 @@ class DatabaseHandler{
     }
 
     dbPost(body, tableName){
-        console.log("Esketit");
         return new Promise((resolve, reject) => {
             const data = [];
             let values = "(";
@@ -56,8 +55,7 @@ class DatabaseHandler{
                 data.push(body[key]);
             });
             values = values.slice(0, -2) + ')';
-            console.log(data);
-
+            
             const command = `Insert Into ${tableName}(${dbInserts[tableName]} ) Values ${values}`; 
 
             this.db.query(command, data, (err, results) => {
