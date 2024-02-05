@@ -47,6 +47,7 @@ class DatabaseHandler{
     }
 
     dbPost(body, tableName){
+        console.log("Esketit");
         return new Promise((resolve, reject) => {
             const data = [];
             let values = "(";

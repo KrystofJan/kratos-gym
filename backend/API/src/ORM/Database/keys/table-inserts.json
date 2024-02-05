@@ -1,4 +1,5 @@
 {
     "WrkOutPlan": "PlanName, UserId",
-    "User": "FirstName, LastName, Email, PhoneNumber, Password, AddressId"
+    "User": "FirstName, LastName, Email, PhoneNumber, Password, AddressId",
+    "Address": "Street, City, PostalCode, Country, BuildingNumber, ApartmentNumber"
 }

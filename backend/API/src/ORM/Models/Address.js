@@ -1,6 +1,5 @@
 class Address{
 
-    
     constructFromJson(jsonData){
         this.addressId = jsonData.AddressId;
         this.street = jsonData.Street;
@@ -20,10 +19,17 @@ class Address{
         this.apartmentNumber = apartmentNumber;
     }
 
-    constructJson(jsonData){        
-        this.constructFromJson(jsonData);
-        return this;
+    constructJson(jsonData){
+        return {
+            "AddressId": this.addressId,
+            "Street": this.street,
+            "City": this.city,
+            "postalCode": this.postalCode,
+            "Country": this.country,
+            "BuildingNumber": this.buildingNumber,
+            "ApartmentNumber": this.apartmentNumber,
+        }
     }
-    
 }
+
 module.exports = Address;

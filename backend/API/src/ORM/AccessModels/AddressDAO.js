@@ -12,5 +12,25 @@ class AddressDAO extends RelationalModel{
         }
         
     }
+
+    async get(id){
+        try{
+            const result = await this.MakeDbRequest(() => this.dbHandler.dbSelectSpecific(id,"Address"));
+            return result[0];            
+        }
+        catch(err){        
+            console.error(err);
+        }
+    }
+
+    async post (body){
+        try{
+            const result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body, "Address"));
+            return result;
+        }        
+        catch(error){
+            console.log("Nastala chyba: " + error);
+        }
+    }
 }
 module.exports = AddressDAO;
