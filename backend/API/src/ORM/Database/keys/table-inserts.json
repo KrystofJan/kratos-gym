@@ -3,5 +3,6 @@
     "User": "FirstName, LastName, Email, PhoneNumber, Password, AddressId",
     "Address": "Street, City, PostalCode, Country, BuildingNumber, ApartmentNumber",
     "ExerciseType": "ExerciseTypeName, Category, BodyPart",
-    "WrkOutMachine": "MachineName, MaxWeight, MinWeight, MaxPeople, AvgTimeTaken"
+    "WrkOutMachine": "MachineName, MaxWeight, MinWeight, MaxPeople, AvgTimeTaken",
+    "MachineExerciseTypes": "WrkOutMachineId, ExerciseTypeId"
 }

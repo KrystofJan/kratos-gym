@@ -14,4 +14,5 @@ class RelationalModel{
         return result;
     }
 }
+
 module.exports = RelationalModel;

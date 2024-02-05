@@ -55,7 +55,7 @@ class DatabaseHandler{
                 data.push(body[key]);
             });
             values = values.slice(0, -2) + ')';
-            
+
             const command = `Insert Into ${tableName}(${dbInserts[tableName]} ) Values ${values}`; 
 
             this.db.query(command, data, (err, results) => {
@@ -94,6 +94,8 @@ class DatabaseHandler{
     dbSelectSpecific(id, tableName){
         return new Promise((resolve, reject) => {
             const pkey = dbKeys[tableName];
+            const tableNames = tableName.split('--');
+            tableName = tableNames[0];
 
             if(!Validators.validateNumericId(id)){
                 console.error('Cannot use this ID', id);

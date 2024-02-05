@@ -5,5 +5,7 @@
     "User": "UserId",
     "WrkOutMachine": "WrkOutMachineId",
     "WrkOutPlan": "WrkOutPlanId",
-    "WrkOutPlanPreset": "WrkOutPlanPresetId"
+    "WrkOutPlanPreset": "WrkOutPlanPresetId",
+    "MachineExerciseTypes--machine": "WrkOutMachineId",
+    "MachineExerciseTypes--type": "ExerciseTypeId"
 }
