@@ -21,7 +21,6 @@ const getIdMachine = async (req,res,id) => {
             
             
             machine.constructFromJson(machineBody);
-            console.log(machine);
             exerciseType.constructFromJson(typeBody);
     
             const model = new machineExerciseTypesModel({
@@ -42,7 +41,6 @@ const getIdMachine = async (req,res,id) => {
 const getIdType = async (req,res,id) => {
     try{
         const machineTypes = await machineExerciseTypesService.getIdType(id);
-        console.log(machineTypes);
 
         const result = [];
 

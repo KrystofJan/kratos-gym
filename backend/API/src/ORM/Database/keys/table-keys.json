@@ -9,5 +9,7 @@
     "MachineExerciseTypes--machine": "WrkOutMachineId",
     "MachineExerciseTypes--type": "ExerciseTypeId",
     "WrkOutPlanType--type": "ExerciseTypeId",
-    "WrkOutPlanType--plan": "WrkOutPlanId"
+    "WrkOutPlanType--plan": "WrkOutPlanId",
+    "WrkOutPlanMachines--plan": "WrkOutPlanId",
+    "WrkOutPlanMachines--machine": "WrkOutMachineId"
 }

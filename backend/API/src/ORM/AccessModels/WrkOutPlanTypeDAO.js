@@ -29,7 +29,6 @@ class WrkOutPlanTypeDAO extends RelationalModel{
     async post (body){
         try{
             const result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body, "WrkOutPlanType"));
-            console.log('plannn', result);
             return result;
         }        
         catch(error){
