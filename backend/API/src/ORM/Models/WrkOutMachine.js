@@ -1,6 +1,6 @@
 class WrkOutMachine{
 
-    constructFromJson(jsonData){
+    constructor(jsonData){
         this.wrkOutMachineId = jsonData.WrkOutMachineId;
         this.machineName = jsonData.MachineName;
         this.maxWeight = (jsonData.MaxWeight != null)? jsonData.MaxWeight : 0;
@@ -10,16 +10,6 @@ class WrkOutMachine{
         this.popularityScore = jsonData.PopularityScore;
         this.exerciseTypeName = (jsonData.ExerciseTypeName != null) ? jsonData.ExerciseTypeName : ""
         this.bodyPart = (jsonData.BodyPart != null) ? jsonData.BodyPart : ""
-    }
-
-    constructFromData(WrkOutMachineId,MachineName,MaxWeight, MinWeight, MaxPeople, AvgTimeTaken, PopularityScore){
-        this.wrkOutMachineId = WrkOutMachineId;
-        this.machineName = MachineName;
-        this.maxWeight = MaxWeight;
-        this.minWeight = MinWeight;
-        this.maxPeople = MaxPeople;
-        this.avgTimeTaken = AvgTimeTaken;
-        this.popularityScore = PopularityScore;
     }
 
     constructJson(){

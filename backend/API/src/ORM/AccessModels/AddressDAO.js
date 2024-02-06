@@ -33,4 +33,5 @@ class AddressDAO extends RelationalModel{
         }
     }
 }
+
 module.exports = AddressDAO;

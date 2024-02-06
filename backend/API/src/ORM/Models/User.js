@@ -1,6 +1,6 @@
 class User{
 
-    constructFromJson(jsonData){
+    constructor(jsonData){
         this.userId = jsonData.UserId;
         this.firstName = jsonData.FirstName;
         this.lastName = jsonData.LastName;
@@ -13,22 +13,6 @@ class User{
         this.password = jsonData.Password;
         this.address = jsonData.Address;
         this.credits = (jsonData.credits) ? jsonData.credits : 0;
-    }
-    
-    constructFromData(street, city, postalCode, country, buildingNumber, apartmentNumber){
-        this.userId = userId;
-        this.firstName = firstName;
-        // TODO: Finish
-
-        // this.lastName = jsonData.LastName;
-        // this.role = jsonData.Role;
-        // this.email = jsonData.Email;
-        // this.phoneNumber = jsonData.PhoneNumber;
-        // this.isActive = jsonData.isActive;
-        // this.createDate = jsonData.CreateDate;
-        // this.lastOnline = jsonData.LastOnline;
-        // this.password = jsonData.Password;
-        // this.Address = jsonData.Address;
     }
 
     constructJson(addr){

@@ -1,5 +1,5 @@
 class UserAuth {
-    constructFromJson(jsonData){
+    constructor(jsonData){
         this.loginOrEmail = jsonData.LoginOrEmail;
         this.encodedPassword = (jsonData.EncodedPassword) ? jsonData.EncodedPassword : '';
     }

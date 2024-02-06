@@ -1,5 +1,5 @@
 const exerciseTypeService = require('../Services/ExerciseTypeService');
-const exerciseTypeModel = require('../ORM/Models/ExerciseType');
+const ExerciseTypeModel = require('../ORM/Models/ExerciseType');
 
 const getAll = async (req, res) => {
     try{
@@ -9,9 +9,7 @@ const getAll = async (req, res) => {
         const results = [];
         
         for (const b of body){
-            const a = new exerciseTypeModel();
-            
-            a.constructFromJson(b);
+            const a = new ExerciseTypeModel(b);
 
             results.push(a.constructJson());
         }
@@ -27,8 +25,7 @@ const getId = async (req,res,id) => {
     try{
         const body = await exerciseTypeService.get(id);
         
-        const model = new exerciseTypeModel();
-        model.constructFromJson(body);
+        const model = new ExerciseTypeModel(body);
 
         res.status(200).json(model.constructJson());
     }
@@ -36,7 +33,6 @@ const getId = async (req,res,id) => {
         res.status(500).json(err);
     }
 }
-
 
 const post = async (req, res) => {
     try{

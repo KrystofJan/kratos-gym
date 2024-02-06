@@ -1,26 +1,18 @@
 const reservationService = require('../Services/ReservationService');
-const reservationModel = require('../ORM/Models/Reservation');
 const userService = require('../Services/UserService');
-const userModel = require('../ORM/Models/User');
+const UserModel = require('../ORM/Models/User');
+const ReservationModel = require('../ORM/Models/Reservation');
 
 const getId = async (req,res,id) => {
     try{
         const reservation = await reservationService.getId(id);
         
-        const model = new reservationModel();
-        
-        model.constructFromJson(reservation);
-        
         const customerData = await userService.getId(reservation.CustomerId);
+        const customer =  new UserModel(customerData);
 
-        const customer =  new userModel();
-        customer.constructFromJson(
-            customerData
-        );
-
+        const model = new ReservationModel(reservation);
         model.customer = customer.constructJson();
         
-
         res.status(200).json(model.constructJson(reservation));
     }
     catch(err){
@@ -31,21 +23,14 @@ const getId = async (req,res,id) => {
 const getAll = async (req,res) => {
     try{
         const reservation = await reservationService.getAll();
-
-        const model = new reservationModel();
         
         const results = [];
         
         for (const b of reservation){
-            const a = new reservationModel();
-            a.constructFromJson(b);
             const customerData = await userService.getId(b.CustomerId);
-            
-            const customer =  new userModel();
-            customer.constructFromJson(
-                customerData
-            );
+            const customer =  new UserModel(customerData);
 
+            const a = new ReservationModel(b);
             a.customer = customer.constructJson();
 
             results.push(a.constructJson(b));

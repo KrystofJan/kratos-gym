@@ -1,23 +1,16 @@
 const wrkOutPlanService = require('../Services/WrkOutPlanService');
-const WrkOutPlanModel = require('../ORM/Models/WrkOutPlan');
 const userService = require('../Services/UserService');
-const userModel = require('../ORM/Models/User');
+const WrkOutPlanModel = require('../ORM/Models/WrkOutPlan');
+const UserModel = require('../ORM/Models/User');
 
 const getId = async (req,res,id) => {
     try{
         const wrkOutPlan = await wrkOutPlanService.getId(id);
         
-        const model = new WrkOutPlanModel();
-        
-        model.constructFromJson(wrkOutPlan);
-        
         const customerData = await userService.getId(wrkOutPlan.UserId);
-        
-        const customer =  new userModel();
-        customer.constructFromJson(
-            customerData
-        );
+        const customer = new UserModel(customerData);
 
+        const model = new WrkOutPlanModel(wrkOutPlan);
         model.user = customer.constructJson();
         
         res.status(200).json(model.constructJson(wrkOutPlan));
@@ -31,22 +24,14 @@ const getAll = async (req,res) => {
 
     try{
         const wrkOutPlan = await wrkOutPlanService.getAll();
-
-        const model = new WrkOutPlanModel();
         
         const results = [];
         
         for (const b of wrkOutPlan){
-            const a = new WrkOutPlanModel();
-            a.constructFromJson(b);
+            const a = new WrkOutPlanModel(b);
             const userData = await userService.getId(b.UserId);
             
-            
-            const user =  new userModel();
-            user.constructFromJson(
-                userData
-            );
-
+            const user =  new UserModel(userData);
             a.user = user.constructJson();
 
             results.push(a.constructJson(b));

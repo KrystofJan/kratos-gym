@@ -1,5 +1,5 @@
 const addressService = require('../Services/AddressService');
-const addressModel = require('../ORM/Models/Address');
+const AddressModel = require('../ORM/Models/Address');
 
 const getAll = async (req, res) => {
     try{
@@ -9,8 +9,7 @@ const getAll = async (req, res) => {
         const results = [];
         
         for (const b of body){
-            const a = new addressModel();
-            a.constructFromJson(b);
+            const a = new AddressModel(b);
             results.push(a.constructJson());
         }
         
@@ -25,8 +24,7 @@ const getId = async (req,res,id) => {
     try{
         const address = await addressService.get(id);
         
-        const model = new addressModel();
-        model.constructFromJson(address);
+        const model = new AddressModel(address);
 
         res.status(200).json(model.constructJson(address));
     }

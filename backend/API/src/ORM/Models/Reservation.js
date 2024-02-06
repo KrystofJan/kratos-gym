@@ -2,21 +2,13 @@ const User = require('./User');
 
 class Reservation {
 
-    constructFromJson(jsonData){
+    constructor(jsonData){
         this.reservationId = jsonData.ReservetionId;
         this.ammountOfPeople = jsonData.AmmoutOfPeople;
         this.reservationTime = jsonData.ReservationTime;
         this.customer = jsonData.Customer;
         this.trainer = jsonData.TrainerId;
         this.wrkOutPlan = jsonData.WrkOutPlanId;
-    }
-
-    constructFromData(ammountOfPeople,reservationTime,customer, trainer, wrkOutPlan){
-        this.ammountOfPeople = ammountOfPeople;
-        this.reservationTime = reservationTime;
-        this.customer = customer;
-        this.trainer = trainer;
-        this.wrkOutPlan = wrkOutPlan;
     }
 
     constructJson(){

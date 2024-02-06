@@ -2,16 +2,10 @@ const User = require('./User');
 
 class WrkOutPlan{
 
-    constructFromJson(jsonData){
+    constructor(jsonData){
         this.wrkOutPlanId = jsonData.WrkOutPlanId;
         this.planName = jsonData.PlanName;
         this.user = jsonData.User;
-    }
-
-    constructFromData(WrkOutPlanId, PlanName, User){
-        this.wrkOutPlanId = WrkOutPlanId;
-        this.planName = PlanName;
-        this.user = User;
     }
 
     constructJson(){

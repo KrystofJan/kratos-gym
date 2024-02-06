@@ -1,11 +1,10 @@
 const userService = require('../Services/UserService');
-const userModel = require('../ORM/Models/User');
-const userAuthModel = require('../ORM/Models/UserAuth');
+const UserModel = require('../ORM/Models/User');
+const UserAuthModel = require('../ORM/Models/UserAuth');
 
 const loginAuth = async (req, res) => {
     try{
-        const userAuth = new userAuthModel();
-        userAuth.constructFromJson(req.body);
+        const userAuth = new UserAuthModel(req.body);
         
         let result = await userService.getValueLogin(userAuth.loginOrEmail);
         

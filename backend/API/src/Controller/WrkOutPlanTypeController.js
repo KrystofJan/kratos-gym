@@ -5,30 +5,31 @@ const PlanModel = require('../ORM/Models/WrkOutPlan');
 const ExerciseTypeModel = require('../ORM/Models/ExerciseType');
 const WrkOutMachinePlanModel = require('../ORM/Models/WrkOutPlanType');
 
+const buildBody = async (planType) => {
+    const result = [];
+
+    for(const pt of planType){
+        
+        const planBody = await wrkOutPlanService.getId(pt.WrkOutPlanId);
+        const typeBody = await typeService.get(pt.ExerciseTypeId);
+
+        const plan = new PlanModel(planBody);
+        const exerciseType = new ExerciseTypeModel(typeBody);
+
+        const model = new WrkOutMachinePlanModel({
+            "WrkOutPlan": plan.constructJson(),
+            "ExerciseType": exerciseType.constructJson()
+        });
+        result.push(model.constructJson(model));
+    }
+    return result;
+}
+
 const getIdPlan = async (req,res,id) => {
     try{
         const planType = await wrkOutPlanTypeService.getIdPlan(id);
-        const result = [];
-
-        for(const pt of planType){
-            
-            const planBody = await wrkOutPlanService.getId(pt.WrkOutPlanId);
-            const typeBody = await typeService.get(pt.ExerciseTypeId);
-    
-            const plan = new PlanModel();
-            const exerciseType = new ExerciseTypeModel();
-            
-            plan.constructFromJson(planBody);
-            exerciseType.constructFromJson(typeBody);
-    
-            const model = new WrkOutMachinePlanModel({
-                "WrkOutPlan": plan.constructJson(),
-                "ExerciseType": exerciseType.constructJson()
-            });
-            result.push(model.constructJson(model));
-        }
-
-
+        
+        const result = await buildBody(planType);
         res.status(200).json(result);
     }
     catch(err){
@@ -39,29 +40,8 @@ const getIdPlan = async (req,res,id) => {
 const getIdType = async (req,res,id) => {
     try{
         const planType = await wrkOutPlanTypeService.getIdType(id);
-
-        const result = [];
-
-        for(const pt of planType){
-            
-            const planBody = await wrkOutPlanService.getId(pt.WrkOutPlanId);
-            const typeBody = await typeService.get(pt.ExerciseTypeId);
-    
-            const plan = new PlanModel();
-            const exerciseType = new ExerciseTypeModel();
-            
-            
-            plan.constructFromJson(planBody);
-            exerciseType.constructFromJson(typeBody);
-    
-            const model = new WrkOutMachinePlanModel({
-                "WrkOutPlan": plan.constructJson(),
-                "ExerciseType": exerciseType.constructJson()
-            });
-            result.push(model.constructJson(model));
-        }
-
-
+        
+        const result = await buildBody(planType);
         res.status(200).json(result);
     }
     catch(err){

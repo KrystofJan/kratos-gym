@@ -1,6 +1,6 @@
 class ExerciseType{
 
-    constructFromJson(jsonData){
+    constructor(jsonData){
         this.exerciseTypeId = jsonData.ExerciseTypeId
         this.typeName = jsonData.ExerciseTypeName;
         this.category = jsonData.Category;
