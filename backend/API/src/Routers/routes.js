@@ -7,7 +7,7 @@ const exerciseTypeRouter = require('./ExerciseTypeRouter');
 const machineExerciseTypesRouter = require('./MachineExerciseTypesRouter');
 
 const setRoutes = (app) => {
-    app.use('/api/reservations', reservationRouter);
+    app.use('/api/reservation', reservationRouter);
     app.use('/api/address', addressRouter);
     app.use('/api/plan', wrkOutPlanRouter);
     app.use('/api/machine', wrkOutMachineRouter);

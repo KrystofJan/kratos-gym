@@ -11,4 +11,9 @@ ReservationRouter.get('/:id', (req, res) => {
     reservationController.getId( req,res,req.params['id']);
 })
 
+ReservationRouter.post('/', (req, res) => {
+    reservationController.post( req,res);
+    
+});
+
 module.exports = ReservationRouter;

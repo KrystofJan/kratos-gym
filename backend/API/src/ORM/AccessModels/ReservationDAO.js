@@ -24,5 +24,17 @@ class ReservationDAO extends RelationalModel{
             console.log("Nastala chyba: " + error);
         }
     }
+
+    async post(body){
+        try{
+            console.log(body);
+            const result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body,"Reservation"));
+            
+            return result;
+        }
+        catch(error){
+            console.log("Nastala chyba: " + error);
+        }
+    }
 }
 module.exports = ReservationDAO;

@@ -4,5 +4,6 @@
     "Address": "Street, City, PostalCode, Country, BuildingNumber, ApartmentNumber",
     "ExerciseType": "ExerciseTypeName, Category, BodyPart",
     "WrkOutMachine": "MachineName, MaxWeight, MinWeight, MaxPeople, AvgTimeTaken",
-    "MachineExerciseTypes": "WrkOutMachineId, ExerciseTypeId"
+    "MachineExerciseTypes": "WrkOutMachineId, ExerciseTypeId",
+    "Reservation":   "AmmoutOfPeople, ReservationTime, CustomerId, TrainerId, WrkOutPlanId"
 }

@@ -58,7 +58,20 @@ const getAll = async (req,res) => {
     }
 }
 
+const post = async (req, res) => {
+    try{
+        const body = req.body;
+        const result = await reservationService.post(body);
+
+        res.status(201).json(result);
+    }
+    catch(err){
+        res.status(500).json(err);
+    }
+}
+
 module.exports = {
     getId,
     getAll,
+    post,
 }
