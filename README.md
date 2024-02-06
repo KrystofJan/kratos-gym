@@ -1,4 +1,9 @@
 # gym-reservation-system
+## Update Feb 06. 2024
+* Adding WrkOutPlanTypes and WrkOutPlanMachine endpoints
+* Adding requests to Reservations endpoint
+* Refractoring models and controllers
+
 ## Update Feb 05. 2024
 * Adding MachineExerciseTypes and ExerciseType endpoints
 * Adding requests to WrkOutMachine and Address endpoints
