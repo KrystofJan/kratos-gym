@@ -5,6 +5,7 @@ const wrkOutMachineRouter = require('./WrkOutMachineRouter');
 const userAuthRouter = require('./UserAuthRouter');
 const exerciseTypeRouter = require('./ExerciseTypeRouter');
 const machineExerciseTypesRouter = require('./MachineExerciseTypesRouter');
+const wrkOutPlanTypeRouter = require('./WrkOutPlanTypeRouter');
 
 const setRoutes = (app) => {
     app.use('/api/reservation', reservationRouter);
@@ -14,6 +15,7 @@ const setRoutes = (app) => {
     app.use('/api/userauth',userAuthRouter);
     app.use('/api/exercise-type', exerciseTypeRouter);
     app.use('/api/mach-ex-type', machineExerciseTypesRouter);
+    app.use('/api/plan-type', wrkOutPlanTypeRouter);
 }
 
 module.exports = {

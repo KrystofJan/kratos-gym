@@ -27,7 +27,6 @@ class ReservationDAO extends RelationalModel{
 
     async post(body){
         try{
-            console.log(body);
             const result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body,"Reservation"));
             
             return result;

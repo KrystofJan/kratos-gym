@@ -16,8 +16,6 @@ class UserDAO extends RelationalModel{
     async getValueIs (attrValue, attrName) {
         try{
             const result = await this.MakeDbRequest(() => this.dbHandler.dbSelectAttrIs(attrValue, attrName, "User"));
-            console.log("I want to die");
-            console.log(result);
             return result;
         }
         catch(error){
