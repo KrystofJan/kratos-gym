@@ -96,11 +96,11 @@ create table WrkOutPlanPreset(
     FOREIGN KEY (AuthorId) references User(UserId)
 )
 create table WrkOutPlanMachinesPreset(
-    WrkOutPlanMachinesPreset int not null,
+    WrkOutPlanPresetId int not null,
     WrkOutMachineId int not null,
     sets int not null default 4,
     reps int not null default 8,
-    FOREIGN KEY (WrkOutPlanMachinesPreset) references WrkOutPlan(WrkOutPlanId),
+    FOREIGN KEY (WrkOutPlanPresetId) references WrkOutPlanPreset(WrkOutPlanPresetId),
     FOREIGN KEY (WrkOutMachineId) references WrkOutMachine(WrkOutMachineId),
-    PRIMARY KEY (WrkOutPlanMachinesPreset, WrkOutMachineId)
+    PRIMARY KEY (WrkOutPlanPresetId, WrkOutMachineId)
 );
