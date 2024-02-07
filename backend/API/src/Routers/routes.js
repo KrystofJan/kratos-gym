@@ -1,6 +1,7 @@
 const reservationRouter = require('./ReservationRouter');
 const addressRouter = require('./AddressRouter');
 const wrkOutPlanRouter = require('./WrkOutPlanRouter');
+const wrkOutPlanPresetRouter = require('./WrkOutPlanPresetRouter');
 const wrkOutMachineRouter = require('./WrkOutMachineRouter');
 const userAuthRouter = require('./UserAuthRouter');
 const exerciseTypeRouter = require('./ExerciseTypeRouter');
@@ -18,6 +19,7 @@ const setRoutes = (app) => {
     app.use('/api/machine-type', machineExerciseTypesRouter);
     app.use('/api/plan-type', wrkOutPlanTypeRouter);
     app.use('/api/plan-machine', wrkOutPlanMachineRouter);
+    app.use('/api/plan-preset', wrkOutPlanPresetRouter);
 }
 
 module.exports = {

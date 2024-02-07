@@ -8,8 +8,8 @@
     "WrkOutPlanPreset": "WrkOutPlanPresetId",
     "MachineExerciseTypes--machine": "WrkOutMachineId",
     "MachineExerciseTypes--type": "ExerciseTypeId",
-    "WrkOutPlanType--type": "ExerciseTypeId",
     "WrkOutPlanType--plan": "WrkOutPlanId",
+    "WrkOutPlanType--type": "ExerciseTypeId",
     "WrkOutPlanMachines--plan": "WrkOutPlanId",
     "WrkOutPlanMachines--machine": "WrkOutMachineId"
 }
