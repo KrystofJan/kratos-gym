@@ -92,6 +92,7 @@ class DatabaseHandler{
     }
 
     dbSelectSpecific(id, tableName){
+        console.log(id);
         return new Promise((resolve, reject) => {
             const pkey = dbKeys[tableName];
             const tableNames = tableName.split('--');

@@ -1,32 +1,34 @@
 const wrkOutPlanMachinePresetService = require('../Services/WrkOutPlanMachinePresetService');
 const wrkOutPlanPresetService = require('../Services/WrkOutPlanPresetService');
 const wrkOutMachineService = require('../Services/WrkOutMachineService');
+const userService = require('../Services/UserService');
 const PresetModel = require('../ORM/Models/WrkOutPlanPreset');
 const MachineModel = require('../ORM/Models/WrkOutMachine');
 const WrkOutPlanMachinePreset = require('../ORM/Models/WrkOutPlanMachinePreset');
+const UserModel = require('../ORM/Models/User');
 
 const buildBody = async (planMachine) => {
     const result = [];
 
     for(const pm of planMachine){
         
-        const planBody = await wrkOutPlanPresetService.getId(pm.WrkOutPlanId);
+        const planBody = await wrkOutPlanPresetService.getId(pm.WrkOutPlanPresetId);
         const machineBody = await wrkOutMachineService.getId(pm.WrkOutMachineId);
+        const authorBody = await userService.getId(planBody.AuthorId);
 
         const plan = new PresetModel(planBody);
         const machine = new MachineModel(machineBody);
+        const author = new UserModel(authorBody)
+        plan.author = author.constructJson();
 
         const model = new WrkOutPlanMachinePreset({
-            "WrkOutPlan": plan.constructJson(),
+            "WrkOutPlanPreset": plan.constructJson(),
             "WrkOutMachine": machine.constructJson(),
             "Sets": pm.sets,
             "Reps": pm.reps,
-            "WrkOutStartTime": pm.wrkOutStartTime,
-            "WrkOutEndTime": pm.wrkOutEndTime,
-            "CanDisturb": pm.canDisturb ? true : false
         });
 
-        result.push(model.constructJson(model));
+        result.push(model.constructJson());
     }
     return result;
 }
