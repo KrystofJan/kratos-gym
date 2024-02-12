@@ -15,7 +15,7 @@ onMounted(fetchData);
 
 <template>
   
-  <section class="HeroBanners">
+  <section class="HeroBanners frame">
     <article class="HeroBanners-banner" v-for="banner in banners">
       <h3 class="HeroBanners-banner-heading">{{ banner.heading }}</h3>
       <div class="HeroBanners-banner-content">
@@ -32,7 +32,7 @@ onMounted(fetchData);
 .HeroBanners{
   display: flex;
   flex-direction: row;
-  min-height: calc(100dvw/3);
+  min-height: 35rem;
 
   &-banner{
     display: flex;

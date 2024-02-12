@@ -24,7 +24,7 @@ onMounted(fetchData);
 
 <template>
     
-<section v-if="!isLoading" class="StyledText-wrapper">
+<section v-if="!isLoading" class="StyledText-wrapper MarginedComponent frame">
     <StickyText :data="TextData[0]"/>
     <StickyText :data="TextData[1]"/>
     <StickyText :data="TextData[2]"/>

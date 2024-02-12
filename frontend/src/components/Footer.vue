@@ -19,7 +19,7 @@ onMounted(fetchData);
 
 <template>
     <footer class="FooterWrapper">
-        <div class="Footer">
+        <div class="Footer frame">
             <div class="Footer-col" v-for="col in footer_cols">
                 <h3 class="Footer-col-heading">{{ col.footerColHeading }}</h3>
                 <ul class="Footer-col-links">
@@ -35,15 +35,12 @@ onMounted(fetchData);
 </template>
 
 <style scoped lang="scss">
-// .FooterWrapper{
-//     position: absolute;
-//     bottom: 0;
-//     width: 100%;
-// }
+.FooterWrapper{
+    background: #2d2d2d;
+}
 .Footer{
     display: grid;
     grid-template-columns: repeat(3,1fr);
-    background: #2d2d2d;
     min-height: 25dvh;
 
 
