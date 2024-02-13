@@ -1,4 +1,5 @@
 {
+    "test": "test",
     "WrkOutPlan": "PlanName, UserId",
     "WrkOutPlanPreset": "PresetName, AuthorId",
     "User": "FirstName, LastName, Email, PhoneNumber, Password, AddressId",

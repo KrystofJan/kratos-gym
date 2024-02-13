@@ -104,3 +104,8 @@ create table WrkOutPlanMachinesPreset(
     FOREIGN KEY (WrkOutMachineId) references WrkOutMachine(WrkOutMachineId),
     PRIMARY KEY (WrkOutPlanPresetId, WrkOutMachineId)
 );
+
+create table test(
+    id int not null primary key auto_increment,
+    test varchar(64) not null
+);
