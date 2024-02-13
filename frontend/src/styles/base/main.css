@@ -1,5 +1,9 @@
 :root{
-    --background: #2d2d2d;
+    --background: #181610;
+    --backgroundSecondary: #838282;
+    --baseRed: #9a1a10;
+    --baseBlue: #05d3d3;
+    --backgroundContrast: #fff;
     --textColorMain: #d2d2d2;
     --spaceHorizontal: 5rem;
 }
@@ -8,6 +12,7 @@ body{
     margin:0;
     padding: 0;
     font-family: Helvetica, sans-serif;
+    background-color: var(--background);
 }
 
 .MarginedComponent{
@@ -16,5 +21,6 @@ body{
 
 .frame{
     max-width: 1920px;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
 }
