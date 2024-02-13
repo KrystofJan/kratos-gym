@@ -1,52 +1,89 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { getAll } from '../services/ReservationService';
+import { post } from '../services/TestService';
+
 const apiData = ref([]);
+
+const myData = ref('');
 
 const fetchData = async () => {
     try {
-    const response = await fetch('http://localhost:8080/api/reservations');
-    const data = await response.json();
-    apiData.value = data;
+        const data = await getAll();
+        apiData.value = data;
     } catch (error) {
-    console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error);
     }
 };
 
-onMounted(() => {
-    fetchData();
+const postData = async (body) => {
+    try{
+        const pst = await post(body);
+        alert(pst);
+    }
+    catch{
+        alert("noooo");
+    }
+}
+
+const submit = async () => {
+    await postData({'test': myData.value});
+}
+
+onMounted(async () => {
+    await fetchData();
 });
 
 </script>
 
 <template>
-<h1>res</h1>
+    <section class="ReservationForm">
+        <h1>res</h1>
 
-<table>
-    <tr>
-        <th>Reservation Id</th>
-        <th>Ammout of People</th>
-        <th>ReservationTime</th>
-        <th>Customer full name</th>
-    </tr>
-    <tr v-for="reservation in apiData">
-        <td>
-            {{ reservation.ReservationId }}
-        </td>
-        <td>
-            {{ reservation.AmmoutOfPeople }}
-        </td>
-        <td>
-            {{ reservation.ReservationTime }}
-        </td>
-        <td>
-            {{ reservation.Customer.FirstName + " " + reservation.Customer.LastName }}
-        </td>
-    </tr>
-</table>
+        <table>
+            <tr>
+                <th>Reservation Id</th>
+                <th>Ammout of People</th>
+                <th>ReservationTime</th>
+                <th>Customer full name</th>
+            </tr>
+            <tr v-for="reservation in apiData">
+                <td>
+                    {{ reservation.ReservationId }}
+                </td>
+                <td>
+                    {{ reservation.AmmoutOfPeople }}
+                </td>
+                <td>
+                    {{ reservation.ReservationTime }}
+                </td>
+                <td>
+                    {{ reservation.Customer.FirstName + " " + reservation.Customer.LastName }}
+                </td>
+            </tr>
+        </table>
+
+        <div>
+            <div class="FormItem">
+                <label for="test">
+                    Esketit:
+                </label>
+                <input type="text" name="test" id="test" v-model="myData">    
+            </div>
+            <div class="FormItem">
+                <button @click="submit">Post</button>
+            </div>
+        </div>
+
+    </section>
 
 </template>
 
 <style scoped>
+.ReservationForm{
+    background-color: white;
+}
+
 table{
     width: 100%;
 

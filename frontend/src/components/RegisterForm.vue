@@ -43,6 +43,9 @@ const loading = ref(false);
 </template>
 
 <style lang="scss" scoped>
+.RegisterForm{
+    background-color: white;
+}
 .loading{
     position: absolute;
     width: 100vw;
