@@ -64,10 +64,10 @@ class DatabaseHandler{
                   apiLogger.logApi(err);
                   return reject({ error: 'Internal Server Error, check the logger for more context' });
                 }
-    
                 apiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
                 resolve({
-                    "Status": `Successfull post on ${tableName} endpoint`
+                    "Status": `Successfull post on ${tableName} endpoint`,
+                    "CreatedId": results.insertId
                 });
             });
         })
