@@ -57,10 +57,31 @@ const getIdMachine = async (req,res,id) => {
 
 const post = async (req, res) => {
     try{
+        // TODO: Maybe make a better response because I kinda need the id...
         const body = req.body;
-        const result = await wrkOutPlanMachineService.post(body);
+        let response = {};
 
-        res.status(201).json(result);
+        if (body.WrkOutMachines){
+            for(let b of body.WrkOutMachines){
+                const result = await wrkOutPlanMachineService.post(
+                    {
+                        "WrkOutPlanId": body.WrkOutPlanId,
+                        "WrkOutMachineId": b.WrkOutMachineId,
+                        "Reps": b.Reps,
+                        "Sets": b.Sets,
+                        "WrkOutStartTime": b.WrkOutStartTime,
+                        "WrkOutEndTime,": b.WrkOutEndTime,
+                        "CanDisturb": true
+                    }
+                );
+            }
+            response = {"Status": `Created ${ids.length} Machine plan connections for the ${body.WrkOutPlanId}`};
+        } 
+        else{
+            response  = await wrkOutPlanMachineService.post(body);
+        }
+
+        res.status(201).json(response);
     }
     catch(err){
         res.status(500).json(err);

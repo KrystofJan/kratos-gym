@@ -42,7 +42,7 @@ const getIdType = async (req,res,id) => {
         const machineType = await machineExerciseTypesService.getIdType(id);
 
         const result = await buildBody(machineType);
-        res.status(200).json(result);;
+        res.status(200).json(result);
     }
     catch(err){
         res.status(500).json(err);

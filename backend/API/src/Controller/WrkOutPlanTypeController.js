@@ -52,9 +52,26 @@ const getIdType = async (req,res,id) => {
 const post = async (req, res) => {
     try{
         const body = req.body;
-        const result = await wrkOutPlanTypeService.post(body);
+        let response = {};
 
-        res.status(201).json(result);
+        if (body.ExerciseTypeIds){
+            for(let exerciseTypeId of body.ExerciseTypeIds){
+                const result = await wrkOutPlanTypeService.post(
+                    {
+                        "WrkOutPlanId": body.WrkOutPlanId,
+                        "ExerciseTypeIds": exerciseTypeId
+                    }
+                );
+            }
+            response = {
+                "Status": `Created ${body.ExerciseTypeIds.length} plan type connection for the ${body.WrkOutPlanId}`
+            };
+        } 
+        else{
+            response  = await wrkOutPlanMachineService.post(body);
+        }
+
+        res.status(201).json(response);
     }
     catch(err){
         res.status(500).json(err);

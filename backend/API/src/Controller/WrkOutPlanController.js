@@ -49,10 +49,16 @@ const post = async (req, res) => {
         const body = req.body;
 
         if (Array.isArray(body)){
+            const ids = []
             for (const record of body){
                 const result = await wrkOutPlanService.post(record);
+                ids.push(result.CreatedId);
             }
-            res.status(201).json({"status": "All"});
+            
+            res.status(201).json({
+                "status": `Created ${ids.length}`,
+                "CreatedIds": ids
+            });
         }
         else{
             const result = await wrkOutPlanService.post(body);
