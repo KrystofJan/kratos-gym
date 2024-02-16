@@ -2,9 +2,13 @@ import * as config from '../config/api_config';
 
 export class BaseService{
 
-     async  getId (id, endpoint) {
+    constructor(endpoint) {
+        this.endpoint = endpoint;
+    }
+
+     async  getId (id) {
         try {
-            const response = await fetch(`${config.url}/${endpoint}/${id}`);
+            const response = await fetch(`${config.url}/${this.endpoint}/${id}`);
             const data = await response.json();
             return data[0];
         } catch (error) {
@@ -12,9 +16,9 @@ export class BaseService{
         }
     }
     
-    async getAll (endpoint) {
+    async getAll () {
         try {
-            const response = await fetch(`${config.url}/${endpoint}`);
+            const response = await fetch(`${config.url}/${this.endpoint}`);
             const data = await response.json();
             return data;
         } catch (error) {
@@ -22,11 +26,11 @@ export class BaseService{
         }
     }
 
-    async post (endpoint, data) {
+    async post (data) {
         try {
             const requestOptions = config.post_headers;
             requestOptions.body = JSON.stringify(data);
-            const response = await fetch(`${config.url}/${endpoint}`, requestOptions);
+            const response = await fetch(`${config.url}/${this.endpoint}`, requestOptions);
             return response;;
         } catch (error) {
             console.error('Error fetching data:', error);
