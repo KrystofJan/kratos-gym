@@ -11,7 +11,8 @@ class ReservationDAO extends RelationalModel{
             return result[0];
         }
         catch(error){
-            console.log("Nastala chyba: " + error);
+            const err = await error.json();
+            console.log("Nastala chyba: " + err);
         }
     }
 
