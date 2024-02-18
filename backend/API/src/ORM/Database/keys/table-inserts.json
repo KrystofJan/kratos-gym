@@ -7,7 +7,8 @@
     "ExerciseType": "ExerciseTypeName, Category, BodyPart",
     "WrkOutMachine": "MachineName, MaxWeight, MinWeight, MaxPeople, AvgTimeTaken",
     "MachineExerciseTypes": "WrkOutMachineId, ExerciseTypeId",
-    "Reservation":   "AmmoutOfPeople, ReservationTime, CustomerId, TrainerId, WrkOutPlanId",
+    "Reservation--trainer":   "AmmoutOfPeople, ReservationTime, CustomerId, TrainerId, WrkOutPlanId",
+    "Reservation":   "AmmoutOfPeople, ReservationTime, CustomerId, WrkOutPlanId",
     "WrkOutPlanType": "WrkOutPlanId, ExerciseTypeId",
     "WrkOutPlanMachines": "WrkOutPlanId, WrkOutMachineId, Sets, Reps, WrkOutStartTime, WrkOutEndTime, CanDisturb",
     "WrkOutPlanMachinesPreset": "WrkOutPlanPresetId, WrkOutMachineId, Sets, Reps"

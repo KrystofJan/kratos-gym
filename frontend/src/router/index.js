@@ -30,6 +30,11 @@ const routes = [
         path: '/register',
         name: 'Register',
         component: () => import('../views/Register.vue')
+    },
+    {
+        path: '/form-test',
+        name: 'Form Test',
+        component: () => import('../views/FormKitTest.vue')
     }
 ];
 

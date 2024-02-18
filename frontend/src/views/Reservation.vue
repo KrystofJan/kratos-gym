@@ -94,7 +94,7 @@ const postData = async () => {
         })
         const r4 = await reservationRes.json();
         console.log(r4);
-        alert("poppo");
+        alert(r4);
     }
     catch{
         alert("noooo");
@@ -195,8 +195,4 @@ onMounted(async () => {
         }
     }
 }
-
-
-
-
 </style>

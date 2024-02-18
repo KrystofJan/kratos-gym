@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@formkit/icons": "^1.5.9",
+    "@formkit/themes": "^1.5.9",
+    "@formkit/vue": "^1.5.9"
+  }
+}

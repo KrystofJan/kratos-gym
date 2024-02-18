@@ -27,7 +27,12 @@ class ReservationDAO extends RelationalModel{
 
     async post(body){
         try{
-            const result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body,"Reservation"));
+            let result;
+
+            if(body.TrainerId){
+                result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body,"Reservation"));
+            }
+            result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body,"Reservation"));
             
             return result;
         }
@@ -36,4 +41,5 @@ class ReservationDAO extends RelationalModel{
         }
     }
 }
+
 module.exports = ReservationDAO;
