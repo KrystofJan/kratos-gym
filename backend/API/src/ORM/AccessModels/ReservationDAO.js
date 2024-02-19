@@ -31,7 +31,7 @@ class ReservationDAO extends RelationalModel{
             let result;
 
             if(body.TrainerId){
-                result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body,"Reservation"));
+                result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body,"Reservation-trainer"));
             }
             result = await this.MakeDbRequest(() => this.dbHandler.dbPost(body,"Reservation"));
             

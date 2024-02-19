@@ -49,15 +49,15 @@ class DatabaseHandler{
     dbPost(body, tableName){
         return new Promise((resolve, reject) => {
             const data = [];
-            let values = "(";
+            const columns = Object.keys(body).join(', ');
+            const placeholders = Object.keys(body).map(() => '?').join(', ');
+    
             Object.keys(body).forEach(function(key) {
-                values += '?, ';
                 data.push(body[key]);
             });
-            values = values.slice(0, -2) + ')';
-
-            const command = `Insert Into ${tableName}(${dbInserts[tableName]} ) Values ${values}`; 
-
+    
+            const command = `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders})`;
+    
             this.db.query(command, data, (err, results) => {
                 if (err) {
                   console.error('Error querying the database:', err);

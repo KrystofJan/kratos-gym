@@ -59,7 +59,7 @@ const post = async (req, res) => {
                 const result = await wrkOutPlanTypeService.post(
                     {
                         "WrkOutPlanId": body.WrkOutPlanId,
-                        "ExerciseTypeIds": exerciseTypeId
+                        "ExerciseTypeId": exerciseTypeId
                     }
                 );
             }
