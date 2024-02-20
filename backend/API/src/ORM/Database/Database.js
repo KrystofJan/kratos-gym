@@ -70,8 +70,7 @@ class DatabaseHandler{
                     "CreatedId": results.insertId
                 });
             });
-        })
-
+        });
     }
 
     dbSelectAttrIs(attrValue, attrName, tableName){

@@ -70,7 +70,7 @@ const post = async (req, res) => {
                         "Reps": b.Reps,
                         "Sets": b.Sets,
                         "WrkOutStartTime": b.WrkOutStartTime,
-                        "WrkOutEndTime,": b.WrkOutEndTime,
+                        "WrkOutEndTime": b.WrkOutEndTime,
                         "CanDisturb": true
                     }
                 );
