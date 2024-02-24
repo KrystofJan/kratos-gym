@@ -1,0 +1,80 @@
+.ReservationBuilder{
+    padding: 5rem 2.5rem;
+    width: 75%;
+    margin: auto;
+    background-color: white;
+}
+
+.Builder{
+
+    &Step{
+        margin: 5rem auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    h2{
+        text-align: center;
+    }
+
+    p{
+        width: 50%;
+        margin: auto;
+        text-align: center;
+    }
+
+    &Text{
+        grid-column: 1/-1;
+    }
+
+    &Item{
+        display: grid;
+        grid-template-columns: 16rem 1fr;
+    }
+
+    [data-type-checks]{
+        grid-column: 1/-1;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+    
+        label{
+            padding-left: 1rem; 
+        }
+    
+    }
+    [data-machine-checks]{
+        grid-column: 1/-1;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+    
+        label{
+            padding-left: 1rem; 
+        }
+    }
+
+    .PlanMachineDetails{
+
+        .machineWrapper{
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        &-item{
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            align-content: center;
+            background: white;
+            box-shadow: 0 0 2rem rgba(0,0,0,.1);
+            padding: 1rem;
+
+            .DetailItem{
+
+                &-name{
+                    font-size: 2rem;
+                }
+            }
+        }
+    }
+}

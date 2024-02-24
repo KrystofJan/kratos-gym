@@ -2,25 +2,27 @@
 import { ref, onMounted } from 'vue';
 import { BaseService } from '../services/base/ApiService';
 
+import PlanStep from '../components/Reservation/PlanStep.vue';
+
 const Plan = ref({
     PlanName: '',
     UserId: 1 // todo change to loged in user
 });
 
 const PlanMachine = ref({
-    WrkOutPlanId: 0,
+    WrkOutPlanId: Number,
     WrkOutMachines: []
 });
 
 const Reservation = ref({
-    AmmoutOfPeople: 0,
-    WrkOutPlanId: 0,
-    ReservationTime: '',
+    AmmoutOfPeople: Number,
+    WrkOutPlanId: Number,
+    ReservationTime: String,
     CustomerId: 1, // todo change to loged in user
 })
 
 const PlanType = ref({
-    WrkOutPlanId: 0,
+    WrkOutPlanId: Number,
     ExerciseTypeIds: []
 });
 
@@ -29,7 +31,6 @@ const SelectedMachines = ref([]);
 // todo split to objs
 const Machines = ref([]);
 const Types = ref([]);
-const User = 1;
 
 let PlanService = {};
 let PlanTypeService = {};
@@ -99,23 +100,6 @@ const submit = async () => {
     await postData();
 }
 
-const addMachine = async (id) => {
-    let contained = false;
-    console.log(PlanMachine.value.WrkOutMachines);
-
-    PlanMachine.value.WrkOutMachines = PlanMachine.value.WrkOutMachines.filter(item => {
-        if(item.WrkOutMachineId === id){
-            contained = true;
-            return false;
-        }
-        return true;
-    });
-
-    if (!contained){
-        PlanMachine.value.WrkOutMachines.push({WrkOutMachineId: id})
-    }
-}
-
 onMounted(async () => {
     prepareServices();
     await fetchData();
@@ -123,50 +107,16 @@ onMounted(async () => {
 </script>
 
 <template>
-    <section class="ReservationBuilder Builder">
-        {{ PlanMachine }}
-        <div class="PlanName BuilderStep">
-            <div class="BuilderText">
-                <h2>Pick a name and time for your plan!</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>
-            </div>
-            <div class="BuilderItem"  data-plan-name>
-                <label for="plan-name">
-                    PlanName:
-                </label>
-                <input type="text" name="plan-name" id="plan-name" v-model="Plan.PlanName">    
-            </div>
-            <div class="BuilderItem"  data-plan-name>
-                <label for="arrival-date">
-                    ArrivalDate:
-                </label>
-                <input type="date" name="arrival-date" v-model="Reservation.ReservationTime">    
-            </div>
-        </div>
-
-        <div class="PlanMachines BuilderStep">
-            <div class="BuilderText">
-                <h2>Pick your machines</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>
-            </div>
-
-            <div class="BuilderItem" data-machine-checks>
-                <div class="BuilderItem-machine" v-for="machine in Machines">
-                    <input  type="checkbox" 
-                            :name="'machine-' + machine.WrkOutMachineId" 
-                            :id="'machine-' + machine.WrkOutMachineId"
-                            :value="machine"
-                            v-model="SelectedMachines" 
-                            @change="addMachine(machine.WrkOutMachineId)"/>
-                    <label :for="'machine-' + machine.WrkOutMachineId">{{ machine.MachineName }}</label>
-                </div>
-            </div>
-        </div>
+    <form @submit.prevent="submit" class="ReservationBuilder Builder">
+        <PlanStep :Plan="Plan" :Reservation="Reservation"/>
+        
         
         <div v-if="(SelectedMachines.length > 0)" class="PlanMachineDetails BuilderStep">
-            <h2>Now pick time for each machine</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>
-            <div class="machineWrapper">
+            <div class="BuilderText">
+                <h2>Now pick time for each machine</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>
+            </div>
+            <div class="machineWrapper BuilderItem">
                 <div class="PlanMachineDetails-item" v-for="(machine, index) in SelectedMachines">
                     <div class="DetailItem-name">
                         <span class="MachineName">{{ machine.MachineName }} {{ index  }}</span>
@@ -238,97 +188,11 @@ onMounted(async () => {
                 step="1" />
         </div>
         <div class="BuilderItem">
-            <button @click="submit">Post</button>
+            <input type="submit" value="Postik">
         </div>
-    </section>
+    </form>
 </template>
 
 <style scoped lang="scss">
-.ReservationBuilder{
-    padding: 5rem 2.5rem;
-    width: 75%;
-    margin: auto;
-    background-color: white;
-}
-
-.Builder{
-
-    &Step{
-        margin: 5rem auto;
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    h2{
-        text-align: center;
-    }
-
-    p{
-        width: 50%;
-        margin: auto;
-        text-align: center;
-
-    }
-
-    &Text{
-        grid-column: 1/-1;
-    }
-
-    &Item{
-        display: grid;
-        grid-template-columns: 16rem 1fr;
-    }
-
-    [data-plan-name]{
-        grid-column: 1/-1;
-    }
-
-    [data-type-checks]{
-        grid-column: 1/-1;
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-    
-        label{
-            padding-left: 1rem; 
-        }
-    
-    }
-    [data-machine-checks]{
-        grid-column: 1/-1;
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-    
-        label{
-            padding-left: 1rem; 
-        }
-    }
-
-    .PlanMachineDetails{
-
-        .machineWrapper{
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        &-item{
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            align-content: center;
-            background: white;
-            box-shadow: 0 0 2rem rgba(0,0,0,.1);
-            padding: 1rem;
-
-            .DetailItem{
-
-                &-name{
-                    font-size: 2rem;
-                }
-            }
-        }
-
-    }
-}
-
+@import '../styles/sass/Reservation/Builder.scss';
 </style>
