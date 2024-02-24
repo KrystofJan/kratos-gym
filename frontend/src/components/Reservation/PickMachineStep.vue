@@ -1,36 +1,39 @@
 <script setup>
-import {ref, defineProps } from 'vue';
+import {ref, defineProps, onMounted } from 'vue';
+import { BaseService } from '../../services/base/ApiService';
 import Step from './Step.vue';
 
+let MachineService = {};
+
+const prepareServices = () => {
+    MachineService = new BaseService("machine");
+}
+
 const props = defineProps({
-    Machines: ref(Array),
-    SelectedMachines: ref(Array),
+    SelectedMachines: ref([]),
+    PlanMachine: Object,
 });
 
+const Machines = ref([]);
 const builderText = ref({
     heading: 'Pick your machines',
     text: '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>'
 });
 
+const fetchData = async () => {
+    try {
+        const machineData = await MachineService.getAll();
+        Machines.value = machineData;
 
-const addMachine = async (id) => {
-    // TODO: Change
-    let contained = false;
-    console.log(PlanMachine.value.WrkOutMachines);
-
-    PlanMachine.value.WrkOutMachines = PlanMachine.value.WrkOutMachines.filter(item => {
-        if(item.WrkOutMachineId === id){
-            contained = true;
-            return false;
-        }
-        return true;
-    });
-
-    if (!contained){
-        PlanMachine.value.WrkOutMachines.push({WrkOutMachineId: id})
+    } catch (error) {
+        console.error('Error fetching data:', error);
     }
-}
+};
 
+onMounted(async () => {
+    prepareServices();
+    await fetchData();
+})
 </script>
 
 <template>
@@ -40,8 +43,7 @@ const addMachine = async (id) => {
                     :name="'machine-' + machine.WrkOutMachineId" 
                     :id="'machine-' + machine.WrkOutMachineId"
                     :value="machine"
-                    v-model="SelectedMachines" 
-                    @change="addMachine(machine.WrkOutMachineId)"/>
+                    @change="$emit('machineSelected', machine)"/>
             <label :for="'machine-' + machine.WrkOutMachineId">{{ machine.MachineName }}</label>
         </div>
     </Step>
