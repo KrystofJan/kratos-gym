@@ -1,6 +1,6 @@
 <script setup>
 import {ref, defineProps, onMounted } from 'vue';
-import { BaseService } from '../../services/base/ApiService';
+import { BaseService } from '@/services/base/ApiService';
 import Step from './Step.vue';
 
 let MachineService = {};
@@ -50,7 +50,7 @@ onMounted(async () => {
 </template>
 
 <style lang="scss">
-@import '../../styles/sass/Reservation/Builder.scss';
+@import '@/styles/sass/Reservation/Builder.scss';
 
 [data-plan-name]{
     grid-column: 1/-1;

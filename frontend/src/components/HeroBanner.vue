@@ -1,13 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-
+import content from '@/siteContent/_hp-hero-banner-content.json';
 const banners = ref([]);
 
 
-const fetchData = async () => {
-  fetch("../../siteContent/_hp-hero-banner-content.json") 
-              .then((res) => res.json())
-              .then((data) => banners.value = data);
+const fetchData = () => {
+  banners.value = content;
 } 
 
 onMounted(fetchData);

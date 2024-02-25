@@ -1,11 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { BaseService } from '../services/base/ApiService';
+import { BaseService } from '@/services/base/ApiService';
 
-import PlanStep from '../components/Reservation/PlanStep.vue';
-import PickMachineStep from '../components/Reservation/PickMachineStep.vue';
-import ConfigureMachinesStep from '../components/Reservation/ConfigureMachinesStep.vue';
-import ExTypeStep from '../components/Reservation/ExTypeStep.vue';
+import PlanStep from '@/components/Reservation/PlanStep.vue';
+import PickMachineStep from '@/components/Reservation/PickMachineStep.vue';
+import ConfigureMachinesStep from '@/components/Reservation/ConfigureMachinesStep.vue';
+import ExTypeStep from '@/components/Reservation/ExTypeStep.vue';
+import AmmountOfPeopleStep from '@/components/Reservation/AmmountOfPeopleStep.vue';
 
 const Plan = ref({
     PlanName: '',
@@ -126,24 +127,8 @@ onMounted(async () => {
         <PickMachineStep @machine-selected="addMachine"/>
         <ConfigureMachinesStep :SelectedMachines="SelectedMachines" :PlanMachine="PlanMachine" />
         <ExTypeStep :PlanType="PlanType" />
-        <div class="BuilderItem" data-type-checks>
+        <AmmountOfPeopleStep :Reservation="Reservation" />
 
-        </div>
-        <div class="BuilderItem"  data-aop-name>
-            <label for="aop">
-                AmmountOfPeople:
-            </label>
-
-            <FormKit
-                type="number"
-                validation="required|number|between:1,4"
-                validation-visibility="live"
-                id="aop"
-                name="aop"
-                v-model="Reservation.AmmoutOfPeople"
-                value="1"
-                step="1" />
-        </div>
         <div class="BuilderItem">
             <input type="submit" value="Postik">
         </div>
@@ -151,5 +136,5 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="scss">
-@import '../styles/sass/Reservation/Builder.scss';
+@import '@/styles/sass/Reservation/Builder.scss';
 </style>

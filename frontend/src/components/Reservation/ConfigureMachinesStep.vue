@@ -64,7 +64,7 @@ const builderText = ref({
 </template>
 
 <style lang="scss">
-@import '../../styles/sass/Reservation/Builder.scss';
+@import '@/styles/sass/Reservation/Builder.scss';
 
 [data-plan-name]{
     grid-column: 1/-1;

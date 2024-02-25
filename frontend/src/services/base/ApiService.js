@@ -1,4 +1,4 @@
-import * as config from '../config/api_config';
+import * as config from '@/services/config/api_config';
 
 export class BaseService{
 

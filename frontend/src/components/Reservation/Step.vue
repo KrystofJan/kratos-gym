@@ -10,7 +10,7 @@ const props = defineProps({
 
 <template>
     <div class="BuilderStep">
-        <div v-if="builderText != {}" class="BuilderText">
+        <div v-if="builderText" class="BuilderText">
             <h2>{{ builderText.heading }}</h2>
             <div class="BaseText" v-html="builderText.text" />
         </div>
@@ -21,5 +21,5 @@ const props = defineProps({
 </template>
 
 <style lang="scss">
-@import '../../styles/sass/Reservation/Builder.scss';
+@import '@/styles/sass/Reservation/Builder.scss';
 </style>

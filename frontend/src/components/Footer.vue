@@ -1,15 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-
+import content from '@/siteContent/_footer-content.json';
 const footer_cols = ref([]);
-const linkTest= '/reservations';
 
-
-const fetchData = async () => {
-    fetch("../../siteContent/_footer-content.json") 
-              .then((res) => res.json())
-              .then((data) => footer_cols.value = data)
-              .catch((e) => console.log(e));
+const fetchData =  () => {
+    footer_cols.value = content;
 }
 
 
