@@ -9,6 +9,7 @@ const machineExerciseTypesRouter = require('./MachineExerciseTypesRouter');
 const wrkOutPlanTypeRouter = require('./WrkOutPlanTypeRouter');
 const wrkOutPlanMachineRouter = require('./WrkOutPlanMachineRouter');
 const wrkOutPlanMachinePresetRouter = require('./WrkOutPlanMachinePresetRouter');
+const userRouter = require('./UserRouter');
 const test = require("./TestRouter");
 
 const setRoutes = (app) => {
@@ -23,7 +24,8 @@ const setRoutes = (app) => {
     app.use('/api/plan-machine', wrkOutPlanMachineRouter);
     app.use('/api/plan/preset', wrkOutPlanPresetRouter);
     app.use('/api/plan-machine/preset', wrkOutPlanMachinePresetRouter);
-    app.use('/api/test', test)
+    app.use('/api/user', userRouter);
+    app.use('/api/test', test);
 }
 
 module.exports = {

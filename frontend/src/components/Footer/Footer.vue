@@ -31,7 +31,7 @@ onMounted(fetchData);
 
 <style scoped lang="scss">
 .FooterWrapper{
-    background: #2d2d2d;
+    background: var(--baseRed);
 }
 .Footer{
     display: grid;

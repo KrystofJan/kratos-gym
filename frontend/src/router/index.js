@@ -32,6 +32,11 @@ const routes = [
         component: () => import('@/views/User/Register/Register.vue')
     },
     {
+        path: '/profile',
+        name: 'Profile',
+        component: () => import('@/views/User/Profile/Profile.vue')
+    },
+    {
         path: '/form-test',
         name: 'Form Test',
         component: () => import('@/views/pages/FormKitTest/FormKitTest.vue')

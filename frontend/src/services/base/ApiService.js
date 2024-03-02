@@ -10,7 +10,8 @@ export class BaseService{
         try {
             const response = await fetch(`${config.url}/${this.endpoint}/${id}`);
             const data = await response.json();
-            return data[0];
+
+            return data;
         } catch (error) {
             console.error('Error fetching data:', error);
         }

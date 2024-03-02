@@ -1,46 +1,40 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { BaseService } from '@/services/base/ApiService';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const AuthModel = ref({
+    LoginOrEmail: '',
+    EncodedPassword: '',
+});
+
+let AuthService = {};
+const prepareServices = () => {
+    AuthService = new BaseService("userauth/login");
+}
 
 
-const loginOrEmail = ref('');
-const password = ref('');
 const loading = ref(false);
 
 const logIn = async () => {
     loading.value = true;
-    const pass = btoa(password.value);
-    console.log(pass);
+    AuthModel.value.EncodedPassword = btoa(AuthModel.value.EncodedPassword);
+    const response = await AuthService.post(AuthModel.value);
+    const body = await response.json();
 
-    const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify({
-                LoginOrEmail: loginOrEmail.value,
-                EncodedPassword: pass
-            })
-        };
-
-    try{
-        const response = await fetch('http://localhost:8080/api/userauth/login',requestOptions);
-        const body = await response.json();
-
-        loading.value = false;
-
-        if(response.status == 500){
-            alert(body.status);
-            console.log(body);
-        }
+    // TODO: error handeling
 
 
-    }
-    catch(err){
-        console.log("pipi", err);
-    }
+    localStorage.setItem("userId", body.userId);
+    loading.value = false;
+    await router.push({path: '/profile'});
 }
+
+onMounted(() => {
+    prepareServices();
+})
 </script>
 
 <template>
@@ -49,11 +43,11 @@ const logIn = async () => {
     <form class="LogInForm" @submit.prevent="logIn">
         <div class="LogInFormItem">
             <label class="LogInFormItem-label" for="login-email">Login or email</label>
-            <input v-model="loginOrEmail" id="login-email" class="LogInFormItem-input" type="text" placeholder="example@email.com" />
+            <input v-model="AuthModel.LoginOrEmail" id="login-email" class="LogInFormItem-input" type="text" placeholder="example@email.com" />
         </div>
         <div class="LogInFormItem">
             <label class="LogInFormItem-label" for="password">Password</label>
-            <input v-model="password" id="password" class="LogInFormItem-input" type="password" placeholder="password"/>
+            <input v-model="AuthModel.EncodedPassword" id="password" class="LogInFormItem-input" type="password" placeholder="password"/>
         </div>
         <div class="LogInFormItem">
             <button type="submit">LogIn</button>
