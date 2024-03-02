@@ -1,8 +1,9 @@
 :root{
-    --background: #181610;
-    --backgroundSecondary: #838282;
-    --baseRed: #9a1a10;
-    --baseBlue: #05d3d3;
+    --background: #171717;
+    --backgroundSecondary: #EDEDED;
+    --backgroundDarkSecondary: #444444;
+    --baseRed: #DA0037;
+    --baseBlue: #00ADB5;
     --backgroundContrast: #fff;
     --textColorMain: #d2d2d2;
     --spaceHorizontal: 5rem;

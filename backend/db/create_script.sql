@@ -70,8 +70,8 @@ create table WrkOutPlanMachines(
     WrkOutTime DATETIME not null,
     sets int not null default 4,
     reps int not null default 8,
-    WrkOutStartTime datetime not null,
-    WrkOutEndTime datetime not null,
+    WrkOutStartTime TIME not null,
+    WrkOutEndTime TIME not null,
     FOREIGN KEY (WrkOutPlanId) references WrkOutPlan(WrkOutPlanId),
     FOREIGN KEY (WrkOutMachineId) references WrkOutMachine(WrkOutMachineId),
     PRIMARY KEY (WrkOutPlanId, WrkOutMachineId)

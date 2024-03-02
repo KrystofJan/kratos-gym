@@ -1,6 +1,6 @@
 <script setup>
-import AppHeader from './components/AppHeader/AppHeader.vue';
-import Footer from './components/Footer.vue'
+import AppHeader from './components/Header/Header.vue';
+import Footer from './components/Footer/Footer.vue'
 
 
 const stickyScroll = () => {

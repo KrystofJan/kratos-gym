@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { BaseService } from '@/services/base/ApiService';
 
 import PlanStep from '@/components/Reservation/PlanStep.vue';
@@ -32,10 +32,6 @@ const PlanType = ref({
 
 const SelectedMachines = ref([]);
 
-// todo split to objs
-const Machines = ref([]);
-const Types = ref([]);
-
 let PlanService = {};
 let PlanTypeService = {};
 let PlanMachineService = {};
@@ -54,34 +50,10 @@ const prepareData = () =>{
     }
 }
 
-
-const addMachine = async (machine) => {
-    // TODO: Change
-    const id = machine.WrkOutMachineId;
-
-    let contained = false;
-
-    PlanMachine.value.WrkOutMachines = PlanMachine.value.WrkOutMachines.filter(item => {
-        if(item.WrkOutMachineId === id){
-            contained = true;
-            return false;
-        }
-        return true;
-    });
-
-    SelectedMachines.value = SelectedMachines.value.filter(item => {
-        if(item.WrkOutMachineId === id){
-            return false;
-        }
-        return true;
-    });
-
-    if (!contained){
-        SelectedMachines.value.push(machine);
-        PlanMachine.value.WrkOutMachines.push({WrkOutMachineId: id})
-    }
+const addMachine = async (machines) => {
+    PlanMachine.value.WrkOutMachines = machines.map(machine => ({"WrkOutMachineId": machine.WrkOutMachineId}));
+    SelectedMachines.value = machines;
 }
-
 
 const postData = async () => {
     try{
@@ -123,6 +95,7 @@ onMounted(async () => {
 
 <template>
     <form @submit.prevent="submit" class="ReservationBuilder Builder">
+        {{ PlanMachine }}
         <PlanStep :Plan="Plan" :Reservation="Reservation"/>
         <PickMachineStep @machine-selected="addMachine"/>
         <ConfigureMachinesStep :SelectedMachines="SelectedMachines" :PlanMachine="PlanMachine" />

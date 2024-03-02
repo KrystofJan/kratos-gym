@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 
+
 const loginOrEmail = ref('');
 const password = ref('');
 const loading = ref(false);
@@ -23,7 +24,6 @@ const logIn = async () => {
             })
         };
 
-
     try{
         const response = await fetch('http://localhost:8080/api/userauth/login',requestOptions);
         const body = await response.json();
@@ -34,6 +34,8 @@ const logIn = async () => {
             alert(body.status);
             console.log(body);
         }
+
+
     }
     catch(err){
         console.log("pipi", err);

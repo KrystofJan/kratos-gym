@@ -1,5 +1,5 @@
 <script setup>
-import HeroBanner from '@/components/HeroBanner.vue';
+import HeroBanner from '@/components/HeroBanner/HeroBanner.vue';
 import StickyTextComposite from '@/components/StikyTextComposite/StickyTextComposite.vue'
 
 </script>

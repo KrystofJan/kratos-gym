@@ -1,11 +1,13 @@
 #!/bin/bash
 # TODO
-cd backend/API/
+# cd backend/API/
 
-node . &
+# node . &
 
-cd ../../frontend/
+# cd ../../frontend/
 
-npm run dev
+# npm run dev
 
-killall node
+gnome-terminal --title="Backend" -- bash -c "./run_be.sh; exec bash"
+
+gnome-terminal --title="Frontend" -- bash -c "./run_fe.sh; exec bash"

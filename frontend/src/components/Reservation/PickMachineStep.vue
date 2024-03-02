@@ -9,12 +9,8 @@ const prepareServices = () => {
     MachineService = new BaseService("machine");
 }
 
-const props = defineProps({
-    SelectedMachines: ref([]),
-    PlanMachine: Object,
-});
-
 const Machines = ref([]);
+const selectedMachines = ref([]);
 const builderText = ref({
     heading: 'Pick your machines',
     text: '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>'
@@ -40,10 +36,11 @@ onMounted(async () => {
     <Step :builderText="builderText">    
         <div class="BuilderItem-machine" v-for="machine in Machines">
             <input  type="checkbox" 
-                    :name="'machine-' + machine.WrkOutMachineId" 
+                    :name="'machine-' + machine.WrkOutMachineId"
                     :id="'machine-' + machine.WrkOutMachineId"
                     :value="machine"
-                    @change="$emit('machineSelected', machine)"/>
+                    v-model="selectedMachines"
+                    @change="$emit('machineSelected', selectedMachines)"/>
             <label :for="'machine-' + machine.WrkOutMachineId">{{ machine.MachineName }}</label>
         </div>
     </Step>

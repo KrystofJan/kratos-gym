@@ -11,6 +11,12 @@ const builderText = ref({
     heading: 'Pick a name and time for your plan!',
     text: '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>'
 });
+
+
+const validateYear = () => {
+    console.log("sadasd");
+}
+
 </script>
 
 <template>
@@ -22,7 +28,7 @@ const builderText = ref({
         <label for="arrival-date">
             ArrivalDate:
         </label>
-        <input type="date" name="arrival-date" v-model="Reservation.ReservationTime">    
+        <input type="datetime-local" name="arrival-date" @change="validateYear" v-model="Reservation.ReservationTime">    
     </Step>
 </template>
 
