@@ -6,10 +6,10 @@ import { useStorage } from '@vueuse/core';
 
 const showLog = ref(false);
 
-const userId = useLocalStorage(false, "userId");
+const userId = useStorage('userId');
 
 const isLogedIn = computed(() => {
-    return (userId.value);
+    return (userId.value)? true: false;
 })
 const toggleMenu = () => {
     const menu = document.querySelector('.NavMenu');
@@ -19,17 +19,14 @@ const toggleMenu = () => {
     hamburger.classList.toggle('active');
 }
 
-
 const logOff = () => {
-    localStorage.removeItem("userId");
+    userId.value = null;
 }
 
-
-onMounted(() => {
-});
 </script>
 
 <template>
+    {{ userId }}
     <header>
         <div id="header">
             <svg xmlns="http://www.w3.org/2000/svg" width="400" height="120.067">

@@ -1,11 +1,12 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import { BaseService } from '@/services/base/ApiService';
-const UserInfo = ref({}); 
+import { useStorage } from '@vueuse/core';
 
+const UserInfo = ref({}); 
 const isLogedIn = ref(false);
 const isLoading = ref(true);
-let userId = 0; 
+let userId = useStorage('userId'); 
 
 let UserService = {};
 
@@ -25,7 +26,7 @@ const prepareServices = async () => {
 
 const fetchData = async () => {
     try {
-        const userData = await UserService.getId(userId);
+        const userData = await UserService.getId(userId.value);
         UserInfo.value = userData;
         setTimeout(() => {
             isLoading.value = false;            
@@ -37,11 +38,13 @@ const fetchData = async () => {
 
 onMounted(async () => {
     prepareServices();
-    userId = localStorage.getItem('userId');
     
-    if (userId){
+    if (userId.value){
         await fetchData();
         isLogedIn.value = true;
+    }
+    else{
+        isLoading.value = false;
     }
 
 })

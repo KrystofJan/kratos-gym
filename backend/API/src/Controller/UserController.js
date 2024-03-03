@@ -17,17 +17,26 @@ const loginAuth = async (req, res) => {
         }
 
         if (result.length == 0){
-            throw {"status": "Wrong email/login", "error_code": 0}
+            throw {
+                "status": "error",
+                "message": "Wrong email/login!",
+                "error_code": 0
+            };
         }
 
         const real_result = result[0];
 
         if (real_result.Password != userAuth.encodedPassword){
-            throw {"status": "wrong password", "error_code": 1};
+            throw {
+                "status": "error",
+                "message": "Wrong password!",
+                "error_code": 1
+            };
         }
 
         res.status(200).json({
-            "status":"Successfull login!", 
+            "status": "success", 
+            "message":"Successfull login!", 
             "userId": real_result.UserId,
         });
     }

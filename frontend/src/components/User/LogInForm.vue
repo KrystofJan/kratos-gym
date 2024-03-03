@@ -1,7 +1,8 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { BaseService } from '@/services/base/ApiService';
 import { useRouter } from 'vue-router';
+import { useStorage } from '@vueuse/core';
 
 const router = useRouter();
 
@@ -9,6 +10,15 @@ const AuthModel = ref({
     LoginOrEmail: '',
     EncodedPassword: '',
 });
+
+const userId = useStorage("userId");
+
+const error = ref("");
+
+const showError = computed(() => {
+    return error.value != "";
+});
+
 
 let AuthService = {};
 const prepareServices = () => {
@@ -24,12 +34,15 @@ const logIn = async () => {
     const response = await AuthService.post(AuthModel.value);
     const body = await response.json();
 
-    // TODO: error handeling
 
-
-    localStorage.setItem("userId", body.userId);
+    if(body.status == "success"){
+        userId.value = body.userId
+        loading.value = false;
+        await router.push({path: '/profile'});
+    }
+    
+    error.value = body.message;
     loading.value = false;
-    await router.push({path: '/profile'});
 }
 
 onMounted(() => {
@@ -41,13 +54,14 @@ onMounted(() => {
     <div v-if="loading" class="loading">
     </div>
     <form class="LogInForm" @submit.prevent="logIn">
+        <span class="Error" v-if="showError">{{ error }}</span>
         <div class="LogInFormItem">
             <label class="LogInFormItem-label" for="login-email">Login or email</label>
-            <input v-model="AuthModel.LoginOrEmail" id="login-email" class="LogInFormItem-input" type="text" placeholder="example@email.com" />
+            <input required v-model="AuthModel.LoginOrEmail" id="login-email" class="LogInFormItem-input" type="text" placeholder="example@email.com" />
         </div>
         <div class="LogInFormItem">
             <label class="LogInFormItem-label" for="password">Password</label>
-            <input v-model="AuthModel.EncodedPassword" id="password" class="LogInFormItem-input" type="password" placeholder="password"/>
+            <input required v-model="AuthModel.EncodedPassword" id="password" class="LogInFormItem-input" type="password" placeholder="password"/>
         </div>
         <div class="LogInFormItem">
             <button type="submit">LogIn</button>
@@ -56,6 +70,9 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+.Error{
+    color: red;
+}
 .loading{
     position: absolute;
     width: 100vw;

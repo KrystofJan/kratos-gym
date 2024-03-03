@@ -1,7 +1,6 @@
 <script setup>
 import AppHeader from './components/Header/Header.vue';
-import Footer from './components/Footer/Footer.vue'
-
+import Footer from './components/Footer/Footer.vue';
 
 const stickyScroll = () => {
   const navbar = document.querySelector('.NavMenu');

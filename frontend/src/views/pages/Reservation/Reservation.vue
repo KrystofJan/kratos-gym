@@ -1,5 +1,6 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { useStorage } from '@vueuse/core';
 import { BaseService } from '@/services/base/ApiService';
 
 import PlanStep from '@/components/Reservation/PlanStep.vue';
@@ -8,9 +9,12 @@ import ConfigureMachinesStep from '@/components/Reservation/ConfigureMachinesSte
 import ExTypeStep from '@/components/Reservation/ExTypeStep.vue';
 import AmmountOfPeopleStep from '@/components/Reservation/AmmountOfPeopleStep.vue';
 
+
+const userId = useStorage('userId');
+
 const Plan = ref({
     PlanName: '',
-    UserId: 1 // todo change to loged in user
+    UserId: userId.value // todo change to loged in user
 });
 
 const PlanMachine = ref({
@@ -44,20 +48,22 @@ const prepareServices = () => {
     PlanTypeService = new BaseService('plan-type');
 }
 
-const prepareData = () =>{
-    for(let i = 0; i < SelectedMachines.length; i++){
-        PlanMachine.value.WrkOutMachines[i] = SelectedMachines.value[i];
-    }
-}
 
 const addMachine = async (machines) => {
-    PlanMachine.value.WrkOutMachines = machines.map(machine => ({"WrkOutMachineId": machine.WrkOutMachineId}));
     SelectedMachines.value = machines;
 }
 
+watch(SelectedMachines, () => {
+    PlanMachine.value.WrkOutMachines = SelectedMachines.value.map(machine => ({"WrkOutMachineId": machine.WrkOutMachineId}));
+});
+
+watch(userId, () => {
+    Plan.value.UserId = parseInt(userId.value);
+    Reservation.value.CustomerId = parseInt(userId.value);
+});
+
 const postData = async () => {
     try{
-        prepareData();
         const planRes = await PlanService.post(Plan.value);
         const r1 = await planRes.json();
         console.log(r1);
@@ -66,6 +72,7 @@ const postData = async () => {
         Reservation.value.WrkOutPlanId = r1.CreatedId;
         PlanType.value.WrkOutPlanId = r1.CreatedId;
         
+        // something goes wrong here
         const planMachineRes = await PlanMachineService.post(PlanMachine.value);
         const r2 = await planMachineRes.json();
         console.log(r2);
