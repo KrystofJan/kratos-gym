@@ -1,5 +1,6 @@
 <script setup>
-import {ref, defineProps } from 'vue';
+import {ref, defineProps, onMounted } from 'vue';
+import { BaseService } from '@/services/base/ApiService';
 import Step from './Step.vue';
 
 const props = defineProps({
@@ -7,10 +8,33 @@ const props = defineProps({
     PlanMachine: ref(Object),
 });
 
+// TODO: I need to split this component to parent and items, 
+// fetch data on change of input and validate in real time
+
+let wrkOutPlanMachinesService = {};
+
+const prepareServices = () => {
+    wrkOutPlanMachinesService = new BaseService("plan-machine");
+}
+
 const builderText = ref({
     heading: 'Now pick time for each machine',
     text: '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>'
 });
+
+const fetchData = async () => {
+    try {
+        const machineData = await MachineService.getAll();
+        Machines.value = machineData;
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
+
+onMounted(() => {
+    prepareServices();
+})
 </script>
 
 <template>

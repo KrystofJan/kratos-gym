@@ -119,6 +119,35 @@ class DatabaseHandler{
         })
     }
 
+
+    dbSelectOccupiedMachineAmount(id, time, date){
+        return new Promise ( (resolve, reject) => {
+            const pkey = dbKeys["WrkOutPlanMachines--plan"];
+
+            if(!Validators.validateNumericId(id)){
+                console.error('Cannot use this ID', id);
+                apiLogger.logApi("Cannot use this"+ pkey + " ! --" + id);
+                reject({ error: 'Cannot pass in id that\'s not a number! Id: '+ id });
+            }
+            this.db.query(
+            "select count(*) as count "+
+            "from WrkOutPlanMachines inner join Reservation on Reservation.WrkOutPlanId = WrkOutPlanMachines.WrkOutPlanId "+
+            "where ('" + time + "' between WrkOutStartTime and WrkOutEndTime) and Date(ReservationTime) = '" + date + "' " +
+            "and WrkOutPlanMachines.and WrkOutMachineId = " + id
+            ,(err, results) => {
+                if (err) {
+                  console.error('Error querying the database:', err);
+                  apiLogger.logApi(err);
+                  reject({ error: 'Internal Server Error' });
+                }
+    
+                apiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
+                resolve(results);
+            });
+        });            
+    }
+
+
     dbRecommendMachine(id){
         return new Promise ( (resolve, reject) => {
             const pkey = dbKeys["WrkOutMachine"];

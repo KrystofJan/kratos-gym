@@ -88,8 +88,26 @@ const post = async (req, res) => {
     }
 }
 
+const getOccupiedMachineAmount = async (req, res, id, time, date) => {
+    try{
+        const body = await wrkOutPlanMachineService.getOccupiedMachineAmount(id, time, date);
+
+        const result = {
+            "status": "success",
+            "message": `Successfully found ${body[0].count} ammount of machines at this time`,
+            "amount": body[0].count
+        }
+
+        res.status(200).json(result);
+    }
+    catch(err){
+        res.status(500).json(err);
+    }
+}
+
 module.exports = {
     getIdPlan,
     getIdMachine,
     post,
+    getOccupiedMachineAmount,
 }

@@ -13,6 +13,16 @@ class WrkOutPlanMachinesDAO extends RelationalModel{
         }
     }
 
+    async getOccupiedMachineAmount(id, time, date) {
+        try{
+            const result = await this.MakeDbRequest(() => this.dbHandler.dbSelectOccupiedMachineAmount(id, time, date));
+            return result;
+        }
+        catch(err) {
+            console.log("chibi", err);
+        }
+    }
+
     async getIdPlan(id){
         try{
             const result = await this.MakeDbRequest(() => this.dbHandler.dbSelectSpecific(id, "WrkOutPlanMachines--plan"));

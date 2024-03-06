@@ -14,7 +14,7 @@ const userId = useStorage('userId');
 
 const Plan = ref({
     PlanName: '',
-    UserId: userId.value // todo change to loged in user
+    UserId: userId.value
 });
 
 const PlanMachine = ref({
@@ -26,8 +26,8 @@ const Reservation = ref({
     AmmoutOfPeople: Number,
     WrkOutPlanId: Number,
     ReservationTime: String,
-    CustomerId: 1, // todo change to loged in user
-})
+    CustomerId: userId.value,
+});
 
 const PlanType = ref({
     WrkOutPlanId: Number,
