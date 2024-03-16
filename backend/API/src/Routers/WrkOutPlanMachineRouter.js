@@ -10,8 +10,9 @@ WrkOutPlanMachineRouter.get('/machine/:id', (req, res) => {
     wrkOutPlanMachineController.getIdMachine( req,res,req.params['id']);
 });
 
-WrkOutPlanMachineRouter.get('/:id&time=:time&date=:date', (req, res) => {
-    wrkOutPlanMachineController.getOccupiedMachineAmount( req,res,req.params['id'],req.params['time'], req.params['date']);
+WrkOutPlanMachineRouter.get('/:id', (req, res) => {
+    const { time, date } = req.query;
+    wrkOutPlanMachineController.getOccupiedMachineAmount( req,res,req.params['id'],time, date);
 });
 
 WrkOutPlanMachineRouter.post('/', (req, res) => {

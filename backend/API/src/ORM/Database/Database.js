@@ -133,7 +133,7 @@ class DatabaseHandler{
             "select count(*) as count "+
             "from WrkOutPlanMachines inner join Reservation on Reservation.WrkOutPlanId = WrkOutPlanMachines.WrkOutPlanId "+
             "where ('" + time + "' between WrkOutStartTime and WrkOutEndTime) and Date(ReservationTime) = '" + date + "' " +
-            "and WrkOutPlanMachines.and WrkOutMachineId = " + id
+            "and WrkOutPlanMachines.WrkOutMachineId = " + id
             ,(err, results) => {
                 if (err) {
                   console.error('Error querying the database:', err);

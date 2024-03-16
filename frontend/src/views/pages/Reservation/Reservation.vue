@@ -5,7 +5,7 @@ import { BaseService } from '@/services/base/ApiService';
 
 import PlanStep from '@/components/Reservation/PlanStep.vue';
 import PickMachineStep from '@/components/Reservation/PickMachineStep.vue';
-import ConfigureMachinesStep from '@/components/Reservation/ConfigureMachinesStep.vue';
+import ConfigureMachinesStep from '@/components/Reservation/ConfigureMachinesStep/ConfigureMachinesStep.vue';
 import ExTypeStep from '@/components/Reservation/ExTypeStep.vue';
 import AmmountOfPeopleStep from '@/components/Reservation/AmmountOfPeopleStep.vue';
 
