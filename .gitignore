@@ -2,3 +2,4 @@ backend/db/.idea
 backend/API/node_modules
 Logs/
 frontend/.vscode
+node_modules
