@@ -3,9 +3,7 @@ import {ref, defineProps, onMounted } from 'vue';
 import { BaseService } from '@/services/base/ApiService';
 import Step from './Step.vue';
 
-const props = defineProps({
-    PlanType: ref(Array)
-});
+import PlanType from '@/store/PlanTypeStore.js';
 
 const Types = ref([]);
 
@@ -38,7 +36,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <Step :builderText="builderText">    
+    <Step :builderText="builderText" :builderItemClasses="'BuilderItemGrid'">    
         <div class="BuilderItem-type" v-for="ex_type in Types">
             <input  type="checkbox"
                     :name="'type-' + ex_type.ExerciseTypeId"

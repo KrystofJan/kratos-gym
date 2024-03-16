@@ -33,7 +33,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <Step :builderText="builderText">    
+    <Step :builderText="builderText" :builderItemClasses="'BuilderItemGrid'">    
         <div class="BuilderItem-machine" v-for="machine in Machines">
             <input  type="checkbox" 
                     :name="'machine-' + machine.WrkOutMachineId"

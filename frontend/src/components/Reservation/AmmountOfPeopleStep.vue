@@ -2,10 +2,7 @@
 import { ref } from 'vue';
 import Step from './Step.vue';
 
-const props = defineProps({
-    Reservation: ref(Object),
-});
-
+import Reservation from '@/store/ReservationStore.js';
 
 </script>
 

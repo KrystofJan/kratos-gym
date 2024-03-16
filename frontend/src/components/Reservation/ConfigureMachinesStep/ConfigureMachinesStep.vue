@@ -3,14 +3,18 @@ import {ref, defineProps, onMounted } from 'vue';
 import ConfigureMachinesStepItem from './ConfigureMachinesStepItem.vue'
 import { BaseService } from '@/services/base/ApiService';
 import Step from '../Step.vue';
+import PlanMachine from '@/store/PlanMachineStore.js';
+
+const emit = defineEmits(['next']);
 
 const props = defineProps({
     SelectedMachines: ref(Array),
-    PlanMachine: ref(Object),
 });
 
 // TODO: I need to split this component to parent and items, 
 // fetch data on change of input and validate in real time
+
+const showButton = ref(true);
 
 let wrkOutPlanMachinesService = {};
 
@@ -33,23 +37,29 @@ const fetchData = async () => {
     }
 };
 
+const clickHandle = () => {
+    emit('next');
+    showButton.value = false;
+}
+
+
 onMounted(() => {
     prepareServices();
 })
 </script>
 
 <template>
-
-<Step v-if="(SelectedMachines.length > 0)" :builderText="builderText" :builderItemClasses="'PlanMachineDetails'">
-    <div class="PlanMachineDetails-item" v-for="(machine, index) in SelectedMachines">
-           <ConfigureMachinesStepItem 
-                :index="index"
-                :Machine="machine"
-                :PlanMachine="PlanMachine"
-           />
-    </div>
-</Step>
-
+<div v-if="(SelectedMachines.length > 0)" class="StepWrapper">
+    <Step :builderText="builderText" :builderItemClasses="'PlanMachineDetails'">
+        <ConfigureMachinesStepItem 
+            v-for="(machine, index) in SelectedMachines"
+            :index="index"
+            :Machine="machine"
+            :PlanMachine="PlanMachine"
+        />
+    </Step>
+    <div v-if="showButton" class="Button-next" @click="clickHandle">Next -></div>
+</div>
 </template>
 
 <style lang="scss">
@@ -59,8 +69,10 @@ onMounted(() => {
     grid-column: 1/-1;
 }
 
-.BuilderItem{
-
+.PlanMachineDetails{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr)) !important;
+    gap: 2rem 4rem;
 }
 </style>
 

@@ -31,6 +31,12 @@
     &Item{
         display: grid;
         grid-template-columns: 16rem 1fr;
+
+
+
+        &Grid{
+            grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));            
+        }
     }
 
     [data-type-checks]{
@@ -53,25 +59,18 @@
         }
     }
 
-    .PlanMachineDetails{
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
+    .Button-next{
+        display: block;
+        width: fit-content;
+        padding: .5rem 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        background: var(--baseBlue);
+        color: white;
+        transition: .25s ease-in-out;
 
-        &-item{
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            align-content: center;
-            background: white;
-            box-shadow: 0 0 2rem rgba(0,0,0,.1);
-            padding: 1rem;
-
-            .DetailItem{
-
-                &-name{
-                    font-size: 2rem;
-                }
-            }
+        &:hover{
+            filter: brightness(75%);
         }
     }
 }

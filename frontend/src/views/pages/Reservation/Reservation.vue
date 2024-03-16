@@ -7,34 +7,15 @@ import PlanStep from '@/components/Reservation/PlanStep.vue';
 import PickMachineStep from '@/components/Reservation/PickMachineStep.vue';
 import ConfigureMachinesStep from '@/components/Reservation/ConfigureMachinesStep/ConfigureMachinesStep.vue';
 import ExTypeStep from '@/components/Reservation/ExTypeStep.vue';
-import AmmountOfPeopleStep from '@/components/Reservation/AmmountOfPeopleStep.vue';
 
-
-const userId = useStorage('userId');
-
-const Plan = ref({
-    PlanName: '',
-    UserId: userId.value
-});
-
-const PlanMachine = ref({
-    WrkOutPlanId: Number,
-    WrkOutMachines: []
-});
-
-const Reservation = ref({
-    AmmoutOfPeople: Number,
-    WrkOutPlanId: Number,
-    ReservationTime: String,
-    CustomerId: userId.value,
-});
-
-const PlanType = ref({
-    WrkOutPlanId: Number,
-    ExerciseTypeIds: []
-});
+import Plan from '@/store/PlanStore.js';
+import PlanMachine from '@/store/PlanMachineStore.js';
+import Reservation from '@/store/ReservationStore.js';
+import PlanType from '@/store/PlanTypeStore.js';
+import userId  from '@/store/userStore';
 
 const SelectedMachines = ref([]);
+const StepNumber = ref(1);
 
 let PlanService = {};
 let PlanTypeService = {};
@@ -55,6 +36,10 @@ const addMachine = async (machines) => {
 
 watch(SelectedMachines, () => {
     PlanMachine.value.WrkOutMachines = SelectedMachines.value.map(machine => ({"WrkOutMachineId": machine.WrkOutMachineId}));
+    // TODO: Go back if there are no selectedMachines
+    // if(SelectedMachines.value.length == 0){
+    //     StepNumber.value = 2;
+    // }
 });
 
 watch(userId, () => {
@@ -95,6 +80,11 @@ const submit = async () => {
     await postData();
 }
 
+const moveNext = (stepNumber) => {
+    if(StepNumber.value == stepNumber){
+        StepNumber.value ++;
+    }
+}
 onMounted(async () => {
     prepareServices();
 });
@@ -102,14 +92,12 @@ onMounted(async () => {
 
 <template>
     <form @submit.prevent="submit" class="ReservationBuilder Builder">
-        {{ PlanMachine }}
-        <PlanStep :Plan="Plan" :Reservation="Reservation"/>
-        <PickMachineStep @machine-selected="addMachine"/>
-        <ConfigureMachinesStep :SelectedMachines="SelectedMachines" :PlanMachine="PlanMachine" />
-        <ExTypeStep :PlanType="PlanType" />
-        <AmmountOfPeopleStep :Reservation="Reservation" />
+        <PlanStep @next="moveNext(1)"/>
+        <PickMachineStep  v-if="StepNumber >= 2" @machine-selected="addMachine"/>
+        <ConfigureMachinesStep @next="moveNext(2)" :SelectedMachines="SelectedMachines" />
+        <ExTypeStep @next="moveNext(3)" v-if="StepNumber >= 3"/>
 
-        <div class="BuilderItem">
+        <div class="BuilderItem"  v-if="PlanType.ExerciseTypeIds.length > 0">
             <input type="submit" value="Postik">
         </div>
     </form>

@@ -1,12 +1,13 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue';
 import { useStorage } from '@vueuse/core';
+import userId from '@/store/userStore.js';
 
 // TODO: figure out how to make it reacitve or use the vueuse lib
 
 const showLog = ref(false);
 
-const userId = useStorage('userId');
+// const userId = useStorage('userId');
 
 const isLogedIn = computed(() => {
     return (userId.value)? true: false;
