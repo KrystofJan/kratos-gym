@@ -27,15 +27,22 @@
     &Text{
         grid-column: 1/-1;
     }
-
-    &Item{
+    
+    &ItemGrid{
         display: grid;
-        grid-template-columns: 16rem 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    }
 
+    input[type=text],input[type=number], input[type=date], input[type=datetime-local], input[type=time] {
+        height: 1.5rem;
+    } 
 
+    input[type=checkbox] {
+        height: 1rem;
+        width: 1rem;
 
-        &Grid{
-            grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));            
+        &:checked{
+            accent-color: var(--baseRed);
         }
     }
 

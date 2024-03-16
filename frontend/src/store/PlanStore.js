@@ -2,7 +2,7 @@ import { ref } from 'vue';
 import userId  from './userStore';
 
 const Plan = ref({
-    PlanName: '',
+    PlanName: String(),
     UserId: userId.value
 });
 

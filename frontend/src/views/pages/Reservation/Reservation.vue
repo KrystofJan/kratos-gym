@@ -91,7 +91,9 @@ onMounted(async () => {
 </script>
 
 <template>
-    <form @submit.prevent="submit" class="ReservationBuilder Builder">
+    <div class="logInPls" v-if="!userId">
+    Log in lol</div>
+    <form v-else @submit.prevent="submit" class="ReservationBuilder Builder">
         <PlanStep @next="moveNext(1)"/>
         <PickMachineStep  v-if="StepNumber >= 2" @machine-selected="addMachine"/>
         <ConfigureMachinesStep @next="moveNext(2)" :SelectedMachines="SelectedMachines" />
@@ -105,4 +107,8 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 @import '@/styles/sass/Reservation/Builder.scss';
+
+.logInPls{
+    color: white;
+}
 </style>

@@ -1,7 +1,7 @@
 import { ref } from "vue";
 
 const PlanMachine = ref({
-    WrkOutPlanId: Number,
+    WrkOutPlanId: Number(),
     WrkOutMachines: []
 });
 

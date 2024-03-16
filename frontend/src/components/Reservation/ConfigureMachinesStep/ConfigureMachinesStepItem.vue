@@ -104,8 +104,7 @@ onMounted(() => {
             <input  type="checkbox" 
                     :id="`canDisturb${index}`" 
                     :name="`canDisturb${index}`"
-                    v-model="PlanMachine.WrkOutMachines[index].CanDisturb"
-                    required>
+                    v-model="PlanMachine.WrkOutMachines[index].CanDisturb" >
         </div>
     </div>
 </div>
