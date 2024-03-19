@@ -27,7 +27,6 @@ const logOff = () => {
 </script>
 
 <template>
-    {{ userId }}
     <header>
         <div id="header">
             <svg xmlns="http://www.w3.org/2000/svg" width="400" height="120.067">

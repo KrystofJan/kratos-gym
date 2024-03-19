@@ -5,6 +5,8 @@ import { PlanMachineService } from '@/services/PlanMachineService';
 import PlanMachine from '@/store/PlanMachineStore.js';
 import Reservation from '@/store/ReservationStore.js';
 
+import NumberInput from '@/components/Form/NumberInput.vue';
+
 const props = defineProps({
     Machine: ref(Object),
     index: Number
@@ -52,6 +54,7 @@ onMounted(() => {
         <input  type="time" 
                 :name="`MachineStartTime${index}`" 
                 class="MachineTime" 
+                :class="{'MachineTime-Error': isOccupiedAtStart}"   
                 @change="checkIsOccupied(
                     Machine.WrkOutMachineId,
                     PlanMachine.WrkOutMachines[index].WrkOutStartTime,
@@ -64,13 +67,14 @@ onMounted(() => {
         
         <div class="DetailItem-line">
             <label :for="`MachineEndTime${index}`">End time:</label>
-            <div v-if="isOccupiedAtEnd" class="MachineStartTime-error">
+            <div v-if="isOccupiedAtEnd" class="DetailItem-lineError">
                 Machine is occupied at this time
             </div>
             <input  type="time" 
                     :id="`MachineEndTime${index}`" 
                     :name="`MachineEndTime${index}`" 
-                    class="MachineTime"              
+                    class="MachineTime"           
+                    :class="{'MachineTime-Error': isOccupiedAtEnd}"   
                     @change="checkIsOccupied(
                         Machine.WrkOutMachineId,
                         PlanMachine.WrkOutMachines[index].WrkOutStartTime,
@@ -83,21 +87,32 @@ onMounted(() => {
 
         <div class="DetailItem-line">
             <label :for="`reps${index}`">Reps:</label>
-            <input  type="number" 
+            <div v-if="isOccupiedAtEnd" class="DetailItem-lineError">
+                
+            </div>
+            <NumberInput 
+                :max="50"
+                :min="1"
+                :id="`reps${index}`"
+                :name="`reps${index}`"
+                @value-change="(val) => PlanMachine.WrkOutMachines[index].Reps = val"
+                :required="true"/>
+            <!-- <input  type="number" 
                     max="50" min="1" 
                     :id="`reps${index}`" 
                     :name="`reps${index}`"
                     v-model="PlanMachine.WrkOutMachines[index].Reps"
-                    required>
+                    required> -->
         </div>
         <div class="DetailItem-line">
             <label  :for="`sets${index}`">Sets:</label>
-            <input  type="number" 
-                    max="10" min="1" 
-                    :id="`sets${index}`" 
-                    :name="`sets${index}`"
-                    v-model="PlanMachine.WrkOutMachines[index].Sets"
-                    required>
+            <NumberInput 
+                :max="10"
+                :min="1"
+                :id="`sets${index}`"
+                :name="`sets${index}`"
+                @value-change="(val) => PlanMachine.WrkOutMachines[index].Sets = val"
+                :required="true"/>
         </div>
         <div class="DetailItem-line">
             <label  :for="`canDisturb${index}`">Can you be interrupted: </label>
@@ -129,11 +144,23 @@ onMounted(() => {
         text-align: left;
     }
 
+    .MachineTime-Error{
+        border-color: red;
+    }
 
-    
     &-line{
+        position: relative;
         display: grid;
         grid-template-columns: 7.5rem 1fr;
+
+        &Error{
+            position: absolute;
+            background: red;
+            color: white;
+            padding: .25rem;
+            top: -1rem;
+            right: 0;
+        }
     }
 }
 </style>

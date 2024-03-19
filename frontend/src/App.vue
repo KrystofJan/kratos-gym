@@ -12,13 +12,8 @@ const stickyScroll = () => {
     navbar.classList.remove('sticky');
   }
 }
-const toggleMenu = () => {
-  console.log("esketit");
-}
 
 window.addEventListener('scroll', stickyScroll);
-
-
 </script>
 <template>
     <AppHeader />
