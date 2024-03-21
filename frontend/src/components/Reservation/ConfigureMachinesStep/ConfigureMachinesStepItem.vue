@@ -5,7 +5,7 @@ import { PlanMachineService } from '@/services/PlanMachineService';
 import PlanMachine from '@/store/PlanMachineStore.js';
 import Reservation from '@/store/ReservationStore.js';
 
-import NumberInput from '@/components/Form/NumberInput.vue';
+import NumberInput from '@/components/Form/NumberInput/NumberInput.vue';
 
 const props = defineProps({
     Machine: ref(Object),
