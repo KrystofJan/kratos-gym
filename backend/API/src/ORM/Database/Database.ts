@@ -4,7 +4,7 @@ import * as dbKeys from './keys/table-keys.json' with {type: "json"};
 import { Validators } from './DatabaseValidators.js'
 import { ApiLogger } from '../../ApiLoggerLogic/ApiLogger.js';
 import { IDictionary } from '../../utils/Utilities.js';
-import { DatabaseResponse, DatabaseSuccess, DatabaseFail } from '../../utils/ORMUtility/DatabaseResponse.js';
+import { DatabaseResponse, DatabaseSuccess, DatabaseFail } from './DatabaseResponse.js';
 
 export class Database {
 

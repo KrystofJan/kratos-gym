@@ -1,13 +1,13 @@
 import express from 'express';
-var exerciseTypeController = require('../Controller/ExerciseTypeController');
+import { getAllExerciseTypes, getExerciseTypeById, postExerciseType } from '../Controller/ExerciseTypeController.js';
 export var ExerciseTypeRouter = express.Router();
 ExerciseTypeRouter.get('/', function (req, res) {
-    exerciseTypeController.getAll(req, res);
+    getAllExerciseTypes(req, res);
 });
 ExerciseTypeRouter.get('/:id', function (req, res) {
-    exerciseTypeController.getId(req, res, req.params['id']);
+    var id = parseInt(req.params['id']);
+    getExerciseTypeById(req, res, id);
 });
 ExerciseTypeRouter.post('/', function (req, res) {
-    exerciseTypeController.post(req, res);
+    postExerciseType(req, res);
 });
-module.exports = ExerciseTypeRouter;

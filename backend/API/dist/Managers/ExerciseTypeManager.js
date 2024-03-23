@@ -34,25 +34,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { AddressDAO } from '../ORM/AccessModels/AddressDAO.js';
-import { Address } from '../ORM/Models/Address.js';
+import { ExerciseTypeDAO } from '../ORM/AccessModels/ExerciseTypeDAO.js';
+import { ExerciseType } from '../ORM/Models/ExerciseType.js';
 import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
-export var FindAllAdresses = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var addressDAO, body, results, _i, body_1, b, a, err_1;
+export var FindAllExerciseTypes = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var exerciseTypeDAO, body, results, _i, body_1, b, a, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                addressDAO = new AddressDAO();
-                return [4 /*yield*/, addressDAO.SelectAllAdresses()];
+                exerciseTypeDAO = new ExerciseTypeDAO();
+                return [4 /*yield*/, exerciseTypeDAO.SelectAllExerciseTypes()];
             case 1:
                 body = _a.sent();
-                results = new Array();
+                results = [];
                 for (_i = 0, body_1 = body; _i < body_1.length; _i++) {
                     b = body_1[_i];
-                    a = new Address(b);
+                    a = new ExerciseType(b);
                     results.push(a);
                 }
                 return [2 /*return*/, new OkResponse("We good", results)];
@@ -63,17 +63,17 @@ export var FindAllAdresses = function () { return __awaiter(void 0, void 0, void
         }
     });
 }); };
-export var FindAdressById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var addressDAO, body, result, err_2;
+export var FindExerciseTypeById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    var exerciseTypeDAO, body, result, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                addressDAO = new AddressDAO();
-                return [4 /*yield*/, addressDAO.SelectAdressById(id)];
+                exerciseTypeDAO = new ExerciseTypeDAO();
+                return [4 /*yield*/, exerciseTypeDAO.SelectExerciseTypeById(id)];
             case 1:
                 body = _a.sent();
-                result = new Address(body);
+                result = new ExerciseType(body);
                 return [2 /*return*/, new OkResponse("We good", result)];
             case 2:
                 err_2 = _a.sent();
@@ -82,19 +82,18 @@ export var FindAdressById = function (id) { return __awaiter(void 0, void 0, voi
         }
     });
 }); };
-export var CreateAddress = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, addressDAO, successResult, err_3;
+export var CreateExerciseType = function (body) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, exerciseTypeDAO, successResult, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                addressDAO = new AddressDAO();
-                return [4 /*yield*/, addressDAO.InsertAddress(body)];
+                exerciseTypeDAO = new ExerciseTypeDAO();
+                return [4 /*yield*/, exerciseTypeDAO.InsertExerciseType(body)];
             case 1:
                 result = _a.sent();
                 successResult = result;
-                console.log('Bodiiii', result);
-                return [2 /*return*/, new CreatedResponse("Successfully created an Address", successResult.Body)];
+                return [2 /*return*/, new CreatedResponse("Successfully created an ExerciseType", successResult.Body)];
             case 2:
                 err_3 = _a.sent();
                 return [2 /*return*/, new FailedResponse('Sadge')];

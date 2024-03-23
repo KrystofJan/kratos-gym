@@ -50,7 +50,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { RelationalModel } from './RelationalModel.js';
-import { TableTypes } from "../../utils/ORMUtility/TableTypes.js";
+import { TableTypes } from "../Database/TableTypes.js";
 var TestDAO = /** @class */ (function (_super) {
     __extends(TestDAO, _super);
     function TestDAO() {

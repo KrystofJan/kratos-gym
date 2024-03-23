@@ -1,5 +1,5 @@
-import { AddressDAO } from '../ORM/AccessModels/AddressDAO.js';
-import { Address } from '../ORM/Models/Address.js'
+import { ExerciseTypeDAO } from '../ORM/AccessModels/ExerciseTypeDAO.js';
+import { ExerciseType } from '../ORM/Models/ExerciseType.js'
 import { Response } from '../utils/RequestUtility/CustomResponces/Response.js';
 import { IDictionary } from '../utils/Utilities.js';
 import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
@@ -7,51 +7,53 @@ import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/Created
 import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
 import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../ORM/Database/DatabaseResponse.js';
 
-export const FindAllAdresses = async (): Promise<Response> => {
+
+export const FindAllExerciseTypes = async () => {
     try{
-        const addressDAO = new AddressDAO();
-
-        const body: Array<IDictionary<any>> = await addressDAO.SelectAllAdresses();
+        const exerciseTypeDAO = new ExerciseTypeDAO();
+        const body: Array<IDictionary<any>> = await exerciseTypeDAO.SelectAllExerciseTypes();
         
-        let results: Array<Address> = new Array<Address>();
-
+        // validate...
+        const results: Array<ExerciseType> = [];
+        
         for (const b of body){
-            const a = new Address(b);
+            const a = new ExerciseType(b);
+
             results.push(a);
         }
-
+        
         return new OkResponse("We good", results);
     }
-    catch(err) {
+    catch(err){
         return new FailedResponse("Cannot get any of these things :(");
     }
 }
 
-export const FindAdressById = async (id: number): Promise<Response> => {
+export const FindExerciseTypeById = async (id: number) => {
     try{
-        const addressDAO = new AddressDAO();
-
-        const body: IDictionary<any> = await addressDAO.SelectAdressById(id);
+        const exerciseTypeDAO = new ExerciseTypeDAO();
+        const body: IDictionary<any> = await exerciseTypeDAO.SelectExerciseTypeById(id);
         
-        let result: Address = new Address(body);
-
+        // validate...
+        const result = new ExerciseType(body);
+        
         return new OkResponse("We good", result);
     }
-    catch(err) {
+    catch(err){
         return new FailedResponse("Cannot get any of these things :(");
     }
 }
 
-export const CreateAddress = async (body: Address) => { // create
+export const CreateExerciseType = async (body: ExerciseType) => {
     let result: DatabaseResponse;
     // TODO better response
     try{
-        const addressDAO = new AddressDAO();
-        result = await addressDAO.InsertAddress(body);
+        const exerciseTypeDAO = new ExerciseTypeDAO();
+        
+        result = await exerciseTypeDAO.InsertExerciseType(body);
         const successResult = result as DatabaseSuccess;
-        console.log('Bodiiii', result);
         return new CreatedResponse(
-            "Successfully created an Address", 
+            "Successfully created an ExerciseType", 
             successResult.Body);
     }
     catch(err){

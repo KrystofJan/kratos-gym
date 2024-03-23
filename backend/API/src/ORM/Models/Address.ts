@@ -2,13 +2,13 @@ import { IDictionary } from "../../utils/Utilities.js";
 import { Model } from './Model.js'
 
 export class Address extends Model {
-    AddressId: number | null;
-    Street: string;
-    City: string;
-    PostalCode: string;
-    Country: string;
-    BuildingNumber: string;
-    ApartmentNumber: string;
+    public AddressId: number | null;
+    public Street: string;
+    public City: string;
+    public PostalCode: string;
+    public Country: string;
+    public BuildingNumber: string;
+    public ApartmentNumber: string;
 
     constructor(jsonData: IDictionary<any>) {
         super();

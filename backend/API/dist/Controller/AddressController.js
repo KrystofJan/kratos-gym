@@ -34,14 +34,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { selectAllAdresses, selectAdressById, createAddress } from '../Managers/AddressManager.js';
+import { FindAllAdresses, FindAdressById, CreateAddress } from '../Managers/AddressManager.js';
 import { Address } from '../ORM/Models/Address.js';
 import { BadRequestResponse } from '../utils/RequestUtility/CustomResponces/BadRequestResponse.js';
 export var getAllAddresses = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var response;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, selectAllAdresses()];
+            case 0: return [4 /*yield*/, FindAllAdresses()];
             case 1:
                 response = _a.sent();
                 res.status(response.StatusCode).json(response.Body);
@@ -53,7 +53,7 @@ export var getAddressById = function (req, res, id) { return __awaiter(void 0, v
     var response;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, selectAdressById(id)];
+            case 0: return [4 /*yield*/, FindAdressById(id)];
             case 1:
                 response = _a.sent();
                 res.status(response.StatusCode).json(response.Body);
@@ -73,7 +73,7 @@ export var postAddress = function (req, res) { return __awaiter(void 0, void 0, 
                     res.status(response.StatusCode).json(response.Body);
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, createAddress(address)];
+                return [4 /*yield*/, CreateAddress(address)];
             case 1:
                 response = _a.sent();
                 console.log(response);

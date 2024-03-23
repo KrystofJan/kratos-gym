@@ -9,6 +9,7 @@ export class Model {
         return  JSON.parse(JSON.stringify(this));
     }
 
+    // TODO
     validateAttrs(): boolean {
         return true;
     }

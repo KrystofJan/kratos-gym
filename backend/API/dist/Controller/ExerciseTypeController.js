@@ -34,71 +34,51 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { AddressDAO } from '../ORM/AccessModels/AddressDAO.js';
-import { Address } from '../ORM/Models/Address.js';
-import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
-import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
-import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
-export var FindAllAdresses = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var addressDAO, body, results, _i, body_1, b, a, err_1;
+import { FindAllExerciseTypes, FindExerciseTypeById, CreateExerciseType } from '../Managers/ExerciseTypeManager.js';
+import { ExerciseType } from '../ORM/Models/ExerciseType.js';
+import { BadRequestResponse } from '../utils/RequestUtility/CustomResponces/BadRequestResponse.js';
+export var getAllExerciseTypes = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, FindAllExerciseTypes()];
+            case 1:
+                response = _a.sent();
+                res.status(response.StatusCode).json(response.Body);
+                return [2 /*return*/];
+        }
+    });
+}); };
+export var getExerciseTypeById = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
+    var response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, FindExerciseTypeById(id)];
+            case 1:
+                response = _a.sent();
+                res.status(response.StatusCode).json(response.Body);
+                return [2 /*return*/];
+        }
+    });
+}); };
+export var postExerciseType = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var address, response;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                addressDAO = new AddressDAO();
-                return [4 /*yield*/, addressDAO.SelectAllAdresses()];
-            case 1:
-                body = _a.sent();
-                results = new Array();
-                for (_i = 0, body_1 = body; _i < body_1.length; _i++) {
-                    b = body_1[_i];
-                    a = new Address(b);
-                    results.push(a);
+                address = new ExerciseType(req.body);
+                console.log();
+                if (!address.validateAttrs()) {
+                    response = new BadRequestResponse("Unable to create ExerciseType model");
+                    res.status(response.StatusCode).json(response.Body);
+                    return [2 /*return*/];
                 }
-                return [2 /*return*/, new OkResponse("We good", results)];
-            case 2:
-                err_1 = _a.sent();
-                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(")];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-export var FindAdressById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var addressDAO, body, result, err_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                addressDAO = new AddressDAO();
-                return [4 /*yield*/, addressDAO.SelectAdressById(id)];
+                return [4 /*yield*/, CreateExerciseType(address)];
             case 1:
-                body = _a.sent();
-                result = new Address(body);
-                return [2 /*return*/, new OkResponse("We good", result)];
-            case 2:
-                err_2 = _a.sent();
-                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(")];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-export var CreateAddress = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, addressDAO, successResult, err_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                addressDAO = new AddressDAO();
-                return [4 /*yield*/, addressDAO.InsertAddress(body)];
-            case 1:
-                result = _a.sent();
-                successResult = result;
-                console.log('Bodiiii', result);
-                return [2 /*return*/, new CreatedResponse("Successfully created an Address", successResult.Body)];
-            case 2:
-                err_3 = _a.sent();
-                return [2 /*return*/, new FailedResponse('Sadge')];
-            case 3: return [2 /*return*/];
+                response = _a.sent();
+                console.log(response);
+                res.status(response.StatusCode).json(response.Body);
+                return [2 /*return*/];
         }
     });
 }); };

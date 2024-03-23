@@ -51,13 +51,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
-import { DatabaseFail } from "../Database/DatabaseResponse.js";
-var AddressDAO = /** @class */ (function (_super) {
-    __extends(AddressDAO, _super);
-    function AddressDAO() {
+var ExerciseTypeDAO = /** @class */ (function (_super) {
+    __extends(ExerciseTypeDAO, _super);
+    function ExerciseTypeDAO() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    AddressDAO.prototype.SelectAllAdresses = function () {
+    ExerciseTypeDAO.prototype.SelectAllExerciseTypes = function () {
         return __awaiter(this, void 0, void 0, function () {
             var result, err_1;
             var _this = this;
@@ -65,7 +64,7 @@ var AddressDAO = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectAll(TableTypes.Address); })];
+                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectAll(TableTypes.ExerciseType); })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.Body];
@@ -78,7 +77,7 @@ var AddressDAO = /** @class */ (function (_super) {
             });
         });
     };
-    AddressDAO.prototype.SelectAdressById = function (id) {
+    ExerciseTypeDAO.prototype.SelectExerciseTypeById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var result, err_2;
             var _this = this;
@@ -86,20 +85,20 @@ var AddressDAO = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectSpecific(id, TableTypes.Address); })];
+                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectSpecific(id, TableTypes.ExerciseType); })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result.Body[0]];
                     case 2:
                         err_2 = _a.sent();
                         console.error(err_2);
-                        return [2 /*return*/, new DatabaseFail("Whoops")];
+                        return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
             });
         });
     };
-    AddressDAO.prototype.InsertAddress = function (body) {
+    ExerciseTypeDAO.prototype.InsertExerciseType = function (body) {
         return __awaiter(this, void 0, void 0, function () {
             var result, error_1;
             var _this = this;
@@ -107,7 +106,7 @@ var AddressDAO = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbPost(body, TableTypes.Address); })];
+                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbPost(body, TableTypes.ExerciseType); })];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result];
@@ -120,6 +119,6 @@ var AddressDAO = /** @class */ (function (_super) {
             });
         });
     };
-    return AddressDAO;
+    return ExerciseTypeDAO;
 }(RelationalModel));
-export { AddressDAO };
+export { ExerciseTypeDAO };

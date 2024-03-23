@@ -6,6 +6,7 @@ var Model = /** @class */ (function () {
     Model.prototype.constructJson = function () {
         return JSON.parse(JSON.stringify(this));
     };
+    // TODO
     Model.prototype.validateAttrs = function () {
         return true;
     };

@@ -3,7 +3,7 @@ import * as config from '../../Config/config.json' with { type: "json" };
 import * as dbKeys from './keys/table-keys.json' with { type: "json" };
 import { Validators } from './DatabaseValidators.js';
 import { ApiLogger } from '../../ApiLoggerLogic/ApiLogger.js';
-import { DatabaseSuccess, DatabaseFail } from '../../utils/ORMUtility/DatabaseResponse.js';
+import { DatabaseSuccess, DatabaseFail } from './DatabaseResponse.js';
 var Database = /** @class */ (function () {
     function Database() {
         this.db = mysql.createConnection(config.default.Database);

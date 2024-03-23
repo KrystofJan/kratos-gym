@@ -1,5 +1,5 @@
 import { RelationalModel } from './RelationalModel.js';
-import { TableTypes } from "../../utils/ORMUtility/TableTypes.js";
+import { TableTypes } from "../Database/TableTypes.js";
 
 export class TestDAO extends RelationalModel{
 

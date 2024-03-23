@@ -1,40 +1,40 @@
 import { IDictionary } from "../../utils/Utilities.js";
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
-import { Address } from '../Models/Address.js'
+import { ExerciseType } from '../Models/ExerciseType.js'
 import { DatabaseFail, DatabaseResponse } from "../Database/DatabaseResponse.js";
 
-export class AddressDAO extends RelationalModel{
+export class ExerciseTypeDAO extends RelationalModel{
 
-    async SelectAllAdresses(){
+    async SelectAllExerciseTypes(){
         try{
             const result = await this.MakeDbRequest(
-                () => this.dbHandler.dbSelectAll(TableTypes.Address)
+                () => this.dbHandler.dbSelectAll(TableTypes.ExerciseType)
             );
             return result.Body;            
         }
         catch(err){        
             console.error(err);
         }
+        
     }
 
-    async SelectAdressById(id: number): Promise<DatabaseResponse>{
+    async SelectExerciseTypeById(id: number){
         try{
             const result = await this.MakeDbRequest(
-                () => this.dbHandler.dbSelectSpecific(id,TableTypes.Address)
+                () => this.dbHandler.dbSelectSpecific(id, TableTypes.ExerciseType)
             );
             return result.Body[0];            
         }
         catch(err){        
             console.error(err);
-            return new DatabaseFail("Whoops");
         }
     }
 
-    async InsertAddress (body: Address){
+    async InsertExerciseType (body: ExerciseType){
         try{
             const result = await this.MakeDbRequest(
-                () => this.dbHandler.dbPost(body, TableTypes.Address)
+                () => this.dbHandler.dbPost(body, TableTypes.ExerciseType)
             );
             return result;
         }        
