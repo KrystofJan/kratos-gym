@@ -34,10 +34,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { Database } from '../Database/Database.js';
+import { Database } from '../../Database/Database.js';
+import { DatabaseFail, DatabaseSuccess } from '../../Database/DatabaseResponse.js';
 var RelationalModel = /** @class */ (function () {
-    function RelationalModel() {
+    function RelationalModel(tableType) {
         this.dbHandler = new Database();
+        this.TableType = tableType;
     }
     RelationalModel.prototype.MakeDbRequest = function (func) {
         return __awaiter(this, void 0, void 0, function () {
@@ -51,6 +53,157 @@ var RelationalModel = /** @class */ (function () {
                         result = _a.sent();
                         this.dbHandler.dbDisconnect();
                         return [2 /*return*/, result];
+                }
+            });
+        });
+    };
+    RelationalModel.prototype.SecectByForeignId = function (id, foreignTableType) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result, successResult, err_1;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectSpecific(id, foreignTableType); })];
+                    case 1:
+                        result = _a.sent();
+                        if (result instanceof DatabaseSuccess) {
+                            successResult = result;
+                            return [2 /*return*/, successResult.Body];
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_1 = _a.sent();
+                        if (err_1 instanceof DatabaseFail) {
+                            return [2 /*return*/, err_1];
+                        }
+                        else {
+                            console.error(err_1);
+                            throw err_1;
+                        }
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    RelationalModel.prototype.SelectAll = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var result, successResult, err_2;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectAll(_this.TableType); })];
+                    case 1:
+                        result = _a.sent();
+                        if (result instanceof DatabaseSuccess) {
+                            successResult = result;
+                            return [2 /*return*/, successResult.Body];
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_2 = _a.sent();
+                        if (err_2 instanceof DatabaseFail) {
+                            return [2 /*return*/, err_2];
+                        }
+                        else {
+                            console.error(err_2);
+                            throw err_2;
+                        }
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    RelationalModel.prototype.SelectById = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result, successResult, err_3;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectSpecific(id, _this.TableType); })];
+                    case 1:
+                        result = _a.sent();
+                        if (result instanceof DatabaseSuccess) {
+                            successResult = result;
+                            return [2 /*return*/, successResult.Body[0]];
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_3 = _a.sent();
+                        if (err_3 instanceof DatabaseFail) {
+                            return [2 /*return*/, err_3];
+                        }
+                        else {
+                            console.error(err_3);
+                            throw err_3;
+                        }
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    RelationalModel.prototype.SelectByAttr = function (attrName, attrValue) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result, successResult, err_4;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectAttrIs(attrValue, attrName, _this.TableType); })];
+                    case 1:
+                        result = _a.sent();
+                        if (result instanceof DatabaseSuccess) {
+                            successResult = result;
+                            return [2 /*return*/, successResult.Body];
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_4 = _a.sent();
+                        if (err_4 instanceof DatabaseFail) {
+                            return [2 /*return*/, err_4];
+                        }
+                        else {
+                            console.error(err_4);
+                            throw err_4;
+                        }
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    RelationalModel.prototype.Insert = function (body) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result, err_5;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbPost(body, _this.TableType); })];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                    case 2:
+                        err_5 = _a.sent();
+                        if (err_5 instanceof DatabaseFail) {
+                            return [2 /*return*/, err_5];
+                        }
+                        else {
+                            console.error(err_5);
+                            throw err_5;
+                        }
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
             });
         });

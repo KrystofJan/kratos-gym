@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { AddressDAO } from '../ORM/AccessModels/AddressDAO.js';
-import { Address } from '../ORM/Models/Address.js';
+import { Address } from '../Models/Address.js';
 import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';

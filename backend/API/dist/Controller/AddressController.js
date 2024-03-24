@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { FindAllAdresses, FindAdressById, CreateAddress } from '../Managers/AddressManager.js';
-import { Address } from '../ORM/Models/Address.js';
+import { Address } from '../Models/Address.js';
 import { BadRequestResponse } from '../utils/RequestUtility/CustomResponces/BadRequestResponse.js';
 export var getAllAddresses = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var response;
@@ -44,7 +44,7 @@ export var getAllAddresses = function (req, res) { return __awaiter(void 0, void
             case 0: return [4 /*yield*/, FindAllAdresses()];
             case 1:
                 response = _a.sent();
-                res.status(response.StatusCode).json(response.Body);
+                response.buildResponse(req, res);
                 return [2 /*return*/];
         }
     });
@@ -56,7 +56,7 @@ export var getAddressById = function (req, res, id) { return __awaiter(void 0, v
             case 0: return [4 /*yield*/, FindAdressById(id)];
             case 1:
                 response = _a.sent();
-                res.status(response.StatusCode).json(response.Body);
+                response.buildResponse(req, res);
                 return [2 /*return*/];
         }
     });
@@ -70,14 +70,13 @@ export var postAddress = function (req, res) { return __awaiter(void 0, void 0, 
                 console.log();
                 if (!address.validateAttrs()) {
                     response = new BadRequestResponse("Unable to create Address model");
-                    res.status(response.StatusCode).json(response.Body);
+                    response.buildResponse(req, res);
                     return [2 /*return*/];
                 }
                 return [4 /*yield*/, CreateAddress(address)];
             case 1:
                 response = _a.sent();
-                console.log(response);
-                res.status(response.StatusCode).json(response.Body);
+                response.buildResponse(req, res);
                 return [2 /*return*/];
         }
     });

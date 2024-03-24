@@ -50,72 +50,54 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { RelationalModel } from "./RelationalModel.js";
-import { TableTypes } from "../Database/TableTypes.js";
+import { TableTypes } from "../../Database/TableTypes.js";
 var ExerciseTypeDAO = /** @class */ (function (_super) {
     __extends(ExerciseTypeDAO, _super);
     function ExerciseTypeDAO() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        return _super.call(this, TableTypes.ExerciseType) || this;
     }
     ExerciseTypeDAO.prototype.SelectAllExerciseTypes = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var result, err_1;
-            var _this = this;
+            var result;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectAll(TableTypes.ExerciseType); })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.Body];
-                    case 2:
-                        err_1 = _a.sent();
-                        console.error(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                try {
+                    result = this.SelectAll();
+                    return [2 /*return*/, result];
                 }
+                catch (err) {
+                    console.error(err);
+                }
+                return [2 /*return*/];
             });
         });
     };
     ExerciseTypeDAO.prototype.SelectExerciseTypeById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, err_2;
-            var _this = this;
+            var result;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectSpecific(id, TableTypes.ExerciseType); })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result.Body[0]];
-                    case 2:
-                        err_2 = _a.sent();
-                        console.error(err_2);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                try {
+                    result = this.SelectById(id);
+                    return [2 /*return*/, result];
                 }
+                catch (err) {
+                    console.error(err);
+                }
+                return [2 /*return*/];
             });
         });
     };
     ExerciseTypeDAO.prototype.InsertExerciseType = function (body) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, error_1;
-            var _this = this;
+            var result;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbPost(body, TableTypes.ExerciseType); })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result];
-                    case 2:
-                        error_1 = _a.sent();
-                        console.log("Nastala chyba: " + error_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                try {
+                    result = this.Insert(body);
+                    return [2 /*return*/, result];
                 }
+                catch (err) {
+                    console.error(err);
+                }
+                return [2 /*return*/];
             });
         });
     };

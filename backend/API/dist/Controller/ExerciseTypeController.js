@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { FindAllExerciseTypes, FindExerciseTypeById, CreateExerciseType } from '../Managers/ExerciseTypeManager.js';
-import { ExerciseType } from '../ORM/Models/ExerciseType.js';
+import { ExerciseType } from '../Models/ExerciseType.js';
 import { BadRequestResponse } from '../utils/RequestUtility/CustomResponces/BadRequestResponse.js';
 export var getAllExerciseTypes = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var response;
@@ -44,7 +44,7 @@ export var getAllExerciseTypes = function (req, res) { return __awaiter(void 0, 
             case 0: return [4 /*yield*/, FindAllExerciseTypes()];
             case 1:
                 response = _a.sent();
-                res.status(response.StatusCode).json(response.Body);
+                response.buildResponse(req, res);
                 return [2 /*return*/];
         }
     });
@@ -56,7 +56,7 @@ export var getExerciseTypeById = function (req, res, id) { return __awaiter(void
             case 0: return [4 /*yield*/, FindExerciseTypeById(id)];
             case 1:
                 response = _a.sent();
-                res.status(response.StatusCode).json(response.Body);
+                response.buildResponse(req, res);
                 return [2 /*return*/];
         }
     });
@@ -70,14 +70,14 @@ export var postExerciseType = function (req, res) { return __awaiter(void 0, voi
                 console.log();
                 if (!address.validateAttrs()) {
                     response = new BadRequestResponse("Unable to create ExerciseType model");
-                    res.status(response.StatusCode).json(response.Body);
+                    response.buildResponse(req, res);
                     return [2 /*return*/];
                 }
                 return [4 /*yield*/, CreateExerciseType(address)];
             case 1:
                 response = _a.sent();
                 console.log(response);
-                res.status(response.StatusCode).json(response.Body);
+                response.buildResponse(req, res);
                 return [2 /*return*/];
         }
     });

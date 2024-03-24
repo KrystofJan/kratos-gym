@@ -1,12 +1,14 @@
 import express from 'express';
-var reservationController = require('../Controller/ReservationController');
+import { getAllReservations, getReservationById, postReservation } from '../Controller/ReservationController.js';
 export var ReservationRouter = express.Router();
 ReservationRouter.get('/', function (req, res) {
-    reservationController.getAll(req, res);
+    getAllReservations(req, res);
 });
 ReservationRouter.get('/:id', function (req, res) {
-    reservationController.getId(req, res, req.params['id']);
+    var id = parseInt(req.params['id']);
+    console.log(id);
+    getReservationById(req, res, id);
 });
 ReservationRouter.post('/', function (req, res) {
-    reservationController.post(req, res);
+    postReservation(req, res);
 });

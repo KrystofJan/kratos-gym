@@ -2,6 +2,7 @@ import { IDictionary } from "../../Utilities.js";
 import { Response, StatusCodeType } from './Response.js';
 import { ResponseStatus } from '../../common/ResponseStatus.js';
 import { ResponseBody} from './ResponseBody.js';
+import { Request as expressRequest, Response as expressResponse } from 'express';
 
 export class BadRequestResponse implements Response {
     StatusCode: StatusCodeType;
@@ -13,5 +14,9 @@ export class BadRequestResponse implements Response {
             status: ResponseStatus.FAIL,
             message: message
         }
+    }
+
+    buildResponse (req: expressRequest, res: expressResponse ) {
+        res.status(this.StatusCode).json(this.Body);
     }
 }

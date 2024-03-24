@@ -8,6 +8,9 @@ var NotFoundResponse = /** @class */ (function () {
             message: message
         };
     }
+    NotFoundResponse.prototype.buildResponse = function (req, res) {
+        res.status(this.StatusCode).json(this.Body);
+    };
     return NotFoundResponse;
 }());
 export { NotFoundResponse };

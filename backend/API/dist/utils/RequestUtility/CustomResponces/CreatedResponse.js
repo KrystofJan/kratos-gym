@@ -9,6 +9,9 @@ var CreatedResponse = /** @class */ (function () {
             CreatedId: createdId
         };
     }
+    CreatedResponse.prototype.buildResponse = function (req, res) {
+        res.status(this.StatusCode).json(this.Body);
+    };
     return CreatedResponse;
 }());
 export { CreatedResponse };

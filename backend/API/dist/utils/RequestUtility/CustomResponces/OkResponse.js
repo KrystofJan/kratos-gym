@@ -9,6 +9,9 @@ var OkResponse = /** @class */ (function () {
             Body: body
         };
     }
+    OkResponse.prototype.buildResponse = function (req, res) {
+        res.status(this.StatusCode).json(this.Body.Body);
+    };
     return OkResponse;
 }());
 export { OkResponse };

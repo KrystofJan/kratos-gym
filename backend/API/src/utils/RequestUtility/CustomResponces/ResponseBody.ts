@@ -1,4 +1,4 @@
-import { Model } from '../../../ORM/Models/Model.js';
+import { Model } from '../../../Models/Model.js';
 import { IDictionary } from '../../Utilities.js';
 import { ResponseStatus } from '../../common/ResponseStatus.js';
 
@@ -13,6 +13,6 @@ export interface PostResponseBody extends ResponseBody {
 
 
 export interface GetResponseBody extends ResponseBody {
-    readonly Body: Array<IDictionary<any>> | IDictionary<any> ;
+    Body: Array<Model> | Model;
 }
 

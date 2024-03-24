@@ -8,6 +8,9 @@ var FailedResponse = /** @class */ (function () {
             message: message
         };
     }
+    FailedResponse.prototype.buildResponse = function (req, res) {
+        res.status(this.StatusCode).json(this.Body);
+    };
     return FailedResponse;
 }());
 export { FailedResponse };

@@ -1,45 +1,40 @@
 import { RelationalModel } from './RelationalModel.js';
-import { TableTypes } from "../Database/TableTypes.js";
+import { TableTypes } from "../../Database/TableTypes.js";
+import { Model } from '../../Models/Model.js';
 
 export class TestDAO extends RelationalModel{
 
-    async getId(id: number){
+    constructor() {
+        super(TableTypes.test);
+    }
 
+    async getId(id: number){
         try{
-            const result = await this.MakeDbRequest(
-                () => this.dbHandler.dbSelectSpecific(id,TableTypes.test)
-            );
-            return result[0];
+            const result = this.SelectById(id);
+            return result;
         }
-        catch(error){
-            console.log("Nastala chyba: " + error);
+        catch(err){        
+            console.error(err);
         }
     }
 
     async getAll(){
         try{
-            console.log("popo");
-
-            const result = await this.MakeDbRequest(
-                () => this.dbHandler.dbSelectAll(TableTypes.test)
-            );
+            const result = this.SelectAll();
             return result;
         }
-        catch(error){
-            console.log("Nastala chyba: " + error);
+        catch(err){        
+            console.error(err);
         }
     }
 
-    async post(body: object){
+    async post(body: Model){
         try{
-            const result = await this.MakeDbRequest(
-                () => this.dbHandler.dbPost(body,TableTypes.test)
-            );
-            
+            const result = this.Insert(body);
             return result;
         }
-        catch(error){
-            console.log("Nastala chyba: " + error);
+        catch(err){        
+            console.error(err);
         }
     }
 }

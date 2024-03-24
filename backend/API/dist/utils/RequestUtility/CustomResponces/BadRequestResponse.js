@@ -8,6 +8,9 @@ var BadRequestResponse = /** @class */ (function () {
             message: message
         };
     }
+    BadRequestResponse.prototype.buildResponse = function (req, res) {
+        res.status(this.StatusCode).json(this.Body);
+    };
     return BadRequestResponse;
 }());
 export { BadRequestResponse };

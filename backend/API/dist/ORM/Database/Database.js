@@ -31,10 +31,8 @@ var Database = /** @class */ (function () {
                 if (err) {
                     console.error('Error querying the database:', err);
                     ApiLogger.logApi(err.toString());
-                    // res.status(500).json({ error: 'Internal Server Error' }); // move to controller
                     reject(new DatabaseFail(err));
                 }
-                // res.json(results); // move to controller
                 ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
                 resolve(new DatabaseSuccess(results));
             });

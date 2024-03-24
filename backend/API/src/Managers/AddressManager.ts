@@ -1,11 +1,11 @@
 import { AddressDAO } from '../ORM/AccessModels/AddressDAO.js';
-import { Address } from '../ORM/Models/Address.js'
+import { Address } from '../Models/Address.js'
 import { Response } from '../utils/RequestUtility/CustomResponces/Response.js';
 import { IDictionary } from '../utils/Utilities.js';
 import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
-import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../ORM/Database/DatabaseResponse.js';
+import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../Database/DatabaseResponse.js';
 
 export const FindAllAdresses = async (): Promise<Response> => {
     try{

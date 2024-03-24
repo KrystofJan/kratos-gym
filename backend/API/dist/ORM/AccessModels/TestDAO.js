@@ -50,73 +50,54 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { RelationalModel } from './RelationalModel.js';
-import { TableTypes } from "../Database/TableTypes.js";
+import { TableTypes } from "../../Database/TableTypes.js";
 var TestDAO = /** @class */ (function (_super) {
     __extends(TestDAO, _super);
     function TestDAO() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        return _super.call(this, TableTypes.test) || this;
     }
     TestDAO.prototype.getId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, error_1;
-            var _this = this;
+            var result;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectSpecific(id, TableTypes.test); })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result[0]];
-                    case 2:
-                        error_1 = _a.sent();
-                        console.log("Nastala chyba: " + error_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                try {
+                    result = this.SelectById(id);
+                    return [2 /*return*/, result];
                 }
+                catch (err) {
+                    console.error(err);
+                }
+                return [2 /*return*/];
             });
         });
     };
     TestDAO.prototype.getAll = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var result, error_2;
-            var _this = this;
+            var result;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        console.log("popo");
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectAll(TableTypes.test); })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result];
-                    case 2:
-                        error_2 = _a.sent();
-                        console.log("Nastala chyba: " + error_2);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                try {
+                    result = this.SelectAll();
+                    return [2 /*return*/, result];
                 }
+                catch (err) {
+                    console.error(err);
+                }
+                return [2 /*return*/];
             });
         });
     };
     TestDAO.prototype.post = function (body) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, error_3;
-            var _this = this;
+            var result;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbPost(body, TableTypes.test); })];
-                    case 1:
-                        result = _a.sent();
-                        return [2 /*return*/, result];
-                    case 2:
-                        error_3 = _a.sent();
-                        console.log("Nastala chyba: " + error_3);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                try {
+                    result = this.Insert(body);
+                    return [2 /*return*/, result];
                 }
+                catch (err) {
+                    console.error(err);
+                }
+                return [2 /*return*/];
             });
         });
     };

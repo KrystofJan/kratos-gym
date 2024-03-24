@@ -1,6 +1,6 @@
 import { Express } from 'express';
 
-// import { ReservationRouter } from './ReservationRouter.js';
+import { ReservationRouter } from './ReservationRouter.js';
 import { AddressRouter } from './AddressRouter.js';
 import { ExerciseTypeRouter } from './ExerciseTypeRouter.js';
 
@@ -21,8 +21,8 @@ export const setRoutes = (app: Express) => {
     app.use('/api/test', Test);
     app.use('/api/address', AddressRouter);
     app.use('/api/exercise-type', ExerciseTypeRouter);
+    app.use('/api/reservation', ReservationRouter);
 
-    // app.use('/api/reservation', ReservationRouter);
     // app.use('/api/machine-type', MachineExerciseTypesRouter);
     // app.use('/api/plan', wrkOutPlanRouter);
     // app.use('/api/machine', wrkOutMachineRouter);

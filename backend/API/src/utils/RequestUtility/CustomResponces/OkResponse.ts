@@ -1,7 +1,8 @@
 import { Response, StatusCodeType } from './Response.js';
 import { ResponseStatus } from '../../common/ResponseStatus.js';
 import { GetResponseBody } from './ResponseBody.js';
-import { Model } from '../../../ORM/Models/Model.js';
+import { Model } from '../../../Models/Model.js';
+import { Request as expressRequest, Response as expressResponse } from 'express';
 
 export class OkResponse implements Response {
     StatusCode: StatusCodeType;
@@ -14,5 +15,9 @@ export class OkResponse implements Response {
             message: message,
             Body: body
         }
+    }
+
+    buildResponse (req: expressRequest, res: expressResponse ) {
+        res.status(this.StatusCode).json(this.Body.Body);
     }
 }

@@ -1,4 +1,4 @@
-// import { ReservationRouter } from './ReservationRouter.js';
+import { ReservationRouter } from './ReservationRouter.js';
 import { AddressRouter } from './AddressRouter.js';
 import { ExerciseTypeRouter } from './ExerciseTypeRouter.js';
 // import { MachineExerciseTypesRouter } from './MachineExerciseTypesRouter.js';
@@ -15,7 +15,7 @@ export var setRoutes = function (app) {
     app.use('/api/test', Test);
     app.use('/api/address', AddressRouter);
     app.use('/api/exercise-type', ExerciseTypeRouter);
-    // app.use('/api/reservation', ReservationRouter);
+    app.use('/api/reservation', ReservationRouter);
     // app.use('/api/machine-type', MachineExerciseTypesRouter);
     // app.use('/api/plan', wrkOutPlanRouter);
     // app.use('/api/machine', wrkOutMachineRouter);

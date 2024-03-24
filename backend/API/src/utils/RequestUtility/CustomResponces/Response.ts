@@ -17,6 +17,5 @@ export enum StatusCodeType{
 export interface  Response { 
     readonly StatusCode: StatusCodeType;
     readonly Body: ResponseBody;
-    // TODO: Maybe use build response instead of what is in controller
-    // buildResponse (req: expressRequest, res: expressResponse ): void;
+    buildResponse (req: expressRequest, res: expressResponse ): void;
 }
