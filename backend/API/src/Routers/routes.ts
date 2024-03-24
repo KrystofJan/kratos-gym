@@ -4,7 +4,7 @@ import { ReservationRouter } from './ReservationRouter.js';
 import { AddressRouter } from './AddressRouter.js';
 import { ExerciseTypeRouter } from './ExerciseTypeRouter.js';
 
-// import { MachineExerciseTypesRouter } from './MachineExerciseTypesRouter.js';
+import { MachineExerciseTypesRouter } from './MachineExerciseTypesRouter.js';
 import { Test } from './TestRouter.js';
 
 
@@ -23,7 +23,7 @@ export const setRoutes = (app: Express) => {
     app.use('/api/exercise-type', ExerciseTypeRouter);
     app.use('/api/reservation', ReservationRouter);
 
-    // app.use('/api/machine-type', MachineExerciseTypesRouter);
+    app.use('/api/machine-type', MachineExerciseTypesRouter);
     // app.use('/api/plan', wrkOutPlanRouter);
     // app.use('/api/machine', wrkOutMachineRouter);
     // app.use('/api/userauth',userAuthRouter);

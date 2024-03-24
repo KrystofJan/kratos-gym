@@ -24,7 +24,7 @@ export class RelationalModel{
     protected async SecectByForeignId(id: number, foreignTableType: TableTypes){
         try{
             const result: DatabaseResponse = await this.MakeDbRequest(
-                () => this.dbHandler.dbSelectSpecific(id, foreignTableType)
+                () => this.dbHandler.dbSelectSpecific(id, this.TableType, foreignTableType)
             );
             
             if (result instanceof DatabaseSuccess){
@@ -68,7 +68,7 @@ export class RelationalModel{
     protected async SelectById(id: number) {
         try{
             const result = await this.MakeDbRequest(
-                () => this.dbHandler.dbSelectSpecific(id, this.TableType)
+                () => this.dbHandler.dbSelectSpecific(id, this.TableType, null)
             );
             
             if (result instanceof DatabaseSuccess){

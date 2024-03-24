@@ -12,4 +12,5 @@ export var TableTypes;
     TableTypes["WrkOutPlanType"] = "WrkOutPlanType";
     TableTypes["WrkOutPlanMachines"] = "WrkOutPlanMachines";
     TableTypes["WrkOutPlanMachinesPreset"] = "WrkOutPlanMachinesPreset";
+    TableTypes["MachineExerciseTypes_Machine"] = "MachineExerciseTypes--";
 })(TableTypes || (TableTypes = {}));

@@ -59,47 +59,63 @@ var MachineExerciseTypesDAO = /** @class */ (function (_super) {
     // TODO: Move logic to wrkOutPlan
     MachineExerciseTypesDAO.prototype.SelectMachineExerciseTypesBy_ExerciseTypeId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var result;
+            var result, err_1;
             return __generator(this, function (_a) {
-                try {
-                    result = this.SecectByForeignId(id, TableTypes.ExerciseType);
-                    return [2 /*return*/, result];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.SecectByForeignId(id, TableTypes.ExerciseType)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                    case 2:
+                        err_1 = _a.sent();
+                        console.error(err_1);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
-                catch (err) {
-                    console.error(err);
-                }
-                return [2 /*return*/];
             });
         });
     };
     // TODO: Move logic to wrkOutMachine
     MachineExerciseTypesDAO.prototype.SelectMachineExerciseTypesBy_WrkOutMachineId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var result;
+            var result, err_2;
             return __generator(this, function (_a) {
-                try {
-                    result = this.SecectByForeignId(id, TableTypes.WrkOutMachine);
-                    return [2 /*return*/, result];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.SecectByForeignId(id, TableTypes.WrkOutMachine)];
+                    case 1:
+                        result = _a.sent();
+                        console.log('res', result);
+                        return [2 /*return*/, result];
+                    case 2:
+                        err_2 = _a.sent();
+                        console.error(err_2);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
-                catch (err) {
-                    console.error(err);
-                }
-                return [2 /*return*/];
             });
         });
     };
     MachineExerciseTypesDAO.prototype.InsertMachineExerciseTypes = function (body) {
         return __awaiter(this, void 0, void 0, function () {
-            var result;
+            var result, err_3;
             return __generator(this, function (_a) {
-                try {
-                    result = this.Insert(body);
-                    return [2 /*return*/, result];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.Insert(body)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                    case 2:
+                        err_3 = _a.sent();
+                        console.error(err_3);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
-                catch (err) {
-                    console.error(err);
-                }
-                return [2 /*return*/];
             });
         });
     };

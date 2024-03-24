@@ -3,16 +3,16 @@ import { TableTypes } from "../../Database/TableTypes.js";
 import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../../Database/DatabaseResponse.js';
 import { MachineExerciseTypePostModel } from '../../Models/PostModels/MachineExerciseTypePostModel.js';
 
-export class MachineExerciseTypesDAO extends RelationalModel{
+export class MachineExerciseTypesDAO extends RelationalModel {
 
     constructor() {
         super(TableTypes.MachineExerciseTypes);
     }
 
     // TODO: Move logic to wrkOutPlan
-    async SelectMachineExerciseTypesBy_ExerciseTypeId(id: number){
+    async SelectMachineExerciseTypesBy_ExerciseTypeId(id: number) {
         try{
-            const result = this.SecectByForeignId(id, TableTypes.ExerciseType);
+            const result = await this.SecectByForeignId(id, TableTypes.ExerciseType);
             return result;
         }
         catch(err){        
@@ -21,9 +21,10 @@ export class MachineExerciseTypesDAO extends RelationalModel{
     }
 
     // TODO: Move logic to wrkOutMachine
-    async SelectMachineExerciseTypesBy_WrkOutMachineId(id: number){
+    async SelectMachineExerciseTypesBy_WrkOutMachineId(id: number) {
         try{
-            const result = this.SecectByForeignId(id, TableTypes.WrkOutMachine);
+            const result = await this.SecectByForeignId(id, TableTypes.WrkOutMachine);
+            console.log('res', result);
             return result;
         }
         catch(err){        
@@ -31,9 +32,9 @@ export class MachineExerciseTypesDAO extends RelationalModel{
         }
     }
 
-    async InsertMachineExerciseTypes(body: MachineExerciseTypePostModel){
+    async InsertMachineExerciseTypes(body: MachineExerciseTypePostModel) {
         try{
-            const result = this.Insert(body);
+            const result = await this.Insert(body);
             return result;
         }
         catch(err){        

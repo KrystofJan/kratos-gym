@@ -65,7 +65,7 @@ var RelationalModel = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectSpecific(id, foreignTableType); })];
+                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectSpecific(id, _this.TableType, foreignTableType); })];
                     case 1:
                         result = _a.sent();
                         if (result instanceof DatabaseSuccess) {
@@ -127,7 +127,7 @@ var RelationalModel = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectSpecific(id, _this.TableType); })];
+                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectSpecific(id, _this.TableType, null); })];
                     case 1:
                         result = _a.sent();
                         if (result instanceof DatabaseSuccess) {

@@ -10,6 +10,6 @@ export class MachineExerciseTypes extends Model{
     constructor(jsonData: IDictionary<any>){
         super();
         this.ExerciseType = jsonData.ExerciseType;
-        this.Machine = jsonData.WrkOutMachine;
+        this.Machine = jsonData.Machine;
     }
 }

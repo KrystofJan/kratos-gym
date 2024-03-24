@@ -13,15 +13,15 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { Model } from './Model.js';
-var MachineExerciseTypes = /** @class */ (function (_super) {
-    __extends(MachineExerciseTypes, _super);
-    function MachineExerciseTypes(jsonData) {
+import { Model } from '../Model.js';
+var MachineExerciseTypeGetModel = /** @class */ (function (_super) {
+    __extends(MachineExerciseTypeGetModel, _super);
+    function MachineExerciseTypeGetModel(wrkOutMachineId, exerciseTypeId) {
         var _this = _super.call(this) || this;
-        _this.ExerciseType = jsonData.ExerciseType;
-        _this.Machine = jsonData.Machine;
+        _this.WrkOutMachineId = wrkOutMachineId;
+        _this.ExerciseTypeId = exerciseTypeId;
         return _this;
     }
-    return MachineExerciseTypes;
+    return MachineExerciseTypeGetModel;
 }(Model));
-export { MachineExerciseTypes };
+export { MachineExerciseTypeGetModel };

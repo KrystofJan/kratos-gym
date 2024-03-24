@@ -34,97 +34,62 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { FindExerciseTypeById } from "./ExerciseTypeManager.js";
-import { FindWrkOutMachineById } from "./WrkOutMachineManager.js";
-import { MachineExerciseTypes } from '../Models/MachineExerciseTypes.js';
-import { MachineExerciseTypesDAO } from '../ORM/AccessModels/MachineExerciseTypesDAO.js';
+import { WrkOutMachine } from '../Models/WrkOutMachine.js';
 import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
-// TODO change MachineExerciseTypePostModel to GetModel
-var buildBody = function (machineType) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, _i, machineType_1, mt, machineBody, typeBody, tmp, machineSuccess, typeSuccess, model;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                result = new Array;
-                _i = 0, machineType_1 = machineType;
-                _a.label = 1;
-            case 1:
-                if (!(_i < machineType_1.length)) return [3 /*break*/, 5];
-                mt = machineType_1[_i];
-                return [4 /*yield*/, FindWrkOutMachineById(mt.WrkOutMachineId)];
-            case 2:
-                machineBody = _a.sent();
-                return [4 /*yield*/, FindExerciseTypeById(mt.ExerciseTypeId)];
-            case 3:
-                typeBody = _a.sent();
-                tmp = {};
-                machineSuccess = machineBody;
-                tmp["Machine"] = machineSuccess.Body.Body;
-                typeSuccess = typeBody;
-                tmp["ExerciseType"] = typeSuccess.Body.Body;
-                console.log(tmp["Machine"]);
-                model = new MachineExerciseTypes(tmp);
-                result.push(model);
-                _a.label = 4;
-            case 4:
-                _i++;
-                return [3 /*break*/, 1];
-            case 5: return [2 /*return*/, result];
-        }
-    });
-}); };
-export var FindMachineExerciteTypeByWrkOutMachineId = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var machineTypesDAO, machineType, body, err_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                machineTypesDAO = new MachineExerciseTypesDAO();
-                return [4 /*yield*/, machineTypesDAO.SelectMachineExerciseTypesBy_WrkOutMachineId(id)];
-            case 1:
-                machineType = _a.sent();
-                return [4 /*yield*/, buildBody(machineType)];
-            case 2:
-                body = _a.sent();
-                return [2 /*return*/, new OkResponse("We good", body)];
-            case 3:
-                err_1 = _a.sent();
-                return [2 /*return*/, new FailedResponse("Cannot get this types ids machine types: ".concat(id))];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
-export var FindMachineExerciteTypeByExerciseTypeId = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var machineTypesDAO, machineType, body, err_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                machineTypesDAO = new MachineExerciseTypesDAO();
-                return [4 /*yield*/, machineTypesDAO.SelectMachineExerciseTypesBy_WrkOutMachineId(id)];
-            case 1:
-                machineType = _a.sent();
-                return [4 /*yield*/, buildBody(machineType)];
-            case 2:
-                body = _a.sent();
-                return [2 /*return*/, new OkResponse("We good", body)];
-            case 3:
-                err_2 = _a.sent();
-                return [2 /*return*/, new FailedResponse("Cannot get this types ids machine types: ".concat(id))];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
-export var CreateMachineExerciseType = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, exerciseTypeDAO, successResult, err_3;
+import { WrkOutMachineDAO } from '../ORM/AccessModels/WrkOutMachineDAO.js';
+export var FindAllWrkOutMachines = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var wrkOutMachineDao, body, results, _i, body_1, b, a, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                exerciseTypeDAO = new MachineExerciseTypesDAO();
-                return [4 /*yield*/, exerciseTypeDAO.InsertMachineExerciseTypes(body)];
+                wrkOutMachineDao = new WrkOutMachineDAO();
+                return [4 /*yield*/, wrkOutMachineDao.SelectAllWrkOutMachines()];
+            case 1:
+                body = _a.sent();
+                results = [];
+                for (_i = 0, body_1 = body; _i < body_1.length; _i++) {
+                    b = body_1[_i];
+                    a = new WrkOutMachine(b);
+                    results.push(a);
+                }
+                return [2 /*return*/, new OkResponse("We good", results)];
+            case 2:
+                err_1 = _a.sent();
+                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(")];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+export var FindWrkOutMachineById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    var wrkOutMachineDao, body, result, err_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                wrkOutMachineDao = new WrkOutMachineDAO();
+                return [4 /*yield*/, wrkOutMachineDao.SelectWrkOutMachineById(id)];
+            case 1:
+                body = _a.sent();
+                result = new WrkOutMachine(body);
+                return [2 /*return*/, new OkResponse("We good", result)];
+            case 2:
+                err_2 = _a.sent();
+                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(")];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+export var CreateWrkOutMachine = function (body) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, wrkOutMachineDao, successResult, err_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                wrkOutMachineDao = new WrkOutMachineDAO();
+                return [4 /*yield*/, wrkOutMachineDao.InsertWrkOutMachine(body)];
             case 1:
                 result = _a.sent();
                 successResult = result;

@@ -77,12 +77,13 @@ var Database = /** @class */ (function () {
         });
     };
     // TODO: change the rest to reflect the rest
-    Database.prototype.dbSelectSpecific = function (id, tableName) {
+    Database.prototype.dbSelectSpecific = function (id, tableName, foreignTable) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             var pkey = _this.tableKeys[tableName];
-            var tableNames = tableName.split('--');
-            tableName = tableNames[0];
+            if (foreignTable != null) {
+                pkey = _this.tableKeys[foreignTable];
+            }
             if (!Validators.validateNumericId(id)) {
                 console.error('Cannot use this ID', id);
                 ApiLogger.logApi("Cannot use this" + pkey + " ! --" + id);

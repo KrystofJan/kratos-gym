@@ -94,12 +94,13 @@ export class Database {
     }
 
     // TODO: change the rest to reflect the rest
-    dbSelectSpecific(id: number, tableName: string) {
+    dbSelectSpecific(id: number, tableName: string, foreignTable: string | null) {
         return new Promise((resolve, reject) => {
             
-            const pkey: string = this.tableKeys[tableName];
-            const tableNames = tableName.split('--');
-            tableName = tableNames[0];
+            let pkey: string = this.tableKeys[tableName];
+            if(foreignTable != null){
+               pkey = this.tableKeys[foreignTable]; 
+            }
 
             if(!Validators.validateNumericId(id)){
                 console.error('Cannot use this ID', id);

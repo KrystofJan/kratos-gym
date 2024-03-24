@@ -1,92 +1,78 @@
-// import { MachineExerciseTypePostModel } from "../Models/PostModels/MachineExerciseTypePostModel.js";
+import { IDictionary } from "../utils/Utilities.js";
+import { MachineExerciseTypePostModel } from "../Models/PostModels/MachineExerciseTypePostModel.js";
+import { FindExerciseTypeById } from "./ExerciseTypeManager.js";
+import { FindWrkOutMachineById } from "./WrkOutMachineManager.js";
+import { WrkOutMachine } from "../Models/WrkOutMachine.js";
+import { ExerciseType } from "../Models/ExerciseType.js";
+import { MachineExerciseTypes } from '../Models/MachineExerciseTypes.js';
+import { MachineExerciseTypeGetModel } from '../Models/GetModels/MachineExerciseTypesGetModel.js'
+import { MachineExerciseTypesDAO } from '../ORM/AccessModels/MachineExerciseTypesDAO.js';
+import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
+import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
+import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
+import { DatabaseResponse, DatabaseSuccess } from '../Database/DatabaseResponse.js';
 
-// TODO
-// const MachineExerciseTypesDAO = require('../ORM/AccessModels/MachineExerciseTypesDAO');
-// const machineManager = require('../Managers/WrkOutMachineManager');
-// const MachineModel = require('../ORM/Models/WrkOutMachine');
-// const ExerciseTypeModel = require('../ORM/Models/ExerciseType');
-// const typeManager = require('../Managers//ExerciseTypeManager');
-// const MachineExerciseTypesModel = require('../ORM/Models/MachineExerciseTypes');
-// const MachineTypesGetModel = require('../RequestUtility/GetModels/MachineTypesGetModel');
-// const SuccessfulResponse = require('../RequestUtility/CustomResponses/SuccessfulResponse');
-// const FailedResponse = require('../RequestUtility/CustomResponses/FailedResponse');
-// const BaseResponse = require('../RequestUtility/CustomResponses/BaseResponse');
-// const MachineTypesPostModel = require('../RequestUtility/PostModels/MachineTypesPostModel');
+// TODO change MachineExerciseTypePostModel to GetModel
+const buildBody = async (machineType: Array<MachineExerciseTypeGetModel>) => {
+    let result: Array<MachineExerciseTypes> = new Array<MachineExerciseTypes>;
+    for(const mt of machineType){
+        const machineBody = await FindWrkOutMachineById(mt.WrkOutMachineId); 
+        const typeBody = await FindExerciseTypeById(mt.ExerciseTypeId);
 
 
-// // TODO change MachineExerciseTypePostModel to GetModel
-// export const buildBody = async (machineType: Array<MachineExerciseTypePostModel>) => {
-//     const result = [];
 
-//     for(const mt of machineType){
-//         const machineBody = await machineManager.getId(mt.WrkOutMachineId); 
-//         const typeBody = await typeManager.get(mt.ExerciseTypeId);
+        let tmp: IDictionary<any> = {};
 
-//         const machine = new MachineModel(machineBody);
-//         const exerciseType = new ExerciseTypeModel(typeBody);
+        const machineSuccess = machineBody as OkResponse;
+        tmp["Machine"] = machineSuccess.Body.Body;
 
-//         const getModel = new MachineTypesGetModel(machine, exerciseType);
+        const typeSuccess = typeBody as OkResponse;
+        tmp["ExerciseType"] = typeSuccess.Body.Body;
+        console.log(tmp["Machine"]);
+        const model = new MachineExerciseTypes(tmp);
+        result.push(model);
+    }
+    return result;
+}
 
-//         const model = new MachineExerciseTypesModel(getModel);
-//         result.push(model); // volam constructJson v controlleru
+export const FindMachineExerciteTypeByWrkOutMachineId = async (id: number) => { // getByMachineId
+    try{
+        const machineTypesDAO = new MachineExerciseTypesDAO();
+        const machineType = await machineTypesDAO.SelectMachineExerciseTypesBy_WrkOutMachineId(id);
+        const body: Array<MachineExerciseTypes> = await buildBody(machineType)
+        return new OkResponse("We good", body);
+    }
+    catch(err){
+        return new FailedResponse(`Cannot get this types ids machine types: ${id}`);
+    }
+}
+
+export const FindMachineExerciteTypeByExerciseTypeId = async (id: number) => {
+    try{
+        const machineTypesDAO = new MachineExerciseTypesDAO();
+        const machineType = await machineTypesDAO.SelectMachineExerciseTypesBy_WrkOutMachineId(id);
+        const body: Array<MachineExerciseTypes> = await buildBody(machineType)
+
+        return new OkResponse("We good", body);
+    }
+    catch(err){
+        return new FailedResponse(`Cannot get this types ids machine types: ${id}`);
+    }
+}
+
+export const CreateMachineExerciseType = async (body: MachineExerciseTypePostModel) => {
+    let result: DatabaseResponse;
+
+    try{
+        const exerciseTypeDAO = new MachineExerciseTypesDAO();
         
-//     }
-//     return result;
-// }
-
-// export const getIdMachine = async (id: number) => { // getByMachineId
-//     try{
-//         const machineTypesDAO = new MachineExerciseTypesDAO();
-//         const machineType = await machineTypesDAO.getIdMachine(id);
-//         const body = buildBody(machineType)
-//         return new SuccessfulResponse(body);
-//     }
-//     catch(err){
-//         return new FailedResponse(`Cannot get this types ids machine types: ${id}`);
-//     }
-// }
-
-// /**
-//  * 
-//  * @param {Number} id 
-//  * @returns {BaseResponse}
-//  */
-// const getIdType = async (id) => {
-//     try{
-//         console.log("Fetching id: ", id);
-        
-//         const machineTypesDAO = new MachineExerciseTypesDAO();
-//         const machineType = await machineTypesDAO.getIdType(id);
-
-//         return new SuccessfulResponse(machineType);
-//         const result = await buildBody(machineType);
-//     }
-//     catch(err){
-//         return new FailedResponse(`Cannot get this machine ids machine types: ${id}`)
-//     }
-// }
-
-// /**
-//  * 
-//  * @param {MachineTypesPostModel} body
-//  * @returns {BaseResponse}
-//  */
-// const post = async (body) => {
-//     try{
-//         const body = req.body;
-//         const machineTypesDAO = new MachineExerciseTypesDAO();
-//         const result = await machineTypesDAO.post(body);
-
-//         return new SuccessfulResponse(result);
-//         res.status(201).json(result);
-//     }
-//     catch(err){
-//         return new FailedResponse("Cannot create an entry due to: ", err);
-//     }
-// }
-
-// module.exports = {
-//     getIdMachine,
-//     getIdType,
-//     post,
-// }
+        result = await exerciseTypeDAO.InsertMachineExerciseTypes(body);
+        const successResult = result as DatabaseSuccess;
+        return new CreatedResponse(
+            "Successfully created an ExerciseType", 
+            successResult.Body);
+    }
+    catch(err){
+        return new FailedResponse('Sadge');
+    }
+}

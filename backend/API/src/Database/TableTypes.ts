@@ -10,5 +10,6 @@ export enum TableTypes {
     Reservation = "Reservation",
     WrkOutPlanType = "WrkOutPlanType",
     WrkOutPlanMachines = "WrkOutPlanMachines",
-    WrkOutPlanMachinesPreset = "WrkOutPlanMachinesPreset"
+    WrkOutPlanMachinesPreset = "WrkOutPlanMachinesPreset",
+    MachineExerciseTypes_Machine = "MachineExerciseTypes--"
 }
