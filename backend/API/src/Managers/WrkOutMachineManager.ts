@@ -6,6 +6,7 @@ import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/Created
 import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
 import { DatabaseResponse, DatabaseSuccess } from '../Database/DatabaseResponse.js';
 import { WrkOutMachineDAO } from '../ORM/AccessModels/WrkOutMachineDAO.js';
+import { WrkOutMachinePostModel } from '../Models/PostModels/WrkOutMachine.js';
 
 export const FindAllWrkOutMachines = async (): Promise<Response> => {
     try{
@@ -43,13 +44,31 @@ export const FindWrkOutMachineById = async (id: number): Promise<Response> => {
     }
 }
 
-export const CreateWrkOutMachine = async (body: WrkOutMachine): Promise<Response> => {
+export const CreateWrkOutMachine = async (body: WrkOutMachinePostModel): Promise<Response> => {
     let result: DatabaseResponse;
     // TODO better response
     try{
         const wrkOutMachineDao = new WrkOutMachineDAO();
         
         result = await wrkOutMachineDao.InsertWrkOutMachine(body);
+
+        const successResult = result as DatabaseSuccess;
+        return new CreatedResponse(
+            "Successfully created an ExerciseType", 
+            successResult.Body);
+    }
+    catch(err){
+        return new FailedResponse('Sadge');
+    }
+}
+
+export const RecommendMachine = async (id: number) => {
+    let result: DatabaseResponse;
+    // TODO better response
+    try{
+        const wrkOutMachineDao = new WrkOutMachineDAO();
+        
+        result = await wrkOutMachineDao.RecommendMachine(id);
 
         const successResult = result as DatabaseSuccess;
         return new CreatedResponse(

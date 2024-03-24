@@ -64,7 +64,6 @@ var buildBody = function (machineType) { return __awaiter(void 0, void 0, void 0
                 tmp["Machine"] = machineSuccess.Body.Body;
                 typeSuccess = typeBody;
                 tmp["ExerciseType"] = typeSuccess.Body.Body;
-                console.log(tmp["Machine"]);
                 model = new MachineExerciseTypes(tmp);
                 result.push(model);
                 _a.label = 4;

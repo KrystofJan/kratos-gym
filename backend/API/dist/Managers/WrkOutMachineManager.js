@@ -101,3 +101,22 @@ export var CreateWrkOutMachine = function (body) { return __awaiter(void 0, void
         }
     });
 }); };
+export var RecommendMachine = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, wrkOutMachineDao, successResult, err_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                wrkOutMachineDao = new WrkOutMachineDAO();
+                return [4 /*yield*/, wrkOutMachineDao.RecommendMachine(id)];
+            case 1:
+                result = _a.sent();
+                successResult = result;
+                return [2 /*return*/, new CreatedResponse("Successfully created an ExerciseType", successResult.Body)];
+            case 2:
+                err_4 = _a.sent();
+                return [2 /*return*/, new FailedResponse('Sadge')];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };

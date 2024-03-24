@@ -13,21 +13,19 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { Model } from './Model.js';
-var WrkOutMachine = /** @class */ (function (_super) {
-    __extends(WrkOutMachine, _super);
-    function WrkOutMachine(jsonData) {
-        var _a, _b, _c, _d;
+import { Model } from '../Model.js';
+var WrkOutMachinePostModel = /** @class */ (function (_super) {
+    __extends(WrkOutMachinePostModel, _super);
+    function WrkOutMachinePostModel(jsonData) {
         var _this = _super.call(this) || this;
-        _this.WrkOutMachineId = (_a = jsonData.WrkOutMachineId) !== null && _a !== void 0 ? _a : null;
         _this.MachineName = jsonData.MachineName;
-        _this.MaxWeight = (_b = jsonData.MaxWeight) !== null && _b !== void 0 ? _b : 0;
-        _this.MinWeight = (_c = jsonData.MinWeight) !== null && _c !== void 0 ? _c : 0;
+        _this.MaxWeight = jsonData.MaxWeight;
+        _this.MinWeight = jsonData.MinWeight;
         _this.MaxPeople = jsonData.MaxPeople;
         _this.AvgTimeTaken = jsonData.AvgTimeTaken;
-        _this.PopularityScore = (_d = jsonData.PopularityScore) !== null && _d !== void 0 ? _d : 0;
+        _this.PopularityScore = jsonData.PopularityScore;
         return _this;
     }
-    return WrkOutMachine;
+    return WrkOutMachinePostModel;
 }(Model));
-export { WrkOutMachine };
+export { WrkOutMachinePostModel };

@@ -1,22 +1,22 @@
-// const express = require('express');
-// const wrkOutMachineController = require('../Controller/WrkOutMachineController');
+import {getAllWrkOutMachines, getWrkOutMachineById, recommendMachine, postWrkOutMachine  } from './../Controller/WrkOutMachineController.js';
+import express, { Request, Response, Router } from 'express';
 
-// const WrkOutMachineRouter = express.Router();
+export const WrkOutMachineRouter = express.Router();
 
-// WrkOutMachineRouter.get('/', (req, res) => {
-//     wrkOutMachineController.getAll(req, res);
-// });
+WrkOutMachineRouter.get('/', (req, res) => {
+    getAllWrkOutMachines(req, res);
+});
 
-// WrkOutMachineRouter.get('/:id', (req, res) => {
-//     wrkOutMachineController.getId( req,res,req.params['id']);
-// });
+WrkOutMachineRouter.get('/:id', (req, res) => {
+    const id = parseInt(req.params['id']);
+    getWrkOutMachineById( req,res,id);
+});
 
-// WrkOutMachineRouter.post('/', (req, res) => {
-//     wrkOutMachineController.post( req,res);
-// });
+WrkOutMachineRouter.post('/', (req, res) => {
+    postWrkOutMachine( req,res);
+});
 
-// WrkOutMachineRouter.get('/recommend/:id', (req, res) => {
-//     wrkOutMachineController.recommendMachine( req,res,req.params['id']); // TODO fix!
-// });
-
-// module.exports = WrkOutMachineRouter;
+WrkOutMachineRouter.get('/recommend/:id', (req, res) => {
+    const id = parseInt(req.params['id']);
+    recommendMachine( req,res,id); // TODO fix!
+});

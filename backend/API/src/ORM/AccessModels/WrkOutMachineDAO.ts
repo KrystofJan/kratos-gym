@@ -1,6 +1,7 @@
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../../Database/TableTypes.js";
 import { WrkOutMachine } from '../../Models/WrkOutMachine.js';
+import { WrkOutMachinePostModel } from "../../Models/PostModels/WrkOutMachine.js";
 
 export class WrkOutMachineDAO extends RelationalModel{
 
@@ -28,7 +29,7 @@ export class WrkOutMachineDAO extends RelationalModel{
         }
     }
 
-    async InsertWrkOutMachine (body: WrkOutMachine){
+    async InsertWrkOutMachine (body: WrkOutMachinePostModel){
         try{
             const result = this.Insert(body);
             return result;

@@ -1,4 +1,6 @@
-// const express = require('express');
+// import express from 'express';
+// import { getWrkOutMachineById } from '../Controller/WrkOutPlanController.js';
+
 // const wrkOutPlanController = require('../Controller/WrkOutPlanController');
 
 // const WrkOutPlanRouter = express.Router();

@@ -2,8 +2,6 @@ import { IDictionary } from "../utils/Utilities.js";
 import { MachineExerciseTypePostModel } from "../Models/PostModels/MachineExerciseTypePostModel.js";
 import { FindExerciseTypeById } from "./ExerciseTypeManager.js";
 import { FindWrkOutMachineById } from "./WrkOutMachineManager.js";
-import { WrkOutMachine } from "../Models/WrkOutMachine.js";
-import { ExerciseType } from "../Models/ExerciseType.js";
 import { MachineExerciseTypes } from '../Models/MachineExerciseTypes.js';
 import { MachineExerciseTypeGetModel } from '../Models/GetModels/MachineExerciseTypesGetModel.js'
 import { MachineExerciseTypesDAO } from '../ORM/AccessModels/MachineExerciseTypesDAO.js';
@@ -28,7 +26,7 @@ const buildBody = async (machineType: Array<MachineExerciseTypeGetModel>) => {
 
         const typeSuccess = typeBody as OkResponse;
         tmp["ExerciseType"] = typeSuccess.Body.Body;
-        console.log(tmp["Machine"]);
+
         const model = new MachineExerciseTypes(tmp);
         result.push(model);
     }
