@@ -1,11 +1,11 @@
-import { UserDAO } from '../ORM/AccessModels/UserDAO.js';
+import { UserDAO } from '../DataLayer/AccessModels/UserDAO.js';
 import { User } from '../Models/User.js'
-import { Response } from '../utils/RequestUtility/CustomResponces/Response.js';
+import { Response } from '../RequestUtility/CustomResponces/Response.js';
 import { IDictionary } from '../utils/Utilities.js';
-import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
-import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
-import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
-import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../Database/DatabaseResponse.js';
+import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
+import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
+import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
+import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/DatabaseResponse.js';
 
 
 export const FindAllUsers = async (): Promise<Response> => {

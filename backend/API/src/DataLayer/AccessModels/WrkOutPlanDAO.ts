@@ -1,6 +1,6 @@
 
 import { RelationalModel } from './RelationalModel.js';
-import { TableTypes } from "../../Database/TableTypes.js";
+import { TableTypes } from "../Database/TableTypes.js";
 import { WrkOutPlan } from '../../Models/WrkOutPlan.js';
 
 export class WrkOutPlanDAO extends RelationalModel{

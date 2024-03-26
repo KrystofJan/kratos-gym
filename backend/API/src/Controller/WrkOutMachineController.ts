@@ -1,12 +1,12 @@
 import { FindWrkOutMachineById, FindAllWrkOutMachines, RecommendMachine, CreateWrkOutMachine } from '../Managers/WrkOutMachineManager.js';
 import { Request as expressRequest, Response as expressResponse } from 'express';
-import { Response } from '../utils/RequestUtility/CustomResponces/Response.js'
+import { Response } from '../RequestUtility/CustomResponces/Response.js'
 import { User } from '../Models/User.js'
 import { Reservation } from '../Models/Reservation.js';
 import { ReservationPostModel } from '../Models/PostModels/ReservationPostModel.js';
-import { BadRequestResponse } from '../utils/RequestUtility/CustomResponces/BadRequestResponse.js';
+import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 import { ReservationGetModel } from '../Models/GetModels/ReservationGetModel.js';
-import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
+import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { IDictionary } from '../utils/Utilities.js';
 import { WrkOutMachine } from '../Models/WrkOutMachine.js';
 

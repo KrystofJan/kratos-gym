@@ -1,15 +1,15 @@
-import { IDictionary } from "../../utils/Utilities.js";
 import { RelationalModel } from "./RelationalModel.js";
-import { TableTypes } from "../../Database/TableTypes.js";
-import { Address } from '../../Models/Address.js'
-import { DatabaseFail, DatabaseResponse } from "../../Database/DatabaseResponse.js";
+import { Reservation } from '../../Models/Reservation.js'
+import { TableTypes } from "../Database/TableTypes.js";
+import { ReservationPostModel } from '../../Models/PostModels/ReservationPostModel.js';
 
-export class AddressDAO extends RelationalModel{
+export class ReservationDAO extends RelationalModel{
+
     constructor() {
-        super(TableTypes.Address);
+        super(TableTypes.Reservation);
     }
 
-    async SelectAllAdresses(){
+    async SelectAllReservations(){
         try{
             const result = this.SelectAll();
             return result;
@@ -19,7 +19,7 @@ export class AddressDAO extends RelationalModel{
         }
     }
 
-    async SelectAdressById(id: number){
+    async SelectReservationById(id: number){
         try{
             const result = this.SelectById(id);
             return result;
@@ -29,7 +29,7 @@ export class AddressDAO extends RelationalModel{
         }
     }
 
-    async InsertAddress (body: Address){
+    async InsertReservation (body: ReservationPostModel){
         try{
             const result = this.Insert(body);
             return result;

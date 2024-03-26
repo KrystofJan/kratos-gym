@@ -1,8 +1,8 @@
 import { FindAllExerciseTypes, FindExerciseTypeById, CreateExerciseType } from '../Managers/ExerciseTypeManager.js';
 import { Request as expressRequest, Response as expressResponse } from 'express';
-import { Response } from '../utils/RequestUtility/CustomResponces/Response.js'
+import { Response } from '../RequestUtility/CustomResponces/Response.js'
 import { ExerciseType } from '../Models/ExerciseType.js'
-import { BadRequestResponse } from '../utils/RequestUtility/CustomResponces/BadRequestResponse.js';
+import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 
 export const getAllExerciseTypes = async (req: expressRequest, res: expressResponse) => {
     const response: Response = await FindAllExerciseTypes();

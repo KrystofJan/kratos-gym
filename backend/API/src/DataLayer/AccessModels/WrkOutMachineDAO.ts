@@ -1,5 +1,5 @@
 import { RelationalModel } from "./RelationalModel.js";
-import { TableTypes } from "../../Database/TableTypes.js";
+import { TableTypes } from "../Database/TableTypes.js";
 import { WrkOutMachine } from '../../Models/WrkOutMachine.js';
 import { WrkOutMachinePostModel } from "../../Models/PostModels/WrkOutMachine.js";
 

@@ -1,13 +1,13 @@
 import {FindAllReservations, FindReservationById, CreateReservation } from '../Managers/ReservationManager.js';
 import { FindUserById, FindAllUsers } from '../Managers/UserManager.js';
 import { Request as expressRequest, Response as expressResponse } from 'express';
-import { Response } from '../utils/RequestUtility/CustomResponces/Response.js'
+import { Response } from '../RequestUtility/CustomResponces/Response.js'
 import { User } from '../Models/User.js'
 import { Reservation } from '../Models/Reservation.js';
 import { ReservationPostModel } from '../Models/PostModels/ReservationPostModel.js';
-import { BadRequestResponse } from '../utils/RequestUtility/CustomResponces/BadRequestResponse.js';
+import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 import { ReservationGetModel } from '../Models/GetModels/ReservationGetModel.js';
-import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
+import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { IDictionary } from '../utils/Utilities.js';
 
 export const getReservationById = async (req: expressRequest,res: expressResponse,id: number) => {

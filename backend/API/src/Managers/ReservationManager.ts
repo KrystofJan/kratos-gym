@@ -1,12 +1,12 @@
-import { ReservationDAO } from '../ORM/AccessModels/ReservationDAO.js';
+import { ReservationDAO } from '../DataLayer/AccessModels/ReservationDAO.js';
 import { Reservation } from '../Models/Reservation.js'
-import { Response } from '../utils/RequestUtility/CustomResponces/Response.js';
+import { Response } from '../RequestUtility/CustomResponces/Response.js';
 import { ReservationPostModel } from '../Models/PostModels/ReservationPostModel.js';
 import { IDictionary } from '../utils/Utilities.js';
-import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
-import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
-import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
-import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../Database/DatabaseResponse.js';
+import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
+import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
+import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
+import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/DatabaseResponse.js';
 import { ReservationGetModel } from '../Models/GetModels/ReservationGetModel.js';
 
 

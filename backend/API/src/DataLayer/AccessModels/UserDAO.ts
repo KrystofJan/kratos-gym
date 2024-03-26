@@ -1,5 +1,5 @@
 import { RelationalModel } from "./RelationalModel.js";
-import { TableTypes } from "../../Database/TableTypes.js";
+import { TableTypes } from "../Database/TableTypes.js";
 import { User } from '../../Models/User.js'
 
 export class UserDAO extends RelationalModel{

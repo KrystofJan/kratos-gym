@@ -1,9 +1,9 @@
 import mysql, { Connection, OkPacket, ResultSetHeader } from 'mysql2';
-import * as config  from '../Config/config.json' with {type: "json"};
-import * as dbKeys from './keys/table-keys.json' with {type: "json"};
+import * as config  from '../../Config/config.json' with {type: "json"};
+import * as dbKeys from '../keys/table-keys.json' with {type: "json"};
 import { Validators } from './DatabaseValidators.js'
-import { ApiLogger } from '../ApiLoggerLogic/ApiLogger.js';
-import { IDictionary } from '../utils/Utilities.js';
+import { ApiLogger } from '../../Logger/ApiLogger.js';
+import { IDictionary } from '../../utils/Utilities.js';
 import { DatabaseResponse, DatabaseSuccess, DatabaseFail } from './DatabaseResponse.js';
 
 export class Database {

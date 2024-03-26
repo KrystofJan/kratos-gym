@@ -4,11 +4,11 @@ import { FindExerciseTypeById } from "./ExerciseTypeManager.js";
 import { FindWrkOutMachineById } from "./WrkOutMachineManager.js";
 import { MachineExerciseTypes } from '../Models/MachineExerciseTypes.js';
 import { MachineExerciseTypeGetModel } from '../Models/GetModels/MachineExerciseTypesGetModel.js'
-import { MachineExerciseTypesDAO } from '../ORM/AccessModels/MachineExerciseTypesDAO.js';
-import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
-import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
-import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
-import { DatabaseResponse, DatabaseSuccess } from '../Database/DatabaseResponse.js';
+import { MachineExerciseTypesDAO } from '../DataLayer/AccessModels/MachineExerciseTypesDAO.js';
+import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
+import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
+import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
+import { DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/DatabaseResponse.js';
 
 // TODO change MachineExerciseTypePostModel to GetModel
 const buildBody = async (machineType: Array<MachineExerciseTypeGetModel>) => {

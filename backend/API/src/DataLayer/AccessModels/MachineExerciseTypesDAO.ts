@@ -1,6 +1,6 @@
 import { RelationalModel } from './RelationalModel.js';
-import { TableTypes } from "../../Database/TableTypes.js";
-import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../../Database/DatabaseResponse.js';
+import { TableTypes } from "../Database/TableTypes.js";
+import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../Database/DatabaseResponse.js';
 import { MachineExerciseTypePostModel } from '../../Models/PostModels/MachineExerciseTypePostModel.js';
 
 export class MachineExerciseTypesDAO extends RelationalModel {

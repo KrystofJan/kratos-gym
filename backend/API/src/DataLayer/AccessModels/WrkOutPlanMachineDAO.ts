@@ -1,18 +1,19 @@
 import { RelationalModel } from './RelationalModel.js';
-import { TableTypes } from "../../Database/TableTypes.js";
-import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../../Database/DatabaseResponse.js';
+import { TableTypes } from "../Database/TableTypes.js";
+import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../Database/DatabaseResponse.js';
 import { WrkOutPlanMachinePostModel } from '../../Models/PostModels/WrkOutPlanMachinePostModel.js';
 
 export class WrkOutPlanMachinesDAO extends RelationalModel{
 
     constructor() {
-        super(TableTypes.test);
+        super(TableTypes.WrkOutPlanMachines);
     }
 
     // TODO: Move logic to wrkOutPlan
     async SelectWrkOutPlanBy_WrkOutPlanId(id: number){
         try{
             const result = this.SecectByForeignId(id, TableTypes.WrkOutPlan);
+            return result;
         }
         catch(err){        
             console.error(err);

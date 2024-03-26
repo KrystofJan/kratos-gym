@@ -1,11 +1,11 @@
 import { WrkOutMachine } from '../Models/WrkOutMachine.js'
-import { Response } from '../utils/RequestUtility/CustomResponces/Response.js';
+import { Response } from '../RequestUtility/CustomResponces/Response.js';
 import { IDictionary } from '../utils/Utilities.js';
-import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
-import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
-import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
-import { DatabaseResponse, DatabaseSuccess } from '../Database/DatabaseResponse.js';
-import { WrkOutMachineDAO } from '../ORM/AccessModels/WrkOutMachineDAO.js';
+import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
+import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
+import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
+import { DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/DatabaseResponse.js';
+import { WrkOutMachineDAO } from '../DataLayer/AccessModels/WrkOutMachineDAO.js';
 import { WrkOutMachinePostModel } from '../Models/PostModels/WrkOutMachine.js';
 
 export const FindAllWrkOutMachines = async (): Promise<Response> => {

@@ -1,14 +1,16 @@
-import { RelationalModel } from './RelationalModel.js';
-import { TableTypes } from "../../Database/TableTypes.js";
-import { Model } from '../../Models/Model.js';
 
-export class TestDAO extends RelationalModel{
+import { RelationalModel } from './RelationalModel.js';
+import { TableTypes } from "../Database/TableTypes.js";
+import { WrkOutPlan } from '../../Models/WrkOutPlan.js';
+
+export class WrkOutPlanPresetDAO extends RelationalModel{
+    // Move to WrkOutPlan 
 
     constructor() {
-        super(TableTypes.test);
+        super(TableTypes.WrkOutPlanPreset);
     }
 
-    async getId(id: number){
+    async SelectWrkOutPlanPresetById(id: number){
         try{
             const result = this.SelectById(id);
             return result;
@@ -18,7 +20,7 @@ export class TestDAO extends RelationalModel{
         }
     }
 
-    async getAll(){
+    async SelectAllWrkOutPlanPresets(){
         try{
             const result = this.SelectAll();
             return result;
@@ -28,7 +30,7 @@ export class TestDAO extends RelationalModel{
         }
     }
 
-    async post(body: Model){
+    async InsertWrkOutPlanPreset(body: WrkOutPlan){
         try{
             const result = this.Insert(body);
             return result;

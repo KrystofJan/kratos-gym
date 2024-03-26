@@ -1,6 +1,6 @@
-import { Model } from '../../../Models/Model.js';
-import { IDictionary } from '../../Utilities.js';
-import { ResponseStatus } from '../../common/ResponseStatus.js';
+import { Model } from '../../Models/Model.js';
+import { IDictionary } from '../../utils/Utilities.js';
+import { ResponseStatus } from '../common/ResponseStatus.js';
 
 export interface ResponseBody {
     readonly status: ResponseStatus;

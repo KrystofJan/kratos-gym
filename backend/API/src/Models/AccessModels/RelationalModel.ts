@@ -1,7 +1,7 @@
 import { IDictionary } from '../../utils/Utilities.js';
-import { Database } from '../../Database/Database.js';
-import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../../Database/DatabaseResponse.js';
-import { TableTypes } from "../../Database/TableTypes.js";
+import { Database } from '../../DataLayer/Database/Database.js';
+import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../../DataLayer/Database/DatabaseResponse.js';
+import { TableTypes } from "../../DataLayer/Database/TableTypes.js";
 import { Model } from '../../Models/Model.js';
 
 export class RelationalModel{

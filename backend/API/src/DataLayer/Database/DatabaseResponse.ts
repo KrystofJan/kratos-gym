@@ -1,6 +1,6 @@
 import mysql  from 'mysql2';
-import { IDictionary } from "../utils/Utilities.js";
-import { ResponseStatus } from '../utils/common/ResponseStatus.js';
+import { IDictionary } from "../../utils/Utilities.js";
+import { ResponseStatus } from '../../RequestUtility/common/ResponseStatus.js';
 
 export interface DatabaseResponse {
     Status: ResponseStatus;

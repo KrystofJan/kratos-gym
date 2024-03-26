@@ -1,7 +1,7 @@
 import { Response, StatusCodeType } from './Response.js';
-import { ResponseStatus } from '../../common/ResponseStatus.js';
+import { ResponseStatus } from '../common/ResponseStatus.js';
 import { GetResponseBody } from './ResponseBody.js';
-import { Model } from '../../../Models/Model.js';
+import { Model } from '../../Models/Model.js';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 
 export class OkResponse implements Response {

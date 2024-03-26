@@ -1,16 +1,15 @@
 import { IDictionary } from "../../utils/Utilities.js";
 import { RelationalModel } from "./RelationalModel.js";
-import { TableTypes } from "../../Database/TableTypes.js";
-import { ExerciseType } from '../../Models/ExerciseType.js'
-import { DatabaseFail, DatabaseResponse } from "../../Database/DatabaseResponse.js";
+import { TableTypes } from "../../DataLayer/Database/TableTypes.js";
+import { Address } from '../../Models/Address.js'
+import { DatabaseFail, DatabaseResponse } from "../../DataLayer/Database/DatabaseResponse.js";
 
-export class ExerciseTypeDAO extends RelationalModel{
-
+export class AddressDAO extends RelationalModel{
     constructor() {
-        super(TableTypes.ExerciseType);
+        super(TableTypes.Address);
     }
 
-    async SelectAllExerciseTypes(){
+    async SelectAllAdresses(){
         try{
             const result = this.SelectAll();
             return result;
@@ -20,7 +19,7 @@ export class ExerciseTypeDAO extends RelationalModel{
         }
     }
 
-    async SelectExerciseTypeById(id: number){
+    async SelectAdressById(id: number){
         try{
             const result = this.SelectById(id);
             return result;
@@ -30,7 +29,7 @@ export class ExerciseTypeDAO extends RelationalModel{
         }
     }
 
-    async InsertExerciseType (body: ExerciseType){
+    async InsertAddress (body: Address){
         try{
             const result = this.Insert(body);
             return result;

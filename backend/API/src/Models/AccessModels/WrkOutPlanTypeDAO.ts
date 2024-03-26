@@ -1,6 +1,6 @@
 import { RelationalModel } from './RelationalModel.js';
-import { TableTypes } from "../../Database/TableTypes.js";
-import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../../Database/DatabaseResponse.js';
+import { TableTypes } from "../../DataLayer/Database/TableTypes.js";
+import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../../DataLayer/Database/DatabaseResponse.js';
 import { WrkOutPlanTypePostModel } from '../../Models/PostModels/WrkOutPlanTypePostModel.js';
 
 export class WrkOutPlanType extends RelationalModel{
