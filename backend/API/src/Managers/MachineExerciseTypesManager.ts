@@ -41,7 +41,7 @@ export const FindMachineExerciteTypeByWrkOutMachineId = async (id: number) => { 
         return new OkResponse("We good", body);
     }
     catch(err){
-        return new FailedResponse(`Cannot get this types ids machine types: ${id}`);
+        return new FailedResponse(`Cannot get this types ids machine types: ${id}`, 404);
     }
 }
 
@@ -54,7 +54,7 @@ export const FindMachineExerciteTypeByExerciseTypeId = async (id: number) => {
         return new OkResponse("We good", body);
     }
     catch(err){
-        return new FailedResponse(`Cannot get this types ids machine types: ${id}`);
+        return new FailedResponse(`Cannot get this types ids machine types: ${id}`, 404);
     }
 }
 
@@ -71,6 +71,6 @@ export const CreateMachineExerciseType = async (body: MachineExerciseTypePostMod
             successResult.Body);
     }
     catch(err){
-        return new FailedResponse('Sadge');
+        return new FailedResponse('Sadge', 404);
     }
 }

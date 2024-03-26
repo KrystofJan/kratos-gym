@@ -34,11 +34,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { UserDAO } from '../ORM/AccessModels/UserDAO.js';
-import { User } from '../Models/User.js';
-import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
-import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
-import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
+import { UserDAO } from '../DataLayer/AccessModels/UserDAO.js';
+import { User, UserAttrs } from '../Models/User.js';
+import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
+import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
+import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
+import { ResponseStatus } from '../RequestUtility/common/ResponseStatus.js';
+import { LoggedInResponse } from '../RequestUtility/CustomResponces/LogInResponse.js';
 export var FindAllUsers = function () { return __awaiter(void 0, void 0, void 0, function () {
     var userDao, body, results, _i, body_1, b, a, err_1;
     return __generator(this, function (_a) {
@@ -58,7 +60,7 @@ export var FindAllUsers = function () { return __awaiter(void 0, void 0, void 0,
                 return [2 /*return*/, new OkResponse("We good", results)];
             case 2:
                 err_1 = _a.sent();
-                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(")];
+                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(", 404)];
             case 3: return [2 /*return*/];
         }
     });
@@ -78,7 +80,7 @@ export var FindUserById = function (id) { return __awaiter(void 0, void 0, void 
                 return [2 /*return*/, new OkResponse("We good", result)];
             case 2:
                 err_2 = _a.sent();
-                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(")];
+                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(", 404)];
             case 3: return [2 /*return*/];
         }
     });
@@ -97,8 +99,52 @@ export var CreateUser = function (body) { return __awaiter(void 0, void 0, void 
                 return [2 /*return*/, new CreatedResponse("Successfully created an ExerciseType", successResult.Body)];
             case 2:
                 err_3 = _a.sent();
-                return [2 /*return*/, new FailedResponse('Sadge')];
+                return [2 /*return*/, new FailedResponse('Sadge', 404)];
             case 3: return [2 /*return*/];
+        }
+    });
+}); };
+export var LoginAuth = function (body) { return __awaiter(void 0, void 0, void 0, function () {
+    var userDao, result, err, real_result, err, err_4, error;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 5, , 6]);
+                userDao = new UserDAO();
+                result = [];
+                if (!body.LoginOrEmail.includes('@')) return [3 /*break*/, 2];
+                return [4 /*yield*/, userDao.SelectUserByAttribute(UserAttrs.Email, body.LoginOrEmail)];
+            case 1:
+                result = _a.sent();
+                return [3 /*break*/, 4];
+            case 2: return [4 /*yield*/, userDao.SelectUserByAttribute(UserAttrs.Login, body.LoginOrEmail)];
+            case 3:
+                result = _a.sent();
+                _a.label = 4;
+            case 4:
+                if (result.length == 0) {
+                    err = {
+                        status: ResponseStatus.FAIL,
+                        message: "Wrong email/login!",
+                        error_code: 0
+                    };
+                    throw err;
+                }
+                real_result = result[0];
+                if (real_result.Password != body.EncodedPassword) {
+                    err = {
+                        status: ResponseStatus.FAIL,
+                        message: "Wrong password!",
+                        error_code: 1
+                    };
+                    throw err;
+                }
+                return [2 /*return*/, new LoggedInResponse("We good", real_result.UserId)];
+            case 5:
+                err_4 = _a.sent();
+                error = err_4;
+                return [2 /*return*/, new FailedResponse(error.message, error.error_code)];
+            case 6: return [2 /*return*/];
         }
     });
 }); };

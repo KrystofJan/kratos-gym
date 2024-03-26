@@ -34,11 +34,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { AddressDAO } from '../ORM/AccessModels/AddressDAO.js';
+import { AddressDAO } from '../Models/AccessModels/AddressDAO.js';
 import { Address } from '../Models/Address.js';
-import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
-import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
-import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
+import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
+import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
+import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
 export var FindAllAdresses = function () { return __awaiter(void 0, void 0, void 0, function () {
     var addressDAO, body, results, _i, body_1, b, a, err_1;
     return __generator(this, function (_a) {
@@ -58,7 +58,7 @@ export var FindAllAdresses = function () { return __awaiter(void 0, void 0, void
                 return [2 /*return*/, new OkResponse("We good", results)];
             case 2:
                 err_1 = _a.sent();
-                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(")];
+                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(", 404)];
             case 3: return [2 /*return*/];
         }
     });
@@ -77,7 +77,7 @@ export var FindAdressById = function (id) { return __awaiter(void 0, void 0, voi
                 return [2 /*return*/, new OkResponse("We good", result)];
             case 2:
                 err_2 = _a.sent();
-                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(")];
+                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(", 404)];
             case 3: return [2 /*return*/];
         }
     });
@@ -97,7 +97,7 @@ export var CreateAddress = function (body) { return __awaiter(void 0, void 0, vo
                 return [2 /*return*/, new CreatedResponse("Successfully created an Address", successResult.Body)];
             case 2:
                 err_3 = _a.sent();
-                return [2 /*return*/, new FailedResponse('Sadge')];
+                return [2 /*return*/, new FailedResponse('Sadge', 404)];
             case 3: return [2 /*return*/];
         }
     });

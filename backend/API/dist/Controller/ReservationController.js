@@ -39,9 +39,9 @@ import { FindUserById } from '../Managers/UserManager.js';
 import { User } from '../Models/User.js';
 import { Reservation } from '../Models/Reservation.js';
 import { ReservationPostModel } from '../Models/PostModels/ReservationPostModel.js';
-import { BadRequestResponse } from '../utils/RequestUtility/CustomResponces/BadRequestResponse.js';
+import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 import { ReservationGetModel } from '../Models/GetModels/ReservationGetModel.js';
-import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
+import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 export var getReservationById = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
     var reservation, reservationGetModel, customerData, customer, tmp;
     return __generator(this, function (_a) {

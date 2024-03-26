@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { FindMachineExerciteTypeByExerciseTypeId, FindMachineExerciteTypeByWrkOutMachineId, CreateMachineExerciseType } from '../Managers/MachineExerciseTypesManager.js';
 import { MachineExerciseTypePostModel } from '../Models/PostModels/MachineExerciseTypePostModel.js';
-import { BadRequestResponse } from '../utils/RequestUtility/CustomResponces/BadRequestResponse.js';
+import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 export var getMachineExerciseTypesByWrkOutMachineId = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
     var response;
     return __generator(this, function (_a) {

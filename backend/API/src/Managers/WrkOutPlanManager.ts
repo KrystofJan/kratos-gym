@@ -24,7 +24,7 @@ export const FindAllWrkOutPlans = async (): Promise<Response> => {
         return new OkResponse("We good", results);
     }
     catch(err){
-        return new FailedResponse("Cannot get any of these things :(");
+        return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
 
@@ -39,7 +39,7 @@ export const FindWrkOutPlanById = async (id: number): Promise<Response> => {
         return new OkResponse("We good", result);
     }
     catch(err){
-        return new FailedResponse("Cannot get any of these things :(");
+        return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
 
@@ -57,6 +57,6 @@ export const CreateWrkOutPlan = async (body: WrkOutPlan): Promise<Response> => {
             successResult.Body);
     }
     catch(err){
-        return new FailedResponse('Sadge');
+        return new FailedResponse('Sadge', 404);
     }
 }

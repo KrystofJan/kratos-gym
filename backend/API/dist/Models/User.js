@@ -22,6 +22,22 @@ export var UserRole;
     UserRole["USER"] = "U";
     UserRole["NOTKNOWN"] = "/";
 })(UserRole || (UserRole = {}));
+export var UserAttrs;
+(function (UserAttrs) {
+    UserAttrs["UserId"] = "UserId";
+    UserAttrs["FirstName"] = "FirstName";
+    UserAttrs["LastName"] = "LastName";
+    UserAttrs["Role"] = "Role";
+    UserAttrs["Email"] = "Email";
+    UserAttrs["PhoneNumber"] = "PhoneNumber";
+    UserAttrs["IsActive"] = "IsActive";
+    UserAttrs["CreateDate"] = "CreateDate";
+    UserAttrs["LastOnline"] = "LastOnline";
+    UserAttrs["Password"] = "Password";
+    UserAttrs["Address"] = "Address";
+    UserAttrs["Credits"] = "Credits";
+    UserAttrs["Login"] = "Login";
+})(UserAttrs || (UserAttrs = {}));
 var User = /** @class */ (function (_super) {
     __extends(User, _super);
     function User(jsonData) {
@@ -60,6 +76,7 @@ var User = /** @class */ (function (_super) {
         _this.Password = jsonData.Password;
         _this.Address = (_a = jsonData.Address) !== null && _a !== void 0 ? _a : null;
         _this.Credits = (_b = jsonData.credits) !== null && _b !== void 0 ? _b : 0;
+        _this.Login = jsonData.login;
         return _this;
     }
     return User;

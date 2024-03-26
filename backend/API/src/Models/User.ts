@@ -2,12 +2,28 @@ import { IDictionary } from '../utils/Utilities.js';
 import { Address } from './Address.js';
 import { Model } from './Model.js';
 
-export enum UserRole{
+export enum UserRole {
     CUSTOMER = 'c',
     TRAINER = 'T',
     EMPLOYEE = 'E',   
     USER = 'U',   
     NOTKNOWN = '/',
+}
+
+export enum UserAttrs {
+    UserId = 'UserId',
+    FirstName = 'FirstName',
+    LastName = 'LastName',
+    Role = 'Role',
+    Email = 'Email',
+    PhoneNumber = 'PhoneNumber',
+    IsActive = 'IsActive',
+    CreateDate = 'CreateDate',
+    LastOnline = 'LastOnline',
+    Password = 'Password',
+    Address = 'Address',
+    Credits = 'Credits',   
+    Login = 'Login',
 }
 
 export class User extends Model{
@@ -23,6 +39,7 @@ export class User extends Model{
     public Password: string;
     public Address: Address | null;
     public Credits: number;
+    public Login: string;
 
     constructor(jsonData: IDictionary<any>){
         super();
@@ -60,5 +77,6 @@ export class User extends Model{
         this.Password = jsonData.Password;
         this.Address = jsonData.Address ?? null;
         this.Credits = jsonData.credits ?? 0;
+        this.Login = jsonData.login;
     }    
 }

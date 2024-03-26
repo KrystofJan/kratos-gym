@@ -1,5 +1,5 @@
 import { Response, StatusCodeType } from './Response.js';
-import { ResponseStatus } from '../../common/ResponseStatus.js';
+import { ResponseStatus } from '../common/ResponseStatus.js';
 import { ResponseBody } from './ResponseBody.js';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 

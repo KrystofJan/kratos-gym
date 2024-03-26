@@ -25,7 +25,7 @@ export const FindAllExerciseTypes = async () => {
         return new OkResponse("We good", results);
     }
     catch(err){
-        return new FailedResponse("Cannot get any of these things :(");
+        return new FailedResponse("Cannot get any of these things :(",  404);
     }
 }
 
@@ -40,7 +40,7 @@ export const FindExerciseTypeById = async (id: number) => {
         return new OkResponse("We good", result);
     }
     catch(err){
-        return new FailedResponse("Cannot get any of these things :(");
+        return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
 
@@ -57,6 +57,6 @@ export const CreateExerciseType = async (body: ExerciseType) => {
             successResult.Body);
     }
     catch(err){
-        return new FailedResponse('Sadge');
+        return new FailedResponse('Sadge', 404);
     }
 }

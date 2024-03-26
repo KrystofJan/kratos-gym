@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import express from 'express';
-import { TestDAO } from '../ORM/AccessModels/TestDAO.js';
+import { TestDAO } from '../DataLayer/AccessModels/TestDAO.js';
 export var Test = express.Router();
 Test.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var result, error_1;

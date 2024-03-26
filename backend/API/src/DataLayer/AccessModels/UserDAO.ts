@@ -1,6 +1,7 @@
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
 import { User } from '../../Models/User.js'
+import { UserRegPostModel } from '../../Models/PostModels/UserRegPostModel.js';
 
 export class UserDAO extends RelationalModel{
 
@@ -39,7 +40,7 @@ export class UserDAO extends RelationalModel{
         }
     }
 
-    async InsertUser (body: User){
+    async InsertUser (body: UserRegPostModel){
         try{
             const result = this.Insert(body);
             return result;

@@ -37,10 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { FindExerciseTypeById } from "./ExerciseTypeManager.js";
 import { FindWrkOutMachineById } from "./WrkOutMachineManager.js";
 import { MachineExerciseTypes } from '../Models/MachineExerciseTypes.js';
-import { MachineExerciseTypesDAO } from '../ORM/AccessModels/MachineExerciseTypesDAO.js';
-import { OkResponse } from '../utils/RequestUtility/CustomResponces/OkResponse.js';
-import { CreatedResponse } from '../utils/RequestUtility/CustomResponces/CreatedResponse.js';
-import { FailedResponse } from '../utils/RequestUtility/CustomResponces/FailedResponse.js';
+import { MachineExerciseTypesDAO } from '../DataLayer/AccessModels/MachineExerciseTypesDAO.js';
+import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
+import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
+import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
 // TODO change MachineExerciseTypePostModel to GetModel
 var buildBody = function (machineType) { return __awaiter(void 0, void 0, void 0, function () {
     var result, _i, machineType_1, mt, machineBody, typeBody, tmp, machineSuccess, typeSuccess, model;
@@ -90,7 +90,7 @@ export var FindMachineExerciteTypeByWrkOutMachineId = function (id) { return __a
                 return [2 /*return*/, new OkResponse("We good", body)];
             case 3:
                 err_1 = _a.sent();
-                return [2 /*return*/, new FailedResponse("Cannot get this types ids machine types: ".concat(id))];
+                return [2 /*return*/, new FailedResponse("Cannot get this types ids machine types: ".concat(id), 404)];
             case 4: return [2 /*return*/];
         }
     });
@@ -111,7 +111,7 @@ export var FindMachineExerciteTypeByExerciseTypeId = function (id) { return __aw
                 return [2 /*return*/, new OkResponse("We good", body)];
             case 3:
                 err_2 = _a.sent();
-                return [2 /*return*/, new FailedResponse("Cannot get this types ids machine types: ".concat(id))];
+                return [2 /*return*/, new FailedResponse("Cannot get this types ids machine types: ".concat(id), 404)];
             case 4: return [2 /*return*/];
         }
     });
@@ -130,7 +130,7 @@ export var CreateMachineExerciseType = function (body) { return __awaiter(void 0
                 return [2 /*return*/, new CreatedResponse("Successfully created an ExerciseType", successResult.Body)];
             case 2:
                 err_3 = _a.sent();
-                return [2 /*return*/, new FailedResponse('Sadge')];
+                return [2 /*return*/, new FailedResponse('Sadge', 404)];
             case 3: return [2 /*return*/];
         }
     });

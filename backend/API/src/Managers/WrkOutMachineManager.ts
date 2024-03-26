@@ -25,7 +25,7 @@ export const FindAllWrkOutMachines = async (): Promise<Response> => {
         return new OkResponse("We good", results);
     }
     catch(err){
-        return new FailedResponse("Cannot get any of these things :(");
+        return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
 
@@ -40,7 +40,7 @@ export const FindWrkOutMachineById = async (id: number): Promise<Response> => {
         return new OkResponse("We good", result);
     }
     catch(err){
-        return new FailedResponse("Cannot get any of these things :(");
+        return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
 
@@ -58,7 +58,7 @@ export const CreateWrkOutMachine = async (body: WrkOutMachinePostModel): Promise
             successResult.Body);
     }
     catch(err){
-        return new FailedResponse('Sadge');
+        return new FailedResponse('Sadge', 404);
     }
 }
 
@@ -76,6 +76,6 @@ export const RecommendMachine = async (id: number) => {
             successResult.Body);
     }
     catch(err){
-        return new FailedResponse('Sadge');
+        return new FailedResponse('Sadge', 404);
     }
 }

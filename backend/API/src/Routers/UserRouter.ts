@@ -1,10 +1,9 @@
-// const express = require('express');
-// const userController = require('../Controller/UserController');
+import { GetId } from './../Controller/UserController.js';
+import express, { Request, Response, Router } from 'express';
 
-// const UserRouter = express.Router();
+export const UserRouter = express.Router();
 
-// UserRouter.get('/:id', (req, res) => {
-//     userController.getId(req, res, req.params['id']);
-// });
-
-// module.exports = UserRouter;
+UserRouter.get('/:id', (req, res) => {
+    const id = parseInt(req.params['id']);
+    GetId(req, res, id);
+});

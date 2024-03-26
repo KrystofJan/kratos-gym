@@ -1,14 +1,12 @@
-// const express = require('express');
-// const userController = require('../Controller/UserController');
+import { LogIn, Register } from './../Controller/UserController.js';
+import express, { Request, Response, Router } from 'express';
 
-// const UserRouterAuth = express.Router();
+export const UserAuthRouter = express.Router();
 
-// UserRouterAuth.post('/login', (req, res) => {
-//     userController.loginAuth(req, res);
-// });
+UserAuthRouter.post('/login', (req, res) => {
+    LogIn(req, res);
+});
 
-// UserRouterAuth.post('/register', (req, res) => {
-//     userController.register(req, res);
-// });
-
-// module.exports = UserRouterAuth;
+UserAuthRouter.post('/register', (req, res) => {
+    Register(req, res);
+});

@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { FindWrkOutMachineById, FindAllWrkOutMachines, RecommendMachine, CreateWrkOutMachine } from '../Managers/WrkOutMachineManager.js';
-import { BadRequestResponse } from '../utils/RequestUtility/CustomResponces/BadRequestResponse.js';
+import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 import { WrkOutMachine } from '../Models/WrkOutMachine.js';
 export var getWrkOutMachineById = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
     var response;

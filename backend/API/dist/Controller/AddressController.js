@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { FindAllAdresses, FindAdressById, CreateAddress } from '../Managers/AddressManager.js';
 import { Address } from '../Models/Address.js';
-import { BadRequestResponse } from '../utils/RequestUtility/CustomResponces/BadRequestResponse.js';
+import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 export var getAllAddresses = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var response;
     return __generator(this, function (_a) {
