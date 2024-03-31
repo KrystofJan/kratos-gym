@@ -1,7 +1,7 @@
 
 import { RelationalModel } from './RelationalModel.js';
 import { TableTypes } from "../Database/TableTypes.js";
-import { WrkOutPlan } from '../../Models/WrkOutPlan.js';
+import { WrkOutPlanPostModel } from '../../Models/PostModels/WrkOutPlanPostModel.js';
 
 export class WrkOutPlanDAO extends RelationalModel{
 
@@ -29,7 +29,7 @@ export class WrkOutPlanDAO extends RelationalModel{
         }
     }
 
-    async InsertWrkOutPlan(body: WrkOutPlan){
+    async InsertWrkOutPlan(body: WrkOutPlanPostModel){
         try{
             const result = this.Insert(body);
             return result;

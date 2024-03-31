@@ -39,47 +39,66 @@ import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
 import { WrkOutPlanDAO } from '../DataLayer/AccessModels/WrkOutPlanDAO.js';
+import { UserDAO } from '../DataLayer/AccessModels/UserDAO.js';
+import { User } from '../Models/User.js';
 export var FindAllWrkOutPlans = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var wrkOutPlanDao, body, results, _i, body_1, b, a, err_1;
+    var wrkOutPlanDao, body, results, _i, body_1, b, userDao, userData, user, a, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 6, , 7]);
                 wrkOutPlanDao = new WrkOutPlanDAO();
                 return [4 /*yield*/, wrkOutPlanDao.SelectAllWrkOutPlans()];
             case 1:
                 body = _a.sent();
                 results = [];
-                for (_i = 0, body_1 = body; _i < body_1.length; _i++) {
-                    b = body_1[_i];
-                    a = new WrkOutPlan(b);
-                    results.push(a);
-                }
-                return [2 /*return*/, new OkResponse("We good", results)];
+                _i = 0, body_1 = body;
+                _a.label = 2;
             case 2:
+                if (!(_i < body_1.length)) return [3 /*break*/, 5];
+                b = body_1[_i];
+                userDao = new UserDAO();
+                return [4 /*yield*/, userDao.SelectUserById(b.UserId)];
+            case 3:
+                userData = _a.sent();
+                user = new User(userData);
+                a = new WrkOutPlan(b);
+                a.User = user;
+                results.push(a);
+                _a.label = 4;
+            case 4:
+                _i++;
+                return [3 /*break*/, 2];
+            case 5: return [2 /*return*/, new OkResponse("We good", results)];
+            case 6:
                 err_1 = _a.sent();
                 return [2 /*return*/, new FailedResponse("Cannot get any of these things :(", 404)];
-            case 3: return [2 /*return*/];
+            case 7: return [2 /*return*/];
         }
     });
 }); };
 export var FindWrkOutPlanById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var wrkOutPlanDao, body, result, err_2;
+    var wrkOutPlanDao, body, userDao, userData, user, result, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _a.trys.push([0, 3, , 4]);
                 wrkOutPlanDao = new WrkOutPlanDAO();
                 return [4 /*yield*/, wrkOutPlanDao.SelectWrkOutPlanById(id)];
             case 1:
                 body = _a.sent();
-                console.log(body);
-                result = new WrkOutPlan(body);
-                return [2 /*return*/, new OkResponse("We good", result)];
+                userDao = new UserDAO();
+                return [4 /*yield*/, userDao.SelectUserById(body.UserId)];
             case 2:
+                userData = _a.sent();
+                user = new User(userData);
+                result = new WrkOutPlan(body);
+                result.User = user;
+                return [2 /*return*/, new OkResponse("We good", result)];
+            case 3:
                 err_2 = _a.sent();
                 return [2 /*return*/, new FailedResponse("Cannot get any of these things :(", 404)];
-            case 3: return [2 /*return*/];
+            case 4: return [2 /*return*/];
         }
     });
 }); };

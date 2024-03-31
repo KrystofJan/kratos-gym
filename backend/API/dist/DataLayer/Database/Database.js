@@ -4,6 +4,7 @@ import * as dbKeys from '../keys/table-keys.json' with { type: "json" };
 import { Validators } from './DatabaseValidators.js';
 import { ApiLogger } from '../../Logger/ApiLogger.js';
 import { DatabaseSuccess, DatabaseFail } from './DatabaseResponse.js';
+// TODO: singleton
 var Database = /** @class */ (function () {
     function Database() {
         this.db = mysql.createConnection(config.default.Database);

@@ -1,15 +1,13 @@
-// import express from 'express';
-// import { getWrkOutMachineById } from '../Controller/WrkOutPlanController.js';
-export {};
-// const wrkOutPlanController = require('../Controller/WrkOutPlanController');
-// const WrkOutPlanRouter = express.Router();
-// WrkOutPlanRouter.get('/', (req, res) => {
-//     wrkOutPlanController.getAll(req, res);
-// });
-// WrkOutPlanRouter.get('/:id', (req, res) => {
-//     wrkOutPlanController.getId( req,res,req.params['id']);
-// });
-// WrkOutPlanRouter.post('/', (req, res) => {
-//     wrkOutPlanController.post(req, res);
-// })
-// module.exports = WrkOutPlanRouter;
+import { getAllWrkOutPlans, getWrkOutPlanById, postWrkOutPlan } from './../Controller/WrkOutPlanController.js';
+import express from 'express';
+export var WrkOutPlanRouter = express.Router();
+WrkOutPlanRouter.get('/', function (req, res) {
+    getAllWrkOutPlans(req, res);
+});
+WrkOutPlanRouter.get('/:id', function (req, res) {
+    var id = parseInt(req.params['id']);
+    getWrkOutPlanById(req, res, id);
+});
+WrkOutPlanRouter.post('/', function (req, res) {
+    postWrkOutPlan(req, res);
+});

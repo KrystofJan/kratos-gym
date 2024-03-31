@@ -6,6 +6,8 @@ import { ApiLogger } from '../../Logger/ApiLogger.js';
 import { IDictionary } from '../../utils/Utilities.js';
 import { DatabaseResponse, DatabaseSuccess, DatabaseFail } from './DatabaseResponse.js';
 
+
+// TODO: singleton
 export class Database {
 
     db: Connection;

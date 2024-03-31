@@ -21,7 +21,8 @@ export class UserDAO extends RelationalModel{
 
     async SelectUserById(id: number){
         try{
-            const result = this.SelectById(id);
+            const result = await this.SelectById(id);
+            console.log(result);
             return result;
         }
         catch(err){        

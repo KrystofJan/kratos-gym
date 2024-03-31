@@ -9,6 +9,7 @@ import { Test } from './TestRouter.js';
 import { WrkOutMachineRouter } from './WrkOutMachineRouter.js';
 import { UserAuthRouter } from './UserAuthRouter.js';
 import { UserRouter } from './UserRouter.js';
+import { WrkOutPlanRouter } from './WrkOutPlanRouter.js'
 
 // const wrkOutPlanRouter = require('./WrkOutPlanRouter');
 // const wrkOutPlanPresetRouter = require('./WrkOutPlanPresetRouter');
@@ -17,7 +18,7 @@ import { UserRouter } from './UserRouter.js';
 // const wrkOutPlanTypeRouter = require('./WrkOutPlanTypeRouter');
 // const wrkOutPlanMachineRouter = require('./WrkOutPlanMachineRouter');
 // const wrkOutPlanMachinePresetRouter = require('./WrkOutPlanMachinePresetRouter');
-// const userRouter = require('./UserRouter');
+
 
 export const setRoutes = (app: Express) => {
     app.use('/api/test', Test);
@@ -28,7 +29,7 @@ export const setRoutes = (app: Express) => {
     app.use('/api/machine', WrkOutMachineRouter);
     app.use('/api/userauth',UserAuthRouter);
     app.use('/api/user', UserRouter);
-    // app.use('/api/plan', wrkOutPlanRouter);
+    app.use('/api/plan', WrkOutPlanRouter);
     // app.use('/api/plan-type', wrkOutPlanTypeRouter);
     // app.use('/api/plan-machine', wrkOutPlanMachineRouter);
     // app.use('/api/plan/preset', wrkOutPlanPresetRouter);
