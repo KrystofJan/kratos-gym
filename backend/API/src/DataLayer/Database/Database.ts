@@ -51,6 +51,7 @@ export class Database {
         })
     }
 
+    // TODO: Handle duplicates
     dbPost(body: IDictionary<any>, tableName: string): Promise<DatabaseResponse>{
         return new Promise((resolve, reject) => {
             let data: Array<IDictionary<any>> = [];
@@ -126,7 +127,7 @@ export class Database {
         })
     }
 
-    // TODO: Change to 
+    // TODO: CanDisturb if its not free,!!!
     dbSelectOccupiedMachineAmount(id: number, time: string, date: string){
         return new Promise ( (resolve, reject) => {
             const pkey = dbKeys.default["WrkOutPlanMachines--plan"];

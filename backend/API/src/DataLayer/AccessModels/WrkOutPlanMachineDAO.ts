@@ -23,7 +23,7 @@ export class WrkOutPlanMachinesDAO extends RelationalModel{
     // TODO: Move logic to wrkOutMachine
     async SelectWrkOutPlanBy_WrkOutMachineId(id: number){
         try{
-            const result = this.SelectAll();
+            const result = this.SecectByForeignId(id, TableTypes.WrkOutMachine);
             return result;
         }
         catch(err){        

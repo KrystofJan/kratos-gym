@@ -17,14 +17,15 @@ import { Model } from './Model.js';
 var WrkOutPlanMachine = /** @class */ (function (_super) {
     __extends(WrkOutPlanMachine, _super);
     function WrkOutPlanMachine(jsonData) {
+        var _a;
         var _this = _super.call(this) || this;
-        _this.WrkOutPlan = jsonData.WrkOutPlan;
-        _this.WrkOutMachine = jsonData.WrkOutMachine;
-        _this.Sets = jsonData.Sets;
-        _this.Reps = jsonData.Reps;
+        _this.WrkOutPlanId = jsonData.WrkOutPlanId;
+        _this.Sets = jsonData.sets;
+        _this.Reps = jsonData.reps;
         _this.WrkOutStartTime = jsonData.WrkOutStartTime;
         _this.WrkOutEndTime = jsonData.WrkOutEndTime;
         _this.CanDisturb = jsonData.CanDisturb;
+        _this.WrkOutMachine = (_a = jsonData.WrkOutMachine) !== null && _a !== void 0 ? _a : null;
         return _this;
     }
     return WrkOutPlanMachine;

@@ -7,6 +7,8 @@ import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse
 import { DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/DatabaseResponse.js';
 import { WrkOutMachineDAO } from '../DataLayer/AccessModels/WrkOutMachineDAO.js';
 import { WrkOutMachinePostModel } from '../Models/PostModels/WrkOutMachine.js';
+import { WrkOutPlanMachinesDAO } from '../DataLayer/AccessModels/WrkOutPlanMachineDAO.js';
+import { WrkoutPlanMachineGetModel } from '../Models/GetModels/WrkOutPlanMachinesGetModel.js';
 
 export const FindAllWrkOutMachines = async (): Promise<Response> => {
     try{
@@ -43,6 +45,53 @@ export const FindWrkOutMachineById = async (id: number): Promise<Response> => {
         return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
+
+export const FindOccupiedMachinesOnSpecificTime = async (id: number, time: string, date: string): Promise<Response> => {
+    try{
+        const wrkOutPlanMachineDao = new WrkOutPlanMachinesDAO();
+        const body: IDictionary<any> = await wrkOutPlanMachineDao.SelectOccupiedMachineAmount(id, time, date);
+
+        // validate...
+        const result = new WrkOutMachine(body);
+        
+        return new OkResponse("We good", result);
+    }
+    catch(err){
+        return new FailedResponse("Cannot get any of these things :(", 404);
+    }
+}
+
+
+
+// TODO: Probably dont even need this tbh
+// export const FindMachinesByPlanId = async (id: number) => {
+//     try {
+//         const wrkOutPlanMachineDao = new WrkOutPlanMachinesDAO();
+        
+//         const body: Array<WrkoutPlanMachineGetModel> = await wrkOutPlanMachineDao.SelectWrkOutPlanBy_WrkOutPlanId(id);
+        
+
+//         const result: Array<WrkOutPlanMachine> = [];
+
+//         for(const machineBody of body) {
+//             const wrkOutMachinesDAO = new WrkOutMachineDAO();
+//             const machineData = await wrkOutMachinesDAO.SelectWrkOutMachineById(machineBody.WrkOutMachineId);
+//             const wrkOutMachine = new WrkOutMachine(machineData);
+//             const wrkOutPlanMachine = new WrkOutPlanMachine(machineBody);
+//             wrkOutPlanMachine.WrkOutMachine = wrkOutMachine;
+
+//             if (wrkOutPlanMachine.validateAttrs()){
+//                 result.push(wrkOutPlanMachine);
+//             }
+//         }
+
+//         return new OkResponse("We good", result);
+//     }
+//     catch(err){
+//         return new FailedResponse("Cannot get any of these things :(", 404);
+//     }
+// }
+
 
 export const CreateWrkOutMachine = async (body: WrkOutMachinePostModel): Promise<Response> => {
     let result: DatabaseResponse;

@@ -15,3 +15,18 @@ var CreatedResponse = /** @class */ (function () {
     return CreatedResponse;
 }());
 export { CreatedResponse };
+var CreatedMultipleResponse = /** @class */ (function () {
+    function CreatedMultipleResponse(message, createdIds) {
+        this.StatusCode = StatusCodeType.CREATED;
+        this.Body = {
+            status: ResponseStatus.SUCCESS,
+            message: message,
+            CreatedIds: createdIds
+        };
+    }
+    CreatedMultipleResponse.prototype.buildResponse = function (req, res) {
+        res.status(this.StatusCode).json(this.Body);
+    };
+    return CreatedMultipleResponse;
+}());
+export { CreatedMultipleResponse };

@@ -39,6 +39,7 @@ var Database = /** @class */ (function () {
             });
         });
     };
+    // TODO: Handle duplicates
     Database.prototype.dbPost = function (body, tableName) {
         var _this = this;
         return new Promise(function (resolve, reject) {
@@ -102,7 +103,7 @@ var Database = /** @class */ (function () {
             });
         });
     };
-    // TODO: Change to 
+    // TODO: CanDisturb if its not free,!!!
     Database.prototype.dbSelectOccupiedMachineAmount = function (id, time, date) {
         var _this = this;
         return new Promise(function (resolve, reject) {

@@ -5,8 +5,8 @@ import { WrkOutMachine } from "./WrkOutMachine.js";
 import { WrkOutPlan } from './WrkOutPlan.js';
 
 export class WrkOutPlanMachine extends Model {
-    public WrkOutPlan: WrkOutPlan;
-    public WrkOutMachine: WrkOutMachine;
+    public WrkOutPlanId: number;
+    public WrkOutMachine: WrkOutMachine | null;
     public Sets: number;
     public Reps: number;
     public WrkOutStartTime: Date;
@@ -16,12 +16,12 @@ export class WrkOutPlanMachine extends Model {
 
     constructor(jsonData: IDictionary<any>){
         super();
-        this.WrkOutPlan = jsonData.WrkOutPlan;
-        this.WrkOutMachine = jsonData.WrkOutMachine;
-        this.Sets = jsonData.Sets;
-        this.Reps = jsonData.Reps;
+        this.WrkOutPlanId = jsonData.WrkOutPlanId;
+        this.Sets = jsonData.sets;
+        this.Reps = jsonData.reps;
         this.WrkOutStartTime = jsonData.WrkOutStartTime;
         this.WrkOutEndTime = jsonData.WrkOutEndTime;
         this.CanDisturb = jsonData.CanDisturb;
+        this.WrkOutMachine = jsonData.WrkOutMachine ?? null;
     }
 }

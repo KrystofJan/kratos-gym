@@ -14,19 +14,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 import { Model } from '../Model.js';
-var WrkOutPlanMachinePostModel = /** @class */ (function (_super) {
-    __extends(WrkOutPlanMachinePostModel, _super);
-    function WrkOutPlanMachinePostModel(jsonData) {
+var WrkoutPlanMachineGetModel = /** @class */ (function (_super) {
+    __extends(WrkoutPlanMachineGetModel, _super);
+    function WrkoutPlanMachineGetModel(jsonData) {
         var _this = _super.call(this) || this;
+        _this.WrkOutPlanId = jsonData.WrkOutPlanId;
         _this.WrkOutMachineId = jsonData.WrkOutMachineId;
-        _this.WrkOutPlanId = jsonData.WrkOutPland;
-        _this.Sets = jsonData.Sets;
-        _this.Reps = jsonData.Reps;
-        _this.WrkOutStartTime = jsonData.WrkOutStartTime;
-        _this.WrkOutEndTime = jsonData.WrkOutEndTime;
-        _this.CanDisturb = jsonData.CanDisturb;
         return _this;
     }
-    return WrkOutPlanMachinePostModel;
+    return WrkoutPlanMachineGetModel;
 }(Model));
-export { WrkOutPlanMachinePostModel };
+export { WrkoutPlanMachineGetModel };
