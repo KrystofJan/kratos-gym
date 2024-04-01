@@ -3,7 +3,6 @@ import { WrkOutMachineDAO } from './../DataLayer/AccessModels/WrkOutMachineDAO.j
 import { WrkOutPlan } from '../Models/WrkOutPlan.js'
 import { WrkOutPlanPostModel } from '../Models/PostModels/WrkOutPlanPostModel.js';
 import { Response } from '../RequestUtility/CustomResponces/Response.js';
-import { IDictionary } from '../utils/Utilities.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse, CreatedMultipleResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
@@ -18,10 +17,11 @@ import { WrkOutMachine } from '../Models/WrkOutMachine.js';
 import { WrkOutPlanMachine } from '../Models/WrkOutPlanMachine.js';
 import { WrkOutPlanMachinePostModel } from '../Models/PostModels/WrkOutPlanMachinePostModel.js';
 import { WrkOutPlanTypePostModel } from '../Models/PostModels/WrkOutPlanTypePostModel.js';
-import { WrkOutPlanTypeDAO } from '../Models/AccessModels/WrkOutPlanTypeDAO.js';
+import { WrkOutPlanTypeDAO } from '../DataLayer/AccessModels/WrkOutPlanTypeDAO.js';
 import { WrkOutPlanType } from '../Models/WrkOutPlanType.js';
 import { WrkOutPlanTypeGetModel } from '../Models/GetModels/WrkOutPlanTypeGetModel.js';
 import { ExerciseType } from '../Models/ExerciseType.js';
+
 export const FindAllWrkOutPlans = async (): Promise<Response> => {
     try{
         const wrkOutPlanDao = new WrkOutPlanDAO();

@@ -1,4 +1,4 @@
-import { AddressDAO } from '../Models/AccessModels/AddressDAO.js';
+import { AddressDAO } from '../DataLayer/AccessModels/AddressDAO.js';
 import { Address } from '../Models/Address.js'
 import { Response } from '../RequestUtility/CustomResponces/Response.js';
 import { IDictionary } from '../utils/Utilities.js';

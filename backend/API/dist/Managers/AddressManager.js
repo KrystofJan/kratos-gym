@@ -34,7 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { AddressDAO } from '../Models/AccessModels/AddressDAO.js';
+import { AddressDAO } from '../DataLayer/AccessModels/AddressDAO.js';
 import { Address } from '../Models/Address.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';

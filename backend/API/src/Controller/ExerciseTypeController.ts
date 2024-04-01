@@ -4,6 +4,7 @@ import { Response } from '../RequestUtility/CustomResponces/Response.js'
 import { ExerciseType } from '../Models/ExerciseType.js'
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 
+// TODO: Add get by Plan
 export const getAllExerciseTypes = async (req: expressRequest, res: expressResponse) => {
     const response: Response = await FindAllExerciseTypes();
     response.buildResponse(req, res);

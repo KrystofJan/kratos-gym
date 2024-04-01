@@ -46,7 +46,7 @@ import { WrkOutPlanMachinesDAO } from '../DataLayer/AccessModels/WrkOutPlanMachi
 import { User } from '../Models/User.js';
 import { WrkOutMachine } from '../Models/WrkOutMachine.js';
 import { WrkOutPlanMachine } from '../Models/WrkOutPlanMachine.js';
-import { WrkOutPlanTypeDAO } from '../Models/AccessModels/WrkOutPlanTypeDAO.js';
+import { WrkOutPlanTypeDAO } from '../DataLayer/AccessModels/WrkOutPlanTypeDAO.js';
 import { WrkOutPlanType } from '../Models/WrkOutPlanType.js';
 import { ExerciseType } from '../Models/ExerciseType.js';
 export var FindAllWrkOutPlans = function () { return __awaiter(void 0, void 0, void 0, function () {
