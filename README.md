@@ -1,4 +1,9 @@
 # gym-reservation-system
+## Update APR 01. 2024
+* Refactored the whole backend to typescript
+* Split Reservation to multiple components on the fe
+* the rest in commit msgs
+
 ## Update Feb 06. 2024
 * Adding WrkOutPlanTypes and WrkOutPlanMachine endpoints
 * Adding requests to Reservations endpoint
