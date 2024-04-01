@@ -1,0 +1,18 @@
+{
+    "test": "id",
+    "Address": "AddressId",
+    "Reservation": "ReservetionId",
+    "ExerciseType": "ExerciseTypeId",
+    "User": "UserId",
+    "WrkOutMachine": "WrkOutMachineId",
+    "WrkOutPlan": "WrkOutPlanId",
+    "WrkOutPlanPreset": "WrkOutPlanPresetId",
+    "MachineExerciseTypes--machine": "WrkOutMachineId",
+    "MachineExerciseTypes--type": "ExerciseTypeId",
+    "WrkOutPlanType--plan": "WrkOutPlanId",
+    "WrkOutPlanType--type": "ExerciseTypeId",
+    "WrkOutPlanMachines--plan": "WrkOutPlanId",
+    "WrkOutPlanMachines--machine": "WrkOutMachineId",
+    "WrkOutPlanMachinesPreset--preset": "WrkOutPlanPresetId",
+    "WrkOutPlanMachinesPreset--machine": "WrkOutMachineId"
+}
