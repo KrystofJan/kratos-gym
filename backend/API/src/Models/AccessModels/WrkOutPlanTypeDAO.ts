@@ -3,7 +3,7 @@ import { TableTypes } from "../../DataLayer/Database/TableTypes.js";
 import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../../DataLayer/Database/DatabaseResponse.js';
 import { WrkOutPlanTypePostModel } from '../../Models/PostModels/WrkOutPlanTypePostModel.js';
 
-export class WrkOutPlanType extends RelationalModel{
+export class WrkOutPlanTypeDAO extends RelationalModel{
 
     constructor() {
         super(TableTypes.WrkOutPlanType);

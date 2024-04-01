@@ -34,7 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { FindAllWrkOutPlans, FindWrkOutPlanById, FindWrkOutMachinesContainedInId, CreateWrkOutPlan, AddMachineToPlan, AddMultipleMachinesToPlan } from '../Managers/WrkOutPlanManager.js';
+import { FindAllWrkOutPlans, FindWrkOutPlanById, AddTypeToPlan, FindExerciseTypesContainedInId, FindWrkOutMachinesContainedInId, CreateWrkOutPlan, AddMachineToPlan, AddMultipleMachinesToPlan } from '../Managers/WrkOutPlanManager.js';
 export var getWrkOutPlanById = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
     var response;
     return __generator(this, function (_a) {
@@ -130,6 +130,33 @@ export var postMachineToPlan = function (req, res, id) { return __awaiter(void 0
                 body = req.body;
                 return [4 /*yield*/, handlePostSingleMachineToPlan(body, id)];
             case 3:
+                response = _a.sent();
+                response.buildResponse(req, res);
+                return [2 /*return*/];
+        }
+    });
+}); };
+export var postExerciseTypeToPlan = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
+    var body, response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                body = req.body;
+                body.WrkOutPlanId = id;
+                return [4 /*yield*/, AddTypeToPlan(body)];
+            case 1:
+                response = _a.sent();
+                response.buildResponse(req, res);
+                return [2 /*return*/];
+        }
+    });
+}); };
+export var getExerciseTypeByPlanId = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
+    var response;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, FindExerciseTypesContainedInId(id)];
+            case 1:
                 response = _a.sent();
                 response.buildResponse(req, res);
                 return [2 /*return*/];

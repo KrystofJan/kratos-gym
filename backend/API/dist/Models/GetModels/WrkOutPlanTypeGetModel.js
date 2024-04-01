@@ -14,14 +14,14 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 import { Model } from '../Model.js';
-var WrkOutPlanPostModel = /** @class */ (function (_super) {
-    __extends(WrkOutPlanPostModel, _super);
-    function WrkOutPlanPostModel(jsonData) {
+var WrkOutPlanTypeGetModel = /** @class */ (function (_super) {
+    __extends(WrkOutPlanTypeGetModel, _super);
+    function WrkOutPlanTypeGetModel(jsonData) {
         var _this = _super.call(this) || this;
-        _this.PlanName = jsonData.PlanName;
-        _this.UserId = jsonData.UserId;
+        _this.WrkOutPlanId = jsonData.WrkOutPlanId;
+        _this.ExerciseTypeId = jsonData.ExerciseTypeId;
         return _this;
     }
-    return WrkOutPlanPostModel;
+    return WrkOutPlanTypeGetModel;
 }(Model));
-export { WrkOutPlanPostModel };
+export { WrkOutPlanTypeGetModel };

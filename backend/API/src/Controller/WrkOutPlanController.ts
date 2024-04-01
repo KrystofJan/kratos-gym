@@ -1,8 +1,9 @@
-import { FindAllWrkOutPlans, FindWrkOutPlanById, FindWrkOutMachinesContainedInId, CreateWrkOutPlan, AddMachineToPlan, AddMultipleMachinesToPlan } from '../Managers/WrkOutPlanManager.js';
+import { FindAllWrkOutPlans, FindWrkOutPlanById, AddTypeToPlan, FindExerciseTypesContainedInId, FindWrkOutMachinesContainedInId, CreateWrkOutPlan, AddMachineToPlan, AddMultipleMachinesToPlan } from '../Managers/WrkOutPlanManager.js';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 import { Response } from '../RequestUtility/CustomResponces/Response.js';
 import { WrkOutPlanPostModel } from '../Models/PostModels/WrkOutPlanPostModel.js';
 import { WrkOutPlanMachinePostModel } from '../Models/PostModels/WrkOutPlanMachinePostModel.js';
+import { WrkOutPlanTypePostModel } from '../Models/PostModels/WrkOutPlanTypePostModel.js';
 
 export const getWrkOutPlanById = async (req: expressRequest,res: expressResponse,id: number) => {
     const response: Response = await FindWrkOutPlanById(id);
@@ -60,5 +61,18 @@ export const postMachineToPlan = async (req: expressRequest, res: expressRespons
 
     const body: WrkOutPlanMachinePostModel = req.body;
     response = await handlePostSingleMachineToPlan(body, id)
+    response.buildResponse(req, res);
+}
+
+
+export const postExerciseTypeToPlan = async (req: expressRequest, res: expressResponse, id: number) => {
+    const body: WrkOutPlanTypePostModel = req.body;
+    body.WrkOutPlanId = id;
+    const response = await AddTypeToPlan(body);
+    response.buildResponse(req, res);
+}
+
+export const getExerciseTypeByPlanId = async (req: expressRequest, res: expressResponse, id: number) => {
+    const response: Response = await FindExerciseTypesContainedInId(id);
     response.buildResponse(req, res);
 }

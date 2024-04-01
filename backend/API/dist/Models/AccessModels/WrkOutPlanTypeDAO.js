@@ -51,13 +51,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { RelationalModel } from './RelationalModel.js';
 import { TableTypes } from "../../DataLayer/Database/TableTypes.js";
-var WrkOutPlanType = /** @class */ (function (_super) {
-    __extends(WrkOutPlanType, _super);
-    function WrkOutPlanType() {
+var WrkOutPlanTypeDAO = /** @class */ (function (_super) {
+    __extends(WrkOutPlanTypeDAO, _super);
+    function WrkOutPlanTypeDAO() {
         return _super.call(this, TableTypes.WrkOutPlanType) || this;
     }
     // TODO: Move logic to wrkOutPlan
-    WrkOutPlanType.prototype.SelectWrkOutPlanTypeBy_WrkOutPlanId = function (id) {
+    WrkOutPlanTypeDAO.prototype.SelectWrkOutPlanTypeBy_WrkOutPlanId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -73,7 +73,7 @@ var WrkOutPlanType = /** @class */ (function (_super) {
         });
     };
     // TODO: Move logic to wrkOutMachine
-    WrkOutPlanType.prototype.SelectWrkOutPlanTypeBy_ExerciseType = function (id) {
+    WrkOutPlanTypeDAO.prototype.SelectWrkOutPlanTypeBy_ExerciseType = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -88,7 +88,7 @@ var WrkOutPlanType = /** @class */ (function (_super) {
             });
         });
     };
-    WrkOutPlanType.prototype.InsertWrkOutPlanType = function (body) {
+    WrkOutPlanTypeDAO.prototype.InsertWrkOutPlanType = function (body) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -103,6 +103,6 @@ var WrkOutPlanType = /** @class */ (function (_super) {
             });
         });
     };
-    return WrkOutPlanType;
+    return WrkOutPlanTypeDAO;
 }(RelationalModel));
-export { WrkOutPlanType };
+export { WrkOutPlanTypeDAO };
