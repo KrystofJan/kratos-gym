@@ -34,7 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { FindWrkOutMachineById, FindAllWrkOutMachines, RecommendMachine, CreateWrkOutMachine } from '../Managers/WrkOutMachineManager.js';
+import { FindWrkOutMachineById, FindAllWrkOutMachines, RecommendMachine, FindOccupiedMachinesOnSpecificTime, CreateWrkOutMachine } from '../Managers/WrkOutMachineManager.js';
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 import { WrkOutMachine } from '../Models/WrkOutMachine.js';
 export var getWrkOutMachineById = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
@@ -68,6 +68,20 @@ export var recommendMachine = function (req, res, id) { return __awaiter(void 0,
             case 0: return [4 /*yield*/, RecommendMachine(id)];
             case 1:
                 response = _a.sent();
+                response.buildResponse(req, res);
+                return [2 /*return*/];
+        }
+    });
+}); };
+export var isOccupied = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, time, date, response;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.query, time = _a.time, date = _a.date;
+                return [4 /*yield*/, FindOccupiedMachinesOnSpecificTime(id, time !== null && time !== void 0 ? time : '', date !== null && date !== void 0 ? date : '')];
+            case 1:
+                response = _b.sent();
                 response.buildResponse(req, res);
                 return [2 /*return*/];
         }

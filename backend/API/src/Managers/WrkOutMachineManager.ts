@@ -9,6 +9,7 @@ import { WrkOutMachineDAO } from '../DataLayer/AccessModels/WrkOutMachineDAO.js'
 import { WrkOutMachinePostModel } from '../Models/PostModels/WrkOutMachine.js';
 import { WrkOutPlanMachinesDAO } from '../DataLayer/AccessModels/WrkOutPlanMachineDAO.js';
 import { WrkoutPlanMachineGetModel } from '../Models/GetModels/WrkOutPlanMachinesGetModel.js';
+import { OccupiedMachinesGetModel } from '../Models/GetModels/OccupiedMachinesGetModel.js';
 
 export const FindAllWrkOutMachines = async (): Promise<Response> => {
     try{
@@ -49,11 +50,11 @@ export const FindWrkOutMachineById = async (id: number): Promise<Response> => {
 export const FindOccupiedMachinesOnSpecificTime = async (id: number, time: string, date: string): Promise<Response> => {
     try{
         const wrkOutPlanMachineDao = new WrkOutPlanMachinesDAO();
-        const body: IDictionary<any> = await wrkOutPlanMachineDao.SelectOccupiedMachineAmount(id, time, date);
+        const body: IDictionary<number> = await wrkOutPlanMachineDao.SelectOccupiedMachineAmount(id, time, date);
 
         // validate...
-        const result = new WrkOutMachine(body);
-        
+        const result = new OccupiedMachinesGetModel(body);
+
         return new OkResponse("We good", result);
     }
     catch(err){

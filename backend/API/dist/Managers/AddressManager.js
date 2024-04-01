@@ -93,7 +93,6 @@ export var CreateAddress = function (body) { return __awaiter(void 0, void 0, vo
             case 1:
                 result = _a.sent();
                 successResult = result;
-                console.log('Bodiiii', result);
                 return [2 /*return*/, new CreatedResponse("Successfully created an Address", successResult.Body)];
             case 2:
                 err_3 = _a.sent();

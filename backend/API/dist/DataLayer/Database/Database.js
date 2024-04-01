@@ -123,7 +123,7 @@ var Database = /** @class */ (function () {
                     reject({ error: 'Internal Server Error' });
                 }
                 ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
-                resolve(results);
+                resolve(new DatabaseSuccess(results));
             });
         });
     };

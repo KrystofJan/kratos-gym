@@ -37,13 +37,14 @@ export class WrkOutPlanMachinesDAO extends RelationalModel{
             const result: DatabaseResponse = await this.MakeDbRequest(
                 () => this.dbHandler.dbSelectOccupiedMachineAmount(id, time, date)
             );
-            
+            console.log(result);
             if (result instanceof DatabaseSuccess){
                 const successResult = result as DatabaseSuccess; 
-                return successResult.Body;
+                console.log(successResult.Body);
+                return successResult.Body[0];
             }         
         }
-        catch(err){        
+        catch(err){
             if (err instanceof DatabaseFail){
                 return err;
             }

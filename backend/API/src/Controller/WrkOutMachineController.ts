@@ -1,4 +1,4 @@
-import { FindWrkOutMachineById, FindAllWrkOutMachines, RecommendMachine, CreateWrkOutMachine } from '../Managers/WrkOutMachineManager.js';
+import { FindWrkOutMachineById, FindAllWrkOutMachines, RecommendMachine, FindOccupiedMachinesOnSpecificTime ,CreateWrkOutMachine } from '../Managers/WrkOutMachineManager.js';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 import { Response } from '../RequestUtility/CustomResponces/Response.js'
 import { User } from '../Models/User.js'
@@ -9,6 +9,7 @@ import { ReservationGetModel } from '../Models/GetModels/ReservationGetModel.js'
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { IDictionary } from '../utils/Utilities.js';
 import { WrkOutMachine } from '../Models/WrkOutMachine.js';
+import { WrkOutMachineParams } from '../RequestUtility/RequestParams/WrkOutMachineParams.js';
 
 export const getWrkOutMachineById = async (req: expressRequest,res: expressResponse,id: number) => {
     const response: Response = await FindWrkOutMachineById(id);
@@ -22,6 +23,13 @@ export const getAllWrkOutMachines = async (req: expressRequest,res: expressRespo
 
 export const recommendMachine = async (req: expressRequest,res: expressResponse,id: number) => {
     const response: Response = await RecommendMachine(id);
+    response.buildResponse(req, res);
+}
+
+export const isOccupied = async (req: expressRequest, res: expressResponse, id: number) => {
+    const { time, date } = req.query as WrkOutMachineParams;
+    const response: Response = await FindOccupiedMachinesOnSpecificTime(id, time ?? '', date ?? '');
+
     response.buildResponse(req, res);
 }
 

@@ -39,6 +39,8 @@ import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
 import { WrkOutMachineDAO } from '../DataLayer/AccessModels/WrkOutMachineDAO.js';
+import { WrkOutPlanMachinesDAO } from '../DataLayer/AccessModels/WrkOutPlanMachineDAO.js';
+import { OccupiedMachinesGetModel } from '../Models/GetModels/OccupiedMachinesGetModel.js';
 export var FindAllWrkOutMachines = function () { return __awaiter(void 0, void 0, void 0, function () {
     var wrkOutMachineDao, body, results, _i, body_1, b, a, err_1;
     return __generator(this, function (_a) {
@@ -82,8 +84,49 @@ export var FindWrkOutMachineById = function (id) { return __awaiter(void 0, void
         }
     });
 }); };
+export var FindOccupiedMachinesOnSpecificTime = function (id, time, date) { return __awaiter(void 0, void 0, void 0, function () {
+    var wrkOutPlanMachineDao, body, result, err_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                wrkOutPlanMachineDao = new WrkOutPlanMachinesDAO();
+                return [4 /*yield*/, wrkOutPlanMachineDao.SelectOccupiedMachineAmount(id, time, date)];
+            case 1:
+                body = _a.sent();
+                result = new OccupiedMachinesGetModel(body);
+                return [2 /*return*/, new OkResponse("We good", result)];
+            case 2:
+                err_3 = _a.sent();
+                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(", 404)];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+// TODO: Probably dont even need this tbh
+// export const FindMachinesByPlanId = async (id: number) => {
+//     try {
+//         const wrkOutPlanMachineDao = new WrkOutPlanMachinesDAO();
+//         const body: Array<WrkoutPlanMachineGetModel> = await wrkOutPlanMachineDao.SelectWrkOutPlanBy_WrkOutPlanId(id);
+//         const result: Array<WrkOutPlanMachine> = [];
+//         for(const machineBody of body) {
+//             const wrkOutMachinesDAO = new WrkOutMachineDAO();
+//             const machineData = await wrkOutMachinesDAO.SelectWrkOutMachineById(machineBody.WrkOutMachineId);
+//             const wrkOutMachine = new WrkOutMachine(machineData);
+//             const wrkOutPlanMachine = new WrkOutPlanMachine(machineBody);
+//             wrkOutPlanMachine.WrkOutMachine = wrkOutMachine;
+//             if (wrkOutPlanMachine.validateAttrs()){
+//                 result.push(wrkOutPlanMachine);
+//             }
+//         }
+//         return new OkResponse("We good", result);
+//     }
+//     catch(err){
+//         return new FailedResponse("Cannot get any of these things :(", 404);
+//     }
+// }
 export var CreateWrkOutMachine = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, wrkOutMachineDao, successResult, err_3;
+    var result, wrkOutMachineDao, successResult, err_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -95,14 +138,14 @@ export var CreateWrkOutMachine = function (body) { return __awaiter(void 0, void
                 successResult = result;
                 return [2 /*return*/, new CreatedResponse("Successfully created an ExerciseType", successResult.Body)];
             case 2:
-                err_3 = _a.sent();
+                err_4 = _a.sent();
                 return [2 /*return*/, new FailedResponse('Sadge', 404)];
             case 3: return [2 /*return*/];
         }
     });
 }); };
 export var RecommendMachine = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, wrkOutMachineDao, successResult, err_4;
+    var result, wrkOutMachineDao, successResult, err_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -114,7 +157,7 @@ export var RecommendMachine = function (id) { return __awaiter(void 0, void 0, v
                 successResult = result;
                 return [2 /*return*/, new CreatedResponse("Successfully created an ExerciseType", successResult.Body)];
             case 2:
-                err_4 = _a.sent();
+                err_5 = _a.sent();
                 return [2 /*return*/, new FailedResponse('Sadge', 404)];
             case 3: return [2 /*return*/];
         }

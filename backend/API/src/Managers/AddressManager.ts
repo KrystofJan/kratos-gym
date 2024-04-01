@@ -10,9 +10,7 @@ import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../DataLayer/Da
 export const FindAllAdresses = async (): Promise<Response> => {
     try{
         const addressDAO = new AddressDAO();
-
         const body: Array<IDictionary<any>> = await addressDAO.SelectAllAdresses();
-        
         let results: Array<Address> = new Array<Address>();
 
         for (const b of body){
@@ -49,7 +47,6 @@ export const CreateAddress = async (body: Address) => { // create
         const addressDAO = new AddressDAO();
         result = await addressDAO.InsertAddress(body);
         const successResult = result as DatabaseSuccess;
-        console.log('Bodiiii', result);
         return new CreatedResponse(
             "Successfully created an Address", 
             successResult.Body);

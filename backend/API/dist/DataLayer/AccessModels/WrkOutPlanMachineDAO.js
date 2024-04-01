@@ -79,7 +79,7 @@ var WrkOutPlanMachinesDAO = /** @class */ (function (_super) {
             var result;
             return __generator(this, function (_a) {
                 try {
-                    result = this.SelectAll();
+                    result = this.SecectByForeignId(id, TableTypes.WrkOutMachine);
                     return [2 /*return*/, result];
                 }
                 catch (err) {
@@ -100,9 +100,11 @@ var WrkOutPlanMachinesDAO = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectOccupiedMachineAmount(id, time, date); })];
                     case 1:
                         result = _a.sent();
+                        console.log(result);
                         if (result instanceof DatabaseSuccess) {
                             successResult = result;
-                            return [2 /*return*/, successResult.Body];
+                            console.log(successResult.Body);
+                            return [2 /*return*/, successResult.Body[0]];
                         }
                         return [3 /*break*/, 3];
                     case 2:

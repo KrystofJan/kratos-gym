@@ -1,4 +1,4 @@
-import {getAllWrkOutMachines, getWrkOutMachineById, recommendMachine, postWrkOutMachine  } from './../Controller/WrkOutMachineController.js';
+import {getAllWrkOutMachines, getWrkOutMachineById, recommendMachine, postWrkOutMachine, isOccupied   } from './../Controller/WrkOutMachineController.js';
 import express, { Request, Response, Router } from 'express';
 
 export const WrkOutMachineRouter = express.Router();
@@ -19,4 +19,9 @@ WrkOutMachineRouter.post('/', (req, res) => {
 WrkOutMachineRouter.get('/recommend/:id', (req, res) => {
     const id = parseInt(req.params['id']);
     recommendMachine( req,res,id); // TODO fix!
+});
+
+WrkOutMachineRouter.get('/:id/occupied', (req, res) => {
+    const id = parseInt(req.params['id']);
+    isOccupied( req,res,id);
 });
