@@ -2,6 +2,9 @@
 import { ref, onMounted, watch } from 'vue';
 import { useStorage } from '@vueuse/core';
 import { BaseService } from '@/services/base/ApiService';
+import { PlanService as PlanServiceObj} from '@/services/PlanService';
+import { PlanMachineService as PlanMachineServiceObj} from '@/services/PlanMachineService';
+import { ReservationService as ReservationServiceObj} from '@/services/ReservationService';
 
 import PlanStep from '@/components/Reservation/PlanStep.vue';
 import PickMachineStep from '@/components/Reservation/PickMachineStep.vue';
@@ -23,9 +26,9 @@ let PlanMachineService = {};
 let ReservationService = {};
 
 const prepareServices = () => {
-    PlanService = new BaseService("plan");
-    PlanMachineService = new BaseService("plan-machine");
-    ReservationService = new BaseService("reservation");
+    PlanService = new PlanServiceObj();
+    PlanMachineService = new PlanMachineServiceObj();
+    ReservationService = new ReservationServiceObj();
     PlanTypeService = new BaseService('plan-type');
 }
 
@@ -53,16 +56,14 @@ const postData = async () => {
         const r1 = await planRes.json();
         console.log(r1);
 
-        PlanMachine.value.WrkOutPlanId = r1.CreatedId;
         Reservation.value.WrkOutPlanId = r1.CreatedId;
-        PlanType.value.WrkOutPlanId = r1.CreatedId;
         
         // something goes wrong here
-        const planMachineRes = await PlanMachineService.post(PlanMachine.value);
+        const planMachineRes = await PlanMachineService.post(PlanMachine.value, r1.CreatedId);
         const r2 = await planMachineRes.json();
         console.log(r2);
         
-        const planTypeRes = await PlanTypeService.post(PlanType.value);
+        const planTypeRes = await PlanTypeService.post(PlanType.value, r1.CreatedId);
         const r3 = await planTypeRes.json();
         console.log(r3);
 
