@@ -1,5 +1,7 @@
 cd backend/API/
 
+npm run build
+
 node . &
 
 
