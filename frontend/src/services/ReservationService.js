@@ -1,21 +1,26 @@
 import { BaseService } from './base/ApiService';
 
-export class ReservationService {
+export class ReservationService extends BaseService{
+    
+    constructor(){
+        super("reservation");
+    }
+    
     async getId (id) {
-        try {
-            const data = await new BaseService().getId(id, "reservation");
-            return data[0];
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+        const data = await this.baseGetId(id);
+        return data[0];
     }
 
     async getAll () {
         try {
-            const data = await new BaseService().getAll("reservation");
+            const data = await this.getAll();
             return data;
         } catch (error) {
             console.error('Error fetching data:', error);
         }
+    }
+    async post(body){
+        const data = await this.basePost(body);
+        return data;
     }
 }

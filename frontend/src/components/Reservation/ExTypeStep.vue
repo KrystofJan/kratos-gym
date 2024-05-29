@@ -1,5 +1,5 @@
 <script setup>
-import {ref, defineProps, onMounted } from 'vue';
+import { ref, defineProps, onMounted } from 'vue';
 import { BaseService } from '@/services/base/ApiService';
 import Step from './Step.vue';
 
@@ -15,7 +15,8 @@ const prepareServices = () => {
 
 const fetchData = async () => {
     try {
-        const typeData = await TypeService.getAll();
+        const typeData = await TypeService.baseGetAll();
+        console.log(typeData)
         Types.value = typeData;
 
     } catch (error) {
@@ -36,14 +37,11 @@ onMounted(async () => {
 </script>
 
 <template>
-    <Step :builderText="builderText" :builderItemClasses="'BuilderItemGrid'">    
+    <Step :builderText="builderText" :builderItemClasses="'BuilderItemGrid'">
         <div class="BuilderItem-type" v-for="ex_type in Types">
-            <input  type="checkbox"
-                    :name="'type-' + ex_type.ExerciseTypeId"
-                    :id="'type-' + ex_type.ExerciseTypeId"
-                    :value="ex_type.ExerciseTypeId"
-                    v-model="PlanType.ExerciseTypeIds">
-            <label :for="'type-' + ex_type.ExerciseTypeId">{{ ex_type.TypeName }}</label>
+            <input type="checkbox" :name="'type-' + ex_type.ExerciseTypeId" :id="'type-' + ex_type.ExerciseTypeId"
+                :value="ex_type.ExerciseTypeId" v-model="PlanType.ExerciseTypeIds">
+            <label :for="'type-' + ex_type.ExerciseTypeId">{{ ex_type.ExerciseTypeName }}</label>
         </div>
     </Step>
 </template>
@@ -51,7 +49,7 @@ onMounted(async () => {
 <style lang="scss">
 @import '@/styles/sass/Reservation/Builder.scss';
 
-[data-plan-name]{
+[data-plan-name] {
     grid-column: 1/-1;
 }
 </style>

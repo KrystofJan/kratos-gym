@@ -5,6 +5,8 @@ import Plan from '@/store/PlanStore.js';
 import AmmountOfPeopleStep from '@/components/Reservation/AmmountOfPeopleStep.vue';
 import Reservation from '@/store/ReservationStore.js';
 
+import NumberInput from '@/components/Form/NumberInput/NumberInput.vue';
+
 const emit = defineEmits(['next']);
 
 const builderText = ref({
@@ -17,10 +19,26 @@ const isPlanNameEmpty = ref(false);
 const isDateEmpty = ref(false);
 const isAOPEmpty = ref(false);
 
-const validateYear = () => {
+const validateYear = async () => {
+    // TODO: Validate year
     isDateEmpty.value = false;
-    const date = Reservation.value.ReservationTime;
-    console.log(date);
+    const year = parseInt(Reservation.value.ReservationTime.split('-')[0]); 
+    if(Reservation.value.ReservationTime.split('-')[0].length < 4){
+        return;
+    }
+
+    if(year > 2100){
+        Reservation.value.ReservationTime = Reservation.value.ReservationTime.replace(year.toString(), '2100');
+    }
+
+
+
+    let date = await new Date();
+    let currentYear = await date.getFullYear();
+    console.log(year < currentYear);
+    if(year < currentYear){
+        Reservation.value.ReservationTime = Reservation.value.ReservationTime.replace(year.toString(), currentYear.toString());
+    }
 }
 
 const clickHandle = () => {
@@ -72,7 +90,7 @@ const clickHandle = () => {
                 <input 
                     type="datetime-local"
                     name="arrival-date" 
-                    @change="validateYear" 
+                    @input="validateYear" 
                     v-model="Reservation.ReservationTime" 
                     required >    
             </div>
@@ -85,15 +103,13 @@ const clickHandle = () => {
                 <label for="amount-of-people">
                     Amout of people:  
                 </label>
-                <input 
-                    type="number"
-                    v-model="Reservation.AmmoutOfPeople"
-                    step="1" 
-                    min="1" 
-                    max="4" 
+                <NumberInput
+                    :min="1" 
+                    :max="4" 
                     @change="isAOPEmpty = false" 
-                    id="amount-of-people" 
-                    name="amount-of-people" >
+                    @value-change="(val) => Reservation.AmmoutOfPeople = val"
+                    :id="'amount-of-people'" 
+                    :name="'amount-of-people'" />
             </div>
         </div>
     </Step>

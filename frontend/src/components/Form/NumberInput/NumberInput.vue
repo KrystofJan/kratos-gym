@@ -1,5 +1,5 @@
 <script setup>
-import {ref, defineProps, onMounted, watch, defineEmits } from 'vue';
+import { ref, defineProps, onMounted, watch, defineEmits } from 'vue';
 
 const props = defineProps({
     max: Number,
@@ -24,12 +24,12 @@ const handleChange = () => {
 
 const validateNumberRange = () => {
     console.log("hihihi");
-    if(Value.value > props.max){
+    if (Value.value > props.max) {
         MaxError.value = true;
         Error.value = true;
         return;
     }
-    if(Value.value < props.min){
+    if (Value.value < props.min) {
         MinError.value = true;
         Error.value = true;
         return;
@@ -43,24 +43,16 @@ const validateNumberRange = () => {
 </script>
 
 <template>
-    <input  
-        type="number" 
-        :max="max" :min="min" 
-        :id="id" 
-        :name="name"
-        class="BaseNumberInput"
-        :class="{
-            'Error': Error,
-            customClass: customClass
-            }"
-        @input="handleChange"
-        v-model="Value"
-        :required="required">
+    <input type="number" :max="max" :min="min" :id="id" :name="name" class="BaseNumberInput" :class="{
+        'Error': Error,
+        customClass: customClass
+    }" @input="handleChange" v-model="Value" :required="required">
 </template>
 
 <style lang="scss">
 @import './NumberInput.scss';
-.Error{
+
+.Error {
     background: rgba(red, .5);
 }
 </style>

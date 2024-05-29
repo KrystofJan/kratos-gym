@@ -5,10 +5,8 @@ import StickyTextComposite from '@/components/StikyTextComposite/StickyTextCompo
 </script>
 
 <template>
-  <HeroBanner />
-  <StickyTextComposite />
+    <HeroBanner />
+    <StickyTextComposite />
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>
