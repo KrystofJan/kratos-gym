@@ -1,9 +1,8 @@
 import { BaseService } from './base/ApiService';
 import * as config from '@/services/config/api_config';
 
-
 export class PlanMachineService extends BaseService {
-    constructor(){
+    constructor() {
         super('machines', 'plan');
     }
 
@@ -13,20 +12,20 @@ export class PlanMachineService extends BaseService {
      * @param {String} time 
      * @param {Date} date 
      */
-    async isMachineOccupied(id, time, date){
+    async isMachineOccupied(id, time, date) {
         try {
-            const result = await 
+            const result = await
                 fetch(`${config.url}/${this.supportEndpoint}/${id}/${this.endpoint}?time=${time}&date=${date}`);
             const plans = await result.json();
-            
+
             return (plans.amount > 0);
         }
-        catch(err) {
+        catch (err) {
             console.error(err);
         }
     }
 
-    async post(body, planId){
+    async post(body, planId) {
         try {
             const requestOptions = config.post_headers;
             requestOptions.body = JSON.stringify(body);

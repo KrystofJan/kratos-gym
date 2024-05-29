@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import content from '@/siteContent/_footer-content.json';
 const footer_cols = ref([]);
 
-const fetchData =  () => {
+const fetchData = () => {
     footer_cols.value = content;
 }
 
@@ -20,7 +20,7 @@ onMounted(fetchData);
                 <ul class="Footer-col-links">
                     <li class="FooterColItem" v-for="link in col.footerColLinks">
                         <router-link class="FooterColItem-link" :to="link.link">
-                        {{ link.text }}
+                            {{ link.text }}
                         </router-link>
                     </li>
                 </ul>
@@ -30,48 +30,53 @@ onMounted(fetchData);
 </template>
 
 <style scoped lang="scss">
-.FooterWrapper{
+.FooterWrapper {
     background: var(--baseRed);
 }
-.Footer{
+
+.Footer {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(3, 1fr);
     min-height: 25dvh;
 
 
-    &-col{
+    &-col {
         padding-left: 3rem;
-        &-heading{
+
+        &-heading {
             color: white;
             font-size: 2rem;
         }
 
-        &-links{
+        &-links {
             padding: 0;
             width: 100%;
         }
     }
+
     //border-bottom: 1px solid black;
 }
-.FooterColItem{
+
+.FooterColItem {
     text-decoration: none;
     list-style: none;
 
-    &-link{
+    &-link {
         font-size: 1.5rem;
         color: #c0c0c0;
         text-decoration: none;
         transition: all 0.2s linear;
 
 
-        &:hover{
+        &:hover {
             color: #fff;
             padding-left: 1rem;
             text-transform: uppercase;
         }
     }
 }
-.copyright{
+
+.copyright {
     display: flex;
     width: 90%;
     padding: 0 5%;

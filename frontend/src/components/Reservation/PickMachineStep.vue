@@ -1,12 +1,12 @@
 <script setup>
-import {ref, defineProps, onMounted } from 'vue';
-import { BaseService } from '@/services/base/ApiService';
+import { ref, defineProps, onMounted } from 'vue';
+import { MachineService } from '@/services/MachineService';
 import Step from './Step.vue';
 
-let MachineService = {};
+let machineService = {};
 
 const prepareServices = () => {
-    MachineService = new BaseService("machine");
+    machineService = new MachineService();
 }
 
 const Machines = ref([]);
@@ -18,7 +18,7 @@ const builderText = ref({
 
 const fetchData = async () => {
     try {
-        const machineData = await MachineService.getAll();
+        const machineData = await machineService.getAll();
         Machines.value = machineData;
 
     } catch (error) {
@@ -33,14 +33,11 @@ onMounted(async () => {
 </script>
 
 <template>
-    <Step :builderText="builderText" :builderItemClasses="'BuilderItemGrid'">    
+    <Step :builderText="builderText" :builderItemClasses="'BuilderItemGrid'">
         <div class="BuilderItem-machine" v-for="machine in Machines">
-            <input  type="checkbox" 
-                    :name="'machine-' + machine.WrkOutMachineId"
-                    :id="'machine-' + machine.WrkOutMachineId"
-                    :value="machine"
-                    v-model="selectedMachines"
-                    @change="$emit('machineSelected', selectedMachines)"/>
+            <input type="checkbox" :name="'machine-' + machine.WrkOutMachineId"
+                :id="'machine-' + machine.WrkOutMachineId" :value="machine" v-model="selectedMachines"
+                @change="$emit('machineSelected', selectedMachines)" />
             <label :for="'machine-' + machine.WrkOutMachineId">{{ machine.MachineName }}</label>
         </div>
     </Step>
@@ -49,7 +46,7 @@ onMounted(async () => {
 <style lang="scss">
 @import '@/styles/sass/Reservation/Builder.scss';
 
-[data-plan-name]{
+[data-plan-name] {
     grid-column: 1/-1;
 }
 </style>
