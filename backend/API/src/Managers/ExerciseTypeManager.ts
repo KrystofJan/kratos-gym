@@ -9,54 +9,53 @@ import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../DataLayer/Da
 
 
 export const FindAllExerciseTypes = async () => {
-    try{
+    try {
         const exerciseTypeDAO = new ExerciseTypeDAO();
         const body: Array<IDictionary<any>> = await exerciseTypeDAO.SelectAllExerciseTypes();
-        
+
         // validate...
         const results: Array<ExerciseType> = [];
-        
-        for (const b of body){
+
+        for (const b of body) {
             const a = new ExerciseType(b);
 
             results.push(a);
         }
-        
+
         return new OkResponse("We good", results);
     }
-    catch(err){
-        return new FailedResponse("Cannot get any of these things :(",  404);
+    catch (err) {
+        return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
 
 export const FindExerciseTypeById = async (id: number) => {
-    try{
+    try {
         const exerciseTypeDAO = new ExerciseTypeDAO();
         const body: IDictionary<any> = await exerciseTypeDAO.SelectExerciseTypeById(id);
-        
+
         // validate...
         const result = new ExerciseType(body);
-        
+
         return new OkResponse("We good", result);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
 
 export const CreateExerciseType = async (body: ExerciseType) => {
-    let result: DatabaseResponse;
     // TODO better response
-    try{
+    try {
         const exerciseTypeDAO = new ExerciseTypeDAO();
-        
-        result = await exerciseTypeDAO.InsertExerciseType(body);
+
+        const result = await exerciseTypeDAO.InsertExerciseType(body);
         const successResult = result as DatabaseSuccess;
         return new CreatedResponse(
-            "Successfully created an ExerciseType", 
+            "Successfully created an ExerciseType",
             successResult.Body);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse('Sadge', 404);
     }
 }

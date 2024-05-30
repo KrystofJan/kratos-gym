@@ -13,8 +13,8 @@ import { DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/Databas
 // TODO change MachineExerciseTypePostModel to GetModel
 const buildBody = async (machineType: Array<MachineExerciseTypeGetModel>) => {
     let result: Array<MachineExerciseTypes> = new Array<MachineExerciseTypes>;
-    for(const mt of machineType){
-        const machineBody = await FindWrkOutMachineById(mt.WrkOutMachineId); 
+    for (const mt of machineType) {
+        const machineBody = await FindWrkOutMachineById(mt.WrkOutMachineId);
         const typeBody = await FindExerciseTypeById(mt.ExerciseTypeId);
 
 
@@ -34,43 +34,41 @@ const buildBody = async (machineType: Array<MachineExerciseTypeGetModel>) => {
 }
 
 export const FindMachineExerciteTypeByWrkOutMachineId = async (id: number) => { // getByMachineId
-    try{
+    try {
         const machineTypesDAO = new MachineExerciseTypesDAO();
         const machineType = await machineTypesDAO.SelectMachineExerciseTypesBy_WrkOutMachineId(id);
         const body: Array<MachineExerciseTypes> = await buildBody(machineType)
         return new OkResponse("We good", body);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse(`Cannot get this types ids machine types: ${id}`, 404);
     }
 }
 
 export const FindMachineExerciteTypeByExerciseTypeId = async (id: number) => {
-    try{
+    try {
         const machineTypesDAO = new MachineExerciseTypesDAO();
         const machineType = await machineTypesDAO.SelectMachineExerciseTypesBy_WrkOutMachineId(id);
         const body: Array<MachineExerciseTypes> = await buildBody(machineType)
 
         return new OkResponse("We good", body);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse(`Cannot get this types ids machine types: ${id}`, 404);
     }
 }
 
 export const CreateMachineExerciseType = async (body: MachineExerciseTypePostModel) => {
-    let result: DatabaseResponse;
-
-    try{
+    try {
         const exerciseTypeDAO = new MachineExerciseTypesDAO();
-        
-        result = await exerciseTypeDAO.InsertMachineExerciseTypes(body);
+
+        const result = await exerciseTypeDAO.InsertMachineExerciseTypes(body);
         const successResult = result as DatabaseSuccess;
         return new CreatedResponse(
-            "Successfully created an ExerciseType", 
+            "Successfully created an ExerciseType",
             successResult.Body);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse('Sadge', 404);
     }
 }

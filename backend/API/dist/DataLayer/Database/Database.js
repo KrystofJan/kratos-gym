@@ -4,31 +4,30 @@ import * as dbKeys from '../keys/table-keys.json' with { type: "json" };
 import { Validators } from './DatabaseValidators.js';
 import { ApiLogger } from '../../Logger/ApiLogger.js';
 import { DatabaseSuccess, DatabaseFail } from './DatabaseResponse.js';
-// TODO: singleton
 var Database = /** @class */ (function () {
     function Database() {
-        this.db = mysql.createConnection(config.default.Database);
         this.tableKeys = JSON.parse(JSON.stringify(dbKeys.default));
     }
-    Database.prototype.dbConnect = function () {
-        this.db.connect(function (err) {
+    Database.dbConnect = function () {
+        // TODO: Investigate if I should switch this to a different approach... maybe dont create connection and end it afterwards
+        Database.db = mysql.createConnection(config.default.Database);
+        Database.db.connect(function (err) {
             if (err) {
                 ApiLogger.logApi("an error occured while trying to connect to the database!\nError: " + err);
             }
         });
     };
-    Database.prototype.dbDisconnect = function () {
-        this.db.end(function (err) {
+    Database.dbDisconnect = function () {
+        Database.db.end(function (err) {
             if (err) {
                 ApiLogger.logApi("an error occured while trying to disconnectiong to the database!\nError: " + err);
             }
         });
     };
     Database.prototype.dbSelectAll = function (tableName) {
-        var _this = this;
         return new Promise(function (resolve, reject) {
             var command = "SELECT * FROM ".concat(tableName);
-            _this.db.query(command, function (err, results) {
+            Database.db.query(command, function (err, results) {
                 if (err) {
                     console.error('Error querying the database:', err);
                     ApiLogger.logApi(err.toString());
@@ -41,7 +40,6 @@ var Database = /** @class */ (function () {
     };
     // TODO: Handle duplicates
     Database.prototype.dbPost = function (body, tableName) {
-        var _this = this;
         return new Promise(function (resolve, reject) {
             var data = [];
             var columns = Object.keys(body).join(', ');
@@ -50,7 +48,7 @@ var Database = /** @class */ (function () {
                 data.push(body[key]);
             });
             var command = "INSERT INTO ".concat(tableName, " (").concat(columns, ") VALUES (").concat(placeholders, ")");
-            _this.db.query(command, data, function (err, results) {
+            Database.db.query(command, data, function (err, results) {
                 if (err) {
                     console.error('Error querying the database:', err);
                     ApiLogger.logApi(err.toString());
@@ -58,16 +56,14 @@ var Database = /** @class */ (function () {
                 }
                 ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
                 var rerere = new DatabaseSuccess(results.insertId);
-                console.log(rerere);
                 resolve(rerere);
             });
         });
     };
     Database.prototype.dbSelectAttrIs = function (attrValue, attrName, tableName) {
-        var _this = this;
         return new Promise(function (resolve, reject) {
             var command = "Select * from ".concat(tableName, " where ").concat(attrName, " = '").concat(attrValue, "'");
-            _this.db.query(command, function (err, results) {
+            Database.db.query(command, function (err, results) {
                 if (err) {
                     console.error('Error querying the database:', err);
                     ApiLogger.logApi(err.toString());
@@ -92,7 +88,7 @@ var Database = /** @class */ (function () {
                 reject({ error: 'Cannot pass in id that\'s not a number! Id: ' + id });
             }
             var command = "SELECT * FROM ".concat(tableName, " WHERE ").concat(pkey, " = ").concat(id);
-            _this.db.query(command, function (err, results) {
+            Database.db.query(command, function (err, results) {
                 if (err) {
                     console.error('Error querying the database:', err);
                     ApiLogger.logApi(err.toString());
@@ -105,7 +101,6 @@ var Database = /** @class */ (function () {
     };
     // TODO: CanDisturb if its not free,!!!
     Database.prototype.dbSelectOccupiedMachineAmount = function (id, time, date) {
-        var _this = this;
         return new Promise(function (resolve, reject) {
             var pkey = dbKeys.default["WrkOutPlanMachines--plan"];
             if (!Validators.validateNumericId(id)) {
@@ -113,7 +108,7 @@ var Database = /** @class */ (function () {
                 ApiLogger.logApi("Cannot use this" + pkey + " ! --" + id);
                 reject({ error: 'Cannot pass in id that\'s not a number! Id: ' + id });
             }
-            _this.db.query("select count(*) as count " +
+            Database.db.query("select count(*) as count " +
                 "from WrkOutPlanMachines inner join Reservation on Reservation.WrkOutPlanId = WrkOutPlanMachines.WrkOutPlanId " +
                 "where ('" + time + "' between WrkOutStartTime and WrkOutEndTime) and Date(ReservationTime) = '" + date + "' " +
                 "and WrkOutPlanMachines.WrkOutMachineId = " + id + " and WrkOutPlanMachines.canDisturb = 1", function (err, results) {
@@ -128,7 +123,6 @@ var Database = /** @class */ (function () {
         });
     };
     Database.prototype.dbRecommendMachine = function (id) {
-        var _this = this;
         return new Promise(function (resolve, reject) {
             var pkey = dbKeys.default["WrkOutMachine"];
             if (!Validators.validateNumericId(id)) {
@@ -136,7 +130,7 @@ var Database = /** @class */ (function () {
                 ApiLogger.logApi("Cannot use this" + pkey + " ! --" + id);
                 reject({ error: 'Cannot pass in id that\'s not a number! Id: ' + id });
             }
-            _this.db.query('SELECT wm.WrkOutMachineId, wm.MachineName, ET.ExerciseTypeName, ET.BodyPart, wm.PopularityScore ' +
+            Database.db.query('SELECT wm.WrkOutMachineId, wm.MachineName, ET.ExerciseTypeName, ET.BodyPart, wm.PopularityScore ' +
                 'FROM WrkOutMachine wm inner join MachineExerciseTypes met on wm.WrkOutMachineId = met.WrkOutMachineId ' +
                 'inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId ' +
                 'Where ET.BodyPart in ( ' +
@@ -160,6 +154,7 @@ var Database = /** @class */ (function () {
             });
         });
     };
+    Database.db = mysql.createConnection(config.default.Database);
     return Database;
 }());
 export { Database };

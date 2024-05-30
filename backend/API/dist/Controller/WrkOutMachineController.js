@@ -92,7 +92,9 @@ export var postWrkOutMachine = function (req, res) { return __awaiter(void 0, vo
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                console.log("asdasd");
                 reservation = new WrkOutMachine(req.body);
+                console.log(reservation);
                 if (!reservation.validateAttrs()) {
                     response = new BadRequestResponse("Unable to create ExerciseType model");
                     response.buildResponse(req, res);
@@ -101,7 +103,6 @@ export var postWrkOutMachine = function (req, res) { return __awaiter(void 0, vo
                 return [4 /*yield*/, CreateWrkOutMachine(reservation)];
             case 1:
                 response = _a.sent();
-                console.log(response);
                 response.buildResponse(req, res);
                 return [2 /*return*/];
         }

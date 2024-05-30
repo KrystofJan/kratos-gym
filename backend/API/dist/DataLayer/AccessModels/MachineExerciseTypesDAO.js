@@ -88,7 +88,6 @@ var MachineExerciseTypesDAO = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.SecectByForeignId(id, TableTypes.WrkOutMachine)];
                     case 1:
                         result = _a.sent();
-                        console.log('res', result);
                         return [2 /*return*/, result];
                     case 2:
                         err_2 = _a.sent();

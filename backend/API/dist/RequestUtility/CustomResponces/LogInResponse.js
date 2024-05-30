@@ -10,7 +10,6 @@ var LoggedInResponse = /** @class */ (function () {
         };
     }
     LoggedInResponse.prototype.buildResponse = function (req, res) {
-        console.log(this.Body);
         res.status(this.StatusCode).json(this.Body);
     };
     return LoggedInResponse;

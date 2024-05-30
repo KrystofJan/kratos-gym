@@ -1,3 +1,18 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,50 +49,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { FindAllExerciseTypes, FindExerciseTypeById, CreateExerciseType } from '../Managers/ExerciseTypeManager.js';
-import { ExerciseType } from '../Models/ExerciseType.js';
-import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
-// TODO: Add get by Plan
-export var getAllExerciseTypes = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var response;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, FindAllExerciseTypes()];
-            case 1:
-                response = _a.sent();
-                response.buildResponse(req, res);
-                return [2 /*return*/];
-        }
-    });
-}); };
-export var getExerciseTypeById = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
-    var response;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, FindExerciseTypeById(id)];
-            case 1:
-                response = _a.sent();
-                response.buildResponse(req, res);
-                return [2 /*return*/];
-        }
-    });
-}); };
-export var postExerciseType = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var address, response;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                address = new ExerciseType(req.body);
-                if (!address.validateAttrs()) {
-                    response = new BadRequestResponse("Unable to create ExerciseType model");
-                    response.buildResponse(req, res);
-                    return [2 /*return*/];
-                }
-                return [4 /*yield*/, CreateExerciseType(address)];
-            case 1:
-                response = _a.sent();
-                response.buildResponse(req, res);
-                return [2 /*return*/];
-        }
-    });
-}); };
+import { BaseDatabaseDecorator } from "../DatabaseDecorators/DatabaseDecorator.js";
+var DatabaseRequestDecorator = /** @class */ (function (_super) {
+    __extends(DatabaseRequestDecorator, _super);
+    function DatabaseRequestDecorator(req) {
+        return _super.call(this, req) || this;
+    }
+    DatabaseRequestDecorator.prototype.execute = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, _super.prototype.execute.call(this)];
+            });
+        });
+    };
+    return DatabaseRequestDecorator;
+}(BaseDatabaseDecorator));
+export { DatabaseRequestDecorator };

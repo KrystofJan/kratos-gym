@@ -36,36 +36,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { Database } from '../Database/Database.js';
 import { DatabaseFail, DatabaseSuccess } from '../Database/DatabaseResponse.js';
+import { SimpleDatabaseRequest } from '../Database/DatabaseRequests/SingleDatabaseRequest.js';
 var RelationalModel = /** @class */ (function () {
     function RelationalModel(tableType) {
         this.dbHandler = new Database();
         this.TableType = tableType;
     }
-    RelationalModel.prototype.MakeDbRequest = function (func) {
-        return __awaiter(this, void 0, void 0, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        this.dbHandler.dbConnect();
-                        return [4 /*yield*/, func()];
-                    case 1:
-                        result = _a.sent();
-                        this.dbHandler.dbDisconnect();
-                        return [2 /*return*/, result];
-                }
-            });
-        });
-    };
     RelationalModel.prototype.SecectByForeignId = function (id, foreignTableType) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, successResult, err_1;
+            var simpleDatabseRequest, result, successResult, err_1;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectSpecific(id, _this.TableType, foreignTableType); })];
+                        simpleDatabseRequest = new SimpleDatabaseRequest(function () { return _this.dbHandler.dbSelectSpecific(id, _this.TableType, foreignTableType); });
+                        return [4 /*yield*/, simpleDatabseRequest.execute()];
                     case 1:
                         result = _a.sent();
                         if (result instanceof DatabaseSuccess) {
@@ -90,13 +76,14 @@ var RelationalModel = /** @class */ (function () {
     };
     RelationalModel.prototype.SelectAll = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var result, successResult, err_2;
+            var simpleDatabseRequest, result, successResult, err_2;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectAll(_this.TableType); })];
+                        simpleDatabseRequest = new SimpleDatabaseRequest(function () { return _this.dbHandler.dbSelectAll(_this.TableType); });
+                        return [4 /*yield*/, simpleDatabseRequest.execute()];
                     case 1:
                         result = _a.sent();
                         if (result instanceof DatabaseSuccess) {
@@ -121,13 +108,14 @@ var RelationalModel = /** @class */ (function () {
     };
     RelationalModel.prototype.SelectById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, successResult, err_3;
+            var simpleDatabaseRequest, result, successResult, err_3;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectSpecific(id, _this.TableType, null); })];
+                        simpleDatabaseRequest = new SimpleDatabaseRequest(function () { return _this.dbHandler.dbSelectSpecific(id, _this.TableType, null); });
+                        return [4 /*yield*/, simpleDatabaseRequest.execute()];
                     case 1:
                         result = _a.sent();
                         if (result instanceof DatabaseSuccess) {
@@ -152,13 +140,14 @@ var RelationalModel = /** @class */ (function () {
     };
     RelationalModel.prototype.SelectByAttr = function (attrName, attrValue) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, successResult, err_4;
+            var simpleDatabaseRequest, result, successResult, err_4;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectAttrIs(attrValue, attrName, _this.TableType); })];
+                        simpleDatabaseRequest = new SimpleDatabaseRequest(function () { return _this.dbHandler.dbSelectAttrIs(attrValue, attrName, _this.TableType); });
+                        return [4 /*yield*/, simpleDatabaseRequest.execute()];
                     case 1:
                         result = _a.sent();
                         if (result instanceof DatabaseSuccess) {
@@ -183,13 +172,14 @@ var RelationalModel = /** @class */ (function () {
     };
     RelationalModel.prototype.Insert = function (body) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, err_5;
+            var simpleDatabaseRequest, result, err_5;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbPost(body, _this.TableType); })];
+                        simpleDatabaseRequest = new SimpleDatabaseRequest(function () { return _this.dbHandler.dbPost(body, _this.TableType); });
+                        return [4 /*yield*/, simpleDatabaseRequest.execute()];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result];

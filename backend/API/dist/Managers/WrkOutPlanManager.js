@@ -35,7 +35,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { ExerciseTypeDAO } from './../DataLayer/AccessModels/ExerciseTypeDAO.js';
-import { WrkOutMachineDAO } from './../DataLayer/AccessModels/WrkOutMachineDAO.js';
 import { WrkOutPlan } from '../Models/WrkOutPlan.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse, CreatedMultipleResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
@@ -49,6 +48,7 @@ import { WrkOutPlanMachine } from '../Models/WrkOutPlanMachine.js';
 import { WrkOutPlanTypeDAO } from '../DataLayer/AccessModels/WrkOutPlanTypeDAO.js';
 import { WrkOutPlanType } from '../Models/WrkOutPlanType.js';
 import { ExerciseType } from '../Models/ExerciseType.js';
+import { WrkOutMachineDAO } from '../DataLayer/AccessModels/WrkOutMachineDAO.js';
 export var FindAllWrkOutPlans = function () { return __awaiter(void 0, void 0, void 0, function () {
     var wrkOutPlanDao, body, results, _i, body_1, b, userDao, userData, user, a, err_1;
     return __generator(this, function (_a) {
@@ -256,7 +256,7 @@ export var AddTypeToPlan = function (body) { return __awaiter(void 0, void 0, vo
     });
 }); };
 export var CreateWrkOutPlan = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, wrkOutPlanDao, successResult, err_8;
+    var wrkOutPlanDao, result, successResult, err_8;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:

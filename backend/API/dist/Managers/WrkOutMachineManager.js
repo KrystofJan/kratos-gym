@@ -126,7 +126,7 @@ export var FindOccupiedMachinesOnSpecificTime = function (id, time, date) { retu
 //     }
 // }
 export var CreateWrkOutMachine = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, wrkOutMachineDao, successResult, err_4;
+    var wrkOutMachineDao, result, successResult, err_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -145,7 +145,7 @@ export var CreateWrkOutMachine = function (body) { return __awaiter(void 0, void
     });
 }); };
 export var RecommendMachine = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, wrkOutMachineDao, successResult, err_5;
+    var wrkOutMachineDao, result, successResult, err_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:

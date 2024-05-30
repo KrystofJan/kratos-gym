@@ -81,7 +81,6 @@ var UserDAO = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.SelectById(id)];
                     case 1:
                         result = _a.sent();
-                        console.log(result);
                         return [2 /*return*/, result];
                     case 2:
                         err_1 = _a.sent();

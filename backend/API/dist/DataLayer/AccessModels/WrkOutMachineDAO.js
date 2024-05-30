@@ -51,6 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
+import { SimpleDatabaseRequest } from "../Database/DatabaseRequests/SingleDatabaseRequest.js";
 var WrkOutMachineDAO = /** @class */ (function (_super) {
     __extends(WrkOutMachineDAO, _super);
     function WrkOutMachineDAO() {
@@ -103,13 +104,14 @@ var WrkOutMachineDAO = /** @class */ (function (_super) {
     };
     WrkOutMachineDAO.prototype.RecommendMachine = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, err_1;
+            var simpleDatabaseRequest, result, err_1;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbRecommendMachine(id); })];
+                        simpleDatabaseRequest = new SimpleDatabaseRequest(function () { return _this.dbHandler.dbRecommendMachine(id); });
+                        return [4 /*yield*/, simpleDatabaseRequest.execute()];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result];

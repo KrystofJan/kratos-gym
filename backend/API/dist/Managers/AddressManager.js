@@ -83,7 +83,7 @@ export var FindAdressById = function (id) { return __awaiter(void 0, void 0, voi
     });
 }); };
 export var CreateAddress = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, addressDAO, successResult, err_3;
+    var addressDAO, result, successResult, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:

@@ -75,7 +75,6 @@ export var FindUserById = function (id) { return __awaiter(void 0, void 0, void 
                 return [4 /*yield*/, userDao.SelectUserById(id)];
             case 1:
                 body = _a.sent();
-                console.log(body);
                 result = new User(body);
                 return [2 /*return*/, new OkResponse("We good", result)];
             case 2:
@@ -86,7 +85,7 @@ export var FindUserById = function (id) { return __awaiter(void 0, void 0, void 
     });
 }); };
 export var CreateUser = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, userDao, successResult, err_3;
+    var userDao, result, successResult, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:

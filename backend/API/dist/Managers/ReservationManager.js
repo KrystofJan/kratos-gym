@@ -73,7 +73,6 @@ export var FindReservationById = function (id) { return __awaiter(void 0, void 0
                 return [4 /*yield*/, reservationDao.SelectReservationById(id)];
             case 1:
                 body = _a.sent();
-                console.log(body);
                 result = new ReservationGetModel(body);
                 return [2 /*return*/, new OkResponse("We good", result)];
             case 2:
@@ -84,7 +83,7 @@ export var FindReservationById = function (id) { return __awaiter(void 0, void 0
     });
 }); };
 export var CreateReservation = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, reservationDao, successResult, err_3;
+    var reservationDao, result, successResult, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:

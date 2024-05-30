@@ -14,71 +14,69 @@ import { LoggedInResponse } from '../RequestUtility/CustomResponces/LogInRespons
 
 
 export const FindAllUsers = async (): Promise<Response> => {
-    try{
+    try {
         const userDao = new UserDAO();
         const body: Array<IDictionary<any>> = await userDao.SelectAllUsers();
-        
+
         // validate...
         const results: Array<User> = [];
-        for (const b of body){
+        for (const b of body) {
             const a = new User(b);
 
             results.push(a);
         }
-        
+
         return new OkResponse("We good", results);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
 
 export const FindUserById = async (id: number): Promise<Response> => {
-    try{
+    try {
         const userDao = new UserDAO();
         const body: IDictionary<any> = await userDao.SelectUserById(id);
-        console.log(body);
-        
+
         // validate...
         const result = new User(body);
-        
+
         return new OkResponse("We good", result);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
 
 export const CreateUser = async (body: UserRegPostModel): Promise<Response> => {
-    let result: DatabaseResponse;
     // TODO better response
-    try{
+    try {
         const userDao = new UserDAO();
-        
-        result = await userDao.InsertUser(body);
+
+        const result = await userDao.InsertUser(body);
 
         const successResult = result as DatabaseSuccess;
         return new CreatedResponse(
-            "Successfully created an ExerciseType", 
+            "Successfully created an ExerciseType",
             successResult.Body);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse('Sadge', 404);
     }
 }
 
 export const LoginAuth = async (body: UserAuth) => {
-    try{
+    try {
         const userDao = new UserDAO();
 
         let result = [];
 
-        if (body.LoginOrEmail.includes('@')){
+        if (body.LoginOrEmail.includes('@')) {
             result = await userDao.SelectUserByAttribute(
                 UserAttrs.Email,
                 body.LoginOrEmail
             );
-        } 
+        }
         else {
             result = await userDao.SelectUserByAttribute(
                 UserAttrs.Login,
@@ -86,7 +84,7 @@ export const LoginAuth = async (body: UserAuth) => {
             );
         }
 
-        if (result.length == 0){
+        if (result.length == 0) {
 
             const err: ErrorResponseBody = {
                 status: ResponseStatus.FAIL,
@@ -98,19 +96,19 @@ export const LoginAuth = async (body: UserAuth) => {
 
         const real_result: User = result[0];
 
-        if (real_result.Password != body.EncodedPassword){
+        if (real_result.Password != body.EncodedPassword) {
             const err: ErrorResponseBody = {
                 status: ResponseStatus.FAIL,
                 message: "Wrong password!",
-                error_code: 1  
+                error_code: 1
             };
             throw err;
         }
 
         return new LoggedInResponse("We good", real_result.UserId);
     }
-    catch(err){
-        const error = err as ErrorResponseBody; 
+    catch (err) {
+        const error = err as ErrorResponseBody;
         return new FailedResponse(error.message, error.error_code);
     }
 }

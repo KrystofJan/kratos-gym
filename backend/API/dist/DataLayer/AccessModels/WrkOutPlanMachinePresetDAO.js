@@ -52,6 +52,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { RelationalModel } from './RelationalModel.js';
 import { TableTypes } from "../Database/TableTypes.js";
 import { DatabaseFail, DatabaseSuccess } from '../Database/DatabaseResponse.js';
+import { SimpleDatabaseRequest } from '../Database/DatabaseRequests/SingleDatabaseRequest.js';
 var WrkOutPlanMachinesDAO = /** @class */ (function (_super) {
     __extends(WrkOutPlanMachinesDAO, _super);
     function WrkOutPlanMachinesDAO() {
@@ -90,13 +91,14 @@ var WrkOutPlanMachinesDAO = /** @class */ (function (_super) {
     };
     WrkOutPlanMachinesDAO.prototype.SelectOccupiedMachineAmount = function (id, time, date) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, successResult, err_1;
+            var simpleDatabaseRequest, result, successResult, err_1;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectOccupiedMachineAmount(id, time, date); })];
+                        simpleDatabaseRequest = new SimpleDatabaseRequest(function () { return _this.dbHandler.dbSelectOccupiedMachineAmount(id, time, date); });
+                        return [4 /*yield*/, simpleDatabaseRequest.execute()];
                     case 1:
                         result = _a.sent();
                         if (result instanceof DatabaseSuccess) {

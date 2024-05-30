@@ -1,7 +1,7 @@
 import { IDictionary } from "../utils/Utilities.js";
 import { Model } from './Model.js';
 
-export class WrkOutMachine extends Model{
+export class WrkOutMachine extends Model {
     public WrkOutMachineId: number | null;
     public MachineName: string;
     public MaxWeight: number;
@@ -10,7 +10,7 @@ export class WrkOutMachine extends Model{
     public AvgTimeTaken: number;
     public PopularityScore: number;
 
-    constructor(jsonData: IDictionary<any>){
+    constructor(jsonData: IDictionary<any>) {
         super();
         this.WrkOutMachineId = jsonData.WrkOutMachineId ?? null;
         this.MachineName = jsonData.MachineName;

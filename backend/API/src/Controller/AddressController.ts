@@ -9,7 +9,7 @@ export const getAllAddresses = async (req: expressRequest, res: expressResponse)
     response.buildResponse(req, res);
 }
 
-export const getAddressById = async (req: expressRequest, res: expressResponse,id: number) => {
+export const getAddressById = async (req: expressRequest, res: expressResponse, id: number) => {
     const response: Response = await FindAdressById(id);
     response.buildResponse(req, res);
 }
@@ -17,8 +17,7 @@ export const getAddressById = async (req: expressRequest, res: expressResponse,i
 export const postAddress = async (req: expressRequest, res: expressResponse) => {
     const address = new Address(req.body);
     let response: Response;
-    console.log();
-    if (!address.validateAttrs()){
+    if (!address.validateAttrs()) {
         response = new BadRequestResponse("Unable to create Address model");
         response.buildResponse(req, res);
         return;

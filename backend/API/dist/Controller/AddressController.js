@@ -67,7 +67,6 @@ export var postAddress = function (req, res) { return __awaiter(void 0, void 0, 
         switch (_a.label) {
             case 0:
                 address = new Address(req.body);
-                console.log();
                 if (!address.validateAttrs()) {
                     response = new BadRequestResponse("Unable to create Address model");
                     response.buildResponse(req, res);
