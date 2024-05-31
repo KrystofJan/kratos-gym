@@ -36,8 +36,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { FindAllReservations, FindReservationById, CreateReservation } from '../Managers/ReservationManager.js';
 import { FindUserById } from '../Managers/UserManager.js';
-import { User } from '../Models/User.js';
-import { Reservation } from '../Models/Reservation.js';
+import { User } from '../Models/ResponseModels/User.js';
+import { Reservation } from '../Models/ResponseModels/Reservation.js';
 import { ReservationPostModel } from '../Models/PostModels/ReservationPostModel.js';
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 import { ReservationGetModel } from '../Models/GetModels/ReservationGetModel.js';

@@ -1,7 +1,10 @@
-import { IDictionary } from "../utils/Utilities.js";
-import { Model } from './Model.js'
+import { IDictionary } from "../../utils/Utilities.js";
+import { Model } from '../Model.js';
+import { PrimaryIdentifier } from '../Decorators/IdentifierDecorator.js';
 
 export class Address extends Model {
+
+    @PrimaryIdentifier()
     public AddressId: number | null;
     public Street: string;
     public City: string;
@@ -12,7 +15,7 @@ export class Address extends Model {
 
     constructor(jsonData: IDictionary<any>) {
         super();
-    
+
         this.AddressId = jsonData.AddressId ?? null;
         this.Street = jsonData.Street;
         this.City = jsonData.City;

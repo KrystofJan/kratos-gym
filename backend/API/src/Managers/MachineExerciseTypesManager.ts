@@ -2,7 +2,7 @@ import { IDictionary } from "../utils/Utilities.js";
 import { MachineExerciseTypePostModel } from "../Models/PostModels/MachineExerciseTypePostModel.js";
 import { FindExerciseTypeById } from "./ExerciseTypeManager.js";
 import { FindWrkOutMachineById } from "./WrkOutMachineManager.js";
-import { MachineExerciseTypes } from '../Models/MachineExerciseTypes.js';
+import { MachineExerciseTypes } from '../Models/ResponseModels/MachineExerciseTypes.js';
 import { MachineExerciseTypeGetModel } from '../Models/GetModels/MachineExerciseTypesGetModel.js'
 import { MachineExerciseTypesDAO } from '../DataLayer/AccessModels/MachineExerciseTypesDAO.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';

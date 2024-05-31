@@ -1,12 +1,13 @@
-import { IDictionary } from '../utils/Utilities.js';
+import { IDictionary } from '../../utils/Utilities.js';
 import { Address } from './Address.js';
-import { Model } from './Model.js';
+import { Model } from '../Model.js';
+import { PrimaryIdentifier, ForeignIdentifier } from '../Decorators/IdentifierDecorator.js';
 
 export enum UserRole {
     CUSTOMER = 'c',
     TRAINER = 'T',
-    EMPLOYEE = 'E',   
-    USER = 'U',   
+    EMPLOYEE = 'E',
+    USER = 'U',
     NOTKNOWN = '/',
 }
 
@@ -22,11 +23,13 @@ export enum UserAttrs {
     LastOnline = 'LastOnline',
     Password = 'Password',
     Address = 'Address',
-    Credits = 'Credits',   
+    Credits = 'Credits',
     Login = 'Login',
 }
 
-export class User extends Model{
+export class User extends Model {
+
+    @PrimaryIdentifier()
     public UserId: number;
     public FirstName: string;
     public LastName: string;
@@ -37,17 +40,18 @@ export class User extends Model{
     public CreateDate: Date;
     public LastOnline: Date;
     public Password: string;
+    @ForeignIdentifier("AddressId")
     public Address: Address | null;
     public Credits: number;
     public Login: string;
 
-    constructor(jsonData: IDictionary<any>){
+    constructor(jsonData: IDictionary<any>) {
         super();
         this.UserId = jsonData.UserId;
         this.FirstName = jsonData.FirstName;
         this.LastName = jsonData.LastName;
         this.Role = UserRole.CUSTOMER;
-        switch(jsonData.Role) {
+        switch (jsonData.Role) {
             case UserRole.CUSTOMER: {
                 this.Role = UserRole.CUSTOMER;
                 break;
@@ -78,5 +82,5 @@ export class User extends Model{
         this.Address = jsonData.Address ?? null;
         this.Credits = jsonData.credits ?? 0;
         this.Login = jsonData.login;
-    }    
+    }
 }

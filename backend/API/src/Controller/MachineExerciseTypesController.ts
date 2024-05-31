@@ -1,9 +1,9 @@
 import { FindMachineExerciteTypeByExerciseTypeId, FindMachineExerciteTypeByWrkOutMachineId, CreateMachineExerciseType } from '../Managers/MachineExerciseTypesManager.js';
+
 import { Request as expressRequest, Response as expressResponse } from 'express';
 import { Response } from '../RequestUtility/CustomResponces/Response.js'
 import { MachineExerciseTypePostModel } from '../Models/PostModels/MachineExerciseTypePostModel.js'
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
-import { MachineExerciseTypes } from '../Models/MachineExerciseTypes.js';
 
 export const getMachineExerciseTypesByWrkOutMachineId = async (req: expressRequest, res: expressResponse, id: number) => {
     const response: Response = await FindMachineExerciteTypeByWrkOutMachineId(id);

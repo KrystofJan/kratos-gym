@@ -2,8 +2,8 @@ import { FindAllReservations, FindReservationById, CreateReservation } from '../
 import { FindUserById, FindAllUsers } from '../Managers/UserManager.js';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 import { Response } from '../RequestUtility/CustomResponces/Response.js'
-import { User } from '../Models/User.js'
-import { Reservation } from '../Models/Reservation.js';
+import { User } from '../Models/ResponseModels/User.js'
+import { Reservation } from '../Models/ResponseModels/Reservation.js';
 import { ReservationPostModel } from '../Models/PostModels/ReservationPostModel.js';
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 import { ReservationGetModel } from '../Models/GetModels/ReservationGetModel.js';

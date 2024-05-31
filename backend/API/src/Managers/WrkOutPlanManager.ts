@@ -1,5 +1,5 @@
 import { ExerciseTypeDAO } from './../DataLayer/AccessModels/ExerciseTypeDAO.js';
-import { WrkOutPlan } from '../Models/WrkOutPlan.js'
+import { WrkOutPlan } from '../Models/ResponseModels/WrkOutPlan.js'
 import { WrkOutPlanPostModel } from '../Models/PostModels/WrkOutPlanPostModel.js';
 import { Response } from '../RequestUtility/CustomResponces/Response.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
@@ -11,15 +11,15 @@ import { UserDAO } from '../DataLayer/AccessModels/UserDAO.js';
 import { WrkOutPlanMachinesDAO } from '../DataLayer/AccessModels/WrkOutPlanMachineDAO.js';
 import { WrkoutPlanGetModel } from '../Models/GetModels/WrkOutPlanGetModel.js';
 import { WrkoutPlanMachineGetModel } from '../Models/GetModels/WrkOutPlanMachinesGetModel.js';
-import { User } from '../Models/User.js';
-import { WrkOutMachine } from '../Models/WrkOutMachine.js';
-import { WrkOutPlanMachine } from '../Models/WrkOutPlanMachine.js';
+import { User } from '../Models/ResponseModels/User.js';
+import { WrkOutMachine } from '../Models/ResponseModels/WrkOutMachine.js';
+import { WrkOutPlanMachine } from '../Models/ResponseModels/WrkOutPlanMachine.js';
 import { WrkOutPlanMachinePostModel } from '../Models/PostModels/WrkOutPlanMachinePostModel.js';
 import { WrkOutPlanTypePostModel } from '../Models/PostModels/WrkOutPlanTypePostModel.js';
 import { WrkOutPlanTypeDAO } from '../DataLayer/AccessModels/WrkOutPlanTypeDAO.js';
-import { WrkOutPlanType } from '../Models/WrkOutPlanType.js';
+import { WrkOutPlanType } from '../Models/ResponseModels/WrkOutPlanType.js';
 import { WrkOutPlanTypeGetModel } from '../Models/GetModels/WrkOutPlanTypeGetModel.js';
-import { ExerciseType } from '../Models/ExerciseType.js';
+import { ExerciseType } from '../Models/ResponseModels/ExerciseType.js';
 import { WrkOutMachineDAO } from '../DataLayer/AccessModels/WrkOutMachineDAO.js';
 
 export const FindAllWrkOutPlans = async (): Promise<Response> => {

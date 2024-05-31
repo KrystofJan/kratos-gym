@@ -1,4 +1,4 @@
-import { WrkOutMachine } from '../Models/WrkOutMachine.js'
+import { WrkOutMachine } from '../Models/ResponseModels/WrkOutMachine.js'
 import { Response } from '../RequestUtility/CustomResponces/Response.js';
 import { IDictionary } from '../utils/Utilities.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';

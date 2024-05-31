@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { ExerciseTypeDAO } from '../DataLayer/AccessModels/ExerciseTypeDAO.js';
-import { ExerciseType } from '../Models/ExerciseType.js';
+import { ExerciseType } from '../Models/ResponseModels/ExerciseType.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';

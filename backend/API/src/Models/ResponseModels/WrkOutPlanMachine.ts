@@ -1,11 +1,15 @@
-import { IDictionary } from "../utils/Utilities.js";
-import { Model } from './Model.js';
+import { IDictionary } from "../../utils/Utilities.js";
+import { ForeignIdentifier, PrimaryIdentifier } from "../Decorators/IdentifierDecorator.js";
+import { Model } from '../Model.js';
 import { User } from './User.js';
 import { WrkOutMachine } from "./WrkOutMachine.js";
 import { WrkOutPlan } from './WrkOutPlan.js';
 
 export class WrkOutPlanMachine extends Model {
+
+    @PrimaryIdentifier()
     public WrkOutPlanId: number;
+    @ForeignIdentifier("WrkOutMachineId")
     public WrkOutMachine: WrkOutMachine | null;
     public Sets: number;
     public Reps: number;
@@ -14,7 +18,7 @@ export class WrkOutPlanMachine extends Model {
     public CanDisturb: boolean;
 
 
-    constructor(jsonData: IDictionary<any>){
+    constructor(jsonData: IDictionary<any>) {
         super();
         this.WrkOutPlanId = jsonData.WrkOutPlanId;
         this.Sets = jsonData.sets;

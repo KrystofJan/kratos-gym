@@ -34,7 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { WrkOutMachine } from '../Models/WrkOutMachine.js';
+import { WrkOutMachine } from '../Models/ResponseModels/WrkOutMachine.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';

@@ -1,7 +1,7 @@
 import { IDictionary } from "../../utils/Utilities.js";
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
-import { Address } from '../../Models/Address.js'
+import { Address } from '../../Models/ResponseModels/Address.js'
 import { DatabaseFail, DatabaseResponse } from "../Database/DatabaseResponse.js";
 
 export class AddressDAO extends RelationalModel {

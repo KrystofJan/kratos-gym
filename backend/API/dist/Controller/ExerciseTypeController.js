@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { FindAllExerciseTypes, FindExerciseTypeById, CreateExerciseType } from '../Managers/ExerciseTypeManager.js';
-import { ExerciseType } from '../Models/ExerciseType.js';
+import { ExerciseType } from '../Models/ResponseModels/ExerciseType.js';
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 // TODO: Add get by Plan
 export var getAllExerciseTypes = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {

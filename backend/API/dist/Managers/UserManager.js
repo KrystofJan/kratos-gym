@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { UserDAO } from '../DataLayer/AccessModels/UserDAO.js';
-import { User, UserAttrs } from '../Models/User.js';
+import { User, UserAttrs } from '../Models/ResponseModels/User.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';

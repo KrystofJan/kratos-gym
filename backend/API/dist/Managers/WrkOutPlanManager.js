@@ -35,19 +35,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { ExerciseTypeDAO } from './../DataLayer/AccessModels/ExerciseTypeDAO.js';
-import { WrkOutPlan } from '../Models/WrkOutPlan.js';
+import { WrkOutPlan } from '../Models/ResponseModels/WrkOutPlan.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse, CreatedMultipleResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
 import { WrkOutPlanDAO } from '../DataLayer/AccessModels/WrkOutPlanDAO.js';
 import { UserDAO } from '../DataLayer/AccessModels/UserDAO.js';
 import { WrkOutPlanMachinesDAO } from '../DataLayer/AccessModels/WrkOutPlanMachineDAO.js';
-import { User } from '../Models/User.js';
-import { WrkOutMachine } from '../Models/WrkOutMachine.js';
-import { WrkOutPlanMachine } from '../Models/WrkOutPlanMachine.js';
+import { User } from '../Models/ResponseModels/User.js';
+import { WrkOutMachine } from '../Models/ResponseModels/WrkOutMachine.js';
+import { WrkOutPlanMachine } from '../Models/ResponseModels/WrkOutPlanMachine.js';
 import { WrkOutPlanTypeDAO } from '../DataLayer/AccessModels/WrkOutPlanTypeDAO.js';
-import { WrkOutPlanType } from '../Models/WrkOutPlanType.js';
-import { ExerciseType } from '../Models/ExerciseType.js';
+import { WrkOutPlanType } from '../Models/ResponseModels/WrkOutPlanType.js';
+import { ExerciseType } from '../Models/ResponseModels/ExerciseType.js';
 import { WrkOutMachineDAO } from '../DataLayer/AccessModels/WrkOutMachineDAO.js';
 export var FindAllWrkOutPlans = function () { return __awaiter(void 0, void 0, void 0, function () {
     var wrkOutPlanDao, body, results, _i, body_1, b, userDao, userData, user, a, err_1;

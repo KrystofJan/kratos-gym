@@ -2,7 +2,7 @@ import { FindWrkOutMachineById, FindAllWrkOutMachines, RecommendMachine, FindOcc
 import { Request as expressRequest, Response as expressResponse } from 'express';
 import { Response } from '../RequestUtility/CustomResponces/Response.js'
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
-import { WrkOutMachine } from '../Models/WrkOutMachine.js';
+import { WrkOutMachine } from '../Models/ResponseModels/WrkOutMachine.js';
 import { WrkOutMachineParams } from '../RequestUtility/RequestParams/WrkOutMachineParams.js';
 
 export const getWrkOutMachineById = async (req: expressRequest, res: expressResponse, id: number) => {

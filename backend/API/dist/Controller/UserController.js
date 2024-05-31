@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { LoginAuth, CreateUser, FindUserById } from './../Managers/UserManager.js';
-import { UserAuth } from '../Models/UserAuth.js';
+import { UserAuth } from '../Models/ResponseModels/UserAuth.js';
 import { UserRegPostModel } from '../Models/PostModels/UserRegPostModel.js';
 export var LogIn = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userAuth, result;

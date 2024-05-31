@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { FindExerciseTypeById } from "./ExerciseTypeManager.js";
 import { FindWrkOutMachineById } from "./WrkOutMachineManager.js";
-import { MachineExerciseTypes } from '../Models/MachineExerciseTypes.js';
+import { MachineExerciseTypes } from '../Models/ResponseModels/MachineExerciseTypes.js';
 import { MachineExerciseTypesDAO } from '../DataLayer/AccessModels/MachineExerciseTypesDAO.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';

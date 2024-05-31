@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { FindWrkOutMachineById, FindAllWrkOutMachines, RecommendMachine, FindOccupiedMachinesOnSpecificTime, CreateWrkOutMachine } from '../Managers/WrkOutMachineManager.js';
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
-import { WrkOutMachine } from '../Models/WrkOutMachine.js';
+import { WrkOutMachine } from '../Models/ResponseModels/WrkOutMachine.js';
 export var getWrkOutMachineById = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
     var response;
     return __generator(this, function (_a) {
@@ -92,7 +92,6 @@ export var postWrkOutMachine = function (req, res) { return __awaiter(void 0, vo
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                console.log("asdasd");
                 reservation = new WrkOutMachine(req.body);
                 console.log(reservation);
                 if (!reservation.validateAttrs()) {

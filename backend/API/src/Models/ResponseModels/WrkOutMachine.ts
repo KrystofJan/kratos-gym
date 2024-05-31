@@ -1,8 +1,11 @@
-import { IDictionary } from "../utils/Utilities.js";
-import { Model } from './Model.js';
+import { IDictionary } from "../../utils/Utilities.js";
+import { PrimaryIdentifier } from "../Decorators/IdentifierDecorator.js";
+import { Model } from '../Model.js';
 
 export class WrkOutMachine extends Model {
-    public WrkOutMachineId: number | null;
+
+    @PrimaryIdentifier()
+    public WrkOutMachineId: number;
     public MachineName: string;
     public MaxWeight: number;
     public MinWeight: number;

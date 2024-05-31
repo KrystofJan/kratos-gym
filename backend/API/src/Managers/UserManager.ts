@@ -1,8 +1,8 @@
 import { ErrorResponseBody } from './../RequestUtility/CustomResponces/ResponseBody.js';
 import { UserDAO } from '../DataLayer/AccessModels/UserDAO.js';
-import { User, UserAttrs } from '../Models/User.js'
+import { User, UserAttrs } from '../Models/ResponseModels/User.js'
 import { UserRegPostModel } from '../Models/PostModels/UserRegPostModel.js';
-import { UserAuth } from '../Models/UserAuth.js';
+import { UserAuth } from '../Models/ResponseModels/UserAuth.js';
 import { Response } from '../RequestUtility/CustomResponces/Response.js';
 import { IDictionary } from '../utils/Utilities.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';

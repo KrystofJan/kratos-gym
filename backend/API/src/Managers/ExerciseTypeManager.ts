@@ -1,5 +1,5 @@
 import { ExerciseTypeDAO } from '../DataLayer/AccessModels/ExerciseTypeDAO.js';
-import { ExerciseType } from '../Models/ExerciseType.js'
+import { ExerciseType } from '../Models/ResponseModels/ExerciseType.js'
 import { Response } from '../RequestUtility/CustomResponces/Response.js';
 import { IDictionary } from '../utils/Utilities.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';

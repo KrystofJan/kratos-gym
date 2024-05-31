@@ -1,7 +1,7 @@
 import { FindAllExerciseTypes, FindExerciseTypeById, CreateExerciseType } from '../Managers/ExerciseTypeManager.js';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 import { Response } from '../RequestUtility/CustomResponces/Response.js'
-import { ExerciseType } from '../Models/ExerciseType.js'
+import { ExerciseType } from '../Models/ResponseModels/ExerciseType.js'
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
 
 // TODO: Add get by Plan
