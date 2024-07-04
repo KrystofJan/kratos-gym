@@ -24,6 +24,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Model } from '../Model.js';
 import { PrimaryIdentifier } from '../Decorators/IdentifierDecorator.js';
+import { Column, Table } from "../Decorators/ReflectionDecorators.js";
 var Address = /** @class */ (function (_super) {
     __extends(Address, _super);
     function Address(jsonData) {
@@ -39,9 +40,38 @@ var Address = /** @class */ (function (_super) {
         return _this;
     }
     __decorate([
+        Column({ type: "number", columnName: "AddressId" }),
         PrimaryIdentifier(),
         __metadata("design:type", Object)
     ], Address.prototype, "AddressId", void 0);
+    __decorate([
+        Column({ type: "string", columnName: "Street" }),
+        __metadata("design:type", String)
+    ], Address.prototype, "Street", void 0);
+    __decorate([
+        Column({ type: "string", columnName: "City" }),
+        __metadata("design:type", String)
+    ], Address.prototype, "City", void 0);
+    __decorate([
+        Column({ type: "string", columnName: "PostalCode" }),
+        __metadata("design:type", String)
+    ], Address.prototype, "PostalCode", void 0);
+    __decorate([
+        Column({ type: "string", columnName: "Country" }),
+        __metadata("design:type", String)
+    ], Address.prototype, "Country", void 0);
+    __decorate([
+        Column({ type: "string", columnName: "BuildingNumber" }),
+        __metadata("design:type", String)
+    ], Address.prototype, "BuildingNumber", void 0);
+    __decorate([
+        Column({ type: "string", columnName: "ApartmentNumber" }),
+        __metadata("design:type", String)
+    ], Address.prototype, "ApartmentNumber", void 0);
+    Address = __decorate([
+        Table("Address"),
+        __metadata("design:paramtypes", [Object])
+    ], Address);
     return Address;
 }(Model));
 export { Address };
