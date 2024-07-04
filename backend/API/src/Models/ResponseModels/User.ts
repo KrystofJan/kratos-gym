@@ -1,3 +1,4 @@
+import { Column, Table } from "../Decorators/ReflectionDecorators.js"
 import { IDictionary } from '../../utils/Utilities.js';
 import { Address } from './Address.js';
 import { Model } from '../Model.js';
@@ -27,22 +28,48 @@ export enum UserAttrs {
     Login = 'Login',
 }
 
+@Table("")
 export class User extends Model {
 
     @PrimaryIdentifier()
+    @Column({ type: "number", columnName: "UserId" })
     public UserId: number;
+
+    @Column({ type: "string", columnName: "FirstName" })
     public FirstName: string;
+
+    @Column({ type: "string", columnName: "LastName" })
     public LastName: string;
+
+    @Column({ type: "UserRole", columnName: "Role" })
     public Role: UserRole;
+
+    @Column({ type: "string", columnName: "Email" })
     public Email: string;
+
+    @Column({ type: "string", columnName: "PhoneNumber" })
     public PhoneNumber: string;
-    public IsActive: Boolean;
+
+    @Column({ type: "boolean", columnName: "IsActive" })
+    public IsActive: boolean;
+
+    @Column({ type: "date", columnName: "CreateDate" })
     public CreateDate: Date;
+
+    @Column({ type: "date", columnName: "LastOnline" })
     public LastOnline: Date;
+
+    @Column({ type: "string", columnName: "Password" })
     public Password: string;
+
     @ForeignIdentifier("AddressId")
+    @Column({ type: "foreignObject", columnName: "Address" })
     public Address: Address | null;
+
+    @Column({ type: "number", columnName: "Credits" })
     public Credits: number;
+
+    @Column({ type: "string", columnName: "Login" })
     public Login: string;
 
     constructor(jsonData: IDictionary<any>) {
