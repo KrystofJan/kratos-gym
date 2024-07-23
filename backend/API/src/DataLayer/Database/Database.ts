@@ -1,15 +1,15 @@
 import postgres from 'postgres';
 import dotenv from "dotenv";
-import { Validators } from './DatabaseValidators.js'
-import { ApiLogger } from '../../Logger/ApiLogger.js';
+import * as dbKeys from '../keys/table-keys.json' with {type: "json"};
 import { IDictionary } from '../../utils/Utilities.js';
 import { DatabaseResponse, DatabaseSuccess, DatabaseFail } from './DatabaseResponse.js';
 import { Model } from '../../Models/Model.js';
-import { Address } from '../../Models/Address.js';
+import Pino from 'pino'
 
 dotenv.config();
 
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+const logger = Pino.pino()
 
 export class Database {
 
@@ -24,45 +24,43 @@ export class Database {
             options: `project=${ENDPOINT_ID}`,
         },
     });
+    tableKeys: IDictionary<string>;
 
     constructor() {
+        this.tableKeys = JSON.parse(JSON.stringify(dbKeys.default));
     }
 
-    dbConnect() {
-        console.log("asdasd")
-    }
-
-    dbDisconnect() {
-        console.log("asdasd")
-    }
-    async dbSelectAll(tableName: string) {
+    async SelectAll(tableName: string) {
         try {
-            const [result]: Model[] = await this.conn<Model[]>`Select * from ${this.conn(tableName)}`;
-            console.log(result);
+            const result: Model[] = await this.conn<Model[]>`Select * from ${this.conn(tableName)}`;
+            logger.info("Select all was successful")
             return new DatabaseSuccess(result);
         } catch (error) {
             console.error("Error executing query:", error);
+            logger.error(error)
             return new DatabaseFail(error as Error)
         }
     }
 
-    // dbSelectAll(tableName: string): Promise<DatabaseResponse> {
-    //     return new Promise((resolve, reject) => {
-    //         const command = `SELECT * FROM ${tableName}`;
-    //
-    //         this.conn
-    //         this.db.query(command, (err, results) => {
-    //             if (err) {
-    //                 console.error('Error querying the database:', err);
-    //                 ApiLogger.logApi(err.toString());
-    //                 reject(new DatabaseFail(err));
-    //             }
-    //
-    //             ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
-    //             resolve(new DatabaseSuccess(results));
-    //         });
-    //     })
-    // }
+    async SelectSpecific(id: number, tableName: string, foreignTable: string | null): Promise<DatabaseResponse> {
+
+        let pkey: string = this.tableKeys[tableName];
+        if (foreignTable != null) {
+            pkey = this.tableKeys[foreignTable];
+        }
+        try {
+            console.log(this.tableKeys)
+            const [result]: Model[] = await this.conn<Model[]>`Select * from ${this.conn(tableName)} where ${this.conn(pkey)} = ${id}`;
+            logger.info("Select specific was successful")
+            console.log(pkey)
+            return new DatabaseSuccess(result);
+        } catch (error) {
+            console.error("Error executing query:", error);
+            logger.error(error)
+            return new DatabaseFail(error as Error)
+        }
+
+    }
 
     // TODO: Handle duplicates
     dbPost(body: IDictionary<any>, tableName: string): Promise<DatabaseResponse> {
@@ -119,74 +117,41 @@ export class Database {
     }
 
     // TODO: change the rest to reflect the rest
-    dbSelectSpecific(id: number, tableName: string, foreignTable: string | null) {
-        return new Promise((resolve, reject) => {
-
-            if (tableName === "hihi") {
-                reject(new DatabaseFail(new Error("asdasdasd")))
-            }
-            resolve(new DatabaseSuccess({ "All": "good" }))
-            // let pkey: string = this.tableKeys[tableName];
-            // if (foreignTable != null) {
-            //     pkey = this.tableKeys[foreignTable];
-            // }
-            //
-            // if (!Validators.validateNumericId(id)) {
-            //     console.error('Cannot use this ID', id);
-            //     ApiLogger.logApi("Cannot use this" + pkey + " ! --" + id);
-            //     reject({ error: 'Cannot pass in id that\'s not a number! Id: ' + id });
-            // }
-            //
-            // const command = `SELECT * FROM ${tableName} WHERE ${pkey} = ${id}`
-            //
-            // this.db.query(command, (err, results) => {
-            //     if (err) {
-            //         console.error('Error querying the database:', err);
-            //         ApiLogger.logApi(err.toString());
-            //         reject(new DatabaseFail(err));
-            //     }
-            //
-            //     ApiLogger.logApi("Get request on the " + tableName + " endpoint was Successfull!");
-            //     resolve(new DatabaseSuccess(results));
-            // });
-            //
-        })
-    }
 
     // TODO: CanDisturb if its not free,!!!
-    dbSelectOccupiedMachineAmount(id: number, time: string, date: string) {
+    dbSelectOccupiedMachineAmount(id: number, time: string, date: string): Promise<DatabaseResponse> {
         return new Promise((resolve, reject) => {
             if (id === 3) {
                 reject(new DatabaseFail(new Error("asdasdasd")))
             }
             resolve(new DatabaseSuccess({ "All": "good" }))
-            // const pkey = dbKeys.default["WrkOutPlanMachines--plan"];
-            //
-            // if (!Validators.validateNumericId(id)) {
-            //     console.error('Cannot use this ID', id);
-            //     ApiLogger.logApi("Cannot use this" + pkey + " ! --" + id);
-            //     reject({ error: 'Cannot pass in id that\'s not a number! Id: ' + id });
-            // }
-            // this.db.query(
-            //     "select count(*) as count " +
-            //     "from WrkOutPlanMachines inner join Reservation on Reservation.WrkOutPlanId = WrkOutPlanMachines.WrkOutPlanId " +
-            //     "where ('" + time + "' between WrkOutStartTime and WrkOutEndTime) and Date(ReservationTime) = '" + date + "' " +
-            //     "and WrkOutPlanMachines.WrkOutMachineId = " + id + " and WrkOutPlanMachines.canDisturb = 1"
-            //     , (err, results) => {
-            //         if (err) {
-            //             console.error('Error querying the database:', err);
-            //             ApiLogger.logApi(err.toString());
-            //             reject({ error: 'Internal Server Error' });
-            //         }
-            //
-            //         ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
-            //         resolve(new DatabaseSuccess(results));
-            //     });
-        });
+        })
+        // const pkey = dbKeys.default["WrkOutPlanMachines--plan"];
+        //
+        // if (!Validators.validateNumericId(id)) {
+        //     console.error('Cannot use this ID', id);
+        //     ApiLogger.logApi("Cannot use this" + pkey + " ! --" + id);
+        //     reject({ error: 'Cannot pass in id that\'s not a number! Id: ' + id });
+        // }
+        // this.db.query(
+        //     "select count(*) as count " +
+        //     "from WrkOutPlanMachines inner join Reservation on Reservation.WrkOutPlanId = WrkOutPlanMachines.WrkOutPlanId " +
+        //     "where ('" + time + "' between WrkOutStartTime and WrkOutEndTime) and Date(ReservationTime) = '" + date + "' " +
+        //     "and WrkOutPlanMachines.WrkOutMachineId = " + id + " and WrkOutPlanMachines.canDisturb = 1"
+        //     , (err, results) => {
+        //         if (err) {
+        //             console.error('Error querying the database:', err);
+        //             ApiLogger.logApi(err.toString());
+        //             reject({ error: 'Internal Server Error' });
+        //         }
+        //
+        //         ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
+        //         resolve(new DatabaseSuccess(results));
+        //     });
     }
 
 
-    dbRecommendMachine(id: number) {
+    dbRecommendMachine(id: number): Promise<DatabaseResponse> {
         return new Promise((resolve, reject) => {
             if (id === 3) {
                 reject(new DatabaseFail(new Error("asdasdasd")))

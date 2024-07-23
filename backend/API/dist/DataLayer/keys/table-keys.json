@@ -1,6 +1,6 @@
 {
     "test": "id",
-    "Address": "AddressId",
+    "address": "addressid",
     "Reservation": "ReservetionId",
     "ExerciseType": "ExerciseTypeId",
     "User": "UserId",

@@ -91,12 +91,11 @@ var WrkOutPlanMachinesDAO = /** @class */ (function (_super) {
     WrkOutPlanMachinesDAO.prototype.SelectOccupiedMachineAmount = function (id, time, date) {
         return __awaiter(this, void 0, void 0, function () {
             var result, successResult, err_1;
-            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbSelectOccupiedMachineAmount(id, time, date); })];
+                        return [4 /*yield*/, this.dbHandler.dbSelectOccupiedMachineAmount(id, time, date)];
                     case 1:
                         result = _a.sent();
                         if (result instanceof DatabaseSuccess) {

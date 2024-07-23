@@ -51,6 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
+import { DatabaseFail } from "../Database/DatabaseResponse.js";
 var UserDAO = /** @class */ (function (_super) {
     __extends(UserDAO, _super);
     function UserDAO() {
@@ -117,6 +118,7 @@ var UserDAO = /** @class */ (function (_super) {
                 }
                 catch (err) {
                     console.error(err);
+                    return [2 /*return*/, new DatabaseFail(err)];
                 }
                 return [2 /*return*/];
             });

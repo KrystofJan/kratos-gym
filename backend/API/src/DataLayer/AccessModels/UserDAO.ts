@@ -2,52 +2,55 @@ import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
 import { User } from '../../Models/User.js'
 import { UserRegPostModel } from '../../Models/PostModels/UserRegPostModel.js';
+import { Database } from "../Database/Database.js";
+import { DatabaseFail } from "../Database/DatabaseResponse.js";
 
-export class UserDAO extends RelationalModel{
+export class UserDAO extends RelationalModel {
 
     constructor() {
         super(TableTypes.User);
     }
 
-    async SelectAllUsers(){
-        try{
+    async SelectAllUsers() {
+        try {
             const result = this.SelectAll();
             return result;
         }
-        catch(err){        
+        catch (err) {
             console.error(err);
         }
     }
 
-    async SelectUserById(id: number){
-        try{
+    async SelectUserById(id: number) {
+        try {
             const result = await this.SelectById(id);
             console.log(result);
             return result;
         }
-        catch(err){        
+        catch (err) {
             console.error(err);
         }
     }
 
 
-    async SelectUserByAttribute(attrName: string, attrValue: any){
-        try{
+    async SelectUserByAttribute(attrName: string, attrValue: any) {
+        try {
             const result = this.SelectByAttr(attrName, attrValue);
             return result;
         }
-        catch(error){
+        catch (error) {
             console.log("Nastala chyba: " + error);
         }
     }
 
-    async InsertUser (body: UserRegPostModel){
-        try{
+    async InsertUser(body: UserRegPostModel) {
+        try {
             const result = this.Insert(body);
             return result;
         }
-        catch(err){        
+        catch (err) {
             console.error(err);
+            return new DatabaseFail(err as Error)
         }
     }
 }

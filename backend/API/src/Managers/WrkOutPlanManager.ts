@@ -23,15 +23,15 @@ import { WrkOutPlanTypeGetModel } from '../Models/GetModels/WrkOutPlanTypeGetMod
 import { ExerciseType } from '../Models/ExerciseType.js';
 
 export const FindAllWrkOutPlans = async (): Promise<Response> => {
-    try{
+    try {
         const wrkOutPlanDao = new WrkOutPlanDAO();
         const body: Array<WrkoutPlanGetModel> = await wrkOutPlanDao.SelectAllWrkOutPlans();
-        
+
 
         // validate...
         const results: Array<WrkOutPlan> = [];
 
-        for (const b of body){
+        for (const b of body) {
             const userDao = new UserDAO();
             const userData = await userDao.SelectUserById(b.UserId);
             const user: User = new User(userData);
@@ -42,7 +42,7 @@ export const FindAllWrkOutPlans = async (): Promise<Response> => {
 
         return new OkResponse("We good", results);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
@@ -51,17 +51,17 @@ export const FindWrkOutPlanById = async (id: number): Promise<Response> => {
     try {
         const wrkOutPlanDao = new WrkOutPlanDAO();
         const body: WrkoutPlanGetModel = await wrkOutPlanDao.SelectWrkOutPlanById(id);
-        const userDao = new UserDAO(); 
+        const userDao = new UserDAO();
 
         // validate...
         const userData = await userDao.SelectUserById(body.UserId);
         const user: User = new User(userData);
-        
+
         const result = new WrkOutPlan(body);
         result.User = user;
         return new OkResponse("We good", result);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
@@ -69,27 +69,27 @@ export const FindWrkOutPlanById = async (id: number): Promise<Response> => {
 export const FindWrkOutMachinesContainedInId = async (id: number) => {
     try {
         const wrkOutPlanMachineDao = new WrkOutPlanMachinesDAO();
-        
+
         const body: Array<WrkoutPlanMachineGetModel> = await wrkOutPlanMachineDao.SelectWrkOutPlanBy_WrkOutPlanId(id);
-        
+
 
         const result: Array<WrkOutPlanMachine> = [];
 
-        for(const machineBody of body) {
+        for (const machineBody of body) {
             const wrkOutMachinesDAO = new WrkOutMachineDAO();
             const machineData = await wrkOutMachinesDAO.SelectWrkOutMachineById(machineBody.WrkOutMachineId);
             const wrkOutMachine = new WrkOutMachine(machineData);
             const wrkOutPlanMachine = new WrkOutPlanMachine(machineBody);
             wrkOutPlanMachine.WrkOutMachine = wrkOutMachine;
 
-            if (wrkOutPlanMachine.validateAttrs()){
+            if (wrkOutPlanMachine.validateAttrs()) {
                 result.push(wrkOutPlanMachine);
             }
         }
 
         return new OkResponse("We good", result);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
@@ -98,27 +98,27 @@ export const FindWrkOutMachinesContainedInId = async (id: number) => {
 export const FindExerciseTypesContainedInId = async (id: number) => {
     try {
         const wrkOutPlanTypeDAO = new WrkOutPlanTypeDAO();
-        
+
         const body: Array<WrkOutPlanTypeGetModel> = await wrkOutPlanTypeDAO.SelectWrkOutPlanTypeBy_WrkOutPlanId(id);;
-        
+
 
         const result: Array<WrkOutPlanType> = [];
 
-        for(const typeBody of body) {
+        for (const typeBody of body) {
             const exerciseTypeDAO = new ExerciseTypeDAO();
             const typeData = await exerciseTypeDAO.SelectExerciseTypeById(typeBody.ExerciseTypeId);
             const exerciseType = new ExerciseType(typeData);
             const wrkOutPlanType = new WrkOutPlanType(typeBody);
             wrkOutPlanType.ExerciseType = exerciseType;
 
-            if (wrkOutPlanType.validateAttrs()){
+            if (wrkOutPlanType.validateAttrs()) {
                 result.push(wrkOutPlanType);
             }
         }
 
         return new OkResponse("We good", result);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
@@ -127,13 +127,13 @@ export const FindExerciseTypesContainedInId = async (id: number) => {
 export const AddMachineToPlan = async (body: WrkOutPlanMachinePostModel) => {
     try {
         const wrkOutPlanMachineDao = new WrkOutPlanMachinesDAO();
-        
+
         const result = await wrkOutPlanMachineDao.InsertWrkOutPlanMachine(body);
 
         const successResult = result as DatabaseSuccess;
-        return new CreatedResponse("We good", successResult.Body );
+        return new CreatedResponse("We good", successResult.Body);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
@@ -143,33 +143,32 @@ export const AddMultipleMachinesToPlan = async (body: Array<WrkOutPlanMachinePos
 
         const createdIds: Array<number> = [];
 
-        for(const machine of body){
+        for (const machine of body) {
             const wrkOutPlanMachineDao = new WrkOutPlanMachinesDAO();
             const result = await wrkOutPlanMachineDao.InsertWrkOutPlanMachine(machine);
             const successResult = result as DatabaseSuccess;
             createdIds.push(successResult.Body);
-        }            
-        
-        return new CreatedMultipleResponse("We good", createdIds );
+        }
+
+        return new CreatedMultipleResponse("We good", createdIds);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
 
-export const AddTypeToPlan = async(body: WrkOutPlanTypePostModel) => {
+export const AddTypeToPlan = async (body: WrkOutPlanTypePostModel) => {
     try {
         const wrkOutPlanTypeDAO = new WrkOutPlanTypeDAO();
-        
+
         const result: DatabaseResponse = await wrkOutPlanTypeDAO.InsertWrkOutPlanType(body);
-        
 
         const successResult = result as DatabaseSuccess;
         return new CreatedResponse(
-            "Successfully created an ExerciseType", 
+            "Successfully created an ExerciseType",
             successResult.Body);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
@@ -185,10 +184,10 @@ export const CreateWrkOutPlan = async (body: WrkOutPlanPostModel): Promise<Respo
 
         const successResult = result as DatabaseSuccess;
         return new CreatedResponse(
-            "Successfully created an ExerciseType", 
+            "Successfully created an ExerciseType",
             successResult.Body);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse('Sadge', 404);
     }
 }

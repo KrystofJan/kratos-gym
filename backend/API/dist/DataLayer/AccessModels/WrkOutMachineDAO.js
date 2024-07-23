@@ -51,6 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
+import { DatabaseFail } from "../Database/DatabaseResponse.js";
 var WrkOutMachineDAO = /** @class */ (function (_super) {
     __extends(WrkOutMachineDAO, _super);
     function WrkOutMachineDAO() {
@@ -96,6 +97,7 @@ var WrkOutMachineDAO = /** @class */ (function (_super) {
                 }
                 catch (err) {
                     console.error(err);
+                    return [2 /*return*/, new DatabaseFail(err)];
                 }
                 return [2 /*return*/];
             });
@@ -104,19 +106,18 @@ var WrkOutMachineDAO = /** @class */ (function (_super) {
     WrkOutMachineDAO.prototype.RecommendMachine = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var result, err_1;
-            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.MakeDbRequest(function () { return _this.dbHandler.dbRecommendMachine(id); })];
+                        return [4 /*yield*/, this.dbHandler.dbRecommendMachine(id)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result];
                     case 2:
                         err_1 = _a.sent();
                         console.error(err_1);
-                        return [3 /*break*/, 3];
+                        return [2 /*return*/, new DatabaseFail(err_1)];
                     case 3: return [2 /*return*/];
                 }
             });

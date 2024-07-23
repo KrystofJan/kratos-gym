@@ -83,7 +83,7 @@ export var FindAdressById = function (id) { return __awaiter(void 0, void 0, voi
     });
 }); };
 export var CreateAddress = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, addressDAO, successResult, err_3;
+    var result, addressDAO, result_1, successResult, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -91,8 +91,8 @@ export var CreateAddress = function (body) { return __awaiter(void 0, void 0, vo
                 addressDAO = new AddressDAO();
                 return [4 /*yield*/, addressDAO.InsertAddress(body)];
             case 1:
-                result = _a.sent();
-                successResult = result;
+                result_1 = _a.sent();
+                successResult = result_1;
                 return [2 /*return*/, new CreatedResponse("Successfully created an Address", successResult.Body)];
             case 2:
                 err_3 = _a.sent();

@@ -11,7 +11,7 @@ export class AddressDAO extends RelationalModel {
 
     async SelectAllAdresses() {
         try {
-            const result = this.SelectAll();
+            const result = await this.SelectAll();
             return result;
         }
         catch (err) {

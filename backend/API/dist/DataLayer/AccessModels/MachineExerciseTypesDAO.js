@@ -51,6 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { RelationalModel } from './RelationalModel.js';
 import { TableTypes } from "../Database/TableTypes.js";
+import { DatabaseFail } from '../Database/DatabaseResponse.js';
 var MachineExerciseTypesDAO = /** @class */ (function (_super) {
     __extends(MachineExerciseTypesDAO, _super);
     function MachineExerciseTypesDAO() {
@@ -113,7 +114,7 @@ var MachineExerciseTypesDAO = /** @class */ (function (_super) {
                     case 2:
                         err_3 = _a.sent();
                         console.error(err_3);
-                        return [3 /*break*/, 3];
+                        return [2 /*return*/, new DatabaseFail(err_3)];
                     case 3: return [2 /*return*/];
                 }
             });
