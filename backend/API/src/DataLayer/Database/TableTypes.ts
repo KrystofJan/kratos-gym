@@ -3,7 +3,7 @@ export enum TableTypes {
     WrkOutPlan = "WrkOutPlan",
     WrkOutPlanPreset = "WrkOutPlanPreset",
     User = "User",
-    Address = "Address",
+    Address = "address",
     ExerciseType = "ExerciseType",
     WrkOutMachine = "WrkOutMachine",
     MachineExerciseTypes = "MachineExerciseTypes",

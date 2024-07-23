@@ -4,7 +4,7 @@ export var TableTypes;
     TableTypes["WrkOutPlan"] = "WrkOutPlan";
     TableTypes["WrkOutPlanPreset"] = "WrkOutPlanPreset";
     TableTypes["User"] = "User";
-    TableTypes["Address"] = "Address";
+    TableTypes["Address"] = "address";
     TableTypes["ExerciseType"] = "ExerciseType";
     TableTypes["WrkOutMachine"] = "WrkOutMachine";
     TableTypes["MachineExerciseTypes"] = "MachineExerciseTypes";
