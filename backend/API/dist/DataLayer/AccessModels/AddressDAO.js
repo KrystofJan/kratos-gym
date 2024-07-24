@@ -95,6 +95,7 @@ var AddressDAO = /** @class */ (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
+                console.log(body);
                 try {
                     result = this.Insert(body);
                     return [2 /*return*/, result];

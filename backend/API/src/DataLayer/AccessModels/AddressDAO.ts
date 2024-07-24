@@ -30,6 +30,7 @@ export class AddressDAO extends RelationalModel {
     }
 
     async InsertAddress(body: Address) {
+        console.log(body)
         try {
             const result = this.Insert(body);
             return result;

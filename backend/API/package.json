@@ -21,6 +21,7 @@
     "nodemon": "^3.1.0",
     "pino": "^9.3.1",
     "postgres": "^3.4.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.3"
   },
   "devDependencies": {

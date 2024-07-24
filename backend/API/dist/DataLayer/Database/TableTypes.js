@@ -1,16 +1,16 @@
 export var TableTypes;
 (function (TableTypes) {
     TableTypes["test"] = "test";
-    TableTypes["WrkOutPlan"] = "WrkOutPlan";
-    TableTypes["WrkOutPlanPreset"] = "WrkOutPlanPreset";
-    TableTypes["User"] = "User";
+    TableTypes["WrkOutPlan"] = "wrkoutplan";
+    TableTypes["WrkOutPlanPreset"] = "wrkoutplanpreset";
+    TableTypes["User"] = "user";
     TableTypes["Address"] = "address";
-    TableTypes["ExerciseType"] = "ExerciseType";
-    TableTypes["WrkOutMachine"] = "WrkOutMachine";
-    TableTypes["MachineExerciseTypes"] = "MachineExerciseTypes";
-    TableTypes["Reservation"] = "Reservation";
-    TableTypes["WrkOutPlanType"] = "WrkOutPlanType";
-    TableTypes["WrkOutPlanMachines"] = "WrkOutPlanMachines";
-    TableTypes["WrkOutPlanMachinesPreset"] = "WrkOutPlanMachinesPreset";
-    TableTypes["MachineExerciseTypes_Machine"] = "MachineExerciseTypes--";
+    TableTypes["ExerciseType"] = "exercisetype";
+    TableTypes["WrkOutMachine"] = "wrkoutmachine";
+    TableTypes["MachineExerciseTypes"] = "machineexercisetypes";
+    TableTypes["Reservation"] = "reservation";
+    TableTypes["WrkOutPlanType"] = "wrkoutplantype";
+    TableTypes["WrkOutPlanMachines"] = "wrkoutplanmachines";
+    TableTypes["WrkOutPlanMachinesPreset"] = "wrkoutplanmachinespreset";
+    TableTypes["MachineExerciseTypes_Machine"] = "machineexercisetypes--";
 })(TableTypes || (TableTypes = {}));

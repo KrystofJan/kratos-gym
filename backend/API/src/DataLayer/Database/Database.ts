@@ -13,7 +13,7 @@ const logger = Pino.pino()
 
 export class Database {
 
-    public conn = postgres({
+    public sql = postgres({
         host: PGHOST,
         database: PGDATABASE,
         username: PGUSER,
@@ -32,7 +32,7 @@ export class Database {
 
     async SelectAll(tableName: string) {
         try {
-            const result: Model[] = await this.conn<Model[]>`Select * from ${this.conn(tableName)}`;
+            const result: Model[] = await this.sql<Model[]>`Select * from ${this.sql(tableName)}`;
             logger.info("Select all was successful")
             return new DatabaseSuccess(result);
         } catch (error) {
@@ -49,10 +49,36 @@ export class Database {
             pkey = this.tableKeys[foreignTable];
         }
         try {
-            console.log(this.tableKeys)
-            const [result]: Model[] = await this.conn<Model[]>`Select * from ${this.conn(tableName)} where ${this.conn(pkey)} = ${id}`;
+            const [result]: Model[] = await this.sql<Model[]>`Select * from ${this.sql(tableName)} where ${this.sql(pkey)} = ${id}`;
             logger.info("Select specific was successful")
-            console.log(pkey)
+            return new DatabaseSuccess(result);
+        } catch (error) {
+            console.error("Error executing query:", error);
+            logger.error(error)
+            return new DatabaseFail(error as Error)
+        }
+    }
+
+    async SelectAttrIs(attrValue: any, attrName: string, tableName: string): Promise<DatabaseResponse> {
+        try {
+            const [result]: Model[] = await this.sql<Model[]>`Select * from ${this.sql(tableName)} where ${this.sql(attrName)} = ${attrValue}`;
+            logger.info("Select by attr was successful")
+            return new DatabaseSuccess(result);
+        } catch (error) {
+            console.error("Error executing query:", error);
+            logger.error(error)
+            return new DatabaseFail(error as Error)
+        }
+    }
+
+    // TODO: Handle duplicates
+    async Post(body: IDictionary<any>, tableName: string): Promise<DatabaseResponse> {
+        const columns = Object.keys(body)
+
+        try {
+            const result = await this.sql`insert into ${this.sql(tableName)} ${this.sql(body, columns)}`
+            console.log(result)
+            logger.info("Select by attr was successful")
             return new DatabaseSuccess(result);
         } catch (error) {
             console.error("Error executing query:", error);
@@ -60,10 +86,6 @@ export class Database {
             return new DatabaseFail(error as Error)
         }
 
-    }
-
-    // TODO: Handle duplicates
-    dbPost(body: IDictionary<any>, tableName: string): Promise<DatabaseResponse> {
         return new Promise((resolve, reject) => {
             if (tableName === "hihi") {
                 reject(new DatabaseFail(new Error("asdasdasd")))
@@ -94,27 +116,6 @@ export class Database {
         });
     }
 
-    dbSelectAttrIs(attrValue: any, attrName: string, tableName: string): Promise<DatabaseResponse> {
-        return new Promise((resolve, reject) => {
-
-            if (tableName === "hihi") {
-                reject(new DatabaseFail(new Error("asdasdasd")))
-            }
-            resolve(new DatabaseSuccess({ "All": "good" }))
-            // const command = `Select * from ${tableName} where ${attrName} = '${attrValue}'`;
-            //
-            // this.db.query(command, (err, results) => {
-            //     if (err) {
-            //         console.error('Error querying the database:', err);
-            //         ApiLogger.logApi(err.toString());
-            //         reject(new DatabaseFail(err));
-            //     }
-            //
-            //     ApiLogger.logApi("Get request on the " + tableName + " endpoint was Successfull!");
-            //     resolve(new DatabaseSuccess(results));
-            // })
-        });
-    }
 
     // TODO: change the rest to reflect the rest
 

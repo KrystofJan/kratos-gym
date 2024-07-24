@@ -1,15 +1,15 @@
 export enum TableTypes {
     test = "test",
-    WrkOutPlan = "WrkOutPlan",
-    WrkOutPlanPreset = "WrkOutPlanPreset",
-    User = "User",
+    WrkOutPlan = "wrkoutplan",
+    WrkOutPlanPreset = "wrkoutplanpreset",
+    User = "user",
     Address = "address",
-    ExerciseType = "ExerciseType",
-    WrkOutMachine = "WrkOutMachine",
-    MachineExerciseTypes = "MachineExerciseTypes",
-    Reservation = "Reservation",
-    WrkOutPlanType = "WrkOutPlanType",
-    WrkOutPlanMachines = "WrkOutPlanMachines",
-    WrkOutPlanMachinesPreset = "WrkOutPlanMachinesPreset",
-    MachineExerciseTypes_Machine = "MachineExerciseTypes--"
+    ExerciseType = "exercisetype",
+    WrkOutMachine = "wrkoutmachine",
+    MachineExerciseTypes = "machineexercisetypes",
+    Reservation = "reservation",
+    WrkOutPlanType = "wrkoutplantype",
+    WrkOutPlanMachines = "wrkoutplanmachines",
+    WrkOutPlanMachinesPreset = "wrkoutplanmachinespreset",
+    MachineExerciseTypes_Machine = "machineexercisetypes--"
 }

@@ -139,7 +139,7 @@ var RelationalModel = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.dbHandler.dbSelectAttrIs(attrValue, attrName, this.TableType)];
+                        return [4 /*yield*/, this.dbHandler.SelectAttrIs(attrValue, attrName, this.TableType)];
                     case 1:
                         result = _a.sent();
                         if (result instanceof DatabaseSuccess) {
@@ -169,7 +169,7 @@ var RelationalModel = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.dbHandler.dbPost(body, this.TableType)];
+                        return [4 /*yield*/, this.dbHandler.Post(body, this.TableType)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result];

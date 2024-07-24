@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import cors from 'cors';
-import { setRoutes }  from './Routers/routes.js';
+import { setRoutes } from './Routers/routes.js';
 import { BodyParser } from 'body-parser';
 
 const app: Express = express();

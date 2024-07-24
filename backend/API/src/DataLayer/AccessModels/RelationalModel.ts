@@ -78,7 +78,7 @@ export class RelationalModel {
     protected async SelectByAttr(attrName: string, attrValue: any) {
 
         try {
-            const result = await this.dbHandler.dbSelectAttrIs(attrValue, attrName, this.TableType)
+            const result = await this.dbHandler.SelectAttrIs(attrValue, attrName, this.TableType)
 
             if (result instanceof DatabaseSuccess) {
                 const successResult = result as DatabaseSuccess;
@@ -98,7 +98,7 @@ export class RelationalModel {
 
     protected async Insert(body: Model) {
         try {
-            const result = await this.dbHandler.dbPost(body, this.TableType)
+            const result = await this.dbHandler.Post(body, this.TableType)
             return result;
         }
         catch (err) {

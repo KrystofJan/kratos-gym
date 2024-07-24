@@ -48,7 +48,7 @@ var _a = process.env, PGHOST = _a.PGHOST, PGDATABASE = _a.PGDATABASE, PGUSER = _
 var logger = Pino.pino();
 var Database = /** @class */ (function () {
     function Database() {
-        this.conn = postgres({
+        this.sql = postgres({
             host: PGHOST,
             database: PGDATABASE,
             username: PGUSER,
@@ -68,7 +68,7 @@ var Database = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.conn(templateObject_1 || (templateObject_1 = __makeTemplateObject(["Select * from ", ""], ["Select * from ", ""])), this.conn(tableName))];
+                        return [4 /*yield*/, this.sql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["Select * from ", ""], ["Select * from ", ""])), this.sql(tableName))];
                     case 1:
                         result = _a.sent();
                         logger.info("Select all was successful");
@@ -96,12 +96,10 @@ var Database = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
-                        console.log(this.tableKeys);
-                        return [4 /*yield*/, this.conn(templateObject_2 || (templateObject_2 = __makeTemplateObject(["Select * from ", " where ", " = ", ""], ["Select * from ", " where ", " = ", ""])), this.conn(tableName), this.conn(pkey), id)];
+                        return [4 /*yield*/, this.sql(templateObject_2 || (templateObject_2 = __makeTemplateObject(["Select * from ", " where ", " = ", ""], ["Select * from ", " where ", " = ", ""])), this.sql(tableName), this.sql(pkey), id)];
                     case 2:
                         result = (_a.sent())[0];
                         logger.info("Select specific was successful");
-                        console.log(pkey);
                         return [2 /*return*/, new DatabaseSuccess(result)];
                     case 3:
                         error_2 = _a.sent();
@@ -113,55 +111,80 @@ var Database = /** @class */ (function () {
             });
         });
     };
-    // TODO: Handle duplicates
-    Database.prototype.dbPost = function (body, tableName) {
-        return new Promise(function (resolve, reject) {
-            if (tableName === "hihi") {
-                reject(new DatabaseFail(new Error("asdasdasd")));
-            }
-            resolve(new DatabaseSuccess({ "All": "good" }));
-            // let data: Array<IDictionary<any>> = [];
-            // const columns: string = Object.keys(body).join(', ');
-            // const placeholders: string = Object.keys(body).map(() => '?').join(', ');
-            //
-            // Object.keys(body).forEach(function(key: string) {
-            //     data.push(body[key]);
-            // });
-            //
-            // const command = `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders})`;
-            //
-            // this.db.query<ResultSetHeader>(command, data, (err, results) => {
-            //     if (err) {
-            //         console.error('Error querying the database:', err);
-            //         ApiLogger.logApi(err.toString());
-            //         reject(new DatabaseFail(err));
-            //     }
-            //     ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
-            //
-            //     const rerere = new DatabaseSuccess(results.insertId);
-            //     console.log(rerere)
-            //     resolve(rerere);
-            // });
+    Database.prototype.SelectAttrIs = function (attrValue, attrName, tableName) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result, error_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.sql(templateObject_3 || (templateObject_3 = __makeTemplateObject(["Select * from ", " where ", " = ", ""], ["Select * from ", " where ", " = ", ""])), this.sql(tableName), this.sql(attrName), attrValue)];
+                    case 1:
+                        result = (_a.sent())[0];
+                        logger.info("Select by attr was successful");
+                        return [2 /*return*/, new DatabaseSuccess(result)];
+                    case 2:
+                        error_3 = _a.sent();
+                        console.error("Error executing query:", error_3);
+                        logger.error(error_3);
+                        return [2 /*return*/, new DatabaseFail(error_3)];
+                    case 3: return [2 /*return*/];
+                }
+            });
         });
     };
-    Database.prototype.dbSelectAttrIs = function (attrValue, attrName, tableName) {
-        return new Promise(function (resolve, reject) {
-            if (tableName === "hihi") {
-                reject(new DatabaseFail(new Error("asdasdasd")));
-            }
-            resolve(new DatabaseSuccess({ "All": "good" }));
-            // const command = `Select * from ${tableName} where ${attrName} = '${attrValue}'`;
-            //
-            // this.db.query(command, (err, results) => {
-            //     if (err) {
-            //         console.error('Error querying the database:', err);
-            //         ApiLogger.logApi(err.toString());
-            //         reject(new DatabaseFail(err));
-            //     }
-            //
-            //     ApiLogger.logApi("Get request on the " + tableName + " endpoint was Successfull!");
-            //     resolve(new DatabaseSuccess(results));
-            // })
+    // TODO: Handle duplicates
+    Database.prototype.Post = function (body, tableName) {
+        return __awaiter(this, void 0, void 0, function () {
+            var columns, result, error_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        columns = Object.keys(body);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.sql(templateObject_4 || (templateObject_4 = __makeTemplateObject(["insert into ", " ", ""], ["insert into ", " ", ""])), this.sql(tableName), this.sql(body, columns))];
+                    case 2:
+                        result = _a.sent();
+                        console.log(result);
+                        logger.info("Select by attr was successful");
+                        return [2 /*return*/, new DatabaseSuccess(result)];
+                    case 3:
+                        error_4 = _a.sent();
+                        console.error("Error executing query:", error_4);
+                        logger.error(error_4);
+                        return [2 /*return*/, new DatabaseFail(error_4)];
+                    case 4: return [2 /*return*/, new Promise(function (resolve, reject) {
+                            if (tableName === "hihi") {
+                                reject(new DatabaseFail(new Error("asdasdasd")));
+                            }
+                            resolve(new DatabaseSuccess({ "All": "good" }));
+                            // let data: Array<IDictionary<any>> = [];
+                            // const columns: string = Object.keys(body).join(', ');
+                            // const placeholders: string = Object.keys(body).map(() => '?').join(', ');
+                            //
+                            // Object.keys(body).forEach(function(key: string) {
+                            //     data.push(body[key]);
+                            // });
+                            //
+                            // const command = `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders})`;
+                            //
+                            // this.db.query<ResultSetHeader>(command, data, (err, results) => {
+                            //     if (err) {
+                            //         console.error('Error querying the database:', err);
+                            //         ApiLogger.logApi(err.toString());
+                            //         reject(new DatabaseFail(err));
+                            //     }
+                            //     ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
+                            //
+                            //     const rerere = new DatabaseSuccess(results.insertId);
+                            //     console.log(rerere)
+                            //     resolve(rerere);
+                            // });
+                        })];
+                }
+            });
         });
     };
     // TODO: change the rest to reflect the rest
@@ -239,4 +262,4 @@ var Database = /** @class */ (function () {
     return Database;
 }());
 export { Database };
-var templateObject_1, templateObject_2;
+var templateObject_1, templateObject_2, templateObject_3, templateObject_4;
