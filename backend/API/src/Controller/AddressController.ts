@@ -3,6 +3,7 @@ import { Request as expressRequest, Response as expressResponse } from 'express'
 import { Response } from '../RequestUtility/CustomResponces/Response.js'
 import { Address } from '../Models/Address.js'
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
+import { AddressPostModel } from '../Models/PostModels/AddressPostModel.js';
 
 export const getAllAddresses = async (req: expressRequest, res: expressResponse) => {
     const response: Response = await FindAllAdresses();
@@ -15,16 +16,15 @@ export const getAddressById = async (req: expressRequest, res: expressResponse, 
 }
 
 export const postAddress = async (req: expressRequest, res: expressResponse) => {
-    const address = new Address(req.body);
-    console.log(address)
-    console.log(req.body)
+    const address = new AddressPostModel(req.body);
     let response: Response;
-    console.log();
-    if (!address.validateAttrs()) {
+    // handle badrequest
+    if (!address.validateAttrs() || address === undefined) {
         response = new BadRequestResponse("Unable to create Address model");
         response.buildResponse(req, res);
         return;
     }
+    // not this can be either 
     response = await CreateAddress(address);
     response.buildResponse(req, res);
 }

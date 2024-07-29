@@ -134,55 +134,31 @@ var Database = /** @class */ (function () {
         });
     };
     // TODO: Handle duplicates
-    Database.prototype.Post = function (body, tableName) {
+    Database.prototype.Insert = function (body, tableName) {
         return __awaiter(this, void 0, void 0, function () {
-            var columns, result, error_4;
+            var bodVal, columns, res, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        columns = Object.keys(body);
+                        bodVal = Object.fromEntries(Object.entries(body).filter(function (_a) {
+                            var _ = _a[0], v = _a[1];
+                            return v != null;
+                        }));
+                        columns = Object.keys(bodVal);
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.sql(templateObject_4 || (templateObject_4 = __makeTemplateObject(["insert into ", " ", ""], ["insert into ", " ", ""])), this.sql(tableName), this.sql(body, columns))];
+                        return [4 /*yield*/, this.sql(templateObject_4 || (templateObject_4 = __makeTemplateObject(["insert into ", " ", " returning *"], ["insert into ", " ", " returning *"])), this.sql(tableName), this.sql(body, columns))];
                     case 2:
-                        result = _a.sent();
-                        console.log(result);
+                        res = (_a.sent())[0];
                         logger.info("Select by attr was successful");
-                        return [2 /*return*/, new DatabaseSuccess(result)];
+                        return [2 /*return*/, new DatabaseSuccess(res)];
                     case 3:
                         error_4 = _a.sent();
                         console.error("Error executing query:", error_4);
                         logger.error(error_4);
                         return [2 /*return*/, new DatabaseFail(error_4)];
-                    case 4: return [2 /*return*/, new Promise(function (resolve, reject) {
-                            if (tableName === "hihi") {
-                                reject(new DatabaseFail(new Error("asdasdasd")));
-                            }
-                            resolve(new DatabaseSuccess({ "All": "good" }));
-                            // let data: Array<IDictionary<any>> = [];
-                            // const columns: string = Object.keys(body).join(', ');
-                            // const placeholders: string = Object.keys(body).map(() => '?').join(', ');
-                            //
-                            // Object.keys(body).forEach(function(key: string) {
-                            //     data.push(body[key]);
-                            // });
-                            //
-                            // const command = `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders})`;
-                            //
-                            // this.db.query<ResultSetHeader>(command, data, (err, results) => {
-                            //     if (err) {
-                            //         console.error('Error querying the database:', err);
-                            //         ApiLogger.logApi(err.toString());
-                            //         reject(new DatabaseFail(err));
-                            //     }
-                            //     ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
-                            //
-                            //     const rerere = new DatabaseSuccess(results.insertId);
-                            //     console.log(rerere)
-                            //     resolve(rerere);
-                            // });
-                        })];
+                    case 4: return [2 /*return*/];
                 }
             });
         });

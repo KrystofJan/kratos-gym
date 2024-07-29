@@ -1,8 +1,7 @@
-import { IDictionary } from "../utils/Utilities.js";
-import { Model } from './Model.js'
+import { IDictionary } from "../../utils/Utilities.js";
+import { Model } from '../Model.js'
 
-export class Address extends Model {
-    public addressid: number | null;
+export class AddressPostModel extends Model {
     public street: string;
     public city: string;
     public postalcode: string;
@@ -12,8 +11,6 @@ export class Address extends Model {
 
     constructor(jsonData: IDictionary<any>) {
         super();
-
-        this.addressid = jsonData.addressid ?? null;
         this.street = jsonData.street;
         this.city = jsonData.city;
         this.postalcode = jsonData.postalcode;

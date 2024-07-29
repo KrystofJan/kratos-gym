@@ -24,6 +24,7 @@ export class Database {
             options: `project=${ENDPOINT_ID}`,
         },
     });
+
     tableKeys: IDictionary<string>;
 
     constructor() {
@@ -72,48 +73,19 @@ export class Database {
     }
 
     // TODO: Handle duplicates
-    async Post(body: IDictionary<any>, tableName: string): Promise<DatabaseResponse> {
-        const columns = Object.keys(body)
+    async Insert(body: IDictionary<any>, tableName: string): Promise<DatabaseResponse> {
+        const bodVal = Object.fromEntries(Object.entries(body).filter(([_, v]) => v != null));
+        const columns: string[] = Object.keys(bodVal)
 
         try {
-            const result = await this.sql`insert into ${this.sql(tableName)} ${this.sql(body, columns)}`
-            console.log(result)
+            const [res] = await this.sql`insert into ${this.sql(tableName)} ${this.sql(body, columns)} returning *`
             logger.info("Select by attr was successful")
-            return new DatabaseSuccess(result);
+            return new DatabaseSuccess(res);
         } catch (error) {
             console.error("Error executing query:", error);
             logger.error(error)
             return new DatabaseFail(error as Error)
         }
-
-        return new Promise((resolve, reject) => {
-            if (tableName === "hihi") {
-                reject(new DatabaseFail(new Error("asdasdasd")))
-            }
-            resolve(new DatabaseSuccess({ "All": "good" }))
-            // let data: Array<IDictionary<any>> = [];
-            // const columns: string = Object.keys(body).join(', ');
-            // const placeholders: string = Object.keys(body).map(() => '?').join(', ');
-            //
-            // Object.keys(body).forEach(function(key: string) {
-            //     data.push(body[key]);
-            // });
-            //
-            // const command = `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders})`;
-            //
-            // this.db.query<ResultSetHeader>(command, data, (err, results) => {
-            //     if (err) {
-            //         console.error('Error querying the database:', err);
-            //         ApiLogger.logApi(err.toString());
-            //         reject(new DatabaseFail(err));
-            //     }
-            //     ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
-            //
-            //     const rerere = new DatabaseSuccess(results.insertId);
-            //     console.log(rerere)
-            //     resolve(rerere);
-            // });
-        });
     }
 
 

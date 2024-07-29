@@ -57,7 +57,6 @@ export class RelationalModel {
     protected async SelectById(id: number) {
         try {
             const result = await this.dbHandler.SelectSpecific(id, this.TableType, null)
-            console.log(result)
 
             if (result instanceof DatabaseSuccess) {
                 const successResult = result as DatabaseSuccess;
@@ -98,7 +97,7 @@ export class RelationalModel {
 
     protected async Insert(body: Model) {
         try {
-            const result = await this.dbHandler.Post(body, this.TableType)
+            const result = await this.dbHandler.Insert(body, this.TableType)
             return result;
         }
         catch (err) {

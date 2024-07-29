@@ -2,7 +2,9 @@ import { IDictionary } from "../../utils/Utilities.js";
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
 import { Address } from '../../Models/Address.js'
-import { DatabaseFail, DatabaseResponse } from "../Database/DatabaseResponse.js";
+import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from "../Database/DatabaseResponse.js";
+import { AddressPostModel } from "../../Models/PostModels/AddressPostModel.js";
+import { Database } from "../Database/Database.js";
 
 export class AddressDAO extends RelationalModel {
     constructor() {
@@ -29,14 +31,14 @@ export class AddressDAO extends RelationalModel {
         }
     }
 
-    async InsertAddress(body: Address) {
-        console.log(body)
+    async InsertAddress(body: AddressPostModel) {
         try {
-            const result = this.Insert(body);
-            return result;
+            const result: DatabaseResponse = await this.Insert(body);
+            return result as DatabaseSuccess;
         }
         catch (err) {
             console.error(err);
+            return new DatabaseFail(err as Error)
         }
     }
 }

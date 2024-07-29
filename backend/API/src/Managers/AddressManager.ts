@@ -6,6 +6,7 @@ import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
 import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/DatabaseResponse.js';
+import { AddressPostModel } from '../Models/PostModels/AddressPostModel.js';
 
 export const FindAllAdresses = async (): Promise<Response> => {
     try {
@@ -36,22 +37,22 @@ export const FindAdressById = async (id: number): Promise<Response> => {
         return new OkResponse("We good", result);
     }
     catch (err) {
-        return new FailedResponse("Cannot get any of these things :(", 404);
+        return new FailedResponse(`Could not find Address with ${id} addressid`, 404);
     }
 }
 
-export const CreateAddress = async (body: Address) => { // create
-    let result: DatabaseResponse;
+export const CreateAddress = async (body: AddressPostModel) => { // create
     // TODO better response
-    try {
-        const addressDAO = new AddressDAO();
-        const result = await addressDAO.InsertAddress(body);
+    const addressDAO = new AddressDAO();
+    const result: DatabaseResponse = await addressDAO.InsertAddress(body);
+
+    if (result instanceof DatabaseSuccess) {
         const successResult = result as DatabaseSuccess;
         return new CreatedResponse(
             "Successfully created an Address",
-            successResult.Body);
+            successResult.Body.addressid);
     }
-    catch (err) {
-        return new FailedResponse('Sadge', 404);
-    }
+
+    const res = result as DatabaseFail;
+    return new FailedResponse(res.ErrorMessage, 500)
 }

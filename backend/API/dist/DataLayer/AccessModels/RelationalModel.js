@@ -169,7 +169,7 @@ var RelationalModel = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.dbHandler.Post(body, this.TableType)];
+                        return [4 /*yield*/, this.dbHandler.Insert(body, this.TableType)];
                     case 1:
                         result = _a.sent();
                         return [2 /*return*/, result];

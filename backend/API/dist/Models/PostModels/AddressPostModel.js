@@ -13,13 +13,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { Model } from './Model.js';
-var Address = /** @class */ (function (_super) {
-    __extends(Address, _super);
-    function Address(jsonData) {
-        var _a;
+import { Model } from '../Model.js';
+var AddressPostModel = /** @class */ (function (_super) {
+    __extends(AddressPostModel, _super);
+    function AddressPostModel(jsonData) {
         var _this = _super.call(this) || this;
-        _this.addressid = (_a = jsonData.addressid) !== null && _a !== void 0 ? _a : null;
         _this.street = jsonData.street;
         _this.city = jsonData.city;
         _this.postalcode = jsonData.postalcode;
@@ -28,6 +26,6 @@ var Address = /** @class */ (function (_super) {
         _this.apartmentnumber = jsonData.apartmentnumber;
         return _this;
     }
-    return Address;
+    return AddressPostModel;
 }(Model));
-export { Address };
+export { AddressPostModel };

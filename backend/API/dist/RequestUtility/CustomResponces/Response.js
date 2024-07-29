@@ -8,6 +8,6 @@ export var StatusCodeType;
     StatusCodeType[StatusCodeType["NOT_FOUND"] = 404] = "NOT_FOUND";
     StatusCodeType[StatusCodeType["REQUEST_TIMEOUT"] = 408] = "REQUEST_TIMEOUT";
     StatusCodeType[StatusCodeType["GATEWAY_TIMEOUT"] = 504] = "GATEWAY_TIMEOUT";
-    StatusCodeType[StatusCodeType["INTERNAL_SERVER_ERROR"] = 501] = "INTERNAL_SERVER_ERROR";
-    StatusCodeType[StatusCodeType["NOT_IMPLEMENTED"] = 502] = "NOT_IMPLEMENTED";
+    StatusCodeType[StatusCodeType["INTERNAL_SERVER_ERROR"] = 500] = "INTERNAL_SERVER_ERROR";
+    StatusCodeType[StatusCodeType["NOT_IMPLEMENTED"] = 501] = "NOT_IMPLEMENTED";
 })(StatusCodeType || (StatusCodeType = {}));
