@@ -19,13 +19,13 @@ var Address = /** @class */ (function (_super) {
     function Address(jsonData) {
         var _a;
         var _this = _super.call(this) || this;
-        _this.addressid = (_a = jsonData.addressid) !== null && _a !== void 0 ? _a : null;
-        _this.street = jsonData.street;
-        _this.city = jsonData.city;
-        _this.postalcode = jsonData.postalcode;
-        _this.country = jsonData.country;
-        _this.buildingnumber = jsonData.buildingnumber;
-        _this.apartmentnumber = jsonData.apartmentnumber;
+        _this.AddressId = (_a = jsonData.address_id) !== null && _a !== void 0 ? _a : null;
+        _this.Street = jsonData.street;
+        _this.City = jsonData.city;
+        _this.PostalCode = jsonData.postal_code;
+        _this.Country = jsonData.country;
+        _this.BuildingNumber = jsonData.building_number;
+        _this.ApartmentNumber = jsonData.apartment_number;
         return _this;
     }
     return Address;

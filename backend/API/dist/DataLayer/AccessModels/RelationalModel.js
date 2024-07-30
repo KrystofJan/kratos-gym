@@ -111,7 +111,6 @@ var RelationalModel = /** @class */ (function () {
                         return [4 /*yield*/, this.dbHandler.SelectSpecific(id, this.TableType, null)];
                     case 1:
                         result = _a.sent();
-                        console.log(result);
                         if (result instanceof DatabaseSuccess) {
                             successResult = result;
                             return [2 /*return*/, successResult.Body];

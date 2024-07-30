@@ -50,7 +50,7 @@ export const CreateAddress = async (body: AddressPostModel) => { // create
         const successResult = result as DatabaseSuccess;
         return new CreatedResponse(
             "Successfully created an Address",
-            successResult.Body.addressid);
+            successResult.Body.address_id);
     }
 
     const res = result as DatabaseFail;

@@ -18,12 +18,12 @@ var AddressPostModel = /** @class */ (function (_super) {
     __extends(AddressPostModel, _super);
     function AddressPostModel(jsonData) {
         var _this = _super.call(this) || this;
-        _this.street = jsonData.street;
-        _this.city = jsonData.city;
-        _this.postalcode = jsonData.postalcode;
-        _this.country = jsonData.country;
-        _this.buildingnumber = jsonData.buildingnumber;
-        _this.apartmentnumber = jsonData.apartmentnumber;
+        _this.street = jsonData.Street;
+        _this.city = jsonData.City;
+        _this.postal_code = jsonData.PostalCode;
+        _this.country = jsonData.Country;
+        _this.building_number = jsonData.BuildingNumber;
+        _this.apartment_number = jsonData.ApartmentNumber;
         return _this;
     }
     return AddressPostModel;

@@ -94,7 +94,7 @@ export var CreateAddress = function (body) { return __awaiter(void 0, void 0, vo
                 result = _a.sent();
                 if (result instanceof DatabaseSuccess) {
                     successResult = result;
-                    return [2 /*return*/, new CreatedResponse("Successfully created an Address", successResult.Body.addressid)];
+                    return [2 /*return*/, new CreatedResponse("Successfully created an Address", successResult.Body.address_id)];
                 }
                 res = result;
                 return [2 /*return*/, new FailedResponse(res.ErrorMessage, 500)];

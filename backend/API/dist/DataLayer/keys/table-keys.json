@@ -1,6 +1,6 @@
 {
     "test": "id",
-    "address": "addressid",
+    "address": "address_id",
     "reservation": "reservetionid",
     "exercisetype": "exercisetypeid",
     "user": "userid",
