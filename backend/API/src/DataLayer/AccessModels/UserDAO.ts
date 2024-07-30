@@ -1,14 +1,14 @@
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
-import { User } from '../../Models/User.js'
+import { Account } from '../../Models/User.js'
 import { UserRegPostModel } from '../../Models/PostModels/UserRegPostModel.js';
 import { Database } from "../Database/Database.js";
 import { DatabaseFail } from "../Database/DatabaseResponse.js";
 
-export class UserDAO extends RelationalModel {
+export class AccountDAO extends RelationalModel {
 
     constructor() {
-        super(TableTypes.User);
+        super(TableTypes.Account);
     }
 
     async SelectAllUsers() {

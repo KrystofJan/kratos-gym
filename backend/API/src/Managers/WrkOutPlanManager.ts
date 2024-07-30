@@ -8,11 +8,11 @@ import { CreatedResponse, CreatedMultipleResponse } from '../RequestUtility/Cust
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
 import { DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/DatabaseResponse.js';
 import { WrkOutPlanDAO } from '../DataLayer/AccessModels/WrkOutPlanDAO.js';
-import { UserDAO } from '../DataLayer/AccessModels/UserDAO.js';
+import { AccountDAO } from '../DataLayer/AccessModels/UserDAO.js';
 import { WrkOutPlanMachinesDAO } from '../DataLayer/AccessModels/WrkOutPlanMachineDAO.js';
 import { WrkoutPlanGetModel } from '../Models/GetModels/WrkOutPlanGetModel.js';
 import { WrkoutPlanMachineGetModel } from '../Models/GetModels/WrkOutPlanMachinesGetModel.js';
-import { User } from '../Models/User.js';
+import { Account } from '../Models/User.js';
 import { WrkOutMachine } from '../Models/WrkOutMachine.js';
 import { WrkOutPlanMachine } from '../Models/WrkOutPlanMachine.js';
 import { WrkOutPlanMachinePostModel } from '../Models/PostModels/WrkOutPlanMachinePostModel.js';
@@ -32,9 +32,9 @@ export const FindAllWrkOutPlans = async (): Promise<Response> => {
         const results: Array<WrkOutPlan> = [];
 
         for (const b of body) {
-            const userDao = new UserDAO();
+            const userDao = new AccountDAO();
             const userData = await userDao.SelectUserById(b.UserId);
-            const user: User = new User(userData);
+            const user: Account = new Account(userData);
             const a = new WrkOutPlan(b);
             a.User = user;
             results.push(a);
@@ -51,11 +51,11 @@ export const FindWrkOutPlanById = async (id: number): Promise<Response> => {
     try {
         const wrkOutPlanDao = new WrkOutPlanDAO();
         const body: WrkoutPlanGetModel = await wrkOutPlanDao.SelectWrkOutPlanById(id);
-        const userDao = new UserDAO();
+        const userDao = new AccountDAO();
 
         // validate...
         const userData = await userDao.SelectUserById(body.UserId);
-        const user: User = new User(userData);
+        const user: Account = new Account(userData);
 
         const result = new WrkOutPlan(body);
         result.User = user;

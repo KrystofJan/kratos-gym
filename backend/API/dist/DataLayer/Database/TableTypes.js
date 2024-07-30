@@ -3,7 +3,7 @@ export var TableTypes;
     TableTypes["test"] = "test";
     TableTypes["WrkOutPlan"] = "wrkoutplan";
     TableTypes["WrkOutPlanPreset"] = "wrkoutplanpreset";
-    TableTypes["User"] = "user";
+    TableTypes["Account"] = "account";
     TableTypes["Address"] = "address";
     TableTypes["ExerciseType"] = "exercisetype";
     TableTypes["WrkOutMachine"] = "wrkoutmachine";

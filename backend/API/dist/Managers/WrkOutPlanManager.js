@@ -41,9 +41,9 @@ import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse, CreatedMultipleResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
 import { WrkOutPlanDAO } from '../DataLayer/AccessModels/WrkOutPlanDAO.js';
-import { UserDAO } from '../DataLayer/AccessModels/UserDAO.js';
+import { AccountDAO } from '../DataLayer/AccessModels/UserDAO.js';
 import { WrkOutPlanMachinesDAO } from '../DataLayer/AccessModels/WrkOutPlanMachineDAO.js';
-import { User } from '../Models/User.js';
+import { Account } from '../Models/User.js';
 import { WrkOutMachine } from '../Models/WrkOutMachine.js';
 import { WrkOutPlanMachine } from '../Models/WrkOutPlanMachine.js';
 import { WrkOutPlanTypeDAO } from '../DataLayer/AccessModels/WrkOutPlanTypeDAO.js';
@@ -65,11 +65,11 @@ export var FindAllWrkOutPlans = function () { return __awaiter(void 0, void 0, v
             case 2:
                 if (!(_i < body_1.length)) return [3 /*break*/, 5];
                 b = body_1[_i];
-                userDao = new UserDAO();
+                userDao = new AccountDAO();
                 return [4 /*yield*/, userDao.SelectUserById(b.UserId)];
             case 3:
                 userData = _a.sent();
-                user = new User(userData);
+                user = new Account(userData);
                 a = new WrkOutPlan(b);
                 a.User = user;
                 results.push(a);
@@ -95,11 +95,11 @@ export var FindWrkOutPlanById = function (id) { return __awaiter(void 0, void 0,
                 return [4 /*yield*/, wrkOutPlanDao.SelectWrkOutPlanById(id)];
             case 1:
                 body = _a.sent();
-                userDao = new UserDAO();
+                userDao = new AccountDAO();
                 return [4 /*yield*/, userDao.SelectUserById(body.UserId)];
             case 2:
                 userData = _a.sent();
-                user = new User(userData);
+                user = new Account(userData);
                 result = new WrkOutPlan(body);
                 result.User = user;
                 return [2 /*return*/, new OkResponse("We good", result)];

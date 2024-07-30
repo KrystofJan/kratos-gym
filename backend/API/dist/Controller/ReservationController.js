@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { FindAllReservations, FindReservationById, CreateReservation } from '../Managers/ReservationManager.js';
 import { FindUserById } from '../Managers/UserManager.js';
-import { User } from '../Models/User.js';
+import { Account } from '../Models/User.js';
 import { Reservation } from '../Models/Reservation.js';
 import { ReservationPostModel } from '../Models/PostModels/ReservationPostModel.js';
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
@@ -58,7 +58,7 @@ export var getReservationById = function (req, res, id) { return __awaiter(void 
                 return [4 /*yield*/, FindUserById(reservationGetModel.CustomerId)];
             case 2:
                 customerData = _a.sent();
-                customer = new User(customerData);
+                customer = new Account(customerData);
                 tmp = new Reservation(reservation.Body.Body);
                 tmp.Customer = customer;
                 reservation.Body.Body = tmp;
@@ -88,7 +88,7 @@ export var getAllReservations = function (req, res) { return __awaiter(void 0, v
                 return [4 /*yield*/, FindUserById(reservationGetModel.CustomerId)];
             case 3:
                 customerData = _a.sent();
-                customer = new User(customerData);
+                customer = new Account(customerData);
                 tmp = new Reservation(reservation);
                 tmp.Customer = customer;
                 reservations.Body.Body[i] = tmp;

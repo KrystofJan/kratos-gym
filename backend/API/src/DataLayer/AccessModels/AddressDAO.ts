@@ -23,7 +23,7 @@ export class AddressDAO extends RelationalModel {
 
     async SelectAdressById(id: number) {
         try {
-            const result = this.SelectById(id);
+            const result = await this.SelectById(id);
             return result;
         }
         catch (err) {

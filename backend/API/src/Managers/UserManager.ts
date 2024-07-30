@@ -1,6 +1,6 @@
 import { ErrorResponseBody } from './../RequestUtility/CustomResponces/ResponseBody.js';
-import { UserDAO } from '../DataLayer/AccessModels/UserDAO.js';
-import { User, UserAttrs } from '../Models/User.js'
+import { AccountDAO } from '../DataLayer/AccessModels/UserDAO.js';
+import { Account, UserAttrs } from '../Models/User.js'
 import { UserRegPostModel } from '../Models/PostModels/UserRegPostModel.js';
 import { UserAuth } from '../Models/UserAuth.js';
 import { Response } from '../RequestUtility/CustomResponces/Response.js';
@@ -11,17 +11,19 @@ import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse
 import { DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/DatabaseResponse.js';
 import { ResponseStatus } from '../RequestUtility/common/ResponseStatus.js';
 import { LoggedInResponse } from '../RequestUtility/CustomResponces/LogInResponse.js';
+import { AddressDAO } from '../DataLayer/AccessModels/AddressDAO.js';
+import { Address } from '../Models/Address.js';
 
 
 export const FindAllUsers = async (): Promise<Response> => {
     try {
-        const userDao = new UserDAO();
+        const userDao = new AccountDAO();
         const body: Array<IDictionary<any>> = await userDao.SelectAllUsers();
 
         // validate...
-        const results: Array<User> = [];
+        const results: Array<Account> = [];
         for (const b of body) {
-            const a = new User(b);
+            const a = new Account(b);
 
             results.push(a);
         }
@@ -35,12 +37,14 @@ export const FindAllUsers = async (): Promise<Response> => {
 
 export const FindUserById = async (id: number): Promise<Response> => {
     try {
-        const userDao = new UserDAO();
-        const body: IDictionary<any> = await userDao.SelectUserById(id);
-        console.log(body);
+        const userDao = new AccountDAO();
+        const addressDAO = new AddressDAO()
+        const body = await userDao.SelectUserById(id);
 
-        // validate...
-        const result = new User(body);
+        console.log(body)
+        const addr = await addressDAO.SelectAdressById(body.address_id)
+        const result = new Account(body);
+        result.Address = new Address(addr);
 
         return new OkResponse("We good", result);
     }
@@ -52,7 +56,7 @@ export const FindUserById = async (id: number): Promise<Response> => {
 export const CreateUser = async (body: UserRegPostModel): Promise<Response> => {
     // TODO better response
     try {
-        const userDao = new UserDAO();
+        const userDao = new AccountDAO();
 
         const result = await userDao.InsertUser(body);
 
@@ -68,7 +72,7 @@ export const CreateUser = async (body: UserRegPostModel): Promise<Response> => {
 
 export const LoginAuth = async (body: UserAuth) => {
     try {
-        const userDao = new UserDAO();
+        const userDao = new AccountDAO();
 
         let result = [];
 
@@ -95,7 +99,7 @@ export const LoginAuth = async (body: UserAuth) => {
             throw err;
         }
 
-        const real_result: User = result[0];
+        const real_result: Account = result[0];
 
         if (real_result.Password != body.EncodedPassword) {
             const err: ErrorResponseBody = {
@@ -106,7 +110,7 @@ export const LoginAuth = async (body: UserAuth) => {
             throw err;
         }
 
-        return new LoggedInResponse("We good", real_result.UserId);
+        return new LoggedInResponse("We good", real_result.AccountId);
     }
     catch (err) {
         const error = err as ErrorResponseBody;

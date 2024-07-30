@@ -3,7 +3,7 @@
     "address": "address_id",
     "reservation": "reservetionid",
     "exercisetype": "exercisetypeid",
-    "user": "userid",
+    "account": "account_id",
     "wrkoutmachine": "wrkoutmachineid",
     "wrkoutplan": "wrkoutplanid",
     "wrkoutplanpreset": "wrkoutplanpresetid",

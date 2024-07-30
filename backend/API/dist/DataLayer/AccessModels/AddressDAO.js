@@ -79,22 +79,27 @@ var AddressDAO = /** @class */ (function (_super) {
     };
     AddressDAO.prototype.SelectAdressById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var result;
+            var result, err_2;
             return __generator(this, function (_a) {
-                try {
-                    result = this.SelectById(id);
-                    return [2 /*return*/, result];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.SelectById(id)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                    case 2:
+                        err_2 = _a.sent();
+                        console.error(err_2);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
-                catch (err) {
-                    console.error(err);
-                }
-                return [2 /*return*/];
             });
         });
     };
     AddressDAO.prototype.InsertAddress = function (body) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, err_2;
+            var result, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -104,9 +109,9 @@ var AddressDAO = /** @class */ (function (_super) {
                         result = _a.sent();
                         return [2 /*return*/, result];
                     case 2:
-                        err_2 = _a.sent();
-                        console.error(err_2);
-                        return [2 /*return*/, new DatabaseFail(err_2)];
+                        err_3 = _a.sent();
+                        console.error(err_3);
+                        return [2 /*return*/, new DatabaseFail(err_3)];
                     case 3: return [2 /*return*/];
                 }
             });

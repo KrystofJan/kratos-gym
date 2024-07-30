@@ -52,12 +52,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
 import { DatabaseFail } from "../Database/DatabaseResponse.js";
-var UserDAO = /** @class */ (function (_super) {
-    __extends(UserDAO, _super);
-    function UserDAO() {
-        return _super.call(this, TableTypes.User) || this;
+var AccountDAO = /** @class */ (function (_super) {
+    __extends(AccountDAO, _super);
+    function AccountDAO() {
+        return _super.call(this, TableTypes.Account) || this;
     }
-    UserDAO.prototype.SelectAllUsers = function () {
+    AccountDAO.prototype.SelectAllUsers = function () {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -72,7 +72,7 @@ var UserDAO = /** @class */ (function (_super) {
             });
         });
     };
-    UserDAO.prototype.SelectUserById = function (id) {
+    AccountDAO.prototype.SelectUserById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var result, err_1;
             return __generator(this, function (_a) {
@@ -93,7 +93,7 @@ var UserDAO = /** @class */ (function (_super) {
             });
         });
     };
-    UserDAO.prototype.SelectUserByAttribute = function (attrName, attrValue) {
+    AccountDAO.prototype.SelectUserByAttribute = function (attrName, attrValue) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -108,7 +108,7 @@ var UserDAO = /** @class */ (function (_super) {
             });
         });
     };
-    UserDAO.prototype.InsertUser = function (body) {
+    AccountDAO.prototype.InsertUser = function (body) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -124,6 +124,6 @@ var UserDAO = /** @class */ (function (_super) {
             });
         });
     };
-    return UserDAO;
+    return AccountDAO;
 }(RelationalModel));
-export { UserDAO };
+export { AccountDAO };

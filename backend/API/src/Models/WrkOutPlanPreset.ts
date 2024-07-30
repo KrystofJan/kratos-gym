@@ -1,13 +1,13 @@
 import { IDictionary } from "../utils/Utilities.js";
 import { Model } from './Model.js';
-import { User } from './User.js';
+import { Account } from './User.js';
 
-export class WrkOutPlanPreset extends Model{
+export class WrkOutPlanPreset extends Model {
     WrkOutPlanPresetId: number;
     PresetName: string;
-    Author: User;
+    Author: Account;
 
-    constructor(jsonData: IDictionary<any>){
+    constructor(jsonData: IDictionary<any>) {
         super();
         this.WrkOutPlanPresetId = jsonData.WrkOutPlanPresetId;
         this.PresetName = jsonData.PresetName;

@@ -2,7 +2,7 @@ export enum TableTypes {
     test = "test",
     WrkOutPlan = "wrkoutplan",
     WrkOutPlanPreset = "wrkoutplanpreset",
-    User = "user",
+    Account = "account",
     Address = "address",
     ExerciseType = "exercisetype",
     WrkOutMachine = "wrkoutmachine",

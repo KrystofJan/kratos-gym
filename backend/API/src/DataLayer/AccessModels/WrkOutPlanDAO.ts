@@ -12,7 +12,8 @@ export class WrkOutPlanDAO extends RelationalModel {
 
     async SelectWrkOutPlanById(id: number) {
         try {
-            const result = this.SelectById(id);
+            const result = await this.SelectById(id);
+            console.log(result)
             return result;
         }
         catch (err) {
@@ -22,7 +23,8 @@ export class WrkOutPlanDAO extends RelationalModel {
 
     async SelectAllWrkOutPlans() {
         try {
-            const result = this.SelectAll();
+            const result = await this.SelectAll();
+            console.log(result)
             return result;
         }
         catch (err) {

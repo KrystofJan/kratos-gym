@@ -34,27 +34,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { UserDAO } from '../DataLayer/AccessModels/UserDAO.js';
-import { User, UserAttrs } from '../Models/User.js';
+import { AccountDAO } from '../DataLayer/AccessModels/UserDAO.js';
+import { Account, UserAttrs } from '../Models/User.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
 import { ResponseStatus } from '../RequestUtility/common/ResponseStatus.js';
 import { LoggedInResponse } from '../RequestUtility/CustomResponces/LogInResponse.js';
+import { AddressDAO } from '../DataLayer/AccessModels/AddressDAO.js';
+import { Address } from '../Models/Address.js';
 export var FindAllUsers = function () { return __awaiter(void 0, void 0, void 0, function () {
     var userDao, body, results, _i, body_1, b, a, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                userDao = new UserDAO();
+                userDao = new AccountDAO();
                 return [4 /*yield*/, userDao.SelectAllUsers()];
             case 1:
                 body = _a.sent();
                 results = [];
                 for (_i = 0, body_1 = body; _i < body_1.length; _i++) {
                     b = body_1[_i];
-                    a = new User(b);
+                    a = new Account(b);
                     results.push(a);
                 }
                 return [2 /*return*/, new OkResponse("We good", results)];
@@ -66,22 +68,27 @@ export var FindAllUsers = function () { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 export var FindUserById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var userDao, body, result, err_2;
+    var userDao, addressDAO, body, addr, result, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                userDao = new UserDAO();
+                _a.trys.push([0, 3, , 4]);
+                userDao = new AccountDAO();
+                addressDAO = new AddressDAO();
                 return [4 /*yield*/, userDao.SelectUserById(id)];
             case 1:
                 body = _a.sent();
                 console.log(body);
-                result = new User(body);
-                return [2 /*return*/, new OkResponse("We good", result)];
+                return [4 /*yield*/, addressDAO.SelectAdressById(body.address_id)];
             case 2:
+                addr = _a.sent();
+                result = new Account(body);
+                result.Address = new Address(addr);
+                return [2 /*return*/, new OkResponse("We good", result)];
+            case 3:
                 err_2 = _a.sent();
                 return [2 /*return*/, new FailedResponse("Cannot get any of these things :(", 404)];
-            case 3: return [2 /*return*/];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
@@ -91,7 +98,7 @@ export var CreateUser = function (body) { return __awaiter(void 0, void 0, void 
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                userDao = new UserDAO();
+                userDao = new AccountDAO();
                 return [4 /*yield*/, userDao.InsertUser(body)];
             case 1:
                 result = _a.sent();
@@ -110,7 +117,7 @@ export var LoginAuth = function (body) { return __awaiter(void 0, void 0, void 0
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 5, , 6]);
-                userDao = new UserDAO();
+                userDao = new AccountDAO();
                 result = [];
                 if (!body.LoginOrEmail.includes('@')) return [3 /*break*/, 2];
                 return [4 /*yield*/, userDao.SelectUserByAttribute(UserAttrs.Email, body.LoginOrEmail)];
@@ -139,7 +146,7 @@ export var LoginAuth = function (body) { return __awaiter(void 0, void 0, void 0
                     };
                     throw err;
                 }
-                return [2 /*return*/, new LoggedInResponse("We good", real_result.UserId)];
+                return [2 /*return*/, new LoggedInResponse("We good", real_result.AccountId)];
             case 5:
                 err_4 = _a.sent();
                 error = err_4;
