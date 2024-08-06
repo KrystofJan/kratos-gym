@@ -1,13 +1,13 @@
 import { IDictionary } from "../../utils/Utilities.js";
 import { Model } from '../Model.js';
 
-export class WrkOutPlanPostModel extends Model{
-    public PlanName: string;
-    public UserId: number;
-    
+export class WrkOutPlanPostModel extends Model {
+    public planname: string;
+    public accountid: number;
+
     constructor(jsonData: IDictionary<any>) {
         super();
-        this.PlanName = jsonData.PlanName;
-        this.UserId = jsonData.UserId;
+        this.planname = jsonData.PlanName;
+        this.accountid = jsonData.AccountId;
     }
 }

@@ -9,8 +9,8 @@ export class WrkOutPlan extends Model {
 
     constructor(jsonData: IDictionary<any>) {
         super();
-        this.WrkOutPlanId = jsonData.WrkOutPlanId;
-        this.PlanName = jsonData.PlanName;
-        this.User = jsonData.User;
+        this.WrkOutPlanId = jsonData.wrkoutplanid;
+        this.PlanName = jsonData.planname;
+        this.User = jsonData.account ?? null;
     }
 }

@@ -17,10 +17,11 @@ import { Model } from './Model.js';
 var WrkOutPlan = /** @class */ (function (_super) {
     __extends(WrkOutPlan, _super);
     function WrkOutPlan(jsonData) {
+        var _a;
         var _this = _super.call(this) || this;
-        _this.WrkOutPlanId = jsonData.WrkOutPlanId;
-        _this.PlanName = jsonData.PlanName;
-        _this.User = jsonData.User;
+        _this.WrkOutPlanId = jsonData.wrkoutplanid;
+        _this.PlanName = jsonData.planname;
+        _this.User = (_a = jsonData.account) !== null && _a !== void 0 ? _a : null;
         return _this;
     }
     return WrkOutPlan;

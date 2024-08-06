@@ -55,6 +55,7 @@ export class Database {
             return new DatabaseSuccess(result);
         } catch (error) {
             console.error("Error executing query:", error);
+
             logger.error(error)
             return new DatabaseFail(error as Error)
         }

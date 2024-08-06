@@ -27,13 +27,16 @@ export const FindAllWrkOutPlans = async (): Promise<Response> => {
         const wrkOutPlanDao = new WrkOutPlanDAO();
         const body: Array<WrkoutPlanGetModel> = await wrkOutPlanDao.SelectAllWrkOutPlans();
 
+        console.log(body)
 
         // validate...
         const results: Array<WrkOutPlan> = [];
 
         for (const b of body) {
             const userDao = new AccountDAO();
-            const userData = await userDao.SelectUserById(b.UserId);
+            console.log(b)
+            const userData = await userDao.SelectUserById(b.accountid);
+            console.log(userData, "")
             const user: Account = new Account(userData);
             const a = new WrkOutPlan(b);
             a.User = user;
@@ -54,7 +57,7 @@ export const FindWrkOutPlanById = async (id: number): Promise<Response> => {
         const userDao = new AccountDAO();
 
         // validate...
-        const userData = await userDao.SelectUserById(body.UserId);
+        const userData = await userDao.SelectUserById(body.accountid);
         const user: Account = new Account(userData);
 
         const result = new WrkOutPlan(body);
@@ -77,7 +80,7 @@ export const FindWrkOutMachinesContainedInId = async (id: number) => {
 
         for (const machineBody of body) {
             const wrkOutMachinesDAO = new WrkOutMachineDAO();
-            const machineData = await wrkOutMachinesDAO.SelectWrkOutMachineById(machineBody.WrkOutMachineId);
+            const machineData = await wrkOutMachinesDAO.SelectWrkOutMachineById(machineBody.wrkoutmachineid);
             const wrkOutMachine = new WrkOutMachine(machineData);
             const wrkOutPlanMachine = new WrkOutPlanMachine(machineBody);
             wrkOutPlanMachine.WrkOutMachine = wrkOutMachine;

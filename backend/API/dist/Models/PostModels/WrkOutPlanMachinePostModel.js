@@ -18,13 +18,13 @@ var WrkOutPlanMachinePostModel = /** @class */ (function (_super) {
     __extends(WrkOutPlanMachinePostModel, _super);
     function WrkOutPlanMachinePostModel(jsonData) {
         var _this = _super.call(this) || this;
-        _this.WrkOutMachineId = jsonData.WrkOutMachineId;
-        _this.WrkOutPlanId = jsonData.WrkOutPland;
-        _this.Sets = jsonData.Sets;
-        _this.Reps = jsonData.Reps;
-        _this.WrkOutStartTime = jsonData.WrkOutStartTime;
-        _this.WrkOutEndTime = jsonData.WrkOutEndTime;
-        _this.CanDisturb = jsonData.CanDisturb;
+        _this.wrkoutmachine_id = jsonData.WrkOutMachineId;
+        _this.wrkoutplan_id = jsonData.WrkOutPland;
+        _this.sets = jsonData.Sets;
+        _this.reps = jsonData.Reps;
+        _this.wrkout_start_time = jsonData.WrkOutStartTime;
+        _this.wrkout_end_time = jsonData.WrkOutEndTime;
+        _this.can_disturb = jsonData.CanDisturb;
         return _this;
     }
     return WrkOutPlanMachinePostModel;

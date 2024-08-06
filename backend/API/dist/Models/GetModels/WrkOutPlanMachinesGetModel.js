@@ -18,8 +18,8 @@ var WrkoutPlanMachineGetModel = /** @class */ (function (_super) {
     __extends(WrkoutPlanMachineGetModel, _super);
     function WrkoutPlanMachineGetModel(jsonData) {
         var _this = _super.call(this) || this;
-        _this.WrkOutPlanId = jsonData.WrkOutPlanId;
-        _this.WrkOutMachineId = jsonData.WrkOutMachineId;
+        _this.wrkoutplanid = jsonData.wrkoutplanid;
+        _this.wrkoutmachineid = jsonData.wrkoutmachineid;
         return _this;
     }
     return WrkoutPlanMachineGetModel;

@@ -59,6 +59,7 @@ export var FindAllWrkOutPlans = function () { return __awaiter(void 0, void 0, v
                 return [4 /*yield*/, wrkOutPlanDao.SelectAllWrkOutPlans()];
             case 1:
                 body = _a.sent();
+                console.log(body);
                 results = [];
                 _i = 0, body_1 = body;
                 _a.label = 2;
@@ -66,9 +67,11 @@ export var FindAllWrkOutPlans = function () { return __awaiter(void 0, void 0, v
                 if (!(_i < body_1.length)) return [3 /*break*/, 5];
                 b = body_1[_i];
                 userDao = new AccountDAO();
-                return [4 /*yield*/, userDao.SelectUserById(b.UserId)];
+                console.log(b);
+                return [4 /*yield*/, userDao.SelectUserById(b.accountid)];
             case 3:
                 userData = _a.sent();
+                console.log(userData, "");
                 user = new Account(userData);
                 a = new WrkOutPlan(b);
                 a.User = user;
@@ -96,7 +99,7 @@ export var FindWrkOutPlanById = function (id) { return __awaiter(void 0, void 0,
             case 1:
                 body = _a.sent();
                 userDao = new AccountDAO();
-                return [4 /*yield*/, userDao.SelectUserById(body.UserId)];
+                return [4 /*yield*/, userDao.SelectUserById(body.accountid)];
             case 2:
                 userData = _a.sent();
                 user = new Account(userData);
@@ -127,7 +130,7 @@ export var FindWrkOutMachinesContainedInId = function (id) { return __awaiter(vo
                 if (!(_i < body_2.length)) return [3 /*break*/, 5];
                 machineBody = body_2[_i];
                 wrkOutMachinesDAO = new WrkOutMachineDAO();
-                return [4 /*yield*/, wrkOutMachinesDAO.SelectWrkOutMachineById(machineBody.WrkOutMachineId)];
+                return [4 /*yield*/, wrkOutMachinesDAO.SelectWrkOutMachineById(machineBody.wrkoutmachineid)];
             case 3:
                 machineData = _a.sent();
                 wrkOutMachine = new WrkOutMachine(machineData);

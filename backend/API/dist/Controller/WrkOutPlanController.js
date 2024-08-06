@@ -35,6 +35,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { FindAllWrkOutPlans, FindWrkOutPlanById, AddTypeToPlan, FindExerciseTypesContainedInId, FindWrkOutMachinesContainedInId, CreateWrkOutPlan, AddMachineToPlan, AddMultipleMachinesToPlan } from '../Managers/WrkOutPlanManager.js';
+import { WrkOutPlanPostModel } from '../Models/PostModels/WrkOutPlanPostModel.js';
+import { WrkOutPlanMachinePostModel } from '../Models/PostModels/WrkOutPlanMachinePostModel.js';
 export var getWrkOutPlanById = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
     var response;
     return __generator(this, function (_a) {
@@ -64,7 +66,8 @@ export var postWrkOutPlan = function (req, res) { return __awaiter(void 0, void 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                body = req.body;
+                body = new WrkOutPlanPostModel(req.body);
+                console.log(body);
                 return [4 /*yield*/, CreateWrkOutPlan(body)];
             case 1:
                 response = _a.sent();
@@ -92,7 +95,7 @@ var handlePostMultipleMachinesToPlan = function (body, id) { return __awaiter(vo
             case 0:
                 for (_i = 0, body_1 = body; _i < body_1.length; _i++) {
                     record = body_1[_i];
-                    record.WrkOutPlanId = id;
+                    record.wrkoutplan_id = id;
                 }
                 return [4 /*yield*/, AddMultipleMachinesToPlan(body)];
             case 1:
@@ -106,7 +109,7 @@ var handlePostSingleMachineToPlan = function (body, id) { return __awaiter(void 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                body.WrkOutPlanId = id;
+                body.wrkoutplan_id = id;
                 return [4 /*yield*/, AddMachineToPlan(body)];
             case 1:
                 response = _a.sent();
@@ -115,22 +118,26 @@ var handlePostSingleMachineToPlan = function (body, id) { return __awaiter(void 
     });
 }); };
 export var postMachineToPlan = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
-    var response, body_2, body;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var response, body_2, _i, _a, b, body;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 if (!Array.isArray(req.body)) return [3 /*break*/, 2];
-                body_2 = req.body;
+                body_2 = [];
+                for (_i = 0, _a = req.body; _i < _a.length; _i++) {
+                    b = _a[_i];
+                    body_2.push(new WrkOutPlanMachinePostModel(b));
+                }
                 return [4 /*yield*/, handlePostMultipleMachinesToPlan(body_2, id)];
             case 1:
-                response = _a.sent();
+                response = _b.sent();
                 response.buildResponse(req, res);
                 return [2 /*return*/];
             case 2:
                 body = req.body;
                 return [4 /*yield*/, handlePostSingleMachineToPlan(body, id)];
             case 3:
-                response = _a.sent();
+                response = _b.sent();
                 response.buildResponse(req, res);
                 return [2 /*return*/];
         }
