@@ -1,13 +1,13 @@
 import { IDictionary } from "../utils/Utilities.js";
 import { Model } from './Model.js';
 import { ExerciseType } from './ExerciseType.js';
-import { WrkOutMachine } from './WrkOutMachine.js';
+import { Machine } from './Machine.js';
 
-export class MachineExerciseTypes extends Model{
+export class MachineExerciseTypes extends Model {
     public ExerciseType: ExerciseType;
-    public Machine: WrkOutMachine;
+    public Machine: Machine;
 
-    constructor(jsonData: IDictionary<any>){
+    constructor(jsonData: IDictionary<any>) {
         super();
         this.ExerciseType = jsonData.ExerciseType;
         this.Machine = jsonData.Machine;

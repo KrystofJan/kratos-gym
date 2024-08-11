@@ -22,13 +22,17 @@ export class RelationalModel {
                 const successResult = result as DatabaseSuccess;
                 return successResult.Body;
             }
+            else {
+                throw result
+            }
         }
         catch (err) {
             if (err instanceof DatabaseFail) {
                 return err;
             }
             else {
-                console.error(err);
+                // console.error(err);
+                console.log("asdasd")
                 throw err;
             }
         }

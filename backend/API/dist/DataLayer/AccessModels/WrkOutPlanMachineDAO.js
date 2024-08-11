@@ -52,13 +52,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { RelationalModel } from './RelationalModel.js';
 import { TableTypes } from "../Database/TableTypes.js";
 import { DatabaseFail, DatabaseSuccess } from '../Database/DatabaseResponse.js';
-var WrkOutPlanMachinesDAO = /** @class */ (function (_super) {
-    __extends(WrkOutPlanMachinesDAO, _super);
-    function WrkOutPlanMachinesDAO() {
+var PlanMachinesDAO = /** @class */ (function (_super) {
+    __extends(PlanMachinesDAO, _super);
+    function PlanMachinesDAO() {
         return _super.call(this, TableTypes.WrkOutPlanMachines) || this;
     }
     // TODO: Move logic to wrkOutPlan
-    WrkOutPlanMachinesDAO.prototype.SelectWrkOutPlanBy_WrkOutPlanId = function (id) {
+    PlanMachinesDAO.prototype.SelectPlanBy_WrkOutPlanId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -68,13 +68,14 @@ var WrkOutPlanMachinesDAO = /** @class */ (function (_super) {
                 }
                 catch (err) {
                     console.error(err);
+                    throw err;
                 }
                 return [2 /*return*/];
             });
         });
     };
     // TODO: Move logic to wrkOutMachine
-    WrkOutPlanMachinesDAO.prototype.SelectWrkOutPlanBy_WrkOutMachineId = function (id) {
+    PlanMachinesDAO.prototype.SelectPlanBy_WrkOutMachineId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -89,7 +90,7 @@ var WrkOutPlanMachinesDAO = /** @class */ (function (_super) {
             });
         });
     };
-    WrkOutPlanMachinesDAO.prototype.SelectOccupiedMachineAmount = function (id, time, date) {
+    PlanMachinesDAO.prototype.SelectOccupiedMachineAmount = function (id, time, date) {
         return __awaiter(this, void 0, void 0, function () {
             var result, successResult, err_1;
             return __generator(this, function (_a) {
@@ -121,7 +122,7 @@ var WrkOutPlanMachinesDAO = /** @class */ (function (_super) {
             });
         });
     };
-    WrkOutPlanMachinesDAO.prototype.InsertWrkOutPlanMachine = function (body) {
+    PlanMachinesDAO.prototype.InsertPlanMachine = function (body) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -130,12 +131,12 @@ var WrkOutPlanMachinesDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    console.log("asdasd");
                 }
                 return [2 /*return*/];
             });
         });
     };
-    return WrkOutPlanMachinesDAO;
+    return PlanMachinesDAO;
 }(RelationalModel));
-export { WrkOutPlanMachinesDAO };
+export { PlanMachinesDAO };

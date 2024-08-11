@@ -42,10 +42,9 @@ import postgres from 'postgres';
 import dotenv from "dotenv";
 import * as dbKeys from '../keys/table-keys.json' with { type: "json" };
 import { DatabaseSuccess, DatabaseFail } from './DatabaseResponse.js';
-import Pino from 'pino';
+import { logger } from '../../utils/logger.js';
 dotenv.config();
 var _a = process.env, PGHOST = _a.PGHOST, PGDATABASE = _a.PGDATABASE, PGUSER = _a.PGUSER, PGPASSWORD = _a.PGPASSWORD, ENDPOINT_ID = _a.ENDPOINT_ID;
-var logger = Pino.pino();
 var Database = /** @class */ (function () {
     function Database() {
         this.sql = postgres({
@@ -75,9 +74,8 @@ var Database = /** @class */ (function () {
                         return [2 /*return*/, new DatabaseSuccess(result)];
                     case 2:
                         error_1 = _a.sent();
-                        console.error("Error executing query:", error_1);
                         logger.error(error_1);
-                        return [2 /*return*/, new DatabaseFail(error_1)];
+                        throw new DatabaseFail(error_1);
                     case 3: return [2 /*return*/];
                 }
             });
@@ -103,9 +101,8 @@ var Database = /** @class */ (function () {
                         return [2 /*return*/, new DatabaseSuccess(result)];
                     case 3:
                         error_2 = _a.sent();
-                        console.error("Error executing query:", error_2);
                         logger.error(error_2);
-                        return [2 /*return*/, new DatabaseFail(error_2)];
+                        throw new DatabaseFail(error_2);
                     case 4: return [2 /*return*/];
                 }
             });
@@ -125,9 +122,8 @@ var Database = /** @class */ (function () {
                         return [2 /*return*/, new DatabaseSuccess(result)];
                     case 2:
                         error_3 = _a.sent();
-                        console.error("Error executing query:", error_3);
                         logger.error(error_3);
-                        return [2 /*return*/, new DatabaseFail(error_3)];
+                        throw new DatabaseFail(error_3);
                     case 3: return [2 /*return*/];
                 }
             });
@@ -157,7 +153,7 @@ var Database = /** @class */ (function () {
                         error_4 = _a.sent();
                         console.error("Error executing query:", error_4);
                         logger.error(error_4);
-                        return [2 /*return*/, new DatabaseFail(error_4)];
+                        throw new DatabaseFail(error_4);
                     case 4: return [2 /*return*/];
                 }
             });

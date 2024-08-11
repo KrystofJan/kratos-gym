@@ -1,7 +1,7 @@
 import { IDictionary } from "../utils/Utilities.js";
 import { Model } from './Model.js';
 import { Account } from './User.js';
-import { WrkOutPlan } from './WrkOutPlan.js';
+import { Plan } from './Plan.js';
 
 export class Reservation extends Model {
     public ReservationId: number;
@@ -9,7 +9,7 @@ export class Reservation extends Model {
     public ReservationTime: Date;
     public Customer: Account;
     public Trainer: Account | null;
-    public WrkOutPlan: WrkOutPlan;
+    public Plan: Plan;
 
     constructor(jsonData: IDictionary<any>) {
         super();
@@ -19,6 +19,6 @@ export class Reservation extends Model {
         this.ReservationTime = jsonData.ReservationTime;
         this.Customer = jsonData.Customer;
         this.Trainer = jsonData.Trainer ?? null;
-        this.WrkOutPlan = jsonData.WrkOutPlan;
+        this.Plan = jsonData.Plan;
     }
 }

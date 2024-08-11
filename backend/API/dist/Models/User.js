@@ -47,7 +47,7 @@ var Account = /** @class */ (function (_super) {
         _this.FirstName = jsonData.first_name;
         _this.LastName = jsonData.last_name;
         _this.Role = UserRole.CUSTOMER;
-        switch (jsonData.Role) {
+        switch (jsonData.role) {
             case UserRole.CUSTOMER: {
                 _this.Role = UserRole.CUSTOMER;
                 break;

@@ -18,7 +18,7 @@ var MachineExerciseTypeGetModel = /** @class */ (function (_super) {
     __extends(MachineExerciseTypeGetModel, _super);
     function MachineExerciseTypeGetModel(wrkOutMachineId, exerciseTypeId) {
         var _this = _super.call(this) || this;
-        _this.WrkOutMachineId = wrkOutMachineId;
+        _this.MachineId = wrkOutMachineId;
         _this.ExerciseTypeId = exerciseTypeId;
         return _this;
     }

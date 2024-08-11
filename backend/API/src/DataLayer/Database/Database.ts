@@ -4,12 +4,11 @@ import * as dbKeys from '../keys/table-keys.json' with {type: "json"};
 import { IDictionary } from '../../utils/Utilities.js';
 import { DatabaseResponse, DatabaseSuccess, DatabaseFail } from './DatabaseResponse.js';
 import { Model } from '../../Models/Model.js';
-import Pino from 'pino'
+import { logger } from '../../utils/logger.js';
 
 dotenv.config();
 
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
-const logger = Pino.pino()
 
 export class Database {
 
@@ -37,9 +36,8 @@ export class Database {
             logger.info("Select all was successful")
             return new DatabaseSuccess(result);
         } catch (error) {
-            console.error("Error executing query:", error);
             logger.error(error)
-            return new DatabaseFail(error as Error)
+            throw new DatabaseFail(error as Error)
         }
     }
 
@@ -54,10 +52,8 @@ export class Database {
             logger.info("Select specific was successful")
             return new DatabaseSuccess(result);
         } catch (error) {
-            console.error("Error executing query:", error);
-
             logger.error(error)
-            return new DatabaseFail(error as Error)
+            throw new DatabaseFail(error as Error)
         }
     }
 
@@ -67,9 +63,8 @@ export class Database {
             logger.info("Select by attr was successful")
             return new DatabaseSuccess(result);
         } catch (error) {
-            console.error("Error executing query:", error);
             logger.error(error)
-            return new DatabaseFail(error as Error)
+            throw new DatabaseFail(error as Error)
         }
     }
 
@@ -85,7 +80,7 @@ export class Database {
         } catch (error) {
             console.error("Error executing query:", error);
             logger.error(error)
-            return new DatabaseFail(error as Error)
+            throw new DatabaseFail(error as Error)
         }
     }
 

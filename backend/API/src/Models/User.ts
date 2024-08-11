@@ -47,7 +47,7 @@ export class Account extends Model {
         this.FirstName = jsonData.first_name;
         this.LastName = jsonData.last_name
         this.Role = UserRole.CUSTOMER;
-        switch (jsonData.Role) {
+        switch (jsonData.role) {
             case UserRole.CUSTOMER: {
                 this.Role = UserRole.CUSTOMER;
                 break;

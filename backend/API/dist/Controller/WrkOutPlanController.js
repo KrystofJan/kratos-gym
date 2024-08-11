@@ -34,14 +34,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { FindAllWrkOutPlans, FindWrkOutPlanById, AddTypeToPlan, FindExerciseTypesContainedInId, FindWrkOutMachinesContainedInId, CreateWrkOutPlan, AddMachineToPlan, AddMultipleMachinesToPlan } from '../Managers/WrkOutPlanManager.js';
-import { WrkOutPlanPostModel } from '../Models/PostModels/WrkOutPlanPostModel.js';
-import { WrkOutPlanMachinePostModel } from '../Models/PostModels/WrkOutPlanMachinePostModel.js';
+import { AddTypeToPlan, FindExerciseTypesContainedInId, FindWrkOutMachinesContainedInId, AddMachineToPlan, AddMultipleMachinesToPlan } from '../Managers/WrkOutPlanManager.js';
+import { WrkOutPlanMachinePostModel } from '../Models/PostModels/PlanMachinePostModel.js';
 export var getWrkOutPlanById = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
     var response;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, FindWrkOutPlanById(id)];
+            case 0: return [4 /*yield*/, FindPlanById(id)];
             case 1:
                 response = _a.sent();
                 response.buildResponse(req, res);
@@ -53,7 +52,7 @@ export var getAllWrkOutPlans = function (req, res) { return __awaiter(void 0, vo
     var response;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, FindAllWrkOutPlans()];
+            case 0: return [4 /*yield*/, FindAllPlans()];
             case 1:
                 response = _a.sent();
                 response.buildResponse(req, res);
@@ -68,7 +67,7 @@ export var postWrkOutPlan = function (req, res) { return __awaiter(void 0, void 
             case 0:
                 body = new WrkOutPlanPostModel(req.body);
                 console.log(body);
-                return [4 /*yield*/, CreateWrkOutPlan(body)];
+                return [4 /*yield*/, CreatePlan(body)];
             case 1:
                 response = _a.sent();
                 response.buildResponse(req, res);
@@ -118,26 +117,28 @@ var handlePostSingleMachineToPlan = function (body, id) { return __awaiter(void 
     });
 }); };
 export var postMachineToPlan = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
-    var response, body_2, _i, _a, b, body;
+    var response, body, _i, _a, b, body;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 if (!Array.isArray(req.body)) return [3 /*break*/, 2];
-                body_2 = [];
+                body = [];
                 for (_i = 0, _a = req.body; _i < _a.length; _i++) {
                     b = _a[_i];
-                    body_2.push(new WrkOutPlanMachinePostModel(b));
+                    body.push(new WrkOutPlanMachinePostModel(b));
                 }
-                return [4 /*yield*/, handlePostMultipleMachinesToPlan(body_2, id)];
+                return [4 /*yield*/, handlePostMultipleMachinesToPlan(body, id)];
             case 1:
                 response = _b.sent();
-                response.buildResponse(req, res);
-                return [2 /*return*/];
+                return [3 /*break*/, 4];
             case 2:
                 body = req.body;
                 return [4 /*yield*/, handlePostSingleMachineToPlan(body, id)];
             case 3:
                 response = _b.sent();
+                _b.label = 4;
+            case 4:
+                console.log(response);
                 response.buildResponse(req, res);
                 return [2 /*return*/];
         }
@@ -149,7 +150,7 @@ export var postExerciseTypeToPlan = function (req, res, id) { return __awaiter(v
         switch (_a.label) {
             case 0:
                 body = req.body;
-                body.WrkOutPlanId = id;
+                body.plan_id = id;
                 return [4 /*yield*/, AddTypeToPlan(body)];
             case 1:
                 response = _a.sent();

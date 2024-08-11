@@ -1,16 +1,16 @@
 export var TableTypes;
 (function (TableTypes) {
     TableTypes["test"] = "test";
-    TableTypes["WrkOutPlan"] = "wrkoutplan";
-    TableTypes["WrkOutPlanPreset"] = "wrkoutplanpreset";
+    TableTypes["Plan"] = "wrkoutplan";
+    TableTypes["PlanPreset"] = "wrkoutplanpreset";
     TableTypes["Account"] = "account";
     TableTypes["Address"] = "address";
     TableTypes["ExerciseType"] = "exercisetype";
-    TableTypes["WrkOutMachine"] = "wrkoutmachine";
+    TableTypes["Machine"] = "wrkoutmachine";
     TableTypes["MachineExerciseTypes"] = "machineexercisetypes";
     TableTypes["Reservation"] = "reservation";
-    TableTypes["WrkOutPlanType"] = "wrkoutplantype";
-    TableTypes["WrkOutPlanMachines"] = "wrkoutplanmachines";
-    TableTypes["WrkOutPlanMachinesPreset"] = "wrkoutplanmachinespreset";
+    TableTypes["PlanType"] = "wrkoutplantype";
+    TableTypes["PlanMachines"] = "wrkoutplanmachines";
+    TableTypes["PlanMachinesPreset"] = "wrkoutplanmachinespreset";
     TableTypes["MachineExerciseTypes_Machine"] = "machineexercisetypes--";
 })(TableTypes || (TableTypes = {}));

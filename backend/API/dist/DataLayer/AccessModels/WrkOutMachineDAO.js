@@ -55,7 +55,7 @@ import { DatabaseFail } from "../Database/DatabaseResponse.js";
 var WrkOutMachineDAO = /** @class */ (function (_super) {
     __extends(WrkOutMachineDAO, _super);
     function WrkOutMachineDAO() {
-        return _super.call(this, TableTypes.WrkOutMachine) || this;
+        return _super.call(this, TableTypes.Machine) || this;
     }
     WrkOutMachineDAO.prototype.SelectAllWrkOutMachines = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -72,7 +72,7 @@ var WrkOutMachineDAO = /** @class */ (function (_super) {
             });
         });
     };
-    WrkOutMachineDAO.prototype.SelectWrkOutMachineById = function (id) {
+    WrkOutMachineDAO.prototype.SelectMachineById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {

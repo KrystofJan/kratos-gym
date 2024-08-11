@@ -22,9 +22,9 @@ export class MachineExerciseTypesDAO extends RelationalModel {
     }
 
     // TODO: Move logic to wrkOutMachine
-    async SelectMachineExerciseTypesBy_WrkOutMachineId(id: number) {
+    async SelectMachineExerciseTypesBy_MachineId(id: number) {
         try {
-            const result = await this.SecectByForeignId(id, TableTypes.WrkOutMachine);
+            const result = await this.SecectByForeignId(id, TableTypes.Machine);
             console.log('res', result);
             return result;
         }

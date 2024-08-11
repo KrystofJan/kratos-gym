@@ -55,7 +55,7 @@ import { DatabaseFail } from '../Database/DatabaseResponse.js';
 var WrkOutPlanDAO = /** @class */ (function (_super) {
     __extends(WrkOutPlanDAO, _super);
     function WrkOutPlanDAO() {
-        return _super.call(this, TableTypes.WrkOutPlan) || this;
+        return _super.call(this, TableTypes.Plan) || this;
     }
     WrkOutPlanDAO.prototype.SelectWrkOutPlanById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
@@ -78,7 +78,7 @@ var WrkOutPlanDAO = /** @class */ (function (_super) {
             });
         });
     };
-    WrkOutPlanDAO.prototype.SelectAllWrkOutPlans = function () {
+    WrkOutPlanDAO.prototype.SelectAllPlans = function () {
         return __awaiter(this, void 0, void 0, function () {
             var result, err_2;
             return __generator(this, function (_a) {

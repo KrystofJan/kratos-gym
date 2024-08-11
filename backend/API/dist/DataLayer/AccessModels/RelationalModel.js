@@ -55,6 +55,9 @@ var RelationalModel = /** @class */ (function () {
                             successResult = result;
                             return [2 /*return*/, successResult.Body];
                         }
+                        else {
+                            throw result;
+                        }
                         return [3 /*break*/, 3];
                     case 2:
                         err_1 = _a.sent();
@@ -62,7 +65,8 @@ var RelationalModel = /** @class */ (function () {
                             return [2 /*return*/, err_1];
                         }
                         else {
-                            console.error(err_1);
+                            // console.error(err);
+                            console.log("asdasd");
                             throw err_1;
                         }
                         return [3 /*break*/, 3];
