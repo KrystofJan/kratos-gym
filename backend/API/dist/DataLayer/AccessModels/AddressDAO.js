@@ -51,6 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
+import { DatabaseFail } from "../Database/DatabaseResponse.js";
 var AddressDAO = /** @class */ (function (_super) {
     __extends(AddressDAO, _super);
     function AddressDAO() {
@@ -58,46 +59,58 @@ var AddressDAO = /** @class */ (function (_super) {
     }
     AddressDAO.prototype.SelectAllAdresses = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var result;
+            var result, err_1;
             return __generator(this, function (_a) {
-                try {
-                    result = this.SelectAll();
-                    return [2 /*return*/, result];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.SelectAll()];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                    case 2:
+                        err_1 = _a.sent();
+                        throw new DatabaseFail(err_1);
+                    case 3: return [2 /*return*/];
                 }
-                catch (err) {
-                    console.error(err);
-                }
-                return [2 /*return*/];
             });
         });
     };
     AddressDAO.prototype.SelectAdressById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var result;
+            var result, err_2;
             return __generator(this, function (_a) {
-                try {
-                    result = this.SelectById(id);
-                    return [2 /*return*/, result];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.SelectById(id)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                    case 2:
+                        err_2 = _a.sent();
+                        throw new DatabaseFail(err_2);
+                    case 3: return [2 /*return*/];
                 }
-                catch (err) {
-                    console.error(err);
-                }
-                return [2 /*return*/];
             });
         });
     };
     AddressDAO.prototype.InsertAddress = function (body) {
         return __awaiter(this, void 0, void 0, function () {
-            var result;
+            var result, err_3;
             return __generator(this, function (_a) {
-                try {
-                    result = this.Insert(body);
-                    return [2 /*return*/, result];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.Insert(body)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                    case 2:
+                        err_3 = _a.sent();
+                        throw new DatabaseFail(err_3);
+                    case 3: return [2 /*return*/];
                 }
-                catch (err) {
-                    console.error(err);
-                }
-                return [2 /*return*/];
             });
         });
     };

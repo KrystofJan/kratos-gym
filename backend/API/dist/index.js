@@ -6,4 +6,4 @@ var PORT = 8080;
 app.use(express.json());
 app.use(cors());
 setRoutes(app);
-app.listen(PORT, function () { return console.log("Running on http://localhost:".concat(PORT)); });
+app.listen(PORT);

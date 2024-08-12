@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { FindAllReservations, FindReservationById, CreateReservation } from '../Managers/ReservationManager.js';
 import { FindUserById } from '../Managers/UserManager.js';
-import { User } from '../Models/User.js';
+import { Account } from '../Models/User.js';
 import { Reservation } from '../Models/Reservation.js';
 import { ReservationPostModel } from '../Models/PostModels/ReservationPostModel.js';
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
@@ -50,19 +50,16 @@ export var getReservationById = function (req, res, id) { return __awaiter(void 
             case 1:
                 reservation = _a.sent();
                 if (reservation instanceof OkResponse) {
-                    console.log(reservation.Body.Body);
                 }
                 if (!(reservation instanceof OkResponse && reservation.Body.Body instanceof ReservationGetModel)) return [3 /*break*/, 3];
-                console.log('asdasd');
                 reservationGetModel = new ReservationGetModel(reservation.Body.Body);
                 return [4 /*yield*/, FindUserById(reservationGetModel.CustomerId)];
             case 2:
                 customerData = _a.sent();
-                customer = new User(customerData);
+                customer = new Account(customerData);
                 tmp = new Reservation(reservation.Body.Body);
                 tmp.Customer = customer;
                 reservation.Body.Body = tmp;
-                console.log(reservation.Body.Body);
                 _a.label = 3;
             case 3:
                 reservation.buildResponse(req, res);
@@ -83,12 +80,11 @@ export var getAllReservations = function (req, res) { return __awaiter(void 0, v
             case 2:
                 if (!(i < reservations.Body.Body.length)) return [3 /*break*/, 5];
                 reservation = reservations.Body.Body[i];
-                console.log('res', reservation);
                 reservationGetModel = new ReservationGetModel(reservation);
                 return [4 /*yield*/, FindUserById(reservationGetModel.CustomerId)];
             case 3:
                 customerData = _a.sent();
-                customer = new User(customerData);
+                customer = new Account(customerData);
                 tmp = new Reservation(reservation);
                 tmp.Customer = customer;
                 reservations.Body.Body[i] = tmp;
@@ -116,7 +112,6 @@ export var postReservation = function (req, res) { return __awaiter(void 0, void
                 return [4 /*yield*/, CreateReservation(reservation)];
             case 1:
                 response = _a.sent();
-                console.log(response);
                 response.buildResponse(req, res);
                 return [2 /*return*/];
         }

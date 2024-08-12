@@ -18,13 +18,11 @@ export const getExerciseTypeById = async (req: expressRequest, res: expressRespo
 export const postExerciseType = async (req: expressRequest, res: expressResponse) => {
     const address = new ExerciseType(req.body);
     let response: Response;
-    console.log();
-    if (!address.validateAttrs()){
+    if (!address.validateAttrs()) {
         response = new BadRequestResponse("Unable to create ExerciseType model");
         response.buildResponse(req, res);
         return;
     }
     response = await CreateExerciseType(address);
-    console.log(response);
     response.buildResponse(req, res);
 }

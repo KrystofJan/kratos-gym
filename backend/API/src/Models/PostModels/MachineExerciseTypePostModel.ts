@@ -2,12 +2,12 @@ import { IDictionary } from '../../utils/Utilities.js';
 import { Model } from '../Model.js';
 
 export class MachineExerciseTypePostModel extends Model {
-    public WrkOutMachineId: number;
-    public ExerciseTypeId: number;
+    public machine_id: number;
+    public exercise_type_id: number;
 
-    constructor(jsonData: IDictionary<number>){
+    constructor(jsonData: IDictionary<number>) {
         super();
-        this.WrkOutMachineId = jsonData.WrkOutMachineId;
-        this.ExerciseTypeId = jsonData.ExerciseTypeId;
+        this.machine_id = jsonData.MachineId;
+        this.exercise_type_id = jsonData.ExerciseTypeId;
     }
 }

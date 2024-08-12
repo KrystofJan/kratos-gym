@@ -12,13 +12,13 @@ export class Address extends Model {
 
     constructor(jsonData: IDictionary<any>) {
         super();
-    
-        this.AddressId = jsonData.AddressId ?? null;
-        this.Street = jsonData.Street;
-        this.City = jsonData.City;
-        this.PostalCode = jsonData.PostalCode;
-        this.Country = jsonData.Country;
-        this.BuildingNumber = jsonData.BuildingNumber;
-        this.ApartmentNumber = jsonData.ApartmentNumber;
+
+        this.AddressId = jsonData.address_id ?? null;
+        this.Street = jsonData.street;
+        this.City = jsonData.city;
+        this.PostalCode = jsonData.postal_code;
+        this.Country = jsonData.country;
+        this.BuildingNumber = jsonData.building_number;
+        this.ApartmentNumber = jsonData.apartment_number;
     }
 }

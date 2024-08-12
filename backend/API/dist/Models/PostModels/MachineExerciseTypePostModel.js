@@ -18,8 +18,8 @@ var MachineExerciseTypePostModel = /** @class */ (function (_super) {
     __extends(MachineExerciseTypePostModel, _super);
     function MachineExerciseTypePostModel(jsonData) {
         var _this = _super.call(this) || this;
-        _this.WrkOutMachineId = jsonData.WrkOutMachineId;
-        _this.ExerciseTypeId = jsonData.ExerciseTypeId;
+        _this.machine_id = jsonData.MachineId;
+        _this.exercise_type_id = jsonData.ExerciseTypeId;
         return _this;
     }
     return MachineExerciseTypePostModel;

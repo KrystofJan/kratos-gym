@@ -19,11 +19,11 @@ var ReservationPostModel = /** @class */ (function (_super) {
     function ReservationPostModel(jsonData) {
         var _a;
         var _this = _super.call(this) || this;
-        _this.AmmoutOfPeople = jsonData.AmmoutOfPeople;
-        _this.ReservationTime = jsonData.ReservationTime;
-        _this.CustomerId = jsonData.CustomerId;
-        _this.TrainerId = (_a = jsonData.TrainerId) !== null && _a !== void 0 ? _a : null;
-        _this.WrkOutPlanId = jsonData.WrkOutPlanId;
+        _this.amount_of_people = jsonData.AmoutOfPeople;
+        _this.reservation_time = jsonData.ReservationTime;
+        _this.customer_id = jsonData.CustomerId;
+        _this.trainer_id = (_a = jsonData.TrainerId) !== null && _a !== void 0 ? _a : null;
+        _this.plan_id = jsonData.PlanId;
         return _this;
     }
     return ReservationPostModel;

@@ -3,21 +3,21 @@ import { GetModel } from './GetModel.js'
 import { Model } from '../Model.js';
 // TODO: Move to models
 
-export class ReservationGetModel extends Model implements  GetModel{
+export class ReservationGetModel extends Model implements GetModel {
     ReservationId: number;
     AmmoutOfPeople: number;
     ReservationTime: Date;
     CustomerId: number;
     TrainerId: number;
-    WrkOutPlanId: number;
+    PlanId: number;
 
-    constructor(jsonData: IDictionary<any>){
+    constructor(jsonData: IDictionary<any>) {
         super();
         this.ReservationId = jsonData.ReservetionId;
         this.AmmoutOfPeople = jsonData.AmmoutOfPeople;
         this.ReservationTime = jsonData.ReservationTime;
         this.CustomerId = jsonData.CustomerId;
         this.TrainerId = jsonData.TrainerId;
-        this.WrkOutPlanId = jsonData.WrkOutPlanId;
+        this.PlanId = jsonData.PlanId;
     }
 }

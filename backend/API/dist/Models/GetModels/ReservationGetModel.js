@@ -24,7 +24,7 @@ var ReservationGetModel = /** @class */ (function (_super) {
         _this.ReservationTime = jsonData.ReservationTime;
         _this.CustomerId = jsonData.CustomerId;
         _this.TrainerId = jsonData.TrainerId;
-        _this.WrkOutPlanId = jsonData.WrkOutPlanId;
+        _this.PlanId = jsonData.PlanId;
         return _this;
     }
     return ReservationGetModel;

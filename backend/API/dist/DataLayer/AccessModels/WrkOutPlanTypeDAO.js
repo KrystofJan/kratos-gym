@@ -51,18 +51,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { RelationalModel } from './RelationalModel.js';
 import { TableTypes } from "../Database/TableTypes.js";
-var WrkOutPlanTypeDAO = /** @class */ (function (_super) {
-    __extends(WrkOutPlanTypeDAO, _super);
-    function WrkOutPlanTypeDAO() {
-        return _super.call(this, TableTypes.WrkOutPlanType) || this;
+import { DatabaseFail } from '../Database/DatabaseResponse.js';
+var PlanTypeDAO = /** @class */ (function (_super) {
+    __extends(PlanTypeDAO, _super);
+    function PlanTypeDAO() {
+        return _super.call(this, TableTypes.PlanType) || this;
     }
     // TODO: Move logic to wrkOutPlan
-    WrkOutPlanTypeDAO.prototype.SelectWrkOutPlanTypeBy_WrkOutPlanId = function (id) {
+    PlanTypeDAO.prototype.SelectPlanTypeBy_WrkOutPlanId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 try {
-                    result = this.SecectByForeignId(id, TableTypes.WrkOutPlan);
+                    result = this.SecectByForeignId(id, TableTypes.
+                    );
                     return [2 /*return*/, result];
                 }
                 catch (err) {
@@ -73,7 +75,7 @@ var WrkOutPlanTypeDAO = /** @class */ (function (_super) {
         });
     };
     // TODO: Move logic to wrkOutMachine
-    WrkOutPlanTypeDAO.prototype.SelectWrkOutPlanTypeBy_ExerciseType = function (id) {
+    PlanTypeDAO.prototype.SelectWrkOutPlanTypeBy_ExerciseType = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -88,7 +90,7 @@ var WrkOutPlanTypeDAO = /** @class */ (function (_super) {
             });
         });
     };
-    WrkOutPlanTypeDAO.prototype.InsertWrkOutPlanType = function (body) {
+    PlanTypeDAO.prototype.Insertpe = function (body) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -98,11 +100,12 @@ var WrkOutPlanTypeDAO = /** @class */ (function (_super) {
                 }
                 catch (err) {
                     console.error(err);
+                    return [2 /*return*/, new DatabaseFail(err)];
                 }
                 return [2 /*return*/];
             });
         });
     };
-    return WrkOutPlanTypeDAO;
+    return PlanTypeDAO;
 }(RelationalModel));
-export { WrkOutPlanTypeDAO };
+export { PlanTypeDAO };

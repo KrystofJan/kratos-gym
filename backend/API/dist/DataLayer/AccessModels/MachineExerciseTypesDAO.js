@@ -51,6 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { RelationalModel } from './RelationalModel.js';
 import { TableTypes } from "../Database/TableTypes.js";
+import { DatabaseFail } from '../Database/DatabaseResponse.js';
 var MachineExerciseTypesDAO = /** @class */ (function (_super) {
     __extends(MachineExerciseTypesDAO, _super);
     function MachineExerciseTypesDAO() {
@@ -70,30 +71,27 @@ var MachineExerciseTypesDAO = /** @class */ (function (_super) {
                         return [2 /*return*/, result];
                     case 2:
                         err_1 = _a.sent();
-                        console.error(err_1);
-                        return [3 /*break*/, 3];
+                        throw new DatabaseFail(err_1);
                     case 3: return [2 /*return*/];
                 }
             });
         });
     };
     // TODO: Move logic to wrkOutMachine
-    MachineExerciseTypesDAO.prototype.SelectMachineExerciseTypesBy_WrkOutMachineId = function (id) {
+    MachineExerciseTypesDAO.prototype.SelectMachineExerciseTypesBy_MachineId = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var result, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.SecectByForeignId(id, TableTypes.WrkOutMachine)];
+                        return [4 /*yield*/, this.SecectByForeignId(id, TableTypes.Machine)];
                     case 1:
                         result = _a.sent();
-                        console.log('res', result);
                         return [2 /*return*/, result];
                     case 2:
                         err_2 = _a.sent();
-                        console.error(err_2);
-                        return [3 /*break*/, 3];
+                        throw new DatabaseFail(err_2);
                     case 3: return [2 /*return*/];
                 }
             });
@@ -112,8 +110,7 @@ var MachineExerciseTypesDAO = /** @class */ (function (_super) {
                         return [2 /*return*/, result];
                     case 2:
                         err_3 = _a.sent();
-                        console.error(err_3);
-                        return [3 /*break*/, 3];
+                        throw new DatabaseFail(err_3);
                     case 3: return [2 /*return*/];
                 }
             });

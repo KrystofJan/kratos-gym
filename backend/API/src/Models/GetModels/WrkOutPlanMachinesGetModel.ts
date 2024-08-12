@@ -2,13 +2,13 @@ import { IDictionary } from '../../utils/Utilities.js';
 import { GetModel } from './GetModel.js'
 import { Model } from '../Model.js';
 
-export class WrkoutPlanMachineGetModel extends Model implements  GetModel{
-    public WrkOutPlanId: number;
-    public WrkOutMachineId: number;
-    
+export class WrkoutPlanMachineGetModel extends Model implements GetModel {
+    public wrkoutplanid: number;
+    public wrkoutmachineid: number;
+
     constructor(jsonData: IDictionary<any>) {
         super();
-        this.WrkOutPlanId = jsonData.WrkOutPlanId;
-        this.WrkOutMachineId = jsonData.WrkOutMachineId;
+        this.wrkoutplanid = jsonData.wrkoutplanid;
+        this.wrkoutmachineid = jsonData.wrkoutmachineid;
     }
 }

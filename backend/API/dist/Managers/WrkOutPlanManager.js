@@ -35,42 +35,45 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { ExerciseTypeDAO } from './../DataLayer/AccessModels/ExerciseTypeDAO.js';
-import { WrkOutMachineDAO } from './../DataLayer/AccessModels/WrkOutMachineDAO.js';
-import { WrkOutPlan } from '../Models/WrkOutPlan.js';
+import { MachineDAO } from './../DataLayer/AccessModels/WrkOutMachineDAO.js';
+import { Plan } from '../Models/Plan.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse, CreatedMultipleResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
-import { WrkOutPlanDAO } from '../DataLayer/AccessModels/WrkOutPlanDAO.js';
-import { UserDAO } from '../DataLayer/AccessModels/UserDAO.js';
-import { WrkOutPlanMachinesDAO } from '../DataLayer/AccessModels/WrkOutPlanMachineDAO.js';
-import { User } from '../Models/User.js';
-import { WrkOutMachine } from '../Models/WrkOutMachine.js';
-import { WrkOutPlanMachine } from '../Models/WrkOutPlanMachine.js';
-import { WrkOutPlanTypeDAO } from '../DataLayer/AccessModels/WrkOutPlanTypeDAO.js';
-import { WrkOutPlanType } from '../Models/WrkOutPlanType.js';
+import { PlanDAO } from '../DataLayer/AccessModels/O.js';
+import { AccountDAO } from '../DataLayer/AccessModels/UserDAO.js';
+import { PlanMachinesDAO } from '../DataLayer/AccessModels/WrkOutPlanMachineDAO.js';
+import { Account } from '../Models/User.js';
+import { Machine } from '../Models/Machine.js';
+import { PlanMachine } from '../Models/PlanMachine.js';
+import { PlanTypeDAO } from '../DataLayer/AccessModels/WrkOutPlanTypeDAO.js';
+import { PlanType } from '../Models/pe.js';
 import { ExerciseType } from '../Models/ExerciseType.js';
-export var FindAllWrkOutPlans = function () { return __awaiter(void 0, void 0, void 0, function () {
+export var FindAllPlans = function () { return __awaiter(void 0, void 0, void 0, function () {
     var wrkOutPlanDao, body, results, _i, body_1, b, userDao, userData, user, a, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 6, , 7]);
-                wrkOutPlanDao = new WrkOutPlanDAO();
-                return [4 /*yield*/, wrkOutPlanDao.SelectAllWrkOutPlans()];
+                wrkOutPlanDao = new PlanDAO();
+                return [4 /*yield*/, wrkOutPlanDao.SelectAllPlans()];
             case 1:
                 body = _a.sent();
+                console.log(body);
                 results = [];
                 _i = 0, body_1 = body;
                 _a.label = 2;
             case 2:
                 if (!(_i < body_1.length)) return [3 /*break*/, 5];
                 b = body_1[_i];
-                userDao = new UserDAO();
-                return [4 /*yield*/, userDao.SelectUserById(b.UserId)];
+                userDao = new AccountDAO();
+                console.log(b);
+                return [4 /*yield*/, userDao.SelectUserById(b.accountid)];
             case 3:
                 userData = _a.sent();
-                user = new User(userData);
-                a = new WrkOutPlan(b);
+                console.log(userData, "");
+                user = new Account(userData);
+                a = new Plan(b);
                 a.User = user;
                 results.push(a);
                 _a.label = 4;
@@ -85,22 +88,22 @@ export var FindAllWrkOutPlans = function () { return __awaiter(void 0, void 0, v
         }
     });
 }); };
-export var FindWrkOutPlanById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+export var FindPlanById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
     var wrkOutPlanDao, body, userDao, userData, user, result, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                wrkOutPlanDao = new WrkOutPlanDAO();
-                return [4 /*yield*/, wrkOutPlanDao.SelectWrkOutPlanById(id)];
+                wrkOutPlanDao = new PlanDAO();
+                return [4 /*yield*/, wrkOutPlanDao.SelectPlanById(id)];
             case 1:
                 body = _a.sent();
-                userDao = new UserDAO();
-                return [4 /*yield*/, userDao.SelectUserById(body.UserId)];
+                userDao = new AccountDAO();
+                return [4 /*yield*/, userDao.SelectUserById(body.accountid)];
             case 2:
                 userData = _a.sent();
-                user = new User(userData);
-                result = new WrkOutPlan(body);
+                user = new Account(userData);
+                result = new Plan(body);
                 result.User = user;
                 return [2 /*return*/, new OkResponse("We good", result)];
             case 3:
@@ -110,14 +113,14 @@ export var FindWrkOutPlanById = function (id) { return __awaiter(void 0, void 0,
         }
     });
 }); };
-export var FindWrkOutMachinesContainedInId = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+export var FindMachinesContainedInId = function (id) { return __awaiter(void 0, void 0, void 0, function () {
     var wrkOutPlanMachineDao, body, result, _i, body_2, machineBody, wrkOutMachinesDAO, machineData, wrkOutMachine, wrkOutPlanMachine, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 6, , 7]);
-                wrkOutPlanMachineDao = new WrkOutPlanMachinesDAO();
-                return [4 /*yield*/, wrkOutPlanMachineDao.SelectWrkOutPlanBy_WrkOutPlanId(id)];
+                wrkOutPlanMachineDao = new PlanMachinesDAO();
+                return [4 /*yield*/, wrkOutPlanMachineDao.SelectPlanBy_(id)];
             case 1:
                 body = _a.sent();
                 result = [];
@@ -126,13 +129,13 @@ export var FindWrkOutMachinesContainedInId = function (id) { return __awaiter(vo
             case 2:
                 if (!(_i < body_2.length)) return [3 /*break*/, 5];
                 machineBody = body_2[_i];
-                wrkOutMachinesDAO = new WrkOutMachineDAO();
-                return [4 /*yield*/, wrkOutMachinesDAO.SelectWrkOutMachineById(machineBody.WrkOutMachineId)];
+                wrkOutMachinesDAO = new MachineDAO();
+                return [4 /*yield*/, wrkOutMachinesDAO.SelectMachineById(machineBody.wrkoutmachineid)];
             case 3:
                 machineData = _a.sent();
-                wrkOutMachine = new WrkOutMachine(machineData);
-                wrkOutPlanMachine = new WrkOutPlanMachine(machineBody);
-                wrkOutPlanMachine.WrkOutMachine = wrkOutMachine;
+                wrkOutMachine = new Machine(machineData);
+                wrkOutPlanMachine = new PlanMachine(machineBody);
+                wrkOutPlanMachine.Machine = wrkOutMachine;
                 if (wrkOutPlanMachine.validateAttrs()) {
                     result.push(wrkOutPlanMachine);
                 }
@@ -154,7 +157,7 @@ export var FindExerciseTypesContainedInId = function (id) { return __awaiter(voi
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 6, , 7]);
-                wrkOutPlanTypeDAO = new WrkOutPlanTypeDAO();
+                wrkOutPlanTypeDAO = new PlanTypeDAO();
                 return [4 /*yield*/, wrkOutPlanTypeDAO.SelectWrkOutPlanTypeBy_WrkOutPlanId(id)];
             case 1:
                 body = _a.sent();
@@ -170,7 +173,7 @@ export var FindExerciseTypesContainedInId = function (id) { return __awaiter(voi
             case 3:
                 typeData = _a.sent();
                 exerciseType = new ExerciseType(typeData);
-                wrkOutPlanType = new WrkOutPlanType(typeBody);
+                wrkOutPlanType = new PlanType(typeBody);
                 wrkOutPlanType.ExerciseType = exerciseType;
                 if (wrkOutPlanType.validateAttrs()) {
                     result.push(wrkOutPlanType);
@@ -193,8 +196,8 @@ export var AddMachineToPlan = function (body) { return __awaiter(void 0, void 0,
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                wrkOutPlanMachineDao = new WrkOutPlanMachinesDAO();
-                return [4 /*yield*/, wrkOutPlanMachineDao.InsertWrkOutPlanMachine(body)];
+                wrkOutPlanMachineDao = new PlanMachinesDAO();
+                return [4 /*yield*/, wrkOutPlanMachineDao.InsertPlanMachine(body)];
             case 1:
                 result = _a.sent();
                 successResult = result;
@@ -218,8 +221,8 @@ export var AddMultipleMachinesToPlan = function (body) { return __awaiter(void 0
             case 1:
                 if (!(_i < body_4.length)) return [3 /*break*/, 4];
                 machine = body_4[_i];
-                wrkOutPlanMachineDao = new WrkOutPlanMachinesDAO();
-                return [4 /*yield*/, wrkOutPlanMachineDao.InsertWrkOutPlanMachine(machine)];
+                wrkOutPlanMachineDao = new PlanMachinesDAO();
+                return [4 /*yield*/, wrkOutPlanMachineDao.InsertPlanMachine(machine)];
             case 2:
                 result = _a.sent();
                 successResult = result;
@@ -242,8 +245,8 @@ export var AddTypeToPlan = function (body) { return __awaiter(void 0, void 0, vo
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                wrkOutPlanTypeDAO = new WrkOutPlanTypeDAO();
-                return [4 /*yield*/, wrkOutPlanTypeDAO.InsertWrkOutPlanType(body)];
+                wrkOutPlanTypeDAO = new PlanTypeDAO();
+                return [4 /*yield*/, wrkOutPlanTypeDAO.InsertPlanType(body)];
             case 1:
                 result = _a.sent();
                 successResult = result;
@@ -255,14 +258,14 @@ export var AddTypeToPlan = function (body) { return __awaiter(void 0, void 0, vo
         }
     });
 }); };
-export var CreateWrkOutPlan = function (body) { return __awaiter(void 0, void 0, void 0, function () {
+export var CreatePlan = function (body) { return __awaiter(void 0, void 0, void 0, function () {
     var result, wrkOutPlanDao, successResult, err_8;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                wrkOutPlanDao = new WrkOutPlanDAO();
-                return [4 /*yield*/, wrkOutPlanDao.InsertWrkOutPlan(body)];
+                wrkOutPlanDao = new PlanDAO();
+                return [4 /*yield*/, wrkOutPlanDao.InsertPlan(body)];
             case 1:
                 result = _a.sent();
                 successResult = result;

@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { FindExerciseTypeById } from "./ExerciseTypeManager.js";
-import { FindWrkOutMachineById } from "./WrkOutMachineManager.js";
+import { FindMachineById } from "./MachineManager.js";
 import { MachineExerciseTypes } from '../Models/MachineExerciseTypes.js';
 import { MachineExerciseTypesDAO } from '../DataLayer/AccessModels/MachineExerciseTypesDAO.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
@@ -53,7 +53,7 @@ var buildBody = function (machineType) { return __awaiter(void 0, void 0, void 0
             case 1:
                 if (!(_i < machineType_1.length)) return [3 /*break*/, 5];
                 mt = machineType_1[_i];
-                return [4 /*yield*/, FindWrkOutMachineById(mt.WrkOutMachineId)];
+                return [4 /*yield*/, FindMachineById(mt.MachineId)];
             case 2:
                 machineBody = _a.sent();
                 return [4 /*yield*/, FindExerciseTypeById(mt.ExerciseTypeId)];
@@ -74,14 +74,14 @@ var buildBody = function (machineType) { return __awaiter(void 0, void 0, void 0
         }
     });
 }); };
-export var FindMachineExerciteTypeByWrkOutMachineId = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+export var FindMachineExerciteTypeByMachineId = function (id) { return __awaiter(void 0, void 0, void 0, function () {
     var machineTypesDAO, machineType, body, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
                 machineTypesDAO = new MachineExerciseTypesDAO();
-                return [4 /*yield*/, machineTypesDAO.SelectMachineExerciseTypesBy_WrkOutMachineId(id)];
+                return [4 /*yield*/, machineTypesDAO.SelectMachineExerciseTypesBy_MachineId(id)];
             case 1:
                 machineType = _a.sent();
                 return [4 /*yield*/, buildBody(machineType)];
@@ -102,7 +102,7 @@ export var FindMachineExerciteTypeByExerciseTypeId = function (id) { return __aw
             case 0:
                 _a.trys.push([0, 3, , 4]);
                 machineTypesDAO = new MachineExerciseTypesDAO();
-                return [4 /*yield*/, machineTypesDAO.SelectMachineExerciseTypesBy_WrkOutMachineId(id)];
+                return [4 /*yield*/, machineTypesDAO.SelectMachineExerciseTypesBy_MachineId(id)];
             case 1:
                 machineType = _a.sent();
                 return [4 /*yield*/, buildBody(machineType)];

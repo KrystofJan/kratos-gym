@@ -13,7 +13,7 @@ export const LogIn = async (req: expressRequest, res: expressResponse) => {
 
 export const Register = async (req: expressRequest, res: expressResponse) => {
     const registerBody = new UserRegPostModel(req.body);
-    
+
     const result: Response = await CreateUser(registerBody);
     result.buildResponse(req, res);
 }

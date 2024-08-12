@@ -18,8 +18,8 @@ var WrkOutPlanPostModel = /** @class */ (function (_super) {
     __extends(WrkOutPlanPostModel, _super);
     function WrkOutPlanPostModel(jsonData) {
         var _this = _super.call(this) || this;
-        _this.PlanName = jsonData.PlanName;
-        _this.UserId = jsonData.UserId;
+        _this.planname = jsonData.PlanName;
+        _this.accountid = jsonData.AccountId;
         return _this;
     }
     return WrkOutPlanPostModel;

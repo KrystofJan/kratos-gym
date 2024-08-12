@@ -18,7 +18,7 @@ var WrkOutPlanMachinePreset = /** @class */ (function (_super) {
     __extends(WrkOutPlanMachinePreset, _super);
     function WrkOutPlanMachinePreset(jsonData) {
         var _this = _super.call(this) || this;
-        _this.WrkOutPlanPreset = jsonData.WrkOutPlanPreset;
+        _this.PlanPreset = jsonData.WrkOutPlanPreset;
         _this.WrkOutMachine = jsonData.WrkOutMachine;
         _this.Sets = jsonData.Sets;
         _this.Reps = jsonData.Reps;

@@ -39,6 +39,7 @@ import { Address } from '../Models/Address.js';
 import { OkResponse } from '../RequestUtility/CustomResponces/OkResponse.js';
 import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedResponse.js';
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
+import { DatabaseSuccess } from '../DataLayer/Database/DatabaseResponse.js';
 export var FindAllAdresses = function () { return __awaiter(void 0, void 0, void 0, function () {
     var addressDAO, body, results, _i, body_1, b, a, err_1;
     return __generator(this, function (_a) {
@@ -77,27 +78,26 @@ export var FindAdressById = function (id) { return __awaiter(void 0, void 0, voi
                 return [2 /*return*/, new OkResponse("We good", result)];
             case 2:
                 err_2 = _a.sent();
-                return [2 /*return*/, new FailedResponse("Cannot get any of these things :(", 404)];
+                return [2 /*return*/, new FailedResponse("Could not find Address with ".concat(id, " addressid"), 404)];
             case 3: return [2 /*return*/];
         }
     });
 }); };
 export var CreateAddress = function (body) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, addressDAO, successResult, err_3;
+    var addressDAO, result, successResult, res;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
                 addressDAO = new AddressDAO();
                 return [4 /*yield*/, addressDAO.InsertAddress(body)];
             case 1:
                 result = _a.sent();
-                successResult = result;
-                return [2 /*return*/, new CreatedResponse("Successfully created an Address", successResult.Body)];
-            case 2:
-                err_3 = _a.sent();
-                return [2 /*return*/, new FailedResponse('Sadge', 404)];
-            case 3: return [2 /*return*/];
+                if (result instanceof DatabaseSuccess) {
+                    successResult = result;
+                    return [2 /*return*/, new CreatedResponse("Successfully created an Address", successResult.Body.address_id)];
+                }
+                res = result;
+                return [2 /*return*/, new FailedResponse(res.ErrorMessage, 500)];
         }
     });
 }); };

@@ -38,16 +38,16 @@ export var UserAttrs;
     UserAttrs["Credits"] = "Credits";
     UserAttrs["Login"] = "Login";
 })(UserAttrs || (UserAttrs = {}));
-var User = /** @class */ (function (_super) {
-    __extends(User, _super);
-    function User(jsonData) {
+var Account = /** @class */ (function (_super) {
+    __extends(Account, _super);
+    function Account(jsonData) {
         var _a, _b;
         var _this = _super.call(this) || this;
-        _this.UserId = jsonData.UserId;
-        _this.FirstName = jsonData.FirstName;
-        _this.LastName = jsonData.LastName;
+        _this.AccountId = jsonData.account_id;
+        _this.FirstName = jsonData.first_name;
+        _this.LastName = jsonData.last_name;
         _this.Role = UserRole.CUSTOMER;
-        switch (jsonData.Role) {
+        switch (jsonData.role) {
             case UserRole.CUSTOMER: {
                 _this.Role = UserRole.CUSTOMER;
                 break;
@@ -68,17 +68,17 @@ var User = /** @class */ (function (_super) {
             //     throw new Error(`Unknown user role ${jsonData.Role}`);
             // }
         }
-        _this.Email = jsonData.Email;
-        _this.PhoneNumber = jsonData.PhoneNumber;
-        _this.IsActive = (jsonData.IsActive) ? jsonData.IsActive : true;
-        _this.CreateDate = (jsonData.CreateDate) ? jsonData.CreateDate : '';
-        _this.LastOnline = (jsonData.LastOnline) ? jsonData.LastOnline : '';
-        _this.Password = jsonData.Password;
-        _this.Address = (_a = jsonData.Address) !== null && _a !== void 0 ? _a : null;
+        _this.Email = jsonData.email;
+        _this.PhoneNumber = jsonData.phone_number;
+        _this.IsActive = (jsonData.isactive) ? jsonData.isactive : true;
+        _this.CreateDate = (jsonData.create_date) ? jsonData.create_date : '';
+        _this.LastOnline = (jsonData.last_online) ? jsonData.last_online : '';
+        _this.Password = jsonData.password;
+        _this.Address = (_a = jsonData.address) !== null && _a !== void 0 ? _a : null;
         _this.Credits = (_b = jsonData.credits) !== null && _b !== void 0 ? _b : 0;
         _this.Login = jsonData.login;
         return _this;
     }
-    return User;
+    return Account;
 }(Model));
-export { User };
+export { Account };

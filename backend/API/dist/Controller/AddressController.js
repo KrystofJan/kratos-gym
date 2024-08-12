@@ -35,8 +35,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { FindAllAdresses, FindAdressById, CreateAddress } from '../Managers/AddressManager.js';
-import { Address } from '../Models/Address.js';
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
+import { AddressPostModel } from '../Models/PostModels/AddressPostModel.js';
 export var getAllAddresses = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var response;
     return __generator(this, function (_a) {
@@ -66,15 +66,16 @@ export var postAddress = function (req, res) { return __awaiter(void 0, void 0, 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                address = new Address(req.body);
-                console.log();
-                if (!address.validateAttrs()) {
+                address = new AddressPostModel(req.body);
+                // handle badrequest
+                if (!address.validateAttrs() || address === undefined) {
                     response = new BadRequestResponse("Unable to create Address model");
                     response.buildResponse(req, res);
                     return [2 /*return*/];
                 }
                 return [4 /*yield*/, CreateAddress(address)];
             case 1:
+                // not this can be either 
                 response = _a.sent();
                 response.buildResponse(req, res);
                 return [2 /*return*/];

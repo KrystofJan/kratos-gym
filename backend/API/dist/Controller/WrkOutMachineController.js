@@ -34,14 +34,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { FindWrkOutMachineById, FindAllWrkOutMachines, RecommendMachine, FindOccupiedMachinesOnSpecificTime, CreateWrkOutMachine } from '../Managers/WrkOutMachineManager.js';
+import { RecommendMachine, FindOccupiedMachinesOnSpecificTime, CreateWrkOutMachine } from '../Managers/WrkOutMachineManager.js';
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
-import { WrkOutMachine } from '../Models/WrkOutMachine.js';
+import { Machine } from '../Models/Machine.js';
 export var getWrkOutMachineById = function (req, res, id) { return __awaiter(void 0, void 0, void 0, function () {
     var response;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, FindWrkOutMachineById(id)];
+            case 0: return [4 /*yield*/, FindMachineById(id)];
             case 1:
                 response = _a.sent();
                 response.buildResponse(req, res);
@@ -53,7 +53,7 @@ export var getAllWrkOutMachines = function (req, res) { return __awaiter(void 0,
     var response;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, FindAllWrkOutMachines()];
+            case 0: return [4 /*yield*/, FindAllMachines()];
             case 1:
                 response = _a.sent();
                 response.buildResponse(req, res);
@@ -87,12 +87,12 @@ export var isOccupied = function (req, res, id) { return __awaiter(void 0, void 
         }
     });
 }); };
-export var postWrkOutMachine = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+export var postMachine = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var reservation, response;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                reservation = new WrkOutMachine(req.body);
+                reservation = new Machine(req.body);
                 if (!reservation.validateAttrs()) {
                     response = new BadRequestResponse("Unable to create ExerciseType model");
                     response.buildResponse(req, res);

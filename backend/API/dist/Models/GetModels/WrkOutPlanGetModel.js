@@ -18,9 +18,9 @@ var WrkoutPlanGetModel = /** @class */ (function (_super) {
     __extends(WrkoutPlanGetModel, _super);
     function WrkoutPlanGetModel(jsonData) {
         var _this = _super.call(this) || this;
-        _this.WrkOutPlanId = jsonData.WrkOutPlanId;
-        _this.PlanName = jsonData.PlanName;
-        _this.UserId = jsonData.UserId;
+        _this.wrkoutplanid = jsonData.wrkoutplanid;
+        _this.planname = jsonData.planname;
+        _this.accountid = jsonData.accountid;
         return _this;
     }
     return WrkoutPlanGetModel;

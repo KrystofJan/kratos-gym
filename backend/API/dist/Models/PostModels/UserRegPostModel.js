@@ -18,13 +18,13 @@ var UserRegPostModel = /** @class */ (function (_super) {
     __extends(UserRegPostModel, _super);
     function UserRegPostModel(jsonData) {
         var _this = _super.call(this) || this;
-        _this.FirstName = jsonData.FirstName;
-        _this.LastName = jsonData.LastName;
-        _this.AddressId = jsonData.AddressId;
-        _this.Email = jsonData.Email;
-        _this.PhoneNumber = jsonData.PhoneNumber;
-        _this.Password = jsonData.Password;
-        _this.Login = jsonData.login;
+        _this.first_name = jsonData.FirstName;
+        _this.last_name = jsonData.LastName;
+        _this.address_id = jsonData.AddressId;
+        _this.email = jsonData.Email;
+        _this.phone_number = jsonData.PhoneNumber;
+        _this.password = jsonData.Password;
+        _this.login = jsonData.login;
         return _this;
     }
     return UserRegPostModel;

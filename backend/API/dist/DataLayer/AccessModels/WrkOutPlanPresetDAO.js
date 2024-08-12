@@ -51,13 +51,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { RelationalModel } from './RelationalModel.js';
 import { TableTypes } from "../Database/TableTypes.js";
-var WrkOutPlanPresetDAO = /** @class */ (function (_super) {
-    __extends(WrkOutPlanPresetDAO, _super);
+var PlanPresetDAO = /** @class */ (function (_super) {
+    __extends(PlanPresetDAO, _super);
     // Move to WrkOutPlan 
-    function WrkOutPlanPresetDAO() {
-        return _super.call(this, TableTypes.WrkOutPlanPreset) || this;
+    function PlanPresetDAO() {
+        return _super.call(this, TableTypes.PlanPreset) || this;
     }
-    WrkOutPlanPresetDAO.prototype.SelectWrkOutPlanPresetById = function (id) {
+    PlanPresetDAO.prototype.SelectWrkOutPlanPresetById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -72,7 +72,7 @@ var WrkOutPlanPresetDAO = /** @class */ (function (_super) {
             });
         });
     };
-    WrkOutPlanPresetDAO.prototype.SelectAllWrkOutPlanPresets = function () {
+    PlanPresetDAO.prototype.SelectAllPlanPresets = function () {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -87,7 +87,7 @@ var WrkOutPlanPresetDAO = /** @class */ (function (_super) {
             });
         });
     };
-    WrkOutPlanPresetDAO.prototype.InsertWrkOutPlanPreset = function (body) {
+    PlanPresetDAO.prototype.InsertWrkOutPlanPreset = function (body) {
         return __awaiter(this, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
@@ -102,6 +102,6 @@ var WrkOutPlanPresetDAO = /** @class */ (function (_super) {
             });
         });
     };
-    return WrkOutPlanPresetDAO;
+    return PlanPresetDAO;
 }(RelationalModel));
-export { WrkOutPlanPresetDAO };
+export { PlanPresetDAO };

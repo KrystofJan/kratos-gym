@@ -5,8 +5,8 @@ import { Model } from './Model.js';
 export enum UserRole {
     CUSTOMER = 'c',
     TRAINER = 'T',
-    EMPLOYEE = 'E',   
-    USER = 'U',   
+    EMPLOYEE = 'E',
+    USER = 'U',
     NOTKNOWN = '/',
 }
 
@@ -22,12 +22,12 @@ export enum UserAttrs {
     LastOnline = 'LastOnline',
     Password = 'Password',
     Address = 'Address',
-    Credits = 'Credits',   
+    Credits = 'Credits',
     Login = 'Login',
 }
 
-export class User extends Model{
-    public UserId: number;
+export class Account extends Model {
+    public AccountId: number;
     public FirstName: string;
     public LastName: string;
     public Role: UserRole;
@@ -41,13 +41,13 @@ export class User extends Model{
     public Credits: number;
     public Login: string;
 
-    constructor(jsonData: IDictionary<any>){
+    constructor(jsonData: IDictionary<any>) {
         super();
-        this.UserId = jsonData.UserId;
-        this.FirstName = jsonData.FirstName;
-        this.LastName = jsonData.LastName;
+        this.AccountId = jsonData.account_id;
+        this.FirstName = jsonData.first_name;
+        this.LastName = jsonData.last_name
         this.Role = UserRole.CUSTOMER;
-        switch(jsonData.Role) {
+        switch (jsonData.role) {
             case UserRole.CUSTOMER: {
                 this.Role = UserRole.CUSTOMER;
                 break;
@@ -69,14 +69,14 @@ export class User extends Model{
             // }
         }
 
-        this.Email = jsonData.Email;
-        this.PhoneNumber = jsonData.PhoneNumber;
-        this.IsActive = (jsonData.IsActive) ? jsonData.IsActive : true;
-        this.CreateDate = (jsonData.CreateDate) ? jsonData.CreateDate : '';
-        this.LastOnline = (jsonData.LastOnline) ? jsonData.LastOnline : '';
-        this.Password = jsonData.Password;
-        this.Address = jsonData.Address ?? null;
+        this.Email = jsonData.email;
+        this.PhoneNumber = jsonData.phone_number;
+        this.IsActive = (jsonData.isactive) ? jsonData.isactive : true;
+        this.CreateDate = (jsonData.create_date) ? jsonData.create_date : '';
+        this.LastOnline = (jsonData.last_online) ? jsonData.last_online : '';
+        this.Password = jsonData.password;
+        this.Address = jsonData.address ?? null;
         this.Credits = jsonData.credits ?? 0;
         this.Login = jsonData.login;
-    }    
+    }
 }

@@ -1,15 +1,15 @@
 {
     "test": "test",
-    "WrkOutPlan": "PlanName, UserId",
-    "WrkOutPlanPreset": "PresetName, AuthorId",
+    "Plan": "PlanName, UserId",
+    "PlanPreset": "PresetName, AuthorId",
     "User": "FirstName, LastName, Email, PhoneNumber, Password, AddressId",
     "Address": "Street, City, PostalCode, Country, BuildingNumber, ApartmentNumber",
     "ExerciseType": "ExerciseTypeName, Category, BodyPart",
-    "WrkOutMachine": "MachineName, MaxWeight, MinWeight, MaxPeople, AvgTimeTaken",
-    "MachineExerciseTypes": "WrkOutMachineId, ExerciseTypeId",
-    "Reservation--trainer":   "AmmoutOfPeople, ReservationTime, CustomerId, TrainerId, WrkOutPlanId",
-    "Reservation":   "AmmoutOfPeople, ReservationTime, CustomerId, WrkOutPlanId",
-    "WrkOutPlanType": "WrkOutPlanId, ExerciseTypeId",
-    "WrkOutPlanMachines": "WrkOutPlanId, WrkOutMachineId, Sets, Reps, WrkOutStartTime, WrkOutEndTime, CanDisturb",
-    "WrkOutPlanMachinesPreset": "WrkOutPlanPresetId, WrkOutMachineId, Sets, Reps"
+    "Machine": "MachineName, MaxWeight, MinWeight, MaxPeople, AvgTimeTaken",
+    "MachineExerciseTypes": "MachineId, ExerciseTypeId",
+    "Reservation--trainer":   "AmmoutOfPeople, ReservationTime, CustomerId, TrainerId, PlanId",
+    "Reservation":   "AmmoutOfPeople, ReservationTime, CustomerId, PlanId",
+    "PlanType": "PlanId, ExerciseTypeId",
+    "PlanMachines": "PlanId, MachineId, Sets, Reps, StartTime, EndTime, CanDisturb",
+    "PlanMachinesPreset": "PlanPresetId, MachineId, Sets, Reps"
 }

@@ -1,7 +1,7 @@
 import { IDictionary } from "../utils/Utilities.js";
 import { MachineExerciseTypePostModel } from "../Models/PostModels/MachineExerciseTypePostModel.js";
 import { FindExerciseTypeById } from "./ExerciseTypeManager.js";
-import { FindWrkOutMachineById } from "./WrkOutMachineManager.js";
+import { FindMachineById } from "./MachineManager.js";
 import { MachineExerciseTypes } from '../Models/MachineExerciseTypes.js';
 import { MachineExerciseTypeGetModel } from '../Models/GetModels/MachineExerciseTypesGetModel.js'
 import { MachineExerciseTypesDAO } from '../DataLayer/AccessModels/MachineExerciseTypesDAO.js';
@@ -13,8 +13,8 @@ import { DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/Databas
 // TODO change MachineExerciseTypePostModel to GetModel
 const buildBody = async (machineType: Array<MachineExerciseTypeGetModel>) => {
     let result: Array<MachineExerciseTypes> = new Array<MachineExerciseTypes>;
-    for(const mt of machineType){
-        const machineBody = await FindWrkOutMachineById(mt.WrkOutMachineId); 
+    for (const mt of machineType) {
+        const machineBody = await FindMachineById(mt.MachineId);
         const typeBody = await FindExerciseTypeById(mt.ExerciseTypeId);
 
 
@@ -33,27 +33,27 @@ const buildBody = async (machineType: Array<MachineExerciseTypeGetModel>) => {
     return result;
 }
 
-export const FindMachineExerciteTypeByWrkOutMachineId = async (id: number) => { // getByMachineId
-    try{
+export const FindMachineExerciteTypeByMachineId = async (id: number) => { // getByMachineId
+    try {
         const machineTypesDAO = new MachineExerciseTypesDAO();
-        const machineType = await machineTypesDAO.SelectMachineExerciseTypesBy_WrkOutMachineId(id);
+        const machineType = await machineTypesDAO.SelectMachineExerciseTypesBy_MachineId(id);
         const body: Array<MachineExerciseTypes> = await buildBody(machineType)
         return new OkResponse("We good", body);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse(`Cannot get this types ids machine types: ${id}`, 404);
     }
 }
 
 export const FindMachineExerciteTypeByExerciseTypeId = async (id: number) => {
-    try{
+    try {
         const machineTypesDAO = new MachineExerciseTypesDAO();
-        const machineType = await machineTypesDAO.SelectMachineExerciseTypesBy_WrkOutMachineId(id);
+        const machineType = await machineTypesDAO.SelectMachineExerciseTypesBy_MachineId(id);
         const body: Array<MachineExerciseTypes> = await buildBody(machineType)
 
         return new OkResponse("We good", body);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse(`Cannot get this types ids machine types: ${id}`, 404);
     }
 }
@@ -61,16 +61,16 @@ export const FindMachineExerciteTypeByExerciseTypeId = async (id: number) => {
 export const CreateMachineExerciseType = async (body: MachineExerciseTypePostModel) => {
     let result: DatabaseResponse;
 
-    try{
+    try {
         const exerciseTypeDAO = new MachineExerciseTypesDAO();
-        
+
         result = await exerciseTypeDAO.InsertMachineExerciseTypes(body);
         const successResult = result as DatabaseSuccess;
         return new CreatedResponse(
-            "Successfully created an ExerciseType", 
+            "Successfully created an ExerciseType",
             successResult.Body);
     }
-    catch(err){
+    catch (err) {
         return new FailedResponse('Sadge', 404);
     }
 }

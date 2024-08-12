@@ -24,7 +24,7 @@ var Reservation = /** @class */ (function (_super) {
         _this.ReservationTime = jsonData.ReservationTime;
         _this.Customer = jsonData.Customer;
         _this.Trainer = (_a = jsonData.Trainer) !== null && _a !== void 0 ? _a : null;
-        _this.WrkOutPlan = jsonData.WrkOutPlan;
+        _this.Plan = jsonData.Plan;
         return _this;
     }
     return Reservation;

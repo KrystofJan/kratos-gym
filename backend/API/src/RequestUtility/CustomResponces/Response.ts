@@ -1,7 +1,7 @@
 import { ResponseBody } from './ResponseBody.js';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 
-export enum StatusCodeType{
+export enum StatusCodeType {
     OK = 200,
     CREATED = 201,
     ACCEPTED = 202,
@@ -10,12 +10,12 @@ export enum StatusCodeType{
     NOT_FOUND = 404,
     REQUEST_TIMEOUT = 408,
     GATEWAY_TIMEOUT = 504,
-    INTERNAL_SERVER_ERROR = 501,
-    NOT_IMPLEMENTED = 502
+    INTERNAL_SERVER_ERROR = 500,
+    NOT_IMPLEMENTED = 501
 }
 
-export interface  Response { 
+export interface Response {
     readonly StatusCode: StatusCodeType;
     readonly Body: ResponseBody;
-    buildResponse (req: expressRequest, res: expressResponse ): void;
+    buildResponse(req: expressRequest, res: expressResponse): void;
 }

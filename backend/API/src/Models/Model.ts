@@ -6,11 +6,16 @@ export class Model {
     }
 
     constructJson(): IDictionary<any> {
-        return  JSON.parse(JSON.stringify(this));
+        return JSON.parse(JSON.stringify(this));
     }
 
     // TODO
     validateAttrs(): boolean {
+        for (const prop in this) {
+            if (this[prop] === undefined) {
+                return false;
+            }
+        }
         return true;
     }
 }
