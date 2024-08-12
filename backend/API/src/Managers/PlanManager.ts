@@ -7,10 +7,8 @@ import { CreatedResponse, CreatedMultipleResponse } from '../RequestUtility/Cust
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
 import { DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/DatabaseResponse.js';
 import { PlanDAO } from '../DataLayer/AccessModels/PlanDAO.js';
-import { AccountDAO } from '../DataLayer/AccessModels/UserDAO.js';
+import { AccountDAO } from '../DataLayer/AccessModels/AccountDAO.js';
 import { PlanMachinesDAO } from '../DataLayer/AccessModels/PlanMachineDAO.js';
-import { Account } from '../Models/User.js';
-import { Machine } from '../Models/Machine.js';
 import { PlanMachine } from '../Models/PlanMachine.js';
 import { PlanMachinePostModel } from '../Models/PostModels/PlanMachinePostModel.js';
 import { PlanTypePostModel } from '../Models/PostModels/PlanTypePostModel.js';
@@ -18,28 +16,27 @@ import { PlanTypeDAO } from '../DataLayer/AccessModels/PlanTypeDAO.js';
 import { PlanType } from '../Models/PlanType.js';
 import { ExerciseType } from '../Models/ExerciseType.js';
 import { PlanPostModel } from '../Models/PostModels/PlanPostModel.js';
+import { Account } from '../Models/Account.js';
 
 export const FindAllPlans = async (): Promise<Response> => {
     try {
         const planDao = new PlanDAO();
-        const body: Array<Plan> = await planDao.SelectAllPlans();
-
+        const body = await planDao.SelectAllPlans();
 
         // validate...
         const results: Array<Plan> = [];
 
-        // for (const b of body) {
-        //     const userDao = new AccountDAO();
-        //     const userData = await userDao.SelectUserById(b.account_id);
-        //     const user: Account = new Account(userData);
-        //     const a = new Plan(b);
-        //     a.User = user;
-        //     results.push(a);
-        // }
+        for (const b of body) {
+            const a = new Plan(b);
+            const userDao = new AccountDAO();
+            const userData = await userDao.SelectUserById(b.account_id);
+            const user = new Account(userData);
+            a.User = user;
+            results.push(a);
+        }
 
         return new OkResponse("We good", results);
-    }
-    catch (err) {
+    } catch (err) {
         return new FailedResponse("Cannot get any of these things :(", 404);
     }
 }
@@ -47,14 +44,14 @@ export const FindAllPlans = async (): Promise<Response> => {
 export const FindPlanById = async (id: number): Promise<Response> => {
     try {
         const wrkOutPlanDao = new PlanDAO();
-        const body: Plan = await wrkOutPlanDao.SelectPlanById(id);
+        // const body: Plan = await wrkOutPlanDao.SelectPlanById(id);
         const userDao = new AccountDAO();
 
         // validate...
         // const userData = await userDao.SelectUserById(body.account_id);
         // const user: Account = new Account(userData);
 
-        const result = new Plan(body);
+        const result = new Plan({ "asdasd": "dasd" });
         // result.User = user;
         return new OkResponse("We good", result);
     }
@@ -67,7 +64,7 @@ export const FindMachinesContainedInId = async (id: number) => {
     try {
         const wrkOutPlanMachineDao = new PlanMachinesDAO();
 
-        const body: Array<PlanMachine> = await wrkOutPlanMachineDao.SelectPlanBy_PlanId(id);
+        // const body: Array<PlanMachine> = await wrkOutPlanMachineDao.SelectPlanBy_PlanId(id);
 
 
         const result: Array<PlanMachine> = [];
@@ -171,7 +168,7 @@ export const AddTypeToPlan = async (body: PlanTypePostModel) => {
 }
 
 
-export const CreatePlan = async (body: PlanPostModel): Promise<Response> => {
+export const CreatePlan = async (body: Plan): Promise<Response> => {
     let result: DatabaseResponse;
 
     try {

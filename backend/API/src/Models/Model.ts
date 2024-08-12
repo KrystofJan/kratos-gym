@@ -1,4 +1,6 @@
 import { IDictionary } from "../utils/Utilities.js";
+import { logger } from "../utils/logger.js";
+import { getMetadataForProperties } from "./Decorators/DatabaseDecorators.js";
 
 export class Model {
 
@@ -17,5 +19,9 @@ export class Model {
             }
         }
         return true;
+    }
+
+    getKeysDictionary() {
+        return getMetadataForProperties(this)
     }
 }

@@ -12,8 +12,8 @@ export class ReservationDAO extends RelationalModel {
 
     async SelectAllReservations() {
         try {
-            const result = this.SelectAll();
-            return result;
+            const result = await this.dbHandler.SelectAll<Reservation>(Reservation)
+            return result.Body;
         }
         catch (err) {
             throw new DatabaseFail(err as Error)
@@ -22,7 +22,8 @@ export class ReservationDAO extends RelationalModel {
 
     async SelectReservationById(id: number) {
         try {
-            const result = this.SelectById(id);
+            const result = await this.dbHandler.SelectSpecific<Reservation>(Reservation, id)
+
             return result;
         }
         catch (err) {

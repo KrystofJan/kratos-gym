@@ -1,4 +1,5 @@
 import { ReservationDAO } from '../DataLayer/AccessModels/ReservationDAO.js';
+import { Account } from '../Models/Account.js';
 import { Reservation } from '../Models/Reservation.js'
 import { Response } from '../RequestUtility/CustomResponces/Response.js';
 import { ReservationPostModel } from '../Models/PostModels/ReservationPostModel.js';
@@ -8,18 +9,39 @@ import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedRespon
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
 import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/DatabaseResponse.js';
 import { ReservationGetModel } from '../Models/GetModels/ReservationGetModel.js';
-
+import { AccountDAO } from '../DataLayer/AccessModels/AccountDAO.js';
+import { PlanDAO } from '../DataLayer/AccessModels/PlanDAO.js';
+import { Plan } from '../Models/Plan.js';
 
 export const FindAllReservations = async (): Promise<Response> => {
     try {
         const reservationDao = new ReservationDAO();
+        const accountDao = new AccountDAO()
+        const planDAo = new PlanDAO()
         const body: Array<IDictionary<any>> = await reservationDao.SelectAllReservations();
 
         // validate...
-        const results: Array<ReservationGetModel> = [];
+        const results: Array<Reservation> = [];
 
         for (const b of body) {
-            const a = new ReservationGetModel(b);
+            const a = new Reservation(b);
+            const customer = await accountDao.SelectUserById(b.customer_id)
+
+            const trainer = await accountDao.SelectUserById(b.trainer_id)
+
+            const plan = await planDAo.SelectPlanById(b.plan_id)
+
+
+            a.Customer = new Account(customer);
+            console.log("esesesekajsdhjakshdkjasfksdhfjsbdcijsdhucbisdcedsuncsiudnfuhshdiunvjsad hiuashdf hhsaidfh jasdfn pusahdf hsadofaoisudfhp;wsdbvoiel fposh fosa dfoas fsa dfasudfhoiaefh ashd fuasof sdfasoijdfh9")
+            console.log(a.Customer)
+
+
+            if (trainer) {
+                a.Trainer = new Account(trainer);
+            }
+
+            a.Plan = new Plan(plan);
 
             results.push(a);
         }

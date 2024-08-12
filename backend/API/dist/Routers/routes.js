@@ -14,7 +14,7 @@ import { PlanRouter } from './PlanRouter.js';
 // const wrkOutPlanTypeRouter = require('./PlanTypeRouter');
 // const wrkOutPlanMachineRouter = require('./PlanMachineRouter');
 // const wrkOutPlanMachinePresetRouter = require('./PlanMachinePresetRouter');
-export var setRoutes = function (app) {
+export const setRoutes = (app) => {
     app.use('/api/test', Test);
     app.use('/api/address', AddressRouter);
     app.use('/api/exercise-type', ExerciseTypeRouter);

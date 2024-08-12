@@ -1,7 +1,7 @@
 import { StatusCodeType } from './Response.js';
 import { ResponseStatus } from '../common/ResponseStatus.js';
-var CreatedResponse = /** @class */ (function () {
-    function CreatedResponse(message, createdId) {
+export class CreatedResponse {
+    constructor(message, createdId) {
         this.StatusCode = StatusCodeType.CREATED;
         this.Body = {
             status: ResponseStatus.SUCCESS,
@@ -9,14 +9,12 @@ var CreatedResponse = /** @class */ (function () {
             CreatedId: createdId
         };
     }
-    CreatedResponse.prototype.buildResponse = function (req, res) {
+    buildResponse(req, res) {
         res.status(this.StatusCode).json(this.Body);
-    };
-    return CreatedResponse;
-}());
-export { CreatedResponse };
-var CreatedMultipleResponse = /** @class */ (function () {
-    function CreatedMultipleResponse(message, createdIds) {
+    }
+}
+export class CreatedMultipleResponse {
+    constructor(message, createdIds) {
         this.StatusCode = StatusCodeType.CREATED;
         this.Body = {
             status: ResponseStatus.SUCCESS,
@@ -24,9 +22,7 @@ var CreatedMultipleResponse = /** @class */ (function () {
             CreatedIds: createdIds
         };
     }
-    CreatedMultipleResponse.prototype.buildResponse = function (req, res) {
+    buildResponse(req, res) {
         res.status(this.StatusCode).json(this.Body);
-    };
-    return CreatedMultipleResponse;
-}());
-export { CreatedMultipleResponse };
+    }
+}

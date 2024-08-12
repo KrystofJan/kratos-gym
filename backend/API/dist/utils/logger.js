@@ -1,5 +1,5 @@
 import Pino from 'pino';
-export var logger = Pino.pino({
+export const logger = Pino.pino({
     transport: {
         target: 'pino-pretty',
         options: {

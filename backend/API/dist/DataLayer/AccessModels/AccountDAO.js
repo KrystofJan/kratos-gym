@@ -7,19 +7,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { RelationalModel } from './RelationalModel.js';
+import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
-import { DatabaseFail } from '../Database/DatabaseResponse.js';
-import { PlanPreset } from '../../Models/PlanPreset.js';
-export class PlanPresetDAO extends RelationalModel {
-    // Move to Plan 
+import { Account } from '../../Models/Account.js';
+import { DatabaseFail } from "../Database/DatabaseResponse.js";
+export class AccountDAO extends RelationalModel {
     constructor() {
-        super(TableTypes.PlanPreset);
+        super(TableTypes.Account);
     }
-    SelectPlanPresetById(id) {
+    SelectUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield this.dbHandler.SelectSpecific(PlanPreset, id);
+                const result = yield this.dbHandler.SelectSpecific(Account, id);
                 return result.Body;
             }
             catch (err) {
@@ -27,21 +26,20 @@ export class PlanPresetDAO extends RelationalModel {
             }
         });
     }
-    SelectAllPlanPresets() {
+    SelectUserByAttribute(attrName, attrValue) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = yield this.dbHandler.SelectAll(PlanPreset);
-                return result.Body;
+                const result = this.SelectByAttr(attrName, attrValue);
+                return result;
             }
-            catch (err) {
-                throw new DatabaseFail(err);
+            catch (error) {
             }
         });
     }
-    InsertPlanPreset(body) {
+    InsertUser(body) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const result = this.Insert(body);
+                const result = yield this.dbHandler.Insert(Account, body);
                 return result;
             }
             catch (err) {

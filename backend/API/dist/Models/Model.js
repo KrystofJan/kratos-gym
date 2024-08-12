@@ -1,20 +1,20 @@
-var Model = /** @class */ (function () {
-    function Model() {
+import { getMetadataForProperties } from "./Decorators/DatabaseDecorators.js";
+export class Model {
+    cosntructor() {
     }
-    Model.prototype.cosntructor = function () {
-    };
-    Model.prototype.constructJson = function () {
+    constructJson() {
         return JSON.parse(JSON.stringify(this));
-    };
+    }
     // TODO
-    Model.prototype.validateAttrs = function () {
-        for (var prop in this) {
+    validateAttrs() {
+        for (const prop in this) {
             if (this[prop] === undefined) {
                 return false;
             }
         }
         return true;
-    };
-    return Model;
-}());
-export { Model };
+    }
+    getKeysDictionary() {
+        return getMetadataForProperties(this);
+    }
+}

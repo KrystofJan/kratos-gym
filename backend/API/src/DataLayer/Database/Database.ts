@@ -1,6 +1,5 @@
 import postgres from 'postgres';
 import dotenv from "dotenv";
-import * as dbKeys from '../keys/table-keys.json' with {type: "json"};
 import { IDictionary } from '../../utils/Utilities.js';
 import { DatabaseResponse, DatabaseSuccess, DatabaseFail } from './DatabaseResponse.js';
 import { Model } from '../../Models/Model.js';
@@ -24,19 +23,18 @@ export class Database {
         },
     });
 
-    tableKeys: IDictionary<string>;
-
     constructor() {
-        this.tableKeys = JSON.parse(JSON.stringify(dbKeys.default));
     }
 
-    async SelectAll(tableName: string, limit: number = 10, page: number = 0) {
+    async SelectAll<T extends Model>(modelType: new (data: IDictionary<any>) => T, limit: number = 10, page: number = 0) {
+
+        const tableName = Reflect.getMetadata('tableName', modelType);
         if (limit < 0 || page < 0) {
             throw new DatabaseFail(new Error("Wrong page or limit value "))
         }
         try {
             const offset: number = limit * page
-            const result: Model[] = await this.sql<Model[]>`Select * from ${this.sql(tableName)} limit ${limit} offset ${offset}`;
+            const result: T[] = await this.sql<T[]>`Select * from ${this.sql(tableName)} limit ${limit} offset ${offset}`;
             logger.info(`Select all from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
             return new DatabaseSuccess(result);
         } catch (error) {
@@ -45,14 +43,12 @@ export class Database {
         }
     }
 
-    async SelectSpecific(id: number, tableName: string, foreignTable: string | null): Promise<DatabaseResponse> {
+    async SelectSpecific<T extends Model>(modelType: new (data: IDictionary<any>) => T, id: number, limit: number = 10, page: number = 0) {
+        const tableName = Reflect.getMetadata('tableName', modelType);
+        let pkey: string = Reflect.getMetadata('primaryKey', modelType);
 
-        let pkey: string = this.tableKeys[tableName];
-        if (foreignTable != null) {
-            pkey = this.tableKeys[foreignTable];
-        }
         try {
-            const [result]: Model[] = await this.sql<Model[]>`Select * from ${this.sql(tableName)} where ${this.sql(pkey)} = ${id}`;
+            const [result]: T[] = await this.sql<T[]>`Select * from ${this.sql(tableName)} where ${this.sql(pkey)} = ${id}`;
             logger.info(`Select by id from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
             return new DatabaseSuccess(result);
         } catch (error) {
@@ -73,18 +69,52 @@ export class Database {
     }
 
     // TODO: Handle duplicates
-    async Insert(body: IDictionary<any>, tableName: string): Promise<DatabaseResponse> {
-        const bodVal = Object.fromEntries(Object.entries(body).filter(([_, v]) => v != null));
-        const columns: string[] = Object.keys(bodVal)
+    async Insert<T extends Model>(modelType: new (data: IDictionary<any>) => T, body: IDictionary<any>): Promise<DatabaseResponse> {
+        const columnMap = Reflect.getMetadata('columnMap', modelType.prototype);
+        const tableName = Reflect.getMetadata('tableName', modelType);
+        const foreignKeyMap = Reflect.getMetadata("foreignKeyMap", modelType.prototype);
+
+        // Filter out null or undefined values from the body
+        const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
+        const columns: string[] = Object.keys(filteredBody);
+
+        logger.info(body)
+        let processedData: IDictionary<any> = {};
 
         try {
-            const [res] = await this.sql`insert into ${this.sql(tableName)} ${this.sql(body, columns)} returning *`
-            logger.info(`Insert into ${tableName} was sucessful\n${JSON.stringify(res, null, 4)}`)
-            return new DatabaseSuccess(res);
+            for (const column of columns) {
+                const columnMapped = columnMap[column];
+
+                // Handle foreign key mapping
+                if (foreignKeyMap?.[columnMapped]) {
+                    const [_, fkPrototype] = foreignKeyMap[columnMapped];
+                    const foreignKey = Reflect.getMetadata('primaryKey', fkPrototype);
+                    const fieldMap = Reflect.getMetadata('fieldMap', fkPrototype.prototype);
+
+                    processedData[columnMapped] = filteredBody[column][fieldMap[foreignKey]];
+                } else {
+                    // Handle boolean conversion
+                    processedData[columnMapped] = typeof filteredBody[column] === "boolean"
+                        ? Number(filteredBody[column]).toString()
+                        : filteredBody[column];
+                }
+            }
         } catch (error) {
-            logger.error(error)
-            throw new DatabaseFail(error as Error)
+            logger.error(error);
+            throw new Error("Error processing body data.");
         }
+
+        const columnNames = Object.keys(processedData);
+
+        try {
+            const [result] = await this.sql`insert into ${this.sql(tableName)} ${this.sql(processedData, columnNames)} returning *`;
+            logger.info(`Insert into ${tableName} was successful\n${JSON.stringify(result, null, 4)}`);
+            return new DatabaseSuccess(result);
+        } catch (error) {
+            logger.error(error);
+            throw new DatabaseFail(error as Error);
+        }
+
     }
 
 

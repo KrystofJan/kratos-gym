@@ -1,11 +1,9 @@
-var Validators = /** @class */ (function () {
-    function Validators() {
+export class Validators {
+    constructor() {
     }
-    Validators.validateNumericId = function (id) {
+    static validateNumericId(id) {
         var reg = /^\d+$/;
         // return reg.test(id);
         return true;
-    };
-    return Validators;
-}());
-export { Validators };
+    }
+}

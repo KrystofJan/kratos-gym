@@ -1,29 +1,44 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var ExerciseType_1;
 import { Model } from './Model.js';
-var ExerciseType = /** @class */ (function (_super) {
-    __extends(ExerciseType, _super);
-    function ExerciseType(jsonData) {
-        var _this = _super.call(this) || this;
-        _this.ExerciseTypeId = jsonData.ExerciseTypeId;
-        _this.ExerciseTypeName = jsonData.ExerciseTypeName;
-        _this.Category = jsonData.Category;
-        _this.BodyPart = jsonData.BodyPart;
-        return _this;
+import { Column, PrimaryKey, Table, getMetadataForProperties } from "./Decorators/DatabaseDecorators.js";
+let ExerciseType = ExerciseType_1 = class ExerciseType extends Model {
+    constructor(jsonData) {
+        super();
+        const databaseNames = getMetadataForProperties(ExerciseType_1);
+        this.ExerciseTypeId = jsonData[databaseNames["City"]];
+        this.ExerciseTypeName = jsonData[databaseNames["ExerciseTypeName"]];
+        this.Category = jsonData[databaseNames["Category"]];
+        this.BodyPart = jsonData[databaseNames["BodyPart"]];
     }
-    return ExerciseType;
-}(Model));
+};
+__decorate([
+    Column("exercise_type_id"),
+    __metadata("design:type", Object)
+], ExerciseType.prototype, "ExerciseTypeId", void 0);
+__decorate([
+    Column("exercise_type_name"),
+    __metadata("design:type", String)
+], ExerciseType.prototype, "ExerciseTypeName", void 0);
+__decorate([
+    Column("category"),
+    __metadata("design:type", String)
+], ExerciseType.prototype, "Category", void 0);
+__decorate([
+    Column("body_part"),
+    __metadata("design:type", String)
+], ExerciseType.prototype, "BodyPart", void 0);
+ExerciseType = ExerciseType_1 = __decorate([
+    Table("exercise_type"),
+    PrimaryKey("exercise_type_id"),
+    __metadata("design:paramtypes", [Object])
+], ExerciseType);
 export { ExerciseType };
