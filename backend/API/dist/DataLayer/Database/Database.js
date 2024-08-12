@@ -60,23 +60,31 @@ var Database = /** @class */ (function () {
         });
         this.tableKeys = JSON.parse(JSON.stringify(dbKeys.default));
     }
-    Database.prototype.SelectAll = function (tableName) {
-        return __awaiter(this, void 0, void 0, function () {
-            var result, error_1;
+    Database.prototype.SelectAll = function (tableName_1) {
+        return __awaiter(this, arguments, void 0, function (tableName, limit, page) {
+            var offset, result, error_1;
+            if (limit === void 0) { limit = 10; }
+            if (page === void 0) { page = 0; }
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.sql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["Select * from ", ""], ["Select * from ", ""])), this.sql(tableName))];
+                        if (limit < 0 || page < 0) {
+                            throw new DatabaseFail(new Error("Wrong page or limit value "));
+                        }
+                        _a.label = 1;
                     case 1:
-                        result = _a.sent();
-                        logger.info("Select all was successful");
-                        return [2 /*return*/, new DatabaseSuccess(result)];
+                        _a.trys.push([1, 3, , 4]);
+                        offset = limit * page;
+                        return [4 /*yield*/, this.sql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["Select * from ", " limit ", " offset ", ""], ["Select * from ", " limit ", " offset ", ""])), this.sql(tableName), limit, offset)];
                     case 2:
+                        result = _a.sent();
+                        logger.info("Select all from ".concat(tableName, " table was successful\n").concat(JSON.stringify(result, null, 4)));
+                        return [2 /*return*/, new DatabaseSuccess(result)];
+                    case 3:
                         error_1 = _a.sent();
                         logger.error(error_1);
                         throw new DatabaseFail(error_1);
-                    case 3: return [2 /*return*/];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
@@ -97,7 +105,7 @@ var Database = /** @class */ (function () {
                         return [4 /*yield*/, this.sql(templateObject_2 || (templateObject_2 = __makeTemplateObject(["Select * from ", " where ", " = ", ""], ["Select * from ", " where ", " = ", ""])), this.sql(tableName), this.sql(pkey), id)];
                     case 2:
                         result = (_a.sent())[0];
-                        logger.info("Select specific was successful");
+                        logger.info("Select by id from ".concat(tableName, " table was successful\n").concat(JSON.stringify(result, null, 4)));
                         return [2 /*return*/, new DatabaseSuccess(result)];
                     case 3:
                         error_2 = _a.sent();
@@ -118,7 +126,7 @@ var Database = /** @class */ (function () {
                         return [4 /*yield*/, this.sql(templateObject_3 || (templateObject_3 = __makeTemplateObject(["Select * from ", " where ", " = ", ""], ["Select * from ", " where ", " = ", ""])), this.sql(tableName), this.sql(attrName), attrValue)];
                     case 1:
                         result = (_a.sent())[0];
-                        logger.info("Select by attr was successful");
+                        logger.info("Select by attribute from ".concat(tableName, " table was successful\n").concat(JSON.stringify(result, null, 4)));
                         return [2 /*return*/, new DatabaseSuccess(result)];
                     case 2:
                         error_3 = _a.sent();
@@ -147,11 +155,10 @@ var Database = /** @class */ (function () {
                         return [4 /*yield*/, this.sql(templateObject_4 || (templateObject_4 = __makeTemplateObject(["insert into ", " ", " returning *"], ["insert into ", " ", " returning *"])), this.sql(tableName), this.sql(body, columns))];
                     case 2:
                         res = (_a.sent())[0];
-                        logger.info("Select by attr was successful");
+                        logger.info("Insert into ".concat(tableName, " was sucessful\n").concat(JSON.stringify(res, null, 4)));
                         return [2 /*return*/, new DatabaseSuccess(res)];
                     case 3:
                         error_4 = _a.sent();
-                        console.error("Error executing query:", error_4);
                         logger.error(error_4);
                         throw new DatabaseFail(error_4);
                     case 4: return [2 /*return*/];

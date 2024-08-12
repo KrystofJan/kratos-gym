@@ -101,7 +101,6 @@ export var postMachine = function (req, res) { return __awaiter(void 0, void 0, 
                 return [4 /*yield*/, CreateMachine(reservation)];
             case 1:
                 response = _a.sent();
-                console.log(response);
                 response.buildResponse(req, res);
                 return [2 /*return*/];
         }

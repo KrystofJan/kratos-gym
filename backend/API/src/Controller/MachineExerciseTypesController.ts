@@ -18,7 +18,6 @@ export const getMachineExerciseTypesByExerciseTypeId = async (req: expressReques
 export const postMachineExerciseTypes = async (req: expressRequest, res: expressResponse) => {
     const machineExerciseType = new MachineExerciseTypePostModel(req.body);
     let response: Response;
-    console.log();
     if (!machineExerciseType.validateAttrs()) {
         response = new BadRequestResponse("Unable to create ExerciseType model");
         response.buildResponse(req, res);

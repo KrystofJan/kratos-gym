@@ -1,15 +1,15 @@
 export enum TableTypes {
     test = "test",
-    Plan = "wrkoutplan",
-    PlanPreset = "wrkoutplanpreset",
+    Plan = "plan",
+    PlanPreset = "plan_preset",
     Account = "account",
     Address = "address",
-    ExerciseType = "exercisetype",
-    Machine = "wrkoutmachine",
-    MachineExerciseTypes = "machineexercisetypes",
+    ExerciseType = "exercise_type",
+    Machine = "machine",
+    MachineExerciseTypes = "machine_exercise_types",
     Reservation = "reservation",
-    PlanType = "wrkoutplantype",
-    PlanMachines = "wrkoutplanmachines",
-    PlanMachinesPreset = "wrkoutplanmachinespreset",
+    PlanType = "plan_type",
+    PlanMachines = "plan_machines",
+    PlanMachinesPreset = "plan_machines_preset",
     MachineExerciseTypes_Machine = "machineexercisetypes--"
 }

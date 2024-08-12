@@ -64,9 +64,10 @@ var PlanMachinesDAO = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 try {
                     result = this.SecectByForeignId(id, TableTypes.Plan);
+                    return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });
@@ -78,11 +79,11 @@ var PlanMachinesDAO = /** @class */ (function (_super) {
             var result;
             return __generator(this, function (_a) {
                 try {
-                    result = this.SelectAll();
+                    result = this.SelectById(id);
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });
@@ -105,14 +106,7 @@ var PlanMachinesDAO = /** @class */ (function (_super) {
                         return [3 /*break*/, 3];
                     case 2:
                         err_1 = _a.sent();
-                        if (err_1 instanceof DatabaseFail) {
-                            return [2 /*return*/, err_1];
-                        }
-                        else {
-                            console.error(err_1);
-                            throw err_1;
-                        }
-                        return [3 /*break*/, 3];
+                        throw new DatabaseFail(err_1);
                     case 3: return [2 /*return*/];
                 }
             });
@@ -127,7 +121,7 @@ var PlanMachinesDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });

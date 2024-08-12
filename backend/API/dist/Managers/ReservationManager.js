@@ -73,7 +73,6 @@ export var FindReservationById = function (id) { return __awaiter(void 0, void 0
                 return [4 /*yield*/, reservationDao.SelectReservationById(id)];
             case 1:
                 body = _a.sent();
-                console.log(body);
                 result = new ReservationGetModel(body);
                 return [2 /*return*/, new OkResponse("We good", result)];
             case 2:

@@ -43,22 +43,19 @@ import { AccountDAO } from '../DataLayer/AccessModels/UserDAO.js';
 import { PlanMachinesDAO } from '../DataLayer/AccessModels/PlanMachineDAO.js';
 import { PlanTypeDAO } from '../DataLayer/AccessModels/PlanTypeDAO.js';
 export var FindAllPlans = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var wrkOutPlanDao, body, results, err_1;
+    var planDao, body, results, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                wrkOutPlanDao = new PlanDAO();
-                return [4 /*yield*/, wrkOutPlanDao.SelectAllPlans()];
+                planDao = new PlanDAO();
+                return [4 /*yield*/, planDao.SelectAllPlans()];
             case 1:
                 body = _a.sent();
-                console.log(body);
                 results = [];
                 // for (const b of body) {
                 //     const userDao = new AccountDAO();
-                //     console.log(b)
                 //     const userData = await userDao.SelectUserById(b.account_id);
-                //     console.log(userData, "")
                 //     const user: Account = new Account(userData);
                 //     const a = new Plan(b);
                 //     a.User = user;

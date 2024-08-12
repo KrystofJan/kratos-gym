@@ -67,12 +67,10 @@ var PlanDAO = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.SelectById(id)];
                     case 1:
                         result = _a.sent();
-                        console.log(result);
                         return [2 /*return*/, result];
                     case 2:
                         err_1 = _a.sent();
-                        console.error(err_1);
-                        return [3 /*break*/, 3];
+                        throw new DatabaseFail(err_1);
                     case 3: return [2 /*return*/];
                 }
             });
@@ -88,12 +86,10 @@ var PlanDAO = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.SelectAll()];
                     case 1:
                         result = _a.sent();
-                        console.log(result);
                         return [2 /*return*/, result];
                     case 2:
                         err_2 = _a.sent();
-                        console.error(err_2);
-                        return [3 /*break*/, 3];
+                        throw new DatabaseFail(err_2);
                     case 3: return [2 /*return*/];
                 }
             });
@@ -108,8 +104,7 @@ var PlanDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
-                    return [2 /*return*/, new DatabaseFail(err)];
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });

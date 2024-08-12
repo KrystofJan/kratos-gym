@@ -41,7 +41,6 @@ export const FindUserById = async (id: number): Promise<Response> => {
         const addressDAO = new AddressDAO()
         const body = await userDao.SelectUserById(id);
 
-        console.log(body)
         const addr = await addressDAO.SelectAdressById(body.address_id)
         const result = new Account(body);
         result.Address = new Address(addr);

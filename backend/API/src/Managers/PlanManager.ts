@@ -21,19 +21,16 @@ import { PlanPostModel } from '../Models/PostModels/PlanPostModel.js';
 
 export const FindAllPlans = async (): Promise<Response> => {
     try {
-        const wrkOutPlanDao = new PlanDAO();
-        const body: Array<Plan> = await wrkOutPlanDao.SelectAllPlans();
+        const planDao = new PlanDAO();
+        const body: Array<Plan> = await planDao.SelectAllPlans();
 
-        console.log(body)
 
         // validate...
         const results: Array<Plan> = [];
 
         // for (const b of body) {
         //     const userDao = new AccountDAO();
-        //     console.log(b)
         //     const userData = await userDao.SelectUserById(b.account_id);
-        //     console.log(userData, "")
         //     const user: Account = new Account(userData);
         //     const a = new Plan(b);
         //     a.User = user;

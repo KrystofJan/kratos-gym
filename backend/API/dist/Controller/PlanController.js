@@ -67,7 +67,6 @@ export var postPlan = function (req, res) { return __awaiter(void 0, void 0, voi
         switch (_a.label) {
             case 0:
                 body = new PlanPostModel(req.body);
-                console.log(body);
                 return [4 /*yield*/, CreatePlan(body)];
             case 1:
                 response = _a.sent();
@@ -139,7 +138,6 @@ export var postMachineToPlan = function (req, res, id) { return __awaiter(void 0
                 response = _b.sent();
                 _b.label = 4;
             case 4:
-                console.log(response);
                 response.buildResponse(req, res);
                 return [2 /*return*/];
         }

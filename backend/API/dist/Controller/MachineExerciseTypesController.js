@@ -67,7 +67,6 @@ export var postMachineExerciseTypes = function (req, res) { return __awaiter(voi
         switch (_a.label) {
             case 0:
                 machineExerciseType = new MachineExerciseTypePostModel(req.body);
-                console.log();
                 if (!machineExerciseType.validateAttrs()) {
                     response = new BadRequestResponse("Unable to create ExerciseType model");
                     response.buildResponse(req, res);

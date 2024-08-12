@@ -66,7 +66,7 @@ var MachineDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });
@@ -81,7 +81,7 @@ var MachineDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });
@@ -96,8 +96,7 @@ var MachineDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
-                    return [2 /*return*/, new DatabaseFail(err)];
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });
@@ -116,8 +115,7 @@ var MachineDAO = /** @class */ (function (_super) {
                         return [2 /*return*/, result];
                     case 2:
                         err_1 = _a.sent();
-                        console.error(err_1);
-                        return [2 /*return*/, new DatabaseFail(err_1)];
+                        throw new DatabaseFail(err_1);
                     case 3: return [2 /*return*/];
                 }
             });

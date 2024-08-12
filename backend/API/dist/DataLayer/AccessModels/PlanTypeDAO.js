@@ -67,7 +67,7 @@ var PlanTypeDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });
@@ -83,7 +83,7 @@ var PlanTypeDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });
@@ -98,7 +98,7 @@ var PlanTypeDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                     return [2 /*return*/, new DatabaseFail(err)];
                 }
                 return [2 /*return*/];

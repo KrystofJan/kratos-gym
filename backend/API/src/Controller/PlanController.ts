@@ -25,7 +25,6 @@ export const postPlan = async (req: expressRequest, res: expressResponse) => {
 
     // }
     const body: PlanPostModel = new PlanPostModel(req.body);
-    console.log(body)
     const response: Response = await CreatePlan(body);
     response.buildResponse(req, res);
 }
@@ -66,7 +65,6 @@ export const postMachineToPlan = async (req: expressRequest, res: expressRespons
         response = await handlePostSingleMachineToPlan(body, id)
     }
 
-    console.log(response)
 
     response.buildResponse(req, res);
 }

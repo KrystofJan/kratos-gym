@@ -17,18 +17,17 @@ export class AccountDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
     async SelectUserById(id: number) {
         try {
             const result = await this.SelectById(id);
-            console.log(result);
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -39,7 +38,6 @@ export class AccountDAO extends RelationalModel {
             return result;
         }
         catch (error) {
-            console.log("Nastala chyba: " + error);
         }
     }
 
@@ -49,8 +47,7 @@ export class AccountDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
-            return new DatabaseFail(err as Error)
+            throw new DatabaseFail(err as Error)
         }
     }
 }

@@ -35,8 +35,6 @@ export const FindReservationById = async (id: number): Promise<Response> => {
     try {
         const reservationDao = new ReservationDAO();
         const body: IDictionary<any> = await reservationDao.SelectReservationById(id);
-        console.log(body);
-        // validate...
         const result = new ReservationGetModel(body);
 
         return new OkResponse("We good", result);

@@ -16,7 +16,7 @@ export class MachineDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -26,7 +26,7 @@ export class MachineDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -36,8 +36,7 @@ export class MachineDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
-            return new DatabaseFail(err as Error)
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -47,8 +46,7 @@ export class MachineDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
-            return new DatabaseFail(err as Error)
+            throw new DatabaseFail(err as Error)
         }
     }
 }

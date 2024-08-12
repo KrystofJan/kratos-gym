@@ -66,7 +66,7 @@ var ReservationDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });
@@ -81,7 +81,7 @@ var ReservationDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });
@@ -96,8 +96,7 @@ var ReservationDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
-                    return [2 /*return*/, new DatabaseFail(err)];
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });

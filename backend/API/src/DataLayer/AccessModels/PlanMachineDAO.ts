@@ -16,8 +16,7 @@ export class PlanMachinesDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
-            throw err
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -28,7 +27,7 @@ export class PlanMachinesDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -36,21 +35,13 @@ export class PlanMachinesDAO extends RelationalModel {
 
         try {
             const result: DatabaseResponse = await this.dbHandler.dbSelectOccupiedMachineAmount(id, time, date)
-            console.log(result);
             if (result instanceof DatabaseSuccess) {
                 const successResult = result as DatabaseSuccess;
-                console.log(successResult.Body);
                 return successResult.Body[0];
             }
         }
         catch (err) {
-            if (err instanceof DatabaseFail) {
-                return err;
-            }
-            else {
-                console.error(err);
-                throw err;
-            }
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -60,7 +51,7 @@ export class PlanMachinesDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.log("asdasd")
+            throw new DatabaseFail(err as Error)
         }
     }
 }

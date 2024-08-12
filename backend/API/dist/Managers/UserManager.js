@@ -78,7 +78,6 @@ export var FindUserById = function (id) { return __awaiter(void 0, void 0, void 
                 return [4 /*yield*/, userDao.SelectUserById(id)];
             case 1:
                 body = _a.sent();
-                console.log(body);
                 return [4 /*yield*/, addressDAO.SelectAdressById(body.address_id)];
             case 2:
                 addr = _a.sent();

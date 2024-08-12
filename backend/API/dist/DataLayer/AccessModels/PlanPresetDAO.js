@@ -51,6 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { RelationalModel } from './RelationalModel.js';
 import { TableTypes } from "../Database/TableTypes.js";
+import { DatabaseFail } from '../Database/DatabaseResponse.js';
 var PlanPresetDAO = /** @class */ (function (_super) {
     __extends(PlanPresetDAO, _super);
     // Move to Plan 
@@ -66,7 +67,7 @@ var PlanPresetDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });
@@ -81,7 +82,7 @@ var PlanPresetDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });
@@ -96,7 +97,7 @@ var PlanPresetDAO = /** @class */ (function (_super) {
                     return [2 /*return*/, result];
                 }
                 catch (err) {
-                    console.error(err);
+                    throw new DatabaseFail(err);
                 }
                 return [2 /*return*/];
             });

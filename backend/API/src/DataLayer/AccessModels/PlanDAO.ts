@@ -13,22 +13,20 @@ export class PlanDAO extends RelationalModel {
     async SelectPlanById(id: number) {
         try {
             const result = await this.SelectById(id);
-            console.log(result)
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
     async SelectAllPlans() {
         try {
             const result = await this.SelectAll();
-            console.log(result)
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -38,8 +36,7 @@ export class PlanDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
-            return new DatabaseFail(err as Error)
+            throw new DatabaseFail(err as Error)
         }
     }
 }

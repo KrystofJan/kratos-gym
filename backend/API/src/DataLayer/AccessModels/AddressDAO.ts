@@ -17,7 +17,7 @@ export class AddressDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -27,7 +27,7 @@ export class AddressDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -37,8 +37,7 @@ export class AddressDAO extends RelationalModel {
             return result as DatabaseSuccess;
         }
         catch (err) {
-            console.error(err);
-            return new DatabaseFail(err as Error)
+            throw new DatabaseFail(err as Error)
         }
     }
 }

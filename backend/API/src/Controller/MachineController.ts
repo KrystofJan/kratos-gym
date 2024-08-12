@@ -38,6 +38,5 @@ export const postMachine = async (req: expressRequest, res: expressResponse) => 
         return;
     }
     response = await CreateMachine(reservation);
-    console.log(response);
     response.buildResponse(req, res);
 }

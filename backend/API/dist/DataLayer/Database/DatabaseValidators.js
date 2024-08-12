@@ -1,6 +1,5 @@
 var Validators = /** @class */ (function () {
     function Validators() {
-        console.log("preparing validator");
     }
     Validators.validateNumericId = function (id) {
         var reg = /^\d+$/;

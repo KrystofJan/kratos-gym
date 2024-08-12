@@ -1,8 +1,7 @@
 export class Validators {
-    constructor(){
-        console.log("preparing validator");
+    constructor() {
     }
-    static validateNumericId(id: number){
+    static validateNumericId(id: number) {
         var reg = /^\d+$/;
         // return reg.test(id);
         return true;

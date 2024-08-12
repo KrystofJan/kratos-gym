@@ -31,7 +31,6 @@ const getAll = async (req, res) => {
 
       const author = new UserModel(authorData);
       a.author = author.constructJson();
-      console.log(author);
       results.push(a.constructJson(b));
     }
 

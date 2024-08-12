@@ -65,8 +65,7 @@ var RelationalModel = /** @class */ (function () {
                             return [2 /*return*/, err_1];
                         }
                         else {
-                            // console.error(err);
-                            console.log("asdasd");
+                            throw new DatabaseFail(err_1);
                             throw err_1;
                         }
                         return [3 /*break*/, 3];
@@ -96,7 +95,7 @@ var RelationalModel = /** @class */ (function () {
                             return [2 /*return*/, err_2];
                         }
                         else {
-                            console.error(err_2);
+                            throw new DatabaseFail(err_2);
                             throw err_2;
                         }
                         return [3 /*break*/, 3];
@@ -126,7 +125,7 @@ var RelationalModel = /** @class */ (function () {
                             return [2 /*return*/, err_3];
                         }
                         else {
-                            console.error(err_3);
+                            throw new DatabaseFail(err_3);
                             throw err_3;
                         }
                         return [3 /*break*/, 3];
@@ -156,7 +155,7 @@ var RelationalModel = /** @class */ (function () {
                             return [2 /*return*/, err_4];
                         }
                         else {
-                            console.error(err_4);
+                            throw new DatabaseFail(err_4);
                             throw err_4;
                         }
                         return [3 /*break*/, 3];
@@ -182,7 +181,7 @@ var RelationalModel = /** @class */ (function () {
                             return [2 /*return*/, err_5];
                         }
                         else {
-                            console.error(err_5);
+                            throw new DatabaseFail(err_5);
                             throw err_5;
                         }
                         return [3 /*break*/, 3];

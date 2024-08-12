@@ -30,10 +30,14 @@ export class Database {
         this.tableKeys = JSON.parse(JSON.stringify(dbKeys.default));
     }
 
-    async SelectAll(tableName: string) {
+    async SelectAll(tableName: string, limit: number = 10, page: number = 0) {
+        if (limit < 0 || page < 0) {
+            throw new DatabaseFail(new Error("Wrong page or limit value "))
+        }
         try {
-            const result: Model[] = await this.sql<Model[]>`Select * from ${this.sql(tableName)}`;
-            logger.info("Select all was successful")
+            const offset: number = limit * page
+            const result: Model[] = await this.sql<Model[]>`Select * from ${this.sql(tableName)} limit ${limit} offset ${offset}`;
+            logger.info(`Select all from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
             return new DatabaseSuccess(result);
         } catch (error) {
             logger.error(error)
@@ -49,7 +53,7 @@ export class Database {
         }
         try {
             const [result]: Model[] = await this.sql<Model[]>`Select * from ${this.sql(tableName)} where ${this.sql(pkey)} = ${id}`;
-            logger.info("Select specific was successful")
+            logger.info(`Select by id from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
             return new DatabaseSuccess(result);
         } catch (error) {
             logger.error(error)
@@ -60,7 +64,7 @@ export class Database {
     async SelectAttrIs(attrValue: any, attrName: string, tableName: string): Promise<DatabaseResponse> {
         try {
             const [result]: Model[] = await this.sql<Model[]>`Select * from ${this.sql(tableName)} where ${this.sql(attrName)} = ${attrValue}`;
-            logger.info("Select by attr was successful")
+            logger.info(`Select by attribute from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
             return new DatabaseSuccess(result);
         } catch (error) {
             logger.error(error)
@@ -75,10 +79,9 @@ export class Database {
 
         try {
             const [res] = await this.sql`insert into ${this.sql(tableName)} ${this.sql(body, columns)} returning *`
-            logger.info("Select by attr was successful")
+            logger.info(`Insert into ${tableName} was sucessful\n${JSON.stringify(res, null, 4)}`)
             return new DatabaseSuccess(res);
         } catch (error) {
-            console.error("Error executing query:", error);
             logger.error(error)
             throw new DatabaseFail(error as Error)
         }

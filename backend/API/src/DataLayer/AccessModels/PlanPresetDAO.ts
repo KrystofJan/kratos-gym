@@ -2,6 +2,7 @@
 import { RelationalModel } from './RelationalModel.js';
 import { TableTypes } from "../Database/TableTypes.js";
 import { Plan } from '../../Models/Plan.js';
+import { DatabaseFail } from '../Database/DatabaseResponse.js';
 
 export class PlanPresetDAO extends RelationalModel {
     // Move to Plan 
@@ -16,7 +17,7 @@ export class PlanPresetDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -26,7 +27,7 @@ export class PlanPresetDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -36,7 +37,7 @@ export class PlanPresetDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 }

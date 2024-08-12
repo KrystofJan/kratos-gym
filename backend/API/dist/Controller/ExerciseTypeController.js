@@ -68,7 +68,6 @@ export var postExerciseType = function (req, res) { return __awaiter(void 0, voi
         switch (_a.label) {
             case 0:
                 address = new ExerciseType(req.body);
-                console.log();
                 if (!address.validateAttrs()) {
                     response = new BadRequestResponse("Unable to create ExerciseType model");
                     response.buildResponse(req, res);
@@ -77,7 +76,6 @@ export var postExerciseType = function (req, res) { return __awaiter(void 0, voi
                 return [4 /*yield*/, CreateExerciseType(address)];
             case 1:
                 response = _a.sent();
-                console.log(response);
                 response.buildResponse(req, res);
                 return [2 /*return*/];
         }

@@ -17,7 +17,7 @@ export class MachineExerciseTypesDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -25,11 +25,10 @@ export class MachineExerciseTypesDAO extends RelationalModel {
     async SelectMachineExerciseTypesBy_MachineId(id: number) {
         try {
             const result = await this.SecectByForeignId(id, TableTypes.Machine);
-            console.log('res', result);
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -39,8 +38,8 @@ export class MachineExerciseTypesDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
-            return new DatabaseFail(err as Error)
+            throw new DatabaseFail(err as Error)
+            throw new DatabaseFail(err as Error)
         }
     }
 }

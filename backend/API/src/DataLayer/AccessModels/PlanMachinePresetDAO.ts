@@ -13,20 +13,21 @@ export class PlanMachinesDAO extends RelationalModel {
     async SelectPlanBy_PlanId(id: number) {
         try {
             const result = this.SecectByForeignId(id, TableTypes.Plan);
+            return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
     // TODO: Move logic to wrkOutMachine
     async SelectPlanBy_MachineId(id: number) {
         try {
-            const result = this.SelectAll();
+            const result = this.SelectById(id);
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -41,13 +42,7 @@ export class PlanMachinesDAO extends RelationalModel {
             }
         }
         catch (err) {
-            if (err instanceof DatabaseFail) {
-                return err;
-            }
-            else {
-                console.error(err);
-                throw err;
-            }
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -57,7 +52,7 @@ export class PlanMachinesDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 }

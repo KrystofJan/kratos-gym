@@ -31,8 +31,7 @@ export class RelationalModel {
                 return err;
             }
             else {
-                // console.error(err);
-                console.log("asdasd")
+                throw new DatabaseFail(err as Error)
                 throw err;
             }
         }
@@ -52,7 +51,7 @@ export class RelationalModel {
                 return err;
             }
             else {
-                console.error(err);
+                throw new DatabaseFail(err as Error)
                 throw err;
             }
         }
@@ -72,7 +71,7 @@ export class RelationalModel {
                 return err;
             }
             else {
-                console.error(err);
+                throw new DatabaseFail(err as Error)
                 throw err;
             }
         }
@@ -93,7 +92,7 @@ export class RelationalModel {
                 return err;
             }
             else {
-                console.error(err);
+                throw new DatabaseFail(err as Error)
                 throw err;
             }
         }
@@ -109,7 +108,7 @@ export class RelationalModel {
                 return err;
             }
             else {
-                console.error(err);
+                throw new DatabaseFail(err as Error)
                 throw err;
             }
         }

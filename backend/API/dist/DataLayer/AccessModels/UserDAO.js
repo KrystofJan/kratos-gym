@@ -51,6 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { RelationalModel } from "./RelationalModel.js";
 import { TableTypes } from "../Database/TableTypes.js";
+import { UserRegPostModel } from '../../Models/PostModels/UserRegPostModel.js';
 import { DatabaseFail } from "../Database/DatabaseResponse.js";
 var AccountDAO = /** @class */ (function (_super) {
     __extends(AccountDAO, _super);
@@ -59,68 +60,55 @@ var AccountDAO = /** @class */ (function (_super) {
     }
     AccountDAO.prototype.SelectAllUsers = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var result;
-            return __generator(this, function (_a) {
-                try {
-                    result = this.SelectAll();
-                    return [2 /*return*/, result];
-                }
-                catch (err) {
-                    console.error(err);
-                }
-                return [2 /*return*/];
-            });
-        });
-    };
-    AccountDAO.prototype.SelectUserById = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var result, err_1;
+            var result, result, err_1, result, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.SelectById(id)];
+                        try {
+                            result = this.SelectAll();
+                            return [2 /*return*/, result];
+                        }
+                        catch (err) {
+                            throw new DatabaseFail(err);
+                            throw new DatabaseFail(err);
+                        }
+                        async;
+                        SelectUserById(id, number);
+                        _a.label = 1;
                     case 1:
-                        result = _a.sent();
-                        console.log(result);
-                        return [2 /*return*/, result];
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.SelectById(id)];
                     case 2:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                    case 3:
                         err_1 = _a.sent();
-                        console.error(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        throw new DatabaseFail(err_1);
+                    case 4:
+                        async;
+                        SelectUserByAttribute(attrName, string, attrValue, any);
+                        {
+                            try {
+                                result = this.SelectByAttr(attrName, attrValue);
+                                return [2 /*return*/, result];
+                            }
+                            catch (error) {
+                            }
+                        }
+                        async;
+                        InsertUser(body, UserRegPostModel);
+                        {
+                            try {
+                                result = this.Insert(body);
+                                return [2 /*return*/, result];
+                            }
+                            catch (err) {
+                                throw new DatabaseFail(err);
+                                return [2 /*return*/, new DatabaseFail(err)];
+                            }
+                        }
+                        return [2 /*return*/];
                 }
-            });
-        });
-    };
-    AccountDAO.prototype.SelectUserByAttribute = function (attrName, attrValue) {
-        return __awaiter(this, void 0, void 0, function () {
-            var result;
-            return __generator(this, function (_a) {
-                try {
-                    result = this.SelectByAttr(attrName, attrValue);
-                    return [2 /*return*/, result];
-                }
-                catch (error) {
-                    console.log("Nastala chyba: " + error);
-                }
-                return [2 /*return*/];
-            });
-        });
-    };
-    AccountDAO.prototype.InsertUser = function (body) {
-        return __awaiter(this, void 0, void 0, function () {
-            var result;
-            return __generator(this, function (_a) {
-                try {
-                    result = this.Insert(body);
-                    return [2 /*return*/, result];
-                }
-                catch (err) {
-                    console.error(err);
-                    return [2 /*return*/, new DatabaseFail(err)];
-                }
-                return [2 /*return*/];
             });
         });
     };

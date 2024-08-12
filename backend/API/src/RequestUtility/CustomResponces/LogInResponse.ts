@@ -9,7 +9,7 @@ export class LoggedInResponse implements Response {
     StatusCode: StatusCodeType;
     Body: LogInResponseBody;
 
-    constructor(message: string, userId: number){
+    constructor(message: string, userId: number) {
         this.StatusCode = StatusCodeType.OK;
         this.Body = {
             status: ResponseStatus.SUCCESS,
@@ -18,8 +18,7 @@ export class LoggedInResponse implements Response {
         }
     }
 
-    buildResponse (req: expressRequest, res: expressResponse ) {
-        console.log(this.Body);
+    buildResponse(req: expressRequest, res: expressResponse) {
         res.status(this.StatusCode).json(this.Body);
     }
 }

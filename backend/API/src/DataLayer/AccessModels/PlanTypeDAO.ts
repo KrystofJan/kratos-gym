@@ -16,7 +16,7 @@ export class PlanTypeDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -27,7 +27,7 @@ export class PlanTypeDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
         }
     }
 
@@ -37,7 +37,7 @@ export class PlanTypeDAO extends RelationalModel {
             return result;
         }
         catch (err) {
-            console.error(err);
+            throw new DatabaseFail(err as Error)
             return new DatabaseFail(err as Error)
         }
     }

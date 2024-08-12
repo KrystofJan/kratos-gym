@@ -13,18 +13,15 @@ import { IDictionary } from '../utils/Utilities.js';
 export const getReservationById = async (req: expressRequest, res: expressResponse, id: number) => {
     let reservation = await FindReservationById(id);
     if (reservation instanceof OkResponse) {
-        console.log(reservation.Body.Body);
     }
 
     if (reservation instanceof OkResponse && reservation.Body.Body instanceof ReservationGetModel) {
-        console.log('asdasd');
         const reservationGetModel = new ReservationGetModel(reservation.Body.Body);
         const customerData = await FindUserById(reservationGetModel.CustomerId);
         const customer = new Account(customerData);
         const tmp = new Reservation(reservation.Body.Body);
         tmp.Customer = customer;
         reservation.Body.Body = tmp;
-        console.log(reservation.Body.Body);
     }
     reservation.buildResponse(req, res);
 }
@@ -35,7 +32,6 @@ export const getAllReservations = async (req: expressRequest, res: expressRespon
     if (reservations instanceof OkResponse && Array.isArray(reservations.Body.Body)) {
         for (let i = 0; i < reservations.Body.Body.length; i++) {
             let reservation = reservations.Body.Body[i]
-            console.log('res', reservation);
             const reservationGetModel = new ReservationGetModel(reservation);
             const customerData = await FindUserById(reservationGetModel.CustomerId);
             const customer = new Account(customerData);
@@ -58,7 +54,6 @@ export const postReservation = async (req: expressRequest, res: expressResponse)
         return;
     }
     response = await CreateReservation(reservation);
-    console.log(response);
     response.buildResponse(req, res);
 }
 
