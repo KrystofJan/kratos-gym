@@ -24,13 +24,12 @@ export class Machine extends Model {
     constructor(jsonData: IDictionary<any>) {
         super();
 
-        const databaseNames = getMetadataForProperties(Machine);
-        this.MachineId = jsonData[databaseNames["MachineId"]] ?? null;
-        this.MachineName = jsonData[databaseNames["MachineName"]];
-        this.MaxWeight = jsonData[databaseNames["MaxWeight"]] ?? 0;
-        this.MinWeight = jsonData[databaseNames["MinWeight"]] ?? 0;
-        this.MaxPeople = jsonData[databaseNames["MaxPeople"]];
-        this.AvgTimeTaken = jsonData[databaseNames["AvgTimeTaken"]];
-        this.PopularityScore = jsonData[databaseNames["PopularityScore"]] ?? 0;
+        this.MachineId = jsonData["MachineId"] ?? jsonData["machine_id"];
+        this.MachineName = jsonData["MachineName"] ?? jsonData["machine_name"];
+        this.MaxWeight = jsonData["MaxWeight"] ?? jsonData["max_weight"];
+        this.MinWeight = jsonData["MinWeight"] ?? jsonData["min_weight"];
+        this.MaxPeople = jsonData["MaxPeople"] ?? jsonData["max_people"];
+        this.AvgTimeTaken = jsonData["AvgTimeTaken"] ?? jsonData["avg_time_taken"];
+        this.PopularityScore = jsonData["PopularityScore"] ?? jsonData["popularity_score"];
     }
 }

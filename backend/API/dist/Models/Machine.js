@@ -7,21 +7,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var Machine_1;
 import { Model } from './Model.js';
-import { Column, PrimaryKey, Table, getMetadataForProperties } from "./Decorators/DatabaseDecorators.js";
-let Machine = Machine_1 = class Machine extends Model {
+import { Column, PrimaryKey, Table } from "./Decorators/DatabaseDecorators.js";
+let Machine = class Machine extends Model {
     constructor(jsonData) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c, _d, _e, _f, _g;
         super();
-        const databaseNames = getMetadataForProperties(Machine_1);
-        this.MachineId = (_a = jsonData[databaseNames["MachineId"]]) !== null && _a !== void 0 ? _a : null;
-        this.MachineName = jsonData[databaseNames["MachineName"]];
-        this.MaxWeight = (_b = jsonData[databaseNames["MaxWeight"]]) !== null && _b !== void 0 ? _b : 0;
-        this.MinWeight = (_c = jsonData[databaseNames["MinWeight"]]) !== null && _c !== void 0 ? _c : 0;
-        this.MaxPeople = jsonData[databaseNames["MaxPeople"]];
-        this.AvgTimeTaken = jsonData[databaseNames["AvgTimeTaken"]];
-        this.PopularityScore = (_d = jsonData[databaseNames["PopularityScore"]]) !== null && _d !== void 0 ? _d : 0;
+        this.MachineId = (_a = jsonData["MachineId"]) !== null && _a !== void 0 ? _a : jsonData["machine_id"];
+        this.MachineName = (_b = jsonData["MachineName"]) !== null && _b !== void 0 ? _b : jsonData["machine_name"];
+        this.MaxWeight = (_c = jsonData["MaxWeight"]) !== null && _c !== void 0 ? _c : jsonData["max_weight"];
+        this.MinWeight = (_d = jsonData["MinWeight"]) !== null && _d !== void 0 ? _d : jsonData["min_weight"];
+        this.MaxPeople = (_e = jsonData["MaxPeople"]) !== null && _e !== void 0 ? _e : jsonData["max_people"];
+        this.AvgTimeTaken = (_f = jsonData["AvgTimeTaken"]) !== null && _f !== void 0 ? _f : jsonData["avg_time_taken"];
+        this.PopularityScore = (_g = jsonData["PopularityScore"]) !== null && _g !== void 0 ? _g : jsonData["popularity_score"];
     }
 };
 __decorate([
@@ -52,7 +50,7 @@ __decorate([
     Column("popularity_score"),
     __metadata("design:type", Number)
 ], Machine.prototype, "PopularityScore", void 0);
-Machine = Machine_1 = __decorate([
+Machine = __decorate([
     Table("machine"),
     PrimaryKey("machine_id"),
     __metadata("design:paramtypes", [Object])
