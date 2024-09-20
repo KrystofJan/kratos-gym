@@ -3,6 +3,7 @@ import { RelationalModel } from './RelationalModel.js';
 import { TableTypes } from "../Database/TableTypes.js";
 import { Plan } from '../../Models/Plan.js';
 import { DatabaseFail } from '../Database/DatabaseResponse.js';
+import { PlanPreset } from '../../Models/PlanPreset.js';
 
 export class PlanPresetDAO extends RelationalModel {
     // Move to Plan 
@@ -13,8 +14,8 @@ export class PlanPresetDAO extends RelationalModel {
 
     async SelectPlanPresetById(id: number) {
         try {
-            const result = this.SelectById(id);
-            return result;
+            const result = await this.dbHandler.SelectSpecific<PlanPreset>(PlanPreset, id)
+            return result.Body;
         }
         catch (err) {
             throw new DatabaseFail(err as Error)
@@ -23,8 +24,9 @@ export class PlanPresetDAO extends RelationalModel {
 
     async SelectAllPlanPresets() {
         try {
-            const result = this.SelectAll();
-            return result;
+            const result = await this.dbHandler.SelectAll<PlanPreset>(PlanPreset)
+
+            return result.Body;
         }
         catch (err) {
             throw new DatabaseFail(err as Error)

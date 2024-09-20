@@ -1,7 +1,3 @@
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -11,42 +7,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 import postgres from 'postgres';
 import dotenv from "dotenv";
-import * as dbKeys from '../keys/table-keys.json' with { type: "json" };
 import { DatabaseSuccess, DatabaseFail } from './DatabaseResponse.js';
 import { logger } from '../../utils/logger.js';
 dotenv.config();
-var _a = process.env, PGHOST = _a.PGHOST, PGDATABASE = _a.PGDATABASE, PGUSER = _a.PGUSER, PGPASSWORD = _a.PGPASSWORD, ENDPOINT_ID = _a.ENDPOINT_ID;
-var Database = /** @class */ (function () {
-    function Database() {
+let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+export class Database {
+    constructor() {
         this.sql = postgres({
             host: PGHOST,
             database: PGDATABASE,
@@ -55,121 +23,105 @@ var Database = /** @class */ (function () {
             port: 5432,
             ssl: 'require',
             connection: {
-                options: "project=".concat(ENDPOINT_ID),
+                options: `project=${ENDPOINT_ID}`,
             },
         });
-        this.tableKeys = JSON.parse(JSON.stringify(dbKeys.default));
     }
-    Database.prototype.SelectAll = function (tableName_1) {
-        return __awaiter(this, arguments, void 0, function (tableName, limit, page) {
-            var offset, result, error_1;
-            if (limit === void 0) { limit = 10; }
-            if (page === void 0) { page = 0; }
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (limit < 0 || page < 0) {
-                            throw new DatabaseFail(new Error("Wrong page or limit value "));
-                        }
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        offset = limit * page;
-                        return [4 /*yield*/, this.sql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["Select * from ", " limit ", " offset ", ""], ["Select * from ", " limit ", " offset ", ""])), this.sql(tableName), limit, offset)];
-                    case 2:
-                        result = _a.sent();
-                        logger.info("Select all from ".concat(tableName, " table was successful\n").concat(JSON.stringify(result, null, 4)));
-                        return [2 /*return*/, new DatabaseSuccess(result)];
-                    case 3:
-                        error_1 = _a.sent();
-                        logger.error(error_1);
-                        throw new DatabaseFail(error_1);
-                    case 4: return [2 /*return*/];
-                }
-            });
+    SelectAll(modelType_1) {
+        return __awaiter(this, arguments, void 0, function* (modelType, limit = 10, page = 0) {
+            const tableName = Reflect.getMetadata('tableName', modelType);
+            if (limit < 0 || page < 0) {
+                throw new DatabaseFail(new Error("Wrong page or limit value "));
+            }
+            try {
+                const offset = limit * page;
+                const result = yield this.sql `Select * from ${this.sql(tableName)} limit ${limit} offset ${offset}`;
+                logger.info(`Select all from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`);
+                return new DatabaseSuccess(result);
+            }
+            catch (error) {
+                logger.error(error);
+                throw new DatabaseFail(error);
+            }
         });
-    };
-    Database.prototype.SelectSpecific = function (id, tableName, foreignTable) {
-        return __awaiter(this, void 0, void 0, function () {
-            var pkey, result, error_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        pkey = this.tableKeys[tableName];
-                        if (foreignTable != null) {
-                            pkey = this.tableKeys[foreignTable];
-                        }
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.sql(templateObject_2 || (templateObject_2 = __makeTemplateObject(["Select * from ", " where ", " = ", ""], ["Select * from ", " where ", " = ", ""])), this.sql(tableName), this.sql(pkey), id)];
-                    case 2:
-                        result = (_a.sent())[0];
-                        logger.info("Select by id from ".concat(tableName, " table was successful\n").concat(JSON.stringify(result, null, 4)));
-                        return [2 /*return*/, new DatabaseSuccess(result)];
-                    case 3:
-                        error_2 = _a.sent();
-                        logger.error(error_2);
-                        throw new DatabaseFail(error_2);
-                    case 4: return [2 /*return*/];
-                }
-            });
+    }
+    SelectSpecific(modelType_1, id_1) {
+        return __awaiter(this, arguments, void 0, function* (modelType, id, limit = 10, page = 0) {
+            const tableName = Reflect.getMetadata('tableName', modelType);
+            let pkey = Reflect.getMetadata('primaryKey', modelType);
+            try {
+                const [result] = yield this.sql `Select * from ${this.sql(tableName)} where ${this.sql(pkey)} = ${id}`;
+                logger.info(`Select by id from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`);
+                return new DatabaseSuccess(result);
+            }
+            catch (error) {
+                logger.error(error);
+                throw new DatabaseFail(error);
+            }
         });
-    };
-    Database.prototype.SelectAttrIs = function (attrValue, attrName, tableName) {
-        return __awaiter(this, void 0, void 0, function () {
-            var result, error_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.sql(templateObject_3 || (templateObject_3 = __makeTemplateObject(["Select * from ", " where ", " = ", ""], ["Select * from ", " where ", " = ", ""])), this.sql(tableName), this.sql(attrName), attrValue)];
-                    case 1:
-                        result = (_a.sent())[0];
-                        logger.info("Select by attribute from ".concat(tableName, " table was successful\n").concat(JSON.stringify(result, null, 4)));
-                        return [2 /*return*/, new DatabaseSuccess(result)];
-                    case 2:
-                        error_3 = _a.sent();
-                        logger.error(error_3);
-                        throw new DatabaseFail(error_3);
-                    case 3: return [2 /*return*/];
-                }
-            });
+    }
+    SelectAttrIs(attrValue, attrName, tableName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const [result] = yield this.sql `Select * from ${this.sql(tableName)} where ${this.sql(attrName)} = ${attrValue}`;
+                logger.info(`Select by attribute from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`);
+                return new DatabaseSuccess(result);
+            }
+            catch (error) {
+                logger.error(error);
+                throw new DatabaseFail(error);
+            }
         });
-    };
+    }
     // TODO: Handle duplicates
-    Database.prototype.Insert = function (body, tableName) {
-        return __awaiter(this, void 0, void 0, function () {
-            var bodVal, columns, res, error_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        bodVal = Object.fromEntries(Object.entries(body).filter(function (_a) {
-                            var _ = _a[0], v = _a[1];
-                            return v != null;
-                        }));
-                        columns = Object.keys(bodVal);
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.sql(templateObject_4 || (templateObject_4 = __makeTemplateObject(["insert into ", " ", " returning *"], ["insert into ", " ", " returning *"])), this.sql(tableName), this.sql(body, columns))];
-                    case 2:
-                        res = (_a.sent())[0];
-                        logger.info("Insert into ".concat(tableName, " was sucessful\n").concat(JSON.stringify(res, null, 4)));
-                        return [2 /*return*/, new DatabaseSuccess(res)];
-                    case 3:
-                        error_4 = _a.sent();
-                        logger.error(error_4);
-                        throw new DatabaseFail(error_4);
-                    case 4: return [2 /*return*/];
+    Insert(modelType, body) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const columnMap = Reflect.getMetadata('columnMap', modelType.prototype);
+            const tableName = Reflect.getMetadata('tableName', modelType);
+            const foreignKeyMap = Reflect.getMetadata("foreignKeyMap", modelType.prototype);
+            // Filter out null or undefined values from the body
+            const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
+            const columns = Object.keys(filteredBody);
+            logger.info(body);
+            let processedData = {};
+            try {
+                for (const column of columns) {
+                    const columnMapped = columnMap[column];
+                    // Handle foreign key mapping
+                    if (foreignKeyMap === null || foreignKeyMap === void 0 ? void 0 : foreignKeyMap[columnMapped]) {
+                        const [_, fkPrototype] = foreignKeyMap[columnMapped];
+                        const foreignKey = Reflect.getMetadata('primaryKey', fkPrototype);
+                        const fieldMap = Reflect.getMetadata('fieldMap', fkPrototype.prototype);
+                        processedData[columnMapped] = filteredBody[column][fieldMap[foreignKey]];
+                    }
+                    else {
+                        // Handle boolean conversion
+                        processedData[columnMapped] = typeof filteredBody[column] === "boolean"
+                            ? Number(filteredBody[column]).toString()
+                            : filteredBody[column];
+                    }
                 }
-            });
+            }
+            catch (error) {
+                logger.error(error);
+                throw new Error("Error processing body data.");
+            }
+            const columnNames = Object.keys(processedData);
+            try {
+                const [result] = yield this.sql `insert into ${this.sql(tableName)} ${this.sql(processedData, columnNames)} returning *`;
+                logger.info(`Insert into ${tableName} was successful\n${JSON.stringify(result, null, 4)}`);
+                return new DatabaseSuccess(result);
+            }
+            catch (error) {
+                logger.error(error);
+                throw new DatabaseFail(error);
+            }
         });
-    };
+    }
     // TODO: change the rest to reflect the rest
     // TODO: CanDisturb if its not free,!!!
-    Database.prototype.dbSelectOccupiedMachineAmount = function (id, time, date) {
-        return new Promise(function (resolve, reject) {
+    dbSelectOccupiedMachineAmount(id, time, date) {
+        return new Promise((resolve, reject) => {
             if (id === 3) {
                 reject(new DatabaseFail(new Error("asdasdasd")));
             }
@@ -197,9 +149,9 @@ var Database = /** @class */ (function () {
         //         ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
         //         resolve(new DatabaseSuccess(results));
         //     });
-    };
-    Database.prototype.dbRecommendMachine = function (id) {
-        return new Promise(function (resolve, reject) {
+    }
+    dbRecommendMachine(id) {
+        return new Promise((resolve, reject) => {
             if (id === 3) {
                 reject(new DatabaseFail(new Error("asdasdasd")));
             }
@@ -237,8 +189,5 @@ var Database = /** @class */ (function () {
             //         resolve(results);
             //     });
         });
-    };
-    return Database;
-}());
-export { Database };
-var templateObject_1, templateObject_2, templateObject_3, templateObject_4;
+    }
+}

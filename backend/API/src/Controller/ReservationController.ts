@@ -1,8 +1,8 @@
 import { FindAllReservations, FindReservationById, CreateReservation } from '../Managers/ReservationManager.js';
-import { FindUserById, FindAllUsers } from '../Managers/UserManager.js';
+import { FindUserById } from '../Managers/UserManager.js';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 import { Response } from '../RequestUtility/CustomResponces/Response.js'
-import { Account } from '../Models/User.js'
+import { Account } from '../Models/Account.js'
 import { Reservation } from '../Models/Reservation.js';
 import { ReservationPostModel } from '../Models/PostModels/ReservationPostModel.js';
 import { BadRequestResponse } from '../RequestUtility/CustomResponces/BadRequestResponse.js';
@@ -28,19 +28,6 @@ export const getReservationById = async (req: expressRequest, res: expressRespon
 
 export const getAllReservations = async (req: expressRequest, res: expressResponse) => {
     let reservations = await FindAllReservations();
-
-    if (reservations instanceof OkResponse && Array.isArray(reservations.Body.Body)) {
-        for (let i = 0; i < reservations.Body.Body.length; i++) {
-            let reservation = reservations.Body.Body[i]
-            const reservationGetModel = new ReservationGetModel(reservation);
-            const customerData = await FindUserById(reservationGetModel.CustomerId);
-            const customer = new Account(customerData);
-            const tmp = new Reservation(reservation);
-            tmp.Customer = customer;
-
-            reservations.Body.Body[i] = tmp;
-        }
-    }
     reservations.buildResponse(req, res);
 }
 

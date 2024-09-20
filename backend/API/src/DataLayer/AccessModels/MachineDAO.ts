@@ -12,8 +12,8 @@ export class MachineDAO extends RelationalModel {
 
     async SelectAllMachines() {
         try {
-            const result = this.SelectAll();
-            return result;
+            const result = await this.dbHandler.SelectAll<Machine>(Machine)
+            return result.Body;
         }
         catch (err) {
             throw new DatabaseFail(err as Error)
@@ -22,8 +22,9 @@ export class MachineDAO extends RelationalModel {
 
     async SelectMachineById(id: number) {
         try {
-            const result = this.SelectById(id);
-            return result;
+            const result = await this.dbHandler.SelectSpecific<Machine>(Machine, id)
+
+            return result.Body;
         }
         catch (err) {
             throw new DatabaseFail(err as Error)

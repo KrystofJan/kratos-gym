@@ -1,7 +1,7 @@
 import { StatusCodeType } from './Response.js';
 import { ResponseStatus } from '../common/ResponseStatus.js';
-var LoggedInResponse = /** @class */ (function () {
-    function LoggedInResponse(message, userId) {
+export class LoggedInResponse {
+    constructor(message, userId) {
         this.StatusCode = StatusCodeType.OK;
         this.Body = {
             status: ResponseStatus.SUCCESS,
@@ -9,9 +9,7 @@ var LoggedInResponse = /** @class */ (function () {
             userId: userId
         };
     }
-    LoggedInResponse.prototype.buildResponse = function (req, res) {
+    buildResponse(req, res) {
         res.status(this.StatusCode).json(this.Body);
-    };
-    return LoggedInResponse;
-}());
-export { LoggedInResponse };
+    }
+}

@@ -3,6 +3,7 @@ import { RelationalModel } from './RelationalModel.js';
 import { TableTypes } from "../Database/TableTypes.js";
 import { PlanPostModel } from '../../Models/PostModels/PlanPostModel.js';
 import { DatabaseFail } from '../Database/DatabaseResponse.js';
+import { Plan } from '../../Models/Plan.js';
 
 export class PlanDAO extends RelationalModel {
 
@@ -12,8 +13,8 @@ export class PlanDAO extends RelationalModel {
 
     async SelectPlanById(id: number) {
         try {
-            const result = await this.SelectById(id);
-            return result;
+            const result = await this.dbHandler.SelectSpecific<Plan>(Plan, id);
+            return result.Body;
         }
         catch (err) {
             throw new DatabaseFail(err as Error)
@@ -22,17 +23,17 @@ export class PlanDAO extends RelationalModel {
 
     async SelectAllPlans() {
         try {
-            const result = await this.SelectAll();
-            return result;
+            const result = await this.dbHandler.SelectAll<Plan>(Plan);
+            return result.Body;
         }
         catch (err) {
             throw new DatabaseFail(err as Error)
         }
     }
 
-    async InsertPlan(body: PlanPostModel) {
+    async InsertPlan(body: Plan) {
         try {
-            const result = this.Insert(body);
+            const result = await this.dbHandler.Insert(Plan, body);
             return result;
         }
         catch (err) {

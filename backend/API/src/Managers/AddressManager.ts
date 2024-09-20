@@ -7,11 +7,12 @@ import { CreatedResponse } from '../RequestUtility/CustomResponces/CreatedRespon
 import { FailedResponse } from '../RequestUtility/CustomResponces/FailedResponse.js';
 import { DatabaseFail, DatabaseResponse, DatabaseSuccess } from '../DataLayer/Database/DatabaseResponse.js';
 import { AddressPostModel } from '../Models/PostModels/AddressPostModel.js';
+import { logger } from '../utils/logger.js';
 
 export const FindAllAdresses = async (): Promise<Response> => {
     try {
         const addressDAO = new AddressDAO();
-        const body: Array<IDictionary<any>> = await addressDAO.SelectAllAdresses();
+        const body: any = await addressDAO.SelectAllAdresses();
         let results: Array<Address> = new Array<Address>();
 
         for (const b of body) {
@@ -41,7 +42,7 @@ export const FindAdressById = async (id: number): Promise<Response> => {
     }
 }
 
-export const CreateAddress = async (body: AddressPostModel) => { // create
+export const CreateAddress = async (body: Address) => {
     // TODO better response
     const addressDAO = new AddressDAO();
     const result: DatabaseResponse = await addressDAO.InsertAddress(body);

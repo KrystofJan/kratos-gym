@@ -1,9 +1,9 @@
 import { FindAllPlans, FindPlanById, AddTypeToPlan, FindExerciseTypesContainedInId, FindMachinesContainedInId, CreatePlan, AddMachineToPlan, AddMultipleMachinesToPlan } from '../Managers/PlanManager.js';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 import { Response } from '../RequestUtility/CustomResponces/Response.js';
-import { PlanPostModel } from '../Models/PostModels/PlanPostModel.js';
 import { PlanMachinePostModel } from '../Models/PostModels/PlanMachinePostModel.js';
 import { PlanTypePostModel } from '../Models/PostModels/PlanTypePostModel.js';
+import { Plan } from '../Models/Plan.js';
 
 export const getPlanById = async (req: expressRequest, res: expressResponse, id: number) => {
     const response: Response = await FindPlanById(id);
@@ -24,7 +24,7 @@ export const postPlan = async (req: expressRequest, res: expressResponse) => {
     //     }
 
     // }
-    const body: PlanPostModel = new PlanPostModel(req.body);
+    const body = new Plan(req.body);
     const response: Response = await CreatePlan(body);
     response.buildResponse(req, res);
 }

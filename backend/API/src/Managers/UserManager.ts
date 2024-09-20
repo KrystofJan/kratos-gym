@@ -1,6 +1,6 @@
 import { ErrorResponseBody } from './../RequestUtility/CustomResponces/ResponseBody.js';
-import { AccountDAO } from '../DataLayer/AccessModels/UserDAO.js';
-import { Account, UserAttrs } from '../Models/User.js'
+import { AccountDAO } from '../DataLayer/AccessModels/AccountDAO.js';
+import { Account } from '../Models/Account.js'
 import { UserRegPostModel } from '../Models/PostModels/UserRegPostModel.js';
 import { UserAuth } from '../Models/UserAuth.js';
 import { Response } from '../RequestUtility/CustomResponces/Response.js';
@@ -13,27 +13,8 @@ import { ResponseStatus } from '../RequestUtility/common/ResponseStatus.js';
 import { LoggedInResponse } from '../RequestUtility/CustomResponces/LogInResponse.js';
 import { AddressDAO } from '../DataLayer/AccessModels/AddressDAO.js';
 import { Address } from '../Models/Address.js';
+import { ForeignKey } from '../Models/Decorators/DatabaseDecorators.js';
 
-
-export const FindAllUsers = async (): Promise<Response> => {
-    try {
-        const userDao = new AccountDAO();
-        const body: Array<IDictionary<any>> = await userDao.SelectAllUsers();
-
-        // validate...
-        const results: Array<Account> = [];
-        for (const b of body) {
-            const a = new Account(b);
-
-            results.push(a);
-        }
-
-        return new OkResponse("We good", results);
-    }
-    catch (err) {
-        return new FailedResponse("Cannot get any of these things :(", 404);
-    }
-}
 
 export const FindUserById = async (id: number): Promise<Response> => {
     try {
@@ -41,9 +22,25 @@ export const FindUserById = async (id: number): Promise<Response> => {
         const addressDAO = new AddressDAO()
         const body = await userDao.SelectUserById(id);
 
+
+        const fkMap = Reflect.getMetadata("foreignKeyMap", Account.prototype)
+        console.log(fkMap)
+        for (const key in fkMap) {
+            console.log(body[key], fkMap[key])
+        }
+        //         NOTE: Turn this into something like that
+        //         for (const key in fkMap) {
+        //             console.log(body[key], fkMap[key])
+        //             const addr = await addressDAO.SelectAdressById(body[key])
+        //             const result = new Account(body);
+        //
+        // j           result[fkMap[key][0]] = new Address(addr);
+        //         }
         const addr = await addressDAO.SelectAdressById(body.address_id)
         const result = new Account(body);
+
         result.Address = new Address(addr);
+
 
         return new OkResponse("We good", result);
     }
@@ -52,7 +49,7 @@ export const FindUserById = async (id: number): Promise<Response> => {
     }
 }
 
-export const CreateUser = async (body: UserRegPostModel): Promise<Response> => {
+export const CreateUser = async (body: Account): Promise<Response> => {
     // TODO better response
     try {
         const userDao = new AccountDAO();
@@ -77,13 +74,13 @@ export const LoginAuth = async (body: UserAuth) => {
 
         if (body.LoginOrEmail.includes('@')) {
             result = await userDao.SelectUserByAttribute(
-                UserAttrs.Email,
+                "Email",
                 body.LoginOrEmail
             );
         }
         else {
             result = await userDao.SelectUserByAttribute(
-                UserAttrs.Login,
+                "Login",
                 body.LoginOrEmail
             );
         }

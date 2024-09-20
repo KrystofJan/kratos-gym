@@ -1,12 +1,12 @@
 import express from 'express';
 import { getAllAddresses, getAddressById, postAddress } from '../Controller/AddressController.js';
-export var AddressRouter = express.Router();
-AddressRouter.get('/', function (req, res) {
+export const AddressRouter = express.Router();
+AddressRouter.get('/', (req, res) => {
     getAllAddresses(req, res);
 });
-AddressRouter.get('/:id', function (req, res) {
+AddressRouter.get('/:id', (req, res) => {
     getAddressById(req, res, parseInt(req.params['id']));
 });
-AddressRouter.post('/', function (req, res) {
+AddressRouter.post('/', (req, res) => {
     postAddress(req, res);
 });

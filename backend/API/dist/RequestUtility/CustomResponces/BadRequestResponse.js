@@ -1,16 +1,14 @@
 import { StatusCodeType } from './Response.js';
 import { ResponseStatus } from '../common/ResponseStatus.js';
-var BadRequestResponse = /** @class */ (function () {
-    function BadRequestResponse(message) {
+export class BadRequestResponse {
+    constructor(message) {
         this.StatusCode = StatusCodeType.BAD_REQUEST;
         this.Body = {
             status: ResponseStatus.FAIL,
             message: message
         };
     }
-    BadRequestResponse.prototype.buildResponse = function (req, res) {
+    buildResponse(req, res) {
         res.status(this.StatusCode).json(this.Body);
-    };
-    return BadRequestResponse;
-}());
-export { BadRequestResponse };
+    }
+}

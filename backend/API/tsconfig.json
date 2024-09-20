@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ES5",
+        "target": "ES6",
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
         "outDir": "./dist",
@@ -9,6 +9,8 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
     },
     "ts-node": {
         "transpileOnly": true

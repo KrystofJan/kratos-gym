@@ -1,14 +1,14 @@
 import { getMachineExerciseTypesByExerciseTypeId, getMachineExerciseTypesByMachineId, postMachineExerciseTypes } from './../Controller/MachineExerciseTypesController.js';
 import express from 'express';
-export var MachineExerciseTypesRouter = express.Router();
-MachineExerciseTypesRouter.get('/machine/:id', function (req, res) {
-    var id = parseInt(req.params['id']);
+export const MachineExerciseTypesRouter = express.Router();
+MachineExerciseTypesRouter.get('/machine/:id', (req, res) => {
+    let id = parseInt(req.params['id']);
     getMachineExerciseTypesByMachineId(req, res, id);
 });
-MachineExerciseTypesRouter.get('/type/:id', function (req, res) {
-    var id = parseInt(req.params['id']);
+MachineExerciseTypesRouter.get('/type/:id', (req, res) => {
+    let id = parseInt(req.params['id']);
     getMachineExerciseTypesByExerciseTypeId(req, res, id);
 });
-MachineExerciseTypesRouter.post('/', function (req, res) {
+MachineExerciseTypesRouter.post('/', (req, res) => {
     postMachineExerciseTypes(req, res);
 });

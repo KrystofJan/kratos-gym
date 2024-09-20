@@ -12,8 +12,9 @@ export class ExerciseTypeDAO extends RelationalModel {
 
     async SelectAllExerciseTypes() {
         try {
-            const result = this.SelectAll();
-            return result;
+            const result = await this.dbHandler.SelectAll<ExerciseType>(ExerciseType)
+
+            return result.Body;
         }
         catch (err) {
             throw new DatabaseFail(err as Error)
@@ -22,8 +23,9 @@ export class ExerciseTypeDAO extends RelationalModel {
 
     async SelectExerciseTypeById(id: number) {
         try {
-            const result = this.SelectById(id);
-            return result;
+            const result = await this.dbHandler.SelectSpecific<ExerciseType>(ExerciseType, id)
+
+            return result.Body;
         }
         catch (err) {
             throw new DatabaseFail(err as Error)

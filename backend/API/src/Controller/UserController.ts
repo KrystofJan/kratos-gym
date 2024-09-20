@@ -2,6 +2,7 @@ import { LoginAuth, CreateUser, FindUserById } from './../Managers/UserManager.j
 import { Response } from '../RequestUtility/CustomResponces/Response.js'
 import { Request as expressRequest, Response as expressResponse } from 'express';
 import { UserAuth } from '../Models/UserAuth.js';
+import { Account } from '../Models/Account.js';
 import { UserRegPostModel } from '../Models/PostModels/UserRegPostModel.js'
 
 export const LogIn = async (req: expressRequest, res: expressResponse) => {
@@ -12,8 +13,9 @@ export const LogIn = async (req: expressRequest, res: expressResponse) => {
 }
 
 export const Register = async (req: expressRequest, res: expressResponse) => {
-    const registerBody = new UserRegPostModel(req.body);
+    const registerBody = new Account(req.body);
 
+    console.log(registerBody)
     const result: Response = await CreateUser(registerBody);
     result.buildResponse(req, res);
 }

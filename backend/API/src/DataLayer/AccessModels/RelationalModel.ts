@@ -16,7 +16,7 @@ export class RelationalModel {
 
     protected async SecectByForeignId(id: number, foreignTableType: TableTypes) {
         try {
-            const result: DatabaseResponse = await this.dbHandler.SelectSpecific(id, this.TableType, foreignTableType)
+            const result: DatabaseResponse = await this.dbHandler.SelectSpecific<Model>(Model, id)
 
             if (result instanceof DatabaseSuccess) {
                 const successResult = result as DatabaseSuccess;
@@ -39,7 +39,7 @@ export class RelationalModel {
 
     protected async SelectAll() {
         try {
-            const result: DatabaseResponse = await this.dbHandler.SelectAll(this.TableType)
+            const result: DatabaseResponse = await this.dbHandler.SelectAll<Model>(Model)
 
             if (result instanceof DatabaseSuccess) {
                 const successResult = result as DatabaseSuccess;
@@ -59,8 +59,7 @@ export class RelationalModel {
 
     protected async SelectById(id: number) {
         try {
-            const result = await this.dbHandler.SelectSpecific(id, this.TableType, null)
-
+            const result = await this.dbHandler.SelectSpecific<Model>(Model, id)
             if (result instanceof DatabaseSuccess) {
                 const successResult = result as DatabaseSuccess;
                 return successResult.Body;
@@ -100,7 +99,7 @@ export class RelationalModel {
 
     protected async Insert(body: Model) {
         try {
-            const result = await this.dbHandler.Insert(body, this.TableType)
+            const result = new DatabaseSuccess({ "asd": "asdasd" })// this.dbHandler.Insert<Model>(Model, body)
             return result;
         }
         catch (err) {

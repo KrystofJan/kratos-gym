@@ -1,28 +1,9 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 import { Model } from '../Model.js';
-var WrkoutPlanGetModel = /** @class */ (function (_super) {
-    __extends(WrkoutPlanGetModel, _super);
-    function WrkoutPlanGetModel(jsonData) {
-        var _this = _super.call(this) || this;
-        _this.wrkoutplanid = jsonData.wrkoutplanid;
-        _this.planname = jsonData.planname;
-        _this.accountid = jsonData.accountid;
-        return _this;
+export class WrkoutPlanGetModel extends Model {
+    constructor(jsonData) {
+        super();
+        this.wrkoutplanid = jsonData.wrkoutplanid;
+        this.planname = jsonData.planname;
+        this.accountid = jsonData.accountid;
     }
-    return WrkoutPlanGetModel;
-}(Model));
-export { WrkoutPlanGetModel };
+}
