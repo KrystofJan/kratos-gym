@@ -1,5 +1,5 @@
 import { Model } from '../../endpoints/Model';
-import { ResponseStatus } from '../common/ResponseStatus';
+import { ResponseStatus } from '../common/response-status';
 
 export interface ResponseBody {
     readonly status: ResponseStatus;

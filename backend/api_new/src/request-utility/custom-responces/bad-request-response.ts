@@ -1,15 +1,15 @@
-import { IDictionary } from "../../utils/Utilities.js";
-import { CustomResponse, StatusCodeType } from './Response';
-import { ResponseStatus } from '../common/ResponseStatus';
-import { ResponseBody } from './ResponseBody';
+import { CustomResponse } from './response';
+import { ResponseStatus } from '../common/response-status';
+import { ResponseBody } from './response-body';
+import { StatusCodes } from 'http-status-codes';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 
 export class BadRequestResponse implements CustomResponse {
-    StatusCode: StatusCodeType;
+    StatusCode: StatusCodes;
     Body: ResponseBody;
 
     constructor(message: string) {
-        this.StatusCode = StatusCodeType.BAD_REQUEST;
+        this.StatusCode = StatusCodes.BAD_REQUEST;
         this.Body = {
             status: ResponseStatus.FAIL,
             message: message

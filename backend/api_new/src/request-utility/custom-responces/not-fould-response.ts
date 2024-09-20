@@ -1,14 +1,15 @@
-import { CustomResponse, StatusCodeType } from './Response';
-import { ResponseStatus } from '../common/ResponseStatus';
-import { ResponseBody } from './ResponseBody';
+import { CustomResponse } from './response';
+import { StatusCodes } from 'http-status-codes';
+import { ResponseStatus } from '../common/response-status';
+import { ResponseBody } from './response-body';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 
 export class NotFoundResponse implements CustomResponse {
-    StatusCode: StatusCodeType;
+    StatusCode: StatusCodes;
     Body: ResponseBody;
 
     constructor(message: string) {
-        this.StatusCode = StatusCodeType.NOT_FOUND;
+        this.StatusCode = StatusCodes.NOT_FOUND;
         this.Body = {
             status: ResponseStatus.FAIL,
             message: message

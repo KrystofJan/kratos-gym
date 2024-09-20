@@ -1,7 +1,7 @@
 import postgres from 'postgres';
 import "dotenv/config";
 import { IDictionary } from '../utils';
-import { DatabaseResponse, DatabaseSuccess, DatabaseFail } from './database-response';
+import { DatabaseResponse, DatabaseFoundSingle, DatabaseFail, DatabaseFoundMultiple, DatabaseCreated } from './database-response';
 import { Model } from '../endpoints/Model';
 import { logger } from '../utils/logger';
 
@@ -35,7 +35,7 @@ export class Database {
             const offset: number = limit * page
             const result: T[] = await this.sql<T[]>`Select * from ${this.sql(tableName)} limit ${limit} offset ${offset}`;
             logger.info(`Select all from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
-            return new DatabaseSuccess(result);
+            return new DatabaseFoundMultiple(result);
         } catch (error) {
             logger.error(error)
             throw new DatabaseFail(error as Error)
@@ -49,7 +49,7 @@ export class Database {
         try {
             const [result]: T[] = await this.sql<T[]>`Select * from ${this.sql(tableName)} where ${this.sql(pkey)} = ${id}`;
             logger.info(`Select by id from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
-            return new DatabaseSuccess(result);
+            return new DatabaseFoundSingle(result);
         } catch (error) {
             logger.error(error)
             throw new DatabaseFail(error as Error)
@@ -60,7 +60,7 @@ export class Database {
         try {
             const [result]: Model[] = await this.sql<Model[]>`Select * from ${this.sql(tableName)} where ${this.sql(attrName)} = ${attrValue}`;
             logger.info(`Select by attribute from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
-            return new DatabaseSuccess(result);
+            return new DatabaseFoundSingle(result);
         } catch (error) {
             logger.error(error)
             throw new DatabaseFail(error as Error)
@@ -106,90 +106,12 @@ export class Database {
         const columnNames = Object.keys(processedData);
 
         try {
-            const [result] = await this.sql`insert into ${this.sql(tableName)} ${this.sql(processedData, columnNames)} returning *`;
+            const [result] = await this.sql<T[]>`insert into ${this.sql(tableName)} ${this.sql(processedData, columnNames)} returning *`;
             logger.info(`Insert into ${tableName} was successful\n${JSON.stringify(result, null, 4)}`);
-            return new DatabaseSuccess(result);
+            return new DatabaseCreated(result);
         } catch (error) {
             logger.error(error);
             throw new DatabaseFail(error as Error);
         }
-
-    }
-
-
-    // TODO: change the rest to reflect the rest
-
-    // TODO: CanDisturb if its not free,!!!
-    dbSelectOccupiedMachineAmount(id: number, time: string, date: string): Promise<DatabaseResponse> {
-        return new Promise((resolve, reject) => {
-            if (id === 3) {
-                reject(new DatabaseFail(new Error("asdasdasd")))
-            }
-            resolve(new DatabaseSuccess({ "All": "good" }))
-        })
-        // const pkey = dbKeys.default["WrkOutPlanMachines--plan"];
-        //
-        // if (!Validators.validateNumericId(id)) {
-        //     console.error('Cannot use this ID', id);
-        //     ApiLogger.logApi("Cannot use this" + pkey + " ! --" + id);
-        //     reject({ error: 'Cannot pass in id that\'s not a number! Id: ' + id });
-        // }
-        // this.db.query(
-        //     "select count(*) as count " +
-        //     "from WrkOutPlanMachines inner join Reservation on Reservation.WrkOutPlanId = WrkOutPlanMachines.WrkOutPlanId " +
-        //     "where ('" + time + "' between WrkOutStartTime and WrkOutEndTime) and Date(ReservationTime) = '" + date + "' " +
-        //     "and WrkOutPlanMachines.WrkOutMachineId = " + id + " and WrkOutPlanMachines.canDisturb = 1"
-        //     , (err, results) => {
-        //         if (err) {
-        //             console.error('Error querying the database:', err);
-        //             ApiLogger.logApi(err.toString());
-        //             reject({ error: 'Internal Server Error' });
-        //         }
-        //
-        //         ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
-        //         resolve(new DatabaseSuccess(results));
-        //     });
-    }
-
-
-    dbRecommendMachine(id: number): Promise<DatabaseResponse> {
-        return new Promise((resolve, reject) => {
-            if (id === 3) {
-                reject(new DatabaseFail(new Error("asdasdasd")))
-            }
-            resolve(new DatabaseSuccess({ "All": "good" }))
-            // const pkey = dbKeys.default["WrkOutMachine"];
-            //
-            // if (!Validators.validateNumericId(id)) {
-            //     console.error('Cannot use this ID', id);
-            //     ApiLogger.logApi("Cannot use this" + pkey + " ! --" + id);
-            //     reject({ error: 'Cannot pass in id that\'s not a number! Id: ' + id });
-            // }
-            // this.db.query(
-            //     'SELECT wm.WrkOutMachineId, wm.MachineName, ET.ExerciseTypeName, ET.BodyPart, wm.PopularityScore ' +
-            //     'FROM WrkOutMachine wm inner join MachineExerciseTypes met on wm.WrkOutMachineId = met.WrkOutMachineId ' +
-            //     'inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId ' +
-            //     'Where ET.BodyPart in ( ' +
-            //     'select  DISTINCT BodyPart ' +
-            //     'from MachineExerciseTypes met inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId ' +
-            //     'where met.WrkOutMachineId = ' + id + ') ' +
-            //     'and ET.Category in ( ' +
-            //     'select Category ' +
-            //     'From MachineExerciseTypes met inner join ExerciseType ET on met.ExerciseTypeId = ET.ExerciseTypeId ' +
-            //     'Where met.WrkOutMachineId = ' + id + ') ' +
-            //     'and wm.WrkOutMachineId != ' + id + ' ' +
-            //     'order by wm.PopularityScore desc ' +
-            //     'LIMIT 5'
-            //     , (err, results) => {
-            //         if (err) {
-            //             console.error('Error querying the database:', err);
-            //             ApiLogger.logApi(err.toString());
-            //             reject({ error: 'Internal Server Error' });
-            //         }
-            //
-            //         ApiLogger.logApi("Get request on the Reservations endpoint was Successfull!");
-            //         resolve(results);
-            //     });
-        });
     }
 }

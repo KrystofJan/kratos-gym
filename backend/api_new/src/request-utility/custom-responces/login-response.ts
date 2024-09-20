@@ -1,16 +1,16 @@
-import { CustomResponse, StatusCodeType } from './Response';
-import { ResponseStatus } from '../common/ResponseStatus';
-import { GetResponseBody, LogInResponseBody } from './ResponseBody';
-import { Model } from '../../endpoints/Model';
+import { CustomResponse } from './response';
+import { ResponseStatus } from '../common/response-status';
+import { LogInResponseBody } from './response-body';
+import { StatusCodes } from 'http-status-codes';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 
 
 export class LoggedInResponse implements CustomResponse {
-    StatusCode: StatusCodeType;
+    StatusCode: StatusCodes;
     Body: LogInResponseBody;
 
     constructor(message: string, userId: number) {
-        this.StatusCode = StatusCodeType.OK;
+        this.StatusCode = StatusCodes.OK;
         this.Body = {
             status: ResponseStatus.SUCCESS,
             message: message,
