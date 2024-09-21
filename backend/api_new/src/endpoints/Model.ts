@@ -1,12 +1,13 @@
 import { IDictionary } from "../utils";
 import { getMetadataForProperties } from "../database";
+import { DatabaseType } from "../utils/utilities";
 
 export class Model {
 
     cosntructor() {
     }
 
-    constructJson(): IDictionary<any> {
+    constructJson(): IDictionary<DatabaseType> {
         return JSON.parse(JSON.stringify(this));
     }
 

@@ -4,8 +4,10 @@ import { IDictionary } from '../utils';
 import { DatabaseResponse, DatabaseFoundSingle, DatabaseFail, DatabaseFoundMultiple, DatabaseCreated } from './database-response';
 import { Model } from '../endpoints/Model';
 import { logger } from '../utils/logger';
+import { DatabaseType, SimpleDatabaseType } from '../utils/utilities';
+import { ArgumentError } from '../errors/argument.error';
 
-let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
 
 export class Database {
 
@@ -22,45 +24,57 @@ export class Database {
     });
 
     constructor() {
-        console.log("dyyk more")
     }
 
-    async SelectAll<T extends Model>(modelType: new (data: IDictionary<any>) => T, limit: number = 10, page: number = 0) {
+    async SelectAll<T extends Model>(
+        modelType: new (data: IDictionary<DatabaseType>) => T,
+        limit: number = 10,
+        page: number = 0
+    ): Promise<DatabaseFoundMultiple<T>> {
 
         const tableName = Reflect.getMetadata('tableName', modelType);
         if (limit < 0 || page < 0) {
-            throw new DatabaseFail(new Error("Wrong page or limit value "))
+            throw new ArgumentError("Wrong page or limit value")
         }
         try {
             const offset: number = limit * page
             const result: T[] = await this.sql<T[]>`Select * from ${this.sql(tableName)} limit ${limit} offset ${offset}`;
             logger.info(`Select all from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
-            return new DatabaseFoundMultiple(result);
+            return new DatabaseFoundMultiple<T>(result);
         } catch (error) {
             logger.error(error)
             throw new DatabaseFail(error as Error)
         }
     }
 
-    async SelectSpecific<T extends Model>(modelType: new (data: IDictionary<any>) => T, id: number, limit: number = 10, page: number = 0) {
+    async SelectSpecific<T extends Model>(
+        modelType: new (data: IDictionary<DatabaseType>) => T,
+        id: number
+    ): Promise<DatabaseFoundSingle<T>> {
         const tableName = Reflect.getMetadata('tableName', modelType);
-        let pkey: string = Reflect.getMetadata('primaryKey', modelType);
+        const pkey: string = Reflect.getMetadata('primaryKey', modelType);
 
         try {
             const [result]: T[] = await this.sql<T[]>`Select * from ${this.sql(tableName)} where ${this.sql(pkey)} = ${id}`;
             logger.info(`Select by id from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
-            return new DatabaseFoundSingle(result);
+            return new DatabaseFoundSingle<T>(result);
         } catch (error) {
             logger.error(error)
             throw new DatabaseFail(error as Error)
         }
     }
 
-    async SelectAttrIs(attrValue: any, attrName: string, tableName: string): Promise<DatabaseResponse> {
+    async SelectAttrIs<T extends Model>(
+        modelType: new (data: IDictionary<DatabaseType>) => T,
+        attrValue: SimpleDatabaseType,
+        attrName: string
+    ): Promise<DatabaseFoundSingle<T>> {
+        const tableName = Reflect.getMetadata('tableName', modelType);
+
         try {
-            const [result]: Model[] = await this.sql<Model[]>`Select * from ${this.sql(tableName)} where ${this.sql(attrName)} = ${attrValue}`;
+            const [result]: T[] = await this.sql<T[]>`Select * from ${this.sql(tableName)} where ${this.sql(attrName)} = ${attrValue}`;
             logger.info(`Select by attribute from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
-            return new DatabaseFoundSingle(result);
+            return new DatabaseFoundSingle<T>(result);
         } catch (error) {
             logger.error(error)
             throw new DatabaseFail(error as Error)
@@ -68,7 +82,10 @@ export class Database {
     }
 
     // TODO: Handle duplicates
-    async Insert<T extends Model>(modelType: new (data: IDictionary<any>) => T, body: IDictionary<any>): Promise<DatabaseResponse> {
+    async Insert<T extends Model>(
+        modelType: new (data: IDictionary<DatabaseType>) => T,
+        body: T
+    ): Promise<DatabaseCreated<T>> {
         const columnMap = Reflect.getMetadata('columnMap', modelType.prototype);
         const tableName = Reflect.getMetadata('tableName', modelType);
         const foreignKeyMap = Reflect.getMetadata("foreignKeyMap", modelType.prototype);
@@ -77,8 +94,7 @@ export class Database {
         const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
         const columns: string[] = Object.keys(filteredBody);
 
-        logger.info(body)
-        let processedData: IDictionary<any> = {};
+        const processedData: IDictionary<any> = {};
 
         try {
             for (const column of columns) {
@@ -108,7 +124,7 @@ export class Database {
         try {
             const [result] = await this.sql<T[]>`insert into ${this.sql(tableName)} ${this.sql(processedData, columnNames)} returning *`;
             logger.info(`Insert into ${tableName} was successful\n${JSON.stringify(result, null, 4)}`);
-            return new DatabaseCreated(result);
+            return new DatabaseCreated<T>(result);
         } catch (error) {
             logger.error(error);
             throw new DatabaseFail(error as Error);
