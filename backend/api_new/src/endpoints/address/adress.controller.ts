@@ -3,47 +3,67 @@ import { AddressService } from './address.service';
 import { CreatedResponse, CustomResponse, FailedResponse, OkResponse } from '../../request-utility';
 import { Address } from './address.model';
 import { logger } from '../../utils';
+import { BaseError, ErrorCode } from '../../errors';
+import { addressErrorHandler } from './address.error-handler';
+import { safeAwait } from '../../utils/utilities';
 
 
 export class AddressController {
 
     static async FindAll(req: Request, res: Response) {
-        let response: CustomResponse;
-        try {
-            const data: Address[] = await AddressService.GetAllAddresses();
-            response = new OkResponse("found all data successfully", data);
-        } catch (err) {
+        const [err, data] = await safeAwait(AddressService.GetAllAddresses());
+        if (err !== null) {
             logger.error(err)
-            response = new FailedResponse("failed to find all data", 500);
+            const error = err as BaseError;
+            const statusCode = addressErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode);
+            response.buildResponse(req, res)
+            return;
         }
+
+        const response = new OkResponse("found all data successfully", data);
         response.buildResponse(req, res)
     }
 
     static async FindById(req: Request, res: Response) {
         const id = Number(req.params["id"])
-        let response: CustomResponse;
-        try {
-            const data: Address = await AddressService.GetAddressById(id);
-            response = new OkResponse("found all data successfully", data);
-        } catch (err) {
+        const [err, data] = await safeAwait(AddressService.GetAddressById(id));
+        if (err !== null) {
             logger.error(err)
-            response = new FailedResponse("failed to find all data", 500);
+            const error = err as BaseError;
+            const statusCode = addressErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode);
+            response.buildResponse(req, res)
+            return;
         }
+        const response = new OkResponse("found all data successfully", data);
         response.buildResponse(req, res)
     }
 
     static async Create(req: Request, res: Response) {
         const model = new Address(req.body);
         // if model is valid, create it
-
-        let response: CustomResponse;
-        try {
-            const createdId: number = await AddressService.CreateAddress(model);
-            response = new CreatedResponse("found all data successfully", createdId);
-        } catch (err) {
-            logger.error(err)
-            response = new FailedResponse("failed to find all data", 500);
+        if (!model.validateAttrs()) {
+            const error = new BaseError(ErrorCode.VALIDATION_ERROR, "Validation failed");
+            logger.error(error)
+            const statusCode = addressErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode);
+            response.buildResponse(req, res)
+            return;
         }
+
+        const [err, id] = await safeAwait(AddressService.CreateAddress(model));
+        if (err !== null) {
+
+            logger.error(err)
+            const error = err as BaseError;
+            const statusCode = addressErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        const response = new CreatedResponse("created successfully", id);
         response.buildResponse(req, res)
     }
 }

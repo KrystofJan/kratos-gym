@@ -1,11 +1,11 @@
 import postgres from 'postgres';
 import "dotenv/config";
 import { IDictionary } from '../utils';
-import { DatabaseResponse, DatabaseFoundSingle, DatabaseFail, DatabaseFoundMultiple, DatabaseCreated } from './database-response';
+import { DatabaseResponse, DatabaseFoundSingle, DatabaseFoundMultiple, DatabaseCreated } from './database-response';
 import { Model } from '../endpoints/Model';
 import { logger } from '../utils/logger';
 import { DatabaseType, SimpleDatabaseType } from '../utils/utilities';
-import { ArgumentError } from '../errors/argument.error';
+import { CodedError, ErrorCode } from '../errors/base.error';
 
 const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
 
@@ -34,7 +34,7 @@ export class Database {
 
         const tableName = Reflect.getMetadata('tableName', modelType);
         if (limit < 0 || page < 0) {
-            throw new ArgumentError("Wrong page or limit value")
+            throw new CodedError(ErrorCode.ARGUMENT_ERROR, "Wrong page or limit value")
         }
         try {
             const offset: number = limit * page
@@ -42,8 +42,9 @@ export class Database {
             logger.info(`Select all from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
             return new DatabaseFoundMultiple<T>(result);
         } catch (error) {
-            logger.error(error)
-            throw new DatabaseFail(error as Error)
+            const err = error as Error;
+            logger.error(err)
+            throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
         }
     }
 
@@ -59,8 +60,10 @@ export class Database {
             logger.info(`Select by id from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
             return new DatabaseFoundSingle<T>(result);
         } catch (error) {
-            logger.error(error)
-            throw new DatabaseFail(error as Error)
+            const err = error as Error;
+            logger.error(err)
+            throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
+
         }
     }
 
@@ -76,8 +79,9 @@ export class Database {
             logger.info(`Select by attribute from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
             return new DatabaseFoundSingle<T>(result);
         } catch (error) {
-            logger.error(error)
-            throw new DatabaseFail(error as Error)
+            const err = error as Error;
+            logger.error(err)
+            throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
         }
     }
 
@@ -115,8 +119,9 @@ export class Database {
                 }
             }
         } catch (error) {
-            logger.error(error);
-            throw new Error("Error processing body data.");
+            const err = error as Error;
+            logger.error(err);
+            throw new CodedError(ErrorCode.INTERNAL_ERROR, "Error processing body data.");
         }
 
         const columnNames = Object.keys(processedData);
@@ -126,8 +131,9 @@ export class Database {
             logger.info(`Insert into ${tableName} was successful\n${JSON.stringify(result, null, 4)}`);
             return new DatabaseCreated<T>(result);
         } catch (error) {
-            logger.error(error);
-            throw new DatabaseFail(error as Error);
+            const err = error as Error;
+            logger.error(err)
+            throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
         }
     }
 }

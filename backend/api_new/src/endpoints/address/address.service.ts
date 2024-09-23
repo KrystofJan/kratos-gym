@@ -1,19 +1,10 @@
 import { Database } from "../../database"
-import { DatabaseCreated, DatabaseFail, DatabaseFoundMultiple, DatabaseFoundSingle, DatabaseResponse } from "../../database/database-response"
-import { Model } from "../Model"
-import {
-    CustomResponse,
-    OkResponse,
-    FailedResponse,
-    CreatedResponse
-} from '../../request-utility'
-import { IDictionary, logger } from "../../utils"
-import { DatabaseType } from "../../utils/utilities"
-
+import { logger } from "../../utils"
 import { Address } from "./address.model"
-import { MappingError } from "../../errors/mapping.error"
-import { InternalError } from "../../errors/base.error"
 import { safeAwait } from "../../utils/utilities"
+import { addressErrorHandler } from "./address.error-handler"
+import { StatusCodes } from "http-status-codes"
+import { CodedError, ErrorCode } from "../../errors/base.error"
 
 export class AddressService {
 
@@ -21,9 +12,9 @@ export class AddressService {
         const db = new Database()
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(Address));
-        if (databaseErr === null) {
+        if (databaseErr !== null) {
             logger.error(databaseErr)
-            throw new DatabaseFail(databaseErr)
+            throw databaseErr;
         }
 
         try {
@@ -31,24 +22,22 @@ export class AddressService {
             return models;
         } catch (err) {
             logger.error(err)
-            throw new MappingError("Mapping model at GetAllAddresses failed")
+            throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllAddresses failed")
         }
     }
-
-
 
     static async GetAddressById(id: number): Promise<Address> {
         const db = new Database()
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectSpecific(Address, id));
-        if (databaseErr === null) {
+        if (databaseErr !== null) {
             logger.error(databaseErr)
-            throw new DatabaseFail(databaseErr)
+            throw databaseErr;
         }
 
         const model = new Address(databaseResponse.Body)
         if (!model) {
-            const err = new MappingError("Mapping model at GetAllAddresses failed")
+            const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAddressById failed")
             logger.error(err)
             throw err;
         }
@@ -59,14 +48,14 @@ export class AddressService {
         const db = new Database()
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Insert(Address, body));
-        if (databaseErr === null) {
+        if (databaseErr !== null) {
             logger.error(databaseErr)
-            throw new DatabaseFail(databaseErr)
+            throw databaseErr;
         }
 
         const model = new Address(databaseResponse.Body)
         if (!model) {
-            const err = new MappingError("Mapping model at GetAllAddresses failed")
+            const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at CreateAddress failed")
             logger.error(err)
             throw err;
         }
