@@ -34,6 +34,9 @@ export class AddressService {
             logger.error(databaseErr)
             throw databaseErr;
         }
+        if (databaseResponse.Body === undefined) {
+            throw new CodedError(ErrorCode.NOT_FOUND_ERROR, `Address with an id: '${id}' was not found`)
+        }
 
         const model = new Address(databaseResponse.Body)
         if (!model) {

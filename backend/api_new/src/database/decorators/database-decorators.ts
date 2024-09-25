@@ -50,6 +50,9 @@ export function PrimaryKey(tableName: string) {
     };
 }
 
+export function Optional() {
+}
+
 export function getMetadataForProperties(target: Model) {
     // Create a temporary instance of the class
     const metadata: { [key: string]: string } = {};

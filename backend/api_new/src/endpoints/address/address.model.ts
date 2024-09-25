@@ -8,10 +8,9 @@ import {
 
 @Table("address")
 @PrimaryKey("address_id")
-
 export class Address extends Model {
     @Column("address_id")
-    public AddressId: number | null;
+    public AddressId?: number;
 
     @Column("street")
     public Street: string;
@@ -34,7 +33,9 @@ export class Address extends Model {
     constructor(jsonData: IDictionary<any>) {
         super();
         const addrId = jsonData["address_id"] ?? jsonData["AddressId"]
-        this.AddressId = addrId;
+        if (addrId) {
+            this.AddressId = addrId;
+        }
         this.Street = jsonData["street"] ?? jsonData["Street"];
         this.City = jsonData["city"] ?? jsonData["City"];
         this.PostalCode = jsonData["postal_code"] ?? jsonData["PostalCode"];

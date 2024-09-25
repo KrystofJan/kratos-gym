@@ -1,6 +1,7 @@
-import { IDictionary } from "../utils";
+import { IDictionary, logger } from "../utils";
 import { getMetadataForProperties } from "../database";
 import { DatabaseType } from "../utils/utilities";
+
 
 export class Model {
 
@@ -11,10 +12,20 @@ export class Model {
         return JSON.parse(JSON.stringify(this));
     }
 
-    // TODO
     validateAttrs(): boolean {
-        for (const prop in this) {
-            if (this[prop] === undefined) {
+        // TODO the 
+        // for (const prop of Object.keys(this) as Array<keyof this>) {
+        //     if (this[prop] === undefined) {
+        //         return false;
+        //     }
+        // }
+        return true;
+    }
+
+    checkForUnneededData(json: IDictionary<DatabaseType>) {
+        const thisProps = Object.keys(this)
+        for (const prop of Object.keys(json)) {
+            if (!thisProps.includes(prop)) {
                 return false;
             }
         }

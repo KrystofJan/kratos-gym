@@ -16,7 +16,7 @@ export class AddressController {
             logger.error(err)
             const error = err as BaseError;
             const statusCode = addressErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode);
+            const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
@@ -32,7 +32,7 @@ export class AddressController {
             logger.error(err)
             const error = err as BaseError;
             const statusCode = addressErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode);
+            const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
@@ -41,13 +41,22 @@ export class AddressController {
     }
 
     static async Create(req: Request, res: Response) {
-        const model = new Address(req.body);
-        // if model is valid, create it
+        const body = req.body;
+        const model = new Address(body);
+
+        if (!model.checkForUnneededData(body)) {
+            const error = new BaseError(ErrorCode.MAPPING_ERROR, "TODO: Change the message");
+            logger.error(error)
+            const statusCode = addressErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
         if (!model.validateAttrs()) {
             const error = new BaseError(ErrorCode.VALIDATION_ERROR, "Validation failed");
             logger.error(error)
             const statusCode = addressErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode);
+            const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
@@ -58,7 +67,8 @@ export class AddressController {
             logger.error(err)
             const error = err as BaseError;
             const statusCode = addressErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode);
+            logger.info(statusCode)
+            const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }

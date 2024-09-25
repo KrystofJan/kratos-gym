@@ -11,6 +11,7 @@ export class CodedError extends Error {
     code: ErrorCode = ErrorCode.INTERNAL_ERROR
     constructor(code: ErrorCode, message: string) {
         super(message)
+        this.code = code;
     }
 }
 
