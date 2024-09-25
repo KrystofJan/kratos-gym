@@ -6,6 +6,7 @@ import { Model } from '../endpoints/Model';
 import { logger } from '../utils/logger';
 import { DatabaseType, SimpleDatabaseType } from '../utils/utilities';
 import { CodedError, ErrorCode } from '../errors/base.error';
+import { DecoratorType } from './decorators/database-decorators';
 
 const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
 
@@ -32,7 +33,7 @@ export class Database {
         page: number = 0
     ): Promise<DatabaseFoundMultiple<T>> {
 
-        const tableName = Reflect.getMetadata('tableName', modelType);
+        const tableName = Reflect.getMetadata(DecoratorType.TABLE_NAME, modelType);
         if (limit < 0 || page < 0) {
             throw new CodedError(ErrorCode.ARGUMENT_ERROR, "Wrong page or limit value")
         }
@@ -52,8 +53,8 @@ export class Database {
         modelType: new (data: IDictionary<DatabaseType>) => T,
         id: number
     ): Promise<DatabaseFoundSingle<T>> {
-        const tableName = Reflect.getMetadata('tableName', modelType);
-        const pkey: string = Reflect.getMetadata('primaryKey', modelType);
+        const tableName = Reflect.getMetadata(DecoratorType.TABLE_NAME, modelType);
+        const pkey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, modelType);
 
         try {
             const [result]: T[] = await this.sql<T[]>`Select * from ${this.sql(tableName)} where ${this.sql(pkey)} = ${id}`;
@@ -90,9 +91,9 @@ export class Database {
         modelType: new (data: IDictionary<DatabaseType>) => T,
         body: T
     ): Promise<DatabaseCreated<T>> {
-        const columnMap = Reflect.getMetadata('columnMap', modelType.prototype);
-        const tableName = Reflect.getMetadata('tableName', modelType);
-        const foreignKeyMap = Reflect.getMetadata("foreignKeyMap", modelType.prototype);
+        const columnMap = Reflect.getMetadata(DecoratorType.COLUMN_MAP, modelType.prototype);
+        const tableName = Reflect.getMetadata(DecoratorType.TABLE_NAME, modelType);
+        const foreignKeyMap = Reflect.getMetadata(DecoratorType.FOREIGN_KEY_MAP, modelType.prototype);
 
         // Filter out null or undefined values from the body
         const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
