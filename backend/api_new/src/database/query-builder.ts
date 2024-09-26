@@ -26,8 +26,9 @@ export class SelectQuery<T extends Model> {
     }
 
     Where(condition: { [K in keyof T]?: [string, any] }): this {
+        const colMap = Reflect.getMetadata(DecoratorType.COLUMN_MAP, this.modelClass.prototype);
         for (const [key, [operator, value]] of Object.entries(condition)) {
-            this.whereConditions.push(`${this.fromTable}.${String(key)} ${operator} ${value}`);
+            this.whereConditions.push(`${this.fromTable}.${(colMap[key])} ${operator} ${value}`);
         }
         return this;
     }
@@ -35,7 +36,7 @@ export class SelectQuery<T extends Model> {
     // InnerJoin<U extends Model>(joinModelClass: new () => U): JoinQuery<T, U> {
     //     return new JoinQuery<T, U>(this, joinModelClass);
     // }
-    //
+
     OrderBy(param: keyof T, direction: 'asc' | 'desc'): this {
         this.orderByClause = `ORDER BY ${this.fromTable}.${String(param)} ${direction.toUpperCase()}`;
         return this;

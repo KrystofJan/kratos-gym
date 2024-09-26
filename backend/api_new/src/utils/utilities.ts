@@ -1,5 +1,4 @@
 import { Model } from "../endpoints/Model"
-import { BaseError } from "../errors";
 
 export interface IDictionary<T> {
     [key: string]: T

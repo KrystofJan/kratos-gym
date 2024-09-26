@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { BaseError, ErrorCode } from ".";
+import { CodedError, ErrorCode } from ".";
 
 
 export class ErrorHandler {
@@ -20,7 +20,7 @@ export class ErrorHandler {
         }
     }
 
-    protected setHandler(err: BaseError, status: StatusCodes): void {
+    protected setHandler(err: CodedError, status: StatusCodes): void {
         this.handler[err.code] = status;
     }
 
@@ -28,7 +28,7 @@ export class ErrorHandler {
         return this.handler[errCode] || this.defaultHandler[errCode];
     }
 
-    public handleError(err: BaseError): StatusCodes {
+    public handleError(err: CodedError): StatusCodes {
         return this.getHandler(err.code);
     }
 

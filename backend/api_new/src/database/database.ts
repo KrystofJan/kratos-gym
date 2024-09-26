@@ -86,7 +86,6 @@ export class Database {
         }
     }
 
-    // TODO: Handle duplicates
     async Insert<T extends Model>(
         modelType: new (data: IDictionary<DatabaseType>) => T,
         body: T

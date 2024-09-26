@@ -2,6 +2,7 @@ import { IDictionary } from '../../utils';
 import { Address } from '../address/address.model';
 import { Model } from '../Model';
 import { Column, ForeignKey, PrimaryKey, Table } from "../../database";
+import { CodedError, ErrorCode } from '../../errors/base.error';
 
 export enum UserRole {
     CUSTOMER = 'c',
@@ -39,7 +40,7 @@ export class Account extends Model {
 
     @ForeignKey(Address)
     @Column("address_id")
-    public Address: Address | null;
+    public Address: Address;
     @Column("credits")
     public Credits: number;
     @Column("login")
@@ -70,9 +71,9 @@ export class Account extends Model {
                 this.Role = UserRole.USER;
                 break;
             }
-            // default: {
-            //     throw new Error(`Unknown user role ${jsonData.Role}`);
-            // }
+            default: {
+                throw new CodedError(ErrorCode.MAPPING_ERROR, `Unknown user role ${jsonData.Role}`);
+            }
         }
 
         this.Email = jsonData["email"] ?? jsonData["Email"];

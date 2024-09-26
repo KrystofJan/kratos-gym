@@ -3,7 +3,7 @@ import { AddressService } from './address.service';
 import { CreatedResponse, CustomResponse, FailedResponse, OkResponse } from '../../request-utility';
 import { Address } from './address.model';
 import { logger } from '../../utils';
-import { BaseError, ErrorCode } from '../../errors';
+import { CodedError, ErrorCode } from '../../errors';
 import { addressErrorHandler } from './address.error-handler';
 import { safeAwait } from '../../utils/utilities';
 
@@ -14,7 +14,7 @@ export class AddressController {
         const [err, data] = await safeAwait(AddressService.GetAllAddresses());
         if (err !== null) {
             logger.error(err)
-            const error = err as BaseError;
+            const error = err as CodedError;
             const statusCode = addressErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
@@ -30,7 +30,7 @@ export class AddressController {
         const [err, data] = await safeAwait(AddressService.GetAddressById(id));
         if (err !== null) {
             logger.error(err)
-            const error = err as BaseError;
+            const error = err as CodedError;
             const statusCode = addressErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
@@ -45,7 +45,7 @@ export class AddressController {
         const model = new Address(body);
 
         if (!model.checkForUnneededData(body)) {
-            const error = new BaseError(ErrorCode.MAPPING_ERROR, "TODO: Change the message");
+            const error = new CodedError(ErrorCode.MAPPING_ERROR, "TODO: Change the message");
             logger.error(error)
             const statusCode = addressErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
@@ -53,7 +53,7 @@ export class AddressController {
             return;
         }
         if (!model.validateAttrs()) {
-            const error = new BaseError(ErrorCode.VALIDATION_ERROR, "Validation failed");
+            const error = new CodedError(ErrorCode.VALIDATION_ERROR, "Validation failed");
             logger.error(error)
             const statusCode = addressErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
@@ -65,7 +65,7 @@ export class AddressController {
         if (err !== null) {
 
             logger.error(err)
-            const error = err as BaseError;
+            const error = err as CodedError;
             const statusCode = addressErrorHandler.handleError(error);
             logger.info(statusCode)
             const response = new FailedResponse(error.message, statusCode, error.code);
