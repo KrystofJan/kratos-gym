@@ -1,14 +1,12 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue';
 import { BaseService } from '@/services/base/ApiService';
-import { useStorage } from '@vueuse/core';
+import { SignedIn, SignedOut, useUser } from 'vue-clerk'
 
-const UserInfo = ref({}); 
-const isLogedIn = ref(false);
+const UserInfo = ref({});
 const isLoading = ref(true);
-let userId = useStorage('userId'); 
-
-let UserService = {};
+const loadMessage = ref('Loading...')
+const { user } = useUser();
 
 const roleDictionary = {
     "c": "Customer",
@@ -17,108 +15,98 @@ const roleDictionary = {
 };
 
 const isActive = computed(() => {
-    return (isLogedIn && UserInfo.value.IsActive == "1"); 
+    return (isLogedIn && UserInfo.value.IsActive == "1");
 })
-
-const prepareServices = async () => {
-    UserService = new BaseService('user');
-}
-
+// add to service
 const fetchData = async () => {
     try {
-        const userData = await UserService.getId(userId.value);
-        UserInfo.value = userData;
-        setTimeout(() => {
-            isLoading.value = false;            
-        }, 500);
+        console.log(user)
+        const res = await fetch(`http://localhost:7000/api/account/clerk/${user.clerkId}`)
+        UserInfo.value = await res.json();
     } catch (error) {
+        loadMessage.value = 'Error fetching data';
         console.error('Error fetching data:', error);
     }
 }
 
 onMounted(async () => {
-    prepareServices();
-    
-    if (userId.value){
-        await fetchData();
-        isLogedIn.value = true;
-    }
-    else{
-        isLoading.value = false;
-    }
-
+    fetchData();
 })
 </script>
 
 <template>
-    <div v-if="isLoading" class="Loading MarginedComponent">
-    Loading...
-    </div>
-    <div v-else-if="!isLogedIn && !isLoading" class="ErrorMessage ErrorMessage--notLogedIn MarginedComponent">
+    <SignedOut>
+        <div class="ErrorMessage ErrorMessage--notLogedIn MarginedComponent">
             You need to be logged in !
-    </div>
-        
-    <div v-else class="Profile MarginedComponent"> 
-        <h1>Profile</h1>
-        
-        <div class="ProfileInfo">
-            <div :class="{'active': isActive}" class="ProfileInfo-picture">
-                <span> 
-                   {{ UserInfo.FirstName[0] + UserInfo.LastName[0] }}
-                </span>
-            </div>
-            <div class="ProfileInfo-contact">
-            <h2>Contact Info</h2>
+        </div>
+    </SignedOut>
 
-                Email: 
-                {{ UserInfo.Email }} <br />
-                Phone: 
-                {{ UserInfo.PhoneNumber }} <br/>
-            </div>
-            <div class="ProfileInfo-name">
-                <h2>Main info</h2>
+    <SignedIn>
+        <div v-if="isLoading" class="Loading MarginedComponent">
+            {{ loadMessage }}
+        </div>
+        <div v-else class="Profile MarginedComponent">
+            <h1>Profile</h1>
 
-                First name:
-                {{ UserInfo.FirstName }} <br /> 
-                Last Name: 
-                {{ UserInfo.LastName }}
+            <div class="ProfileInfo">
+                <div :class="{ 'active': isActive }" class="ProfileInfo-picture">
+                    <span>
+                        {{ UserInfo.FirstName[0] + UserInfo.LastName[0] }}
+                    </span>
+                </div>
+                <div class="ProfileInfo-contact">
+                    <h2>Contact Info</h2>
+
+                    Email:
+                    {{ UserInfo.Email }} <br />
+                    Phone:
+                    {{ UserInfo.PhoneNumber }} <br />
+                </div>
+                <div class="ProfileInfo-name">
+                    <h2>Main info</h2>
+
+                    First name:
+                    {{ UserInfo.FirstName }} <br />
+                    Last Name:
+                    {{ UserInfo.LastName }}
+                </div>
+                <div class="ProfileInfo-other">
+                    <h2>Other</h2>
+                    Role:
+                    {{ roleDictionary[UserInfo.Role] }} <br />
+
+                </div>
             </div>
-            <div class="ProfileInfo-other">
-                <h2>Other</h2>
-                Role: 
-                {{ roleDictionary[UserInfo.Role] }} <br/>
+            <div class="Helper">
+                {{ UserInfo }}
 
             </div>
         </div>
-<div class="Helper">
-    {{ UserInfo }}
-
-</div>
-    </div>
+    </SignedIn>
 
 </template>
 
 <style lang="scss" scoped>
-.Loading{
+.Loading {
     color: white;
     text-align: center;
     font-size: 3rem;
 }
 
-.Helper{
+.Helper {
     display: none;
 }
 
-.Profile{
+.Profile {
     color: white;
     width: 75%;
-    
 
-    &Info{
+
+    &Info {
         display: grid;
         grid-template-columns: 10rem 1fr;
 
-        &-picture{
+        &-picture {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -130,20 +118,20 @@ onMounted(async () => {
             margin: auto;
 
 
-            &.active{
+            &.active {
                 background: var(--baseBlue);
             }
-            
-            span{
+
+            span {
                 font-size: 1.5rem;
                 line-height: 1.5rem;
-            }      
+            }
         }
 
     }
 }
 
-.ErrorMessage{
+.ErrorMessage {
     color: var(--baseRed);
     display: block;
     padding: 1rem 2rem;

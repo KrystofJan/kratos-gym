@@ -76,6 +76,7 @@ export class Database {
         const tableName = Reflect.getMetadata('tableName', modelType);
 
         try {
+            logger.info(`Select * from ${tableName} where ${attrName} = ${attrValue}`)
             const [result]: T[] = await this.sql<T[]>`Select * from ${this.sql(tableName)} where ${this.sql(attrName)} = ${attrValue}`;
             logger.info(`Select by attribute from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
             return new DatabaseFoundSingle<T>(result);
@@ -93,6 +94,7 @@ export class Database {
         const columnMap = Reflect.getMetadata(DecoratorType.COLUMN_MAP, modelType.prototype);
         const tableName = Reflect.getMetadata(DecoratorType.TABLE_NAME, modelType);
         const foreignKeyMap = Reflect.getMetadata(DecoratorType.FOREIGN_KEY_MAP, modelType.prototype);
+        const unInsertables = Reflect.getMetadata(DecoratorType.UNINSERTABLE, modelType.prototype);
 
         // Filter out null or undefined values from the body
         const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
@@ -102,6 +104,9 @@ export class Database {
 
         try {
             for (const column of columns) {
+                if (unInsertables?.includes(column)) {
+                    continue;
+                }
                 const columnMapped = columnMap[column];
 
                 // Handle foreign key mapping

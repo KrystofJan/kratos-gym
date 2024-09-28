@@ -24,3 +24,7 @@ AccountRouter.get('/', async (req: Request, res: Response) => {
 AccountRouter.get('/:id', async (req: Request, res: Response) => {
     await AccountController.FindById(req, res)
 });
+
+AccountRouter.get('/clerk/:id', async (req: Request, res: Response) => {
+    await AccountController.FindByClerkId(req, res)
+});

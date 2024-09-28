@@ -1,0 +1,33 @@
+:root{
+    --background: #171717;
+    --backgroundSecondary: #EDEDED;
+    --backgroundDarkSecondary: #444444;
+    --baseRed: #DA0037;
+    --baseBlue: #00ADB5;
+    --backgroundContrast: #fff;
+    --textColorMain: #d2d2d2;
+    --spaceHorizontal: 5rem;
+}
+ 
+body{
+    box-sizing: border-box;
+    margin:0;
+    padding: 0;
+    font-family: Helvetica, sans-serif;
+    background-color: var(--background);
+}
+
+.MarginedComponent{
+    margin: var(--spaceHorizontal) auto;
+}
+
+.frame{
+    max-width: 1920px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.text-center{
+    margin: auto;
+    text-align: center;
+}

@@ -46,6 +46,40 @@ export class AccountController {
         response.buildResponse(req, res)
     }
 
+    static async FindByClerkId(req: Request, res: Response) {
+        const clerk_id = String(req.params["id"])
+        const [err, data] = await safeAwait(AccountService.GetAccountByClerkId(clerk_id));
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = accountErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+
+        if (!data.Address.AddressId) {
+            const response = new OkResponse("Found data withou the address", data);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        const [addrErr, address] = await safeAwait(AddressService.GetAddressById(Number(data.Address.AddressId)));
+        if (addrErr !== null) {
+            logger.error(addrErr)
+            const error = addrErr as CodedError;
+            const statusCode = accountErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        data.Address = address;
+
+        const response = new OkResponse("found all data successfully", data);
+        response.buildResponse(req, res)
+    }
+
     static async FindById(req: Request, res: Response) {
         const id = Number(req.params["id"])
         const [err, data] = await safeAwait(AccountService.GetAccountById(id));
@@ -60,17 +94,13 @@ export class AccountController {
 
 
         if (!data.Address.AddressId) {
-            const error = new CodedError(ErrorCode.MAPPING_ERROR, "Account address id is not null");
-            logger.error(error)
-            const statusCode = accountErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const response = new OkResponse("Found data withou the address", data);
             response.buildResponse(req, res)
             return;
         }
 
         const [addrErr, address] = await safeAwait(AddressService.GetAddressById(Number(data.Address.AddressId)));
         if (addrErr !== null) {
-            logger.error(addrErr)
             const error = addrErr as CodedError;
             const statusCode = accountErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);

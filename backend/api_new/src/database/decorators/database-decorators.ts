@@ -8,6 +8,7 @@ export enum DecoratorType {
     FIELD_MAP = "fieldMap",
     FOREIGN_KEY_MAP = "foreignKeyMap",
     PRIMARY_KEY = "primaryKey",
+    UNINSERTABLE = "uninsertable"
 }
 
 export function Table(tableName: string) {
@@ -48,6 +49,14 @@ export function PrimaryKey(tableName: string) {
     return function(constructor: Function) {
         Reflect.defineMetadata(DecoratorType.PRIMARY_KEY, tableName, constructor);
     };
+}
+
+export function UnInsertable() {
+    return function(target: Model, propertyKey: string) {
+        const unInsertable = Reflect.getMetadata(DecoratorType.UNINSERTABLE, target) || [];
+        unInsertable.push(propertyKey);
+        Reflect.defineMetadata(DecoratorType.UNINSERTABLE, unInsertable, target);
+    }
 }
 
 export function Optional() {

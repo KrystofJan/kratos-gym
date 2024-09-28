@@ -3,6 +3,7 @@ import { Address } from '../address/address.model';
 import { Model } from '../Model';
 import { Column, ForeignKey, PrimaryKey, Table } from "../../database";
 import { CodedError, ErrorCode } from '../../errors/base.error';
+import { UnInsertable } from '../../database/decorators/database-decorators';
 
 export enum UserRole {
     CUSTOMER = 'c',
@@ -45,6 +46,10 @@ export class Account extends Model {
     public Credits: number;
     @Column("login")
     public Login: string;
+
+    @UnInsertable()
+    @Column("clerk_id")
+    public ClerkId?: string;
 
     constructor(jsonData: IDictionary<any>) {
         super();
@@ -90,5 +95,6 @@ export class Account extends Model {
         } else {
             this.Address = new Address(jsonData)
         }
+        this.ClerkId = undefined;
     }
 }
