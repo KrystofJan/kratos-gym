@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import content from '@/siteContent/_footer-content.json';
+import { currentAccount } from '../../store/accountStore'
 const footer_cols = ref([]);
 
 const fetchData = () => {

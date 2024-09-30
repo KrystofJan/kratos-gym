@@ -1,65 +1,25 @@
 import { ref } from 'vue';
 import type { Ref } from 'vue'
+import { Account } from '../support/types'
+import { AccountService } from '../support/services';
 
-export const UserRole = {
-    CUSTOMER: 'c',
-    TRAINER: 'T',
-    EMPLOYEE: 'E',
-    USER: 'U',
-    NOTKNOWN: '/',
-} as const;
+export const currentAccount: Ref<Account | null> = ref(null);
 
-export type UserRole = typeof UserRole[keyof typeof UserRole];
-
-export interface Address {
-    AddressId?: number;
-    Street: string;
-    City: string;
-    PostalCode: string;
-    Country: string;
-    BuildingNumber: string;
-    ApartmentNumber: string;
+export async function fetchAccount(clerkId: string): Promise<void> {
+    try {
+        const data = await new AccountService().fetchAccount(clerkId);
+        currentAccount.value = data;
+    } catch (error) {
+        console.error('Error fetching account:', error);
+        // Instead of throwing, we set currentAccount to null to indicate a failed fetch
+        currentAccount.value = null;
+    }
 }
 
-export interface Account {
-    AccountId: number;
-    FirstName: string;
-    LastName: string;
-    Role: UserRole;
-    Email: string;
-    PhoneNumber: string;
-    IsActive: Boolean;
-    CreateDate: Date;
-    LastOnline: Date;
-    Password: string;
-    Address: Address;
-    Credits: number;
-    Login: string;
-    ClerkId?: string;
+export function updateAccount(newData: Partial<Account>): void {
+    if (currentAccount.value) {
+        Object.assign(currentAccount.value, newData);
+    } else {
+        console.warn('Attempted to update account before it was fetched');
+    }
 }
-
-export const currentAccount: Ref<Account> = ref({
-    AccountId: -1,
-    FirstName: '',
-    LastName: '',
-    Role: UserRole.NOTKNOWN,
-    Email: '',
-    PhoneNumber: '',
-    IsActive: false,
-    CreateDate: new Date(),
-    LastOnline: new Date(),
-    Password: '',
-    Address: {
-        AddressId: 0,
-        Street: '',
-        City: '',
-        PostalCode: '',
-        Country: '',
-        BuildingNumber: '',
-        ApartmentNumber: '',
-    },
-    Credits: 0,
-    Login: '',
-    ClerkId: "",
-});
-

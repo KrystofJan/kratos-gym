@@ -23,4 +23,6 @@ window.addEventListener('scroll', stickyScroll);
     <Footer />
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+@import './styles/sass/base/color-define.scss'
+</style>

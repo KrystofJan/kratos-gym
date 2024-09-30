@@ -5,6 +5,7 @@ import router from './router';
 import { clerkPlugin } from 'vue-clerk'
 
 const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const CLERK_SECRET_KEY = import.meta.env.VITE_CLERK_SECRET_KEY
 
 if (!CLERK_PUBLISHABLE_KEY) {
     console.log(import.meta.env)
@@ -15,5 +16,8 @@ createApp(App)
     .use(router)
     .use(clerkPlugin, {
         publishableKey: CLERK_PUBLISHABLE_KEY,
+        secretKey: CLERK_SECRET_KEY,
+        isSecure: false,
+        afterSignOutUrl: '/profile',
     })
     .mount('#app');
