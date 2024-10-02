@@ -12,6 +12,7 @@ export class AuthController {
     static async CreateAccount(req: Request, res: Response) {
         const body = req.body;
         const model = new Auth(body);
+        console.log(model)
 
         if (!model.checkForUnneededData(body)) {
             const error = new CodedError(ErrorCode.MAPPING_ERROR, "TODO: Change the message");
@@ -21,6 +22,7 @@ export class AuthController {
             response.buildResponse(req, res)
             return;
         }
+
         if (!model.validateAttrs()) {
             const error = new CodedError(ErrorCode.VALIDATION_ERROR, "Validation failed");
             logger.error(error)
@@ -30,7 +32,7 @@ export class AuthController {
             return;
         }
 
-        const [err, id] = await safeAwait(AuthService.CreateAddress(model));
+        const [err, account] = await safeAwait(AuthService.CreateAddress(model));
         if (err !== null) {
 
             logger.error(err)
@@ -42,7 +44,7 @@ export class AuthController {
             return;
         }
 
-        const response = new CreatedResponse("created successfully", id);
-        return response;
+        const response = new CreatedResponse("created successfully", account);
+        response.buildResponse(req, res);
     }
 }

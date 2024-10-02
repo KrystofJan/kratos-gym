@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import type { Ref } from 'vue'
-import { Account } from '../support/types'
+import { Account, AccountCreate } from '../support/types'
 import { AccountService } from '../support/services';
 
 export const currentAccount: Ref<Account | null> = ref(null);
@@ -22,4 +22,10 @@ export function updateAccount(newData: Partial<Account>): void {
     } else {
         console.warn('Attempted to update account before it was fetched');
     }
+}
+
+export async function createAccount(body: AccountCreate) {
+    const accountService = new AccountService();
+    await accountService.CreateAccount(body);
+    currentAccount.value = null;
 }

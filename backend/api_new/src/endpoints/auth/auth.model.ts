@@ -5,9 +5,6 @@ import { Model } from "../Model";
 @Table("account")
 @PrimaryKey("account_id")
 export class Auth extends Model {
-    @Column("account_id")
-    AccountId: Number | null;
-
     @Column("clerk_id")
     ClerkId: string;
 
@@ -20,9 +17,6 @@ export class Auth extends Model {
     @Column("last_name")
     LastName: string;
 
-    @Column("phone_number")
-    PhoneNumber: string | null;
-
     @Column("login")
     Login: string;
 
@@ -33,8 +27,6 @@ export class Auth extends Model {
         this.FirstName = data["FirstName"];
         this.LastName = data["LastName"];
         this.Login = data["Login"];
-        this.PhoneNumber = data["PhoneNumber"];
-        this.AccountId = data["account_id"];
     }
 }
 

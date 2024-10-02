@@ -38,6 +38,11 @@ const routes = [
         component: () => import('@/views/User/Profile/Profile.vue')
     },
     {
+        path: '/confirm-new-account',
+        name: 'Confirm New Account',
+        component: () => import('../views/pages/APIResolve/AfterAuth.vue')
+    },
+    {
         path: '/form-test',
         name: 'Form Test',
         component: () => import('@/views/pages/FormKitTest/FormKitTest.vue')

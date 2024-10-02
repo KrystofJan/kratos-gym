@@ -16,13 +16,13 @@ export class AuthService {
             throw databaseErr;
         }
 
-        const model = new Auth(databaseResponse.Body)
+        const model = new Account(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at CreateAddress failed")
             logger.error(err)
             throw err;
         }
 
-        return Number(model.AccountId);
+        return model.AccountId;
     }
 }

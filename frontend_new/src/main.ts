@@ -18,6 +18,6 @@ createApp(App)
         publishableKey: CLERK_PUBLISHABLE_KEY,
         secretKey: CLERK_SECRET_KEY,
         isSecure: false,
-        afterSignOutUrl: '/profile',
+        signUpForceRedirectUrl: '/confirm-new-account',
     })
     .mount('#app');

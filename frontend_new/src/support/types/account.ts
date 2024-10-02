@@ -24,5 +24,5 @@ export interface Account {
     Address: Address;
     Credits: number;
     Login: string;
-    ClerkId?: string;
+    ClerkId: string;
 }

@@ -21,7 +21,7 @@ const isActive = computed(() => {
 const fetchData = async () => {
     try {
         console.log(user)
-        const res = await fetch(`http://localhost:7000/api/account/clerk/${user.clerkId}`)
+        const res = await fetch(`http://api.kratos.dev/api/account/clerk/${user.clerkId}`)
         UserInfo.value = await res.json();
     } catch (error) {
         loadMessage.value = 'Error fetching data';
