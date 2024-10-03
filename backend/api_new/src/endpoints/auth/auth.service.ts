@@ -7,7 +7,7 @@ import { CodedError, ErrorCode } from "../../errors/base.error"
 
 export class AuthService {
 
-    static async CreateAddress(body: Auth): Promise<number> {
+    static async CreateAddress(body: Auth): Promise<Account> {
         const db = new Database()
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Insert(Auth, body));
@@ -23,6 +23,6 @@ export class AuthService {
             throw err;
         }
 
-        return model.AccountId;
+        return model;
     }
 }

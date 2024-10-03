@@ -81,7 +81,7 @@ const submit = async () => {
     await postData();
 }
 
-const moveNext = (stepNumber) => {
+const moveNext = (stepNumber: number) => {
     if (StepNumber.value == stepNumber) {
         StepNumber.value++;
     }

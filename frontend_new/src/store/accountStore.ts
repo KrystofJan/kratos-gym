@@ -26,6 +26,6 @@ export function updateAccount(newData: Partial<Account>): void {
 
 export async function createAccount(body: AccountCreate) {
     const accountService = new AccountService();
-    await accountService.CreateAccount(body);
-    currentAccount.value = null;
+    const account = await accountService.CreateAccount(body);
+    updateAccount(account.CreatedId);
 }

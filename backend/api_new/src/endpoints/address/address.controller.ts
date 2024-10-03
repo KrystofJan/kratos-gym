@@ -44,6 +44,7 @@ export class AddressController {
         const body = req.body;
         const model = new Address(body);
 
+        logger.info(model)
         if (!model.checkForUnneededData(body)) {
             const error = new CodedError(ErrorCode.MAPPING_ERROR, "TODO: Change the message");
             logger.error(error)
