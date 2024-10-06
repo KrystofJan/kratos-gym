@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import Step from './Step.vue';
 import Plan from '@/store/PlanStore.js';
@@ -22,12 +22,12 @@ const isAOPEmpty = ref(false);
 const validateYear = async () => {
     // TODO: Validate year
     isDateEmpty.value = false;
-    const year = parseInt(Reservation.value.ReservationTime.split('-')[0]); 
-    if(Reservation.value.ReservationTime.split('-')[0].length < 4){
+    const year = parseInt(Reservation.value.ReservationTime.split('-')[0]);
+    if (Reservation.value.ReservationTime.split('-')[0].length < 4) {
         return;
     }
 
-    if(year > 2100){
+    if (year > 2100) {
         Reservation.value.ReservationTime = Reservation.value.ReservationTime.replace(year.toString(), '2100');
     }
 
@@ -36,21 +36,21 @@ const validateYear = async () => {
     let date = await new Date();
     let currentYear = await date.getFullYear();
     console.log(year < currentYear);
-    if(year < currentYear){
+    if (year < currentYear) {
         Reservation.value.ReservationTime = Reservation.value.ReservationTime.replace(year.toString(), currentYear.toString());
     }
 }
 
 const clickHandle = () => {
-    if(!Plan.value.PlanName){
+    if (!Plan.value.PlanName) {
         isPlanNameEmpty.value = true;
         return;
     }
-    if(!Reservation.value.ReservationTime){
+    if (!Reservation.value.ReservationTime) {
         isDateEmpty.value = true;
         return;
     }
-    if(!Reservation.value.AmmoutOfPeople){
+    if (!Reservation.value.AmmoutOfPeople) {
         isAOPEmpty.value = true;
         return;
     }
@@ -61,54 +61,41 @@ const clickHandle = () => {
 </script>
 
 <template>
-    <Step :builderText="builderText">    
+    <Step :builderText="builderText">
         <div class="PlanStepItem">
             <div v-if="isPlanNameEmpty" class="Error">
                 Plan name has to be filled
-            </div> 
+            </div>
             <div class="PlanStepItem-input">
                 <label for="plan-name">
                     PlanName:
                 </label>
-                <input 
-                    type="text" 
-                    name="plan-name" 
-                    id="plan-name" 
-                    v-model="Plan.PlanName" 
-                    required 
+                <input type="text" name="plan-name" id="plan-name" v-model="Plan.PlanName" required
                     @change="isPlanNameEmpty = false">
             </div>
         </div>
         <div class="PlanStepItem">
             <div v-if="isDateEmpty" class="Error">
                 Date has to be filled
-            </div> 
+            </div>
             <div class="PlanStepItem-input">
                 <label for="arrival-date">
                     ArrivalDate:
                 </label>
-                <input 
-                    type="datetime-local"
-                    name="arrival-date" 
-                    @input="validateYear" 
-                    v-model="Reservation.ReservationTime" 
-                    required >    
+                <input type="datetime-local" name="arrival-date" @input="validateYear"
+                    v-model="Reservation.ReservationTime" required>
             </div>
         </div>
         <div class="PlanStepItem">
             <div v-if="isAOPEmpty" class="Error">
                 Amout of people has to be greater than 0
-            </div> 
+            </div>
             <div class="PlanStepItem-input">
                 <label for="amount-of-people">
-                    Amout of people:  
+                    Amout of people:
                 </label>
-                <NumberInput
-                    :min="1" 
-                    :max="4" 
-                    @change="isAOPEmpty = false" 
-                    @value-change="(val) => Reservation.AmmoutOfPeople = val"
-                    :id="'amount-of-people'" 
+                <NumberInput :min="1" :max="4" @change="isAOPEmpty = false"
+                    @value-change="(val) => Reservation.AmmoutOfPeople = val" :id="'amount-of-people'"
                     :name="'amount-of-people'" />
             </div>
         </div>
@@ -122,20 +109,21 @@ const clickHandle = () => {
 <style lang="scss">
 @import '@/styles/sass/Reservation/Builder.scss';
 
-.BuilderItem{
+.BuilderItem {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.PlanStepItem{
+.PlanStepItem {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 
-    &-input{
+    &-input {
         display: grid;
-        grid-template-columns: 16rem 1fr;;
+        grid-template-columns: 16rem 1fr;
+        ;
     }
 }
 </style>

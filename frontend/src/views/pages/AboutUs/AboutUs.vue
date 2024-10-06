@@ -1,4 +1,4 @@
-<script>
+<script setup lang="ts">
 
 </script>
 
@@ -6,7 +6,7 @@
     <div class="main">
         <h1>About Us</h1>
 
-   
+
         <div class="Bong">
             <div class="Bing">Item 1</div>
             <div class="Bing">Item 2</div>
@@ -17,8 +17,9 @@
 
 <style scoped>
 .main {
-background: white;
+    background: white;
 }
+
 .Bong {
     display: flex;
 }
