@@ -1,14 +1,15 @@
-import { Database } from "../../database"
+import { BasicQueryDatabase } from "../../database"
 import { logger } from "../../utils"
 import { Account } from "./account.model"
 import { CodedError, ErrorCode } from "../../errors/base.error"
 import { safeAwait } from "../../utils/utilities"
 import { DecoratorType } from "../../database/decorators/database-decorators"
+import { Address } from "../address"
 
 export class AccountService {
 
     static async GetAllAccounts(): Promise<Array<Account>> {
-        const db = new Database()
+        const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(Account));
         if (databaseErr !== null) {
@@ -26,7 +27,7 @@ export class AccountService {
     }
 
     static async GetAccountById(id: number): Promise<Account> {
-        const db = new Database()
+        const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectSpecific(Account, id));
         if (databaseErr !== null) {
@@ -46,8 +47,28 @@ export class AccountService {
         return model;
     }
 
+
+    static async SetAddressIdById(id: number, body: Partial<Address>): Promise<Address> {
+        const db = new BasicQueryDatabase()
+
+        const [databaseErr, databaseResponse] = await safeAwait(db.Update(Account, id, body));
+        if (databaseErr !== null) {
+            logger.error(databaseErr)
+            throw databaseErr;
+        }
+
+        const model = new Address(databaseResponse.Body)
+        if (!model) {
+            const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAccountById failed")
+            logger.error(err)
+            throw err;
+        }
+        return model;
+    }
+
+
     static async GetAccountByClerkId(clerkId: string): Promise<Account> {
-        const db = new Database()
+        const db = new BasicQueryDatabase()
 
         const colMap = Reflect.getMetadata(DecoratorType.COLUMN_MAP, Account.prototype)
 

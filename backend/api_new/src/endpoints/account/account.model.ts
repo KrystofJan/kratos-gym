@@ -22,28 +22,38 @@ export class Account extends Model {
 
     @Column("first_name")
     public FirstName: string;
+
     @Column("last_name")
     public LastName: string;
+
     @Column("role")
-    public Role: UserRole;
+    public Role: UserRole | undefined;
+
     @Column("email")
     public Email: string;
+
     @Column("phone_number")
     public PhoneNumber: string;
+
     @Column("is_active")
     public IsActive: Boolean;
+
     @Column("create_date")
     public CreateDate: Date;
+
     @Column("last_online")
     public LastOnline: Date;
+
     @Column("password")
     public Password: string;
 
     @ForeignKey(Address)
     @Column("address_id")
     public Address: Address;
+
     @Column("credits")
     public Credits: number;
+
     @Column("login")
     public Login: string;
 
@@ -57,7 +67,6 @@ export class Account extends Model {
         this.AccountId = jsonData["account_id"] ?? jsonData["AccountId"];
         this.FirstName = jsonData["first_name"] ?? jsonData["FirstName"];
         this.LastName = jsonData["last_name"] ?? jsonData["LastName"]
-        this.Role = UserRole.CUSTOMER;
         const role = jsonData["role"] ?? jsonData["Role"]
         switch (role) {
             case UserRole.CUSTOMER: {
@@ -77,14 +86,14 @@ export class Account extends Model {
                 break;
             }
             default: {
-                throw new CodedError(ErrorCode.MAPPING_ERROR, `Unknown user role ${jsonData.Role}`);
+                this.Role = undefined
             }
         }
 
         this.Email = jsonData["email"] ?? jsonData["Email"];
         this.PhoneNumber = jsonData["phone_number"] ?? jsonData["PhoneNumber"];
         const isActive = jsonData["is_active"] ?? jsonData["isActive"]
-        this.IsActive = (isActive) ?? true;
+        this.IsActive = (isActive);
         this.CreateDate = jsonData["create_date"] ?? jsonData["CreateDate"];
         this.LastOnline = jsonData["last_online"] ?? jsonData["LastOnline"];
         this.Password = jsonData["password"] ?? jsonData["Password"];

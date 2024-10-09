@@ -1,4 +1,4 @@
-import { Database } from "../../database"
+import { BasicQueryDatabase } from "../../database"
 import { logger } from "../../utils"
 import { Auth } from "./auth.model"
 import { Account } from "../account/account.model"
@@ -8,7 +8,7 @@ import { CodedError, ErrorCode } from "../../errors/base.error"
 export class AuthService {
 
     static async CreateAddress(body: Auth): Promise<Account> {
-        const db = new Database()
+        const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Insert(Auth, body));
         if (databaseErr !== null) {

@@ -28,3 +28,11 @@ export class DatabaseCreated<T> implements DatabaseResponse<T> {
     }
 }
 
+
+export class DatabaseDeleted implements DatabaseResponse<number> {
+    public Body: number
+    constructor(deletedId: number) {
+        this.Body = deletedId
+    }
+}
+

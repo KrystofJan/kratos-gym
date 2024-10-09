@@ -14,6 +14,10 @@ export interface PostResponseBody extends ResponseBody {
     readonly CreatedId: number | Model;
 }
 
+export interface DelelteResponseBody extends ResponseBody {
+    readonly DeletedId: number;
+}
+
 export interface PostMultipleResponseBody extends ResponseBody {
     readonly CreatedIds: Array<number>;
 }

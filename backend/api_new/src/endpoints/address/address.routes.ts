@@ -10,6 +10,15 @@ AddressRouter.get('/', async (req: Request, res: Response) => {
 AddressRouter.get('/:id', async (req: Request, res: Response) => {
     await AddressController.FindById(req, res)
 });
+
 AddressRouter.post('/', async (req: Request, res: Response) => {
     await AddressController.Create(req, res)
+});
+
+AddressRouter.delete('/:id', async (req: Request, res: Response) => {
+    await AddressController.DeleteById(req, res)
+});
+
+AddressRouter.patch('/:id', async (req: Request, res: Response) => {
+    await AddressController.UpdateById(req, res)
 });

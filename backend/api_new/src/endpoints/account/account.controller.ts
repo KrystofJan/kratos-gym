@@ -112,4 +112,34 @@ export class AccountController {
         const response = new OkResponse("found all data successfully", data);
         response.buildResponse(req, res)
     }
+
+    static async SetAddressId(req: Request, res: Response) {
+        const id = Number(req.params["id"])
+        const body = req.body;
+        const model: Partial<Address> = new Address(body)
+        const addressId = model.AddressId
+        if (!addressId) {
+            logger.error("Cannot insert this id " + addressId);
+            const error = new CodedError(ErrorCode.ARGUMENT_ERROR, `Could not change address id to ${addressId}`)
+            const statusCode = accountErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        const [err, data] = await safeAwait(AccountService.SetAddressIdById(id, model));
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = accountErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        const resultModel = new Address(data)
+
+        const response = new OkResponse("found all data successfully", resultModel);
+        response.buildResponse(req, res)
+    }
 }

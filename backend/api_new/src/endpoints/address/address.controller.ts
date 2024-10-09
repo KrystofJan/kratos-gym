@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import { AddressService } from './address.service';
-import { CreatedResponse, CustomResponse, FailedResponse, OkResponse } from '../../request-utility';
+import { CreatedResponse, FailedResponse, OkResponse } from '../../request-utility';
 import { Address } from './address.model';
 import { logger } from '../../utils';
 import { CodedError, ErrorCode } from '../../errors';
 import { addressErrorHandler } from './address.error-handler';
 import { safeAwait } from '../../utils/utilities';
+import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response';
 
 
 export class AddressController {
@@ -37,6 +38,42 @@ export class AddressController {
             return;
         }
         const response = new OkResponse("found all data successfully", data);
+        response.buildResponse(req, res)
+    }
+
+
+    static async UpdateById(req: Request, res: Response) {
+        const id = Number(req.params["id"])
+        const body = req.body;
+        const model: Partial<Address> = new Address(body);
+
+        const [err, data] = await safeAwait(AddressService.UpdateAddressById(id, model))
+
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = addressErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        const response = new OkResponse("found all data successfully", data);
+        response.buildResponse(req, res)
+    }
+
+
+    static async DeleteById(req: Request, res: Response) {
+        const id = Number(req.params["id"])
+        const [err, data] = await safeAwait(AddressService.DeleteAddressById(id));
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = addressErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        const response = new DeletedResponse("Successfully deleted Address", data);
         response.buildResponse(req, res)
     }
 

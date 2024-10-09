@@ -7,6 +7,7 @@ export enum DecoratorType {
     COLUMN_MAP = "columnMap",
     FIELD_MAP = "fieldMap",
     FOREIGN_KEY_MAP = "foreignKeyMap",
+    FOREIGN_KEYS = "foreignKeys",
     PRIMARY_KEY = "primaryKey",
     UNINSERTABLE = "uninsertable"
 }
@@ -42,6 +43,11 @@ export function ForeignKey(type: any) {
         const columnName = Reflect.getMetadata(DecoratorType.COLUMN_NAME, target) || [];
         fkMap[columnName[propertyKey]] = [propertyKey, type]
         Reflect.defineMetadata(DecoratorType.FOREIGN_KEY_MAP, fkMap, target);
+
+
+        const columns = Reflect.getMetadata(DecoratorType.FOREIGN_KEYS, target) || [];
+        columns.push(propertyKey);
+        Reflect.defineMetadata(DecoratorType.FOREIGN_KEYS, columns, target);
     }
 }
 
