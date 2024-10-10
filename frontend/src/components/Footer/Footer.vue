@@ -1,6 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import content from '@/siteContent/_footer-content.json';
+import { currentAccount } from '../../store/accountStore'
 const footer_cols = ref([]);
 
 const fetchData = () => {
@@ -13,6 +14,7 @@ onMounted(fetchData);
 </script>
 
 <template>
+    <Separator />
     <footer class="FooterWrapper">
         <div class="Footer frame">
             <div class="Footer-col" v-for="col in footer_cols">

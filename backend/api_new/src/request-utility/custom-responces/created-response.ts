@@ -2,13 +2,14 @@ import { CustomResponse } from './response';
 import { ResponseStatus } from '../common/response-status';
 import { PostResponseBody, PostMultipleResponseBody } from './response-body';
 import { StatusCodes } from 'http-status-codes';
+import { Model } from '../../endpoints/Model';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 
 export class CreatedResponse implements CustomResponse {
     public readonly StatusCode: StatusCodes;
     public readonly Body: PostResponseBody;
 
-    constructor(message: string, createdId: number) {
+    constructor(message: string, createdId: number | Model) {
         this.StatusCode = StatusCodes.CREATED;
         this.Body = {
             status: ResponseStatus.SUCCESS,

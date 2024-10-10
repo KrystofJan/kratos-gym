@@ -1,51 +1,38 @@
-import { IDictionary } from "../utils";
-import { ResponseStatus } from '../request-utility';
 import { Model } from "../endpoints/Model";
 
-export interface DatabaseResponse {
-    Status: ResponseStatus;
+export interface DatabaseResponse<T> {
+    Body: T;
 }
 
 // TODO: Dont use any
-export class DatabaseFoundSingle implements DatabaseResponse {
-    public Status: ResponseStatus;
-    public Body: Model
-    constructor(body: Model) {
-        this.Status = ResponseStatus.SUCCESS;
+export class DatabaseFoundSingle<T extends Model> implements DatabaseResponse<T> {
+    public Body: T
+    constructor(body: T) {
         this.Body = body;
     }
 }
 
-export class DatabaseFoundMultiple implements DatabaseResponse {
-    public Status: ResponseStatus;
-    public Body: Array<Model>
-    constructor(body: Array<Model>) {
-        this.Status = ResponseStatus.SUCCESS;
+export class DatabaseFoundMultiple<T extends Model> implements DatabaseResponse<Array<T>> {
+    public Body: Array<T>
+    constructor(body: Array<T>) {
         this.Body = body;
     }
 }
 
 
-export class DatabaseCreated implements DatabaseResponse {
-    public Status: ResponseStatus;
-    public Body: Model
+export class DatabaseCreated<T> implements DatabaseResponse<T> {
+    public Body: T
 
-    constructor(body: Model) {
-        this.Status = ResponseStatus.SUCCESS;
+    constructor(body: T) {
         this.Body = body;
     }
 }
 
-// TODO: Dont use string
-export class DatabaseFail extends Error implements DatabaseResponse {
-    public Status: ResponseStatus;
-    public ErrorMessage: string;
-    private Error: Error;
 
-    constructor(err: Error) {
-        super(err.toString());
-        this.Status = ResponseStatus.FAIL;
-        this.Error = err;
-        this.ErrorMessage = this.Error.toString();
+export class DatabaseDeleted implements DatabaseResponse<number> {
+    public Body: number
+    constructor(deletedId: number) {
+        this.Body = deletedId
     }
 }
+

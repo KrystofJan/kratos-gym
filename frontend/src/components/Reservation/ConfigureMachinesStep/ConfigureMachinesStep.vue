@@ -1,5 +1,5 @@
-<script setup>
-import {ref, defineProps, onMounted } from 'vue';
+<script setup lang="ts">
+import { ref, defineProps, onMounted } from 'vue';
 import ConfigureMachinesStepItem from './ConfigureMachinesStepItem.vue'
 import { BaseService } from '@/services/base/ApiService';
 import Step from '../Step.vue';
@@ -49,30 +49,25 @@ onMounted(() => {
 </script>
 
 <template>
-<div v-if="(SelectedMachines.length > 0)" class="StepWrapper">
-    <Step :builderText="builderText" :builderItemClasses="'PlanMachineDetails'">
-        <ConfigureMachinesStepItem 
-            v-for="(machine, index) in SelectedMachines"
-            :index="index"
-            :Machine="machine"
-            :PlanMachine="PlanMachine"
-        />
-    </Step>
-    <div v-if="showButton" class="Button-next" @click="clickHandle">Next -></div>
-</div>
+    <div v-if="(SelectedMachines.length > 0)" class="StepWrapper">
+        <Step :builderText="builderText" :builderItemClasses="'PlanMachineDetails'">
+            <ConfigureMachinesStepItem v-for="(machine, index) in SelectedMachines" :index="index" :Machine="machine"
+                :PlanMachine="PlanMachine" />
+        </Step>
+        <div v-if="showButton" class="Button-next" @click="clickHandle">Next -></div>
+    </div>
 </template>
 
 <style lang="scss">
 @import '@/styles/sass/Reservation/Builder.scss';
 
-[data-plan-name]{
+[data-plan-name] {
     grid-column: 1/-1;
 }
 
-.PlanMachineDetails{
+.PlanMachineDetails {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr)) !important;
     gap: 2rem 4rem;
 }
 </style>
-
