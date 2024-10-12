@@ -1,4 +1,4 @@
-import type { Account, AccountCreate } from '../types';
+import type { Account, AccountCreate, Address } from '../types';
 
 const KRATOS_API_URL = import.meta.env.VITE_KRATOS_API_URL
 
@@ -23,9 +23,7 @@ export class AccountService {
 
     async CreateAccount(account: AccountCreate) {
         try {
-            console.log(JSON.stringify(account)
-            )
-            const res = await fetch(`http://localhost:5173/api/auth/new-account`, {
+            const res = await fetch(`${KRATOS_API_URL}/api/auth/new-account`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,7 +36,6 @@ export class AccountService {
                 throw new Error(`HTTP error! status: ${res.status}`);
             }
             const data = await res.json();
-            console.log(data)
             return data;
         } catch (error) {
             console.error('Error creating account:', error);
@@ -46,4 +43,32 @@ export class AccountService {
         }
     }
 
+    async AddAddressToAccount(address: Address, accountId: number) {
+        if (!address.AddressId) {
+            throw new Error("Cannot update address for user because the user model has no id")
+        }
+
+        try {
+            const res = await fetch(
+                `${KRATOS_API_URL}/api/account/${accountId}/address/set`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    body: JSON.stringify({ "AddressId": address.AddressId })
+                }
+            );
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const data = await res.json();
+            return data;
+        } catch (error) {
+            console.error(error)
+            throw error
+        }
+    }
 }

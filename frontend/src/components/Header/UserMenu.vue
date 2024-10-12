@@ -51,13 +51,11 @@ import { currentAccount } from "../../store/accountStore"
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem class="p-0">
-                    <router-link to="/profile" class="py-1.5 px-2  w-full h-full"
-                        @click="toggleMenu()">Profile</router-link>
+                    <router-link to="/profile" class="py-1.5 px-2  w-full h-full">Profile</router-link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem class="p-0">
-                    <router-link to="/profile" class="py-1.5 px-2  w-full h-full"
-                        @click="toggleMenu()">Settings</router-link>
+                    <router-link to="/profile" class="py-1.5 px-2  w-full h-full">Settings</router-link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>

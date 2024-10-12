@@ -21,8 +21,7 @@ const toggleMenu = () => {
 </script>
 
 <template>
-    <header class="flex h-32 items-center justify-between px-8">
-        <!-- <TopHeader /> -->
+    <header class="flex h-32 items-center justify-between px-8 sticky top-0 z-50 bg-background">
         <Logo type="horizontal" />
         <MainNav class="mx-6" />
         <UserMenu />

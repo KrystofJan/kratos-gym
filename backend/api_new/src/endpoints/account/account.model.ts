@@ -36,7 +36,7 @@ export class Account extends Model {
     public PhoneNumber: string;
 
     @Column("is_active")
-    public IsActive: Boolean;
+    public IsActive: boolean;
 
     @Column("create_date")
     public CreateDate: Date;
@@ -60,6 +60,10 @@ export class Account extends Model {
     @UnInsertable()
     @Column("clerk_id")
     public ClerkId?: string;
+
+
+    @Column("profile_picture_url")
+    public ProfilePictureUrl?: string;
 
     constructor(jsonData: IDictionary<any>) {
         super();
@@ -104,6 +108,7 @@ export class Account extends Model {
         } else {
             this.Address = new Address(jsonData)
         }
-        this.ClerkId = undefined;
+        this.ClerkId = jsonData["clerk_id"] ?? jsonData["ClerkId"];
+        this.ProfilePictureUrl = jsonData["profile_picture_url"] ?? jsonData["ProfilePictureUrl"];
     }
 }

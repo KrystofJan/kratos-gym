@@ -1,10 +1,27 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, watchEffect } from 'vue';
 import { SignedIn, SignedOut, useUser } from 'vue-clerk'
 import { currentAccount, fetchAccount } from "../../../store/accountStore";
+import { Alert, AlertDescription, AlertTitle } from '@/components/shadcn/ui/alert'
+import { Progress } from '@/components/shadcn/ui/progress'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/shadcn/ui/card'
+
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from '@/components/shadcn/ui/avatar/'
 
 const isLoading = ref(true);
-const loadMessage = ref('Loading...')
+const error = ref(false)
+const progressAmount = ref(0)
 const { user, isLoaded: isUserLoaded } = useUser();
 
 const roleDictionary = {
@@ -17,13 +34,26 @@ const loadAccount = async () => {
     if (!currentAccount.value && user.value) {
         try {
             await fetchAccount(user.value.id);
+            console.log(currentAccount.value)
+            progressAmount.value = 100
         } catch (error) {
-            loadMessage.value = 'Error fetching data';
+            error.value = true;
             console.error('Error fetching data:', error);
         }
     }
     isLoading.value = false;
 };
+
+// NOTE: Maybe not this, but it looks a bit better
+watchEffect((cleanupFn) => {
+    const timer = setInterval(() => {
+        if (progressAmount.value < 90) {
+            progressAmount.value += 10
+        }
+
+    }, 100)
+    cleanupFn(() => clearTimeout(timer))
+})
 
 onMounted(async () => {
     if (isUserLoaded.value) {
@@ -40,43 +70,47 @@ watch(isUserLoaded, (newValue) => {
 
 <template>
     <SignedOut>
+        <Alert>
+            <Terminal class="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+                You need to be logged in !
+            </AlertDescription>
+        </Alert>
         <div class="ErrorMessage ErrorMessage--notLogedIn MarginedComponent">
-            You need to be logged in !
         </div>
     </SignedOut>
     <SignedIn>
         <div v-if="isLoading" class="Loading MarginedComponent">
-            {{ loadMessage }}
+            <Progress v-if="!error" v-model="progressAmount" class="w-3/5 m-auto " />
         </div>
         <div v-else-if="currentAccount" class="Profile MarginedComponent">
-            <h1>Profile</h1>
-            <div class="ProfileInfo">
-                <div :class="{ 'active': currentAccount.IsActive }" class="ProfileInfo-picture">
-                    <img :src="user.imageUrl" alt="profilePic" width="64" height="64" />
-                </div>
-                <div class="ProfileInfo-contact">
-                    <h2>Contact Info</h2>
-                    Email:
-                    {{ currentAccount.Email }} <br />
-                    Phone:
-                    {{ currentAccount.PhoneNumber }} <br />
-                </div>
-                <div class="ProfileInfo-name">
-                    <h2>Main info</h2>
-                    First name:
-                    {{ currentAccount.FirstName }} <br />
-                    Last Name:
-                    {{ currentAccount.LastName }}
-                </div>
-                <div class="ProfileInfo-other">
-                    <h2>Other</h2>
-                    Role:
-                    {{ roleDictionary[currentAccount.Role] || 'Unknown' }} <br />
-                </div>
-            </div>
-            <div class="Helper">
-                {{ currentAccount }}
-            </div>
+            <Card class="max-w-96">
+                <CardHeader class="grid grid-cols-2 gap-4 content-center">
+                    <Avatar class="w-32 h-32">
+                        <AvatarImage :src="currentAccount.ProfilePictureUrl" alt="@radix-vue" />
+                        <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <div class="align-middle h-fit w-fit my-auto">
+                        <CardTitle>
+                            {{ `${currentAccount.FirstName} ${currentAccount.LastName}` }}
+                        </CardTitle>
+                        <CardDescription>{{ roleDictionary[currentAccount.Role] }}</CardDescription>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <ul>
+                        <li>Phone: {{ currentAccount.Phone ?? "-" }}</li>
+                        <li>Email: {{ currentAccount.Email }}</li>
+                        <li>Joinded on: {{ currentAccount.CreateDate.split("T")[0] }}</li>
+                        <li>Last online: {{ currentAccount.LastOnline.split("T")[0] }}</li>
+                        <li>Credits: {{ currentAccount.Credits }}</li>
+                        <li>Address: {{ currentAccount.Credits }}</li>
+                    </ul>
+                </CardContent>
+
+
+            </Card>
         </div>
         <div v-else class="ErrorMessage MarginedComponent">
             Failed to load account data.

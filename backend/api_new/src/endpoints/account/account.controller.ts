@@ -48,6 +48,7 @@ export class AccountController {
 
     static async FindByClerkId(req: Request, res: Response) {
         const clerk_id = String(req.params["id"])
+        console.log(clerk_id)
         const [err, data] = await safeAwait(AccountService.GetAccountByClerkId(clerk_id));
         if (err !== null) {
             logger.error(err)
@@ -137,9 +138,7 @@ export class AccountController {
             return;
         }
 
-        const resultModel = new Address(data)
-
-        const response = new OkResponse("found all data successfully", resultModel);
+        const response = new OkResponse("found all data successfully", data);
         response.buildResponse(req, res)
     }
 }

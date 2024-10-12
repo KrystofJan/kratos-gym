@@ -9,6 +9,7 @@ const { user, isLoaded: isUserLoaded } = useUser();
 
 const loadAccount = async () => {
     if (!currentAccount.value && user.value) {
+        console.log("I'm trying")
         try {
             await fetchAccount(user.value.id);
         } catch (error) {
@@ -23,9 +24,15 @@ onMounted(async () => {
     }
 });
 
-watch(isUserLoaded, (newValue) => {
+watch(isUserLoaded, async (newValue) => {
     if (newValue) {
-        loadAccount();
+        await loadAccount();
+    }
+});
+
+watch(currentAccount, async (newValue) => {
+    if (newValue) {
+        await loadAccount();
     }
 });
 

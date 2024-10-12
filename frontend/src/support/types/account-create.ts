@@ -4,4 +4,5 @@ export interface AccountCreate {
     LastName: string;
     Email: string;
     Login: string;
+    ProfilePictureUrl: string
 }

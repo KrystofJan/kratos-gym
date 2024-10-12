@@ -25,7 +25,10 @@ export function updateAccount(newData: Partial<Account>): void {
 }
 
 export async function createAccount(body: AccountCreate) {
-    const accountService = new AccountService();
-    const account = await accountService.CreateAccount(body);
-    updateAccount(account.CreatedId);
+    if (!currentAccount.value) {
+        const accountService = new AccountService();
+        const account = await accountService.CreateAccount(body);
+        // TODO: This returns the correct stuff, need to rename the response in the backend
+        updateAccount(account.CreatedId);
+    }
 }

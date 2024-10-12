@@ -26,7 +26,7 @@ AccountRouter.get('/:id', async (req: Request, res: Response) => {
 });
 
 AccountRouter.get('/clerk/:id', async (req: Request, res: Response) => {
-    await AccountController.FindById(req, res)
+    await AccountController.FindByClerkId(req, res)
 });
 
 AccountRouter.patch('/:id/address/set', async (req: Request, res: Response) => {

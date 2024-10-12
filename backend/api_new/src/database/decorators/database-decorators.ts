@@ -9,7 +9,9 @@ export enum DecoratorType {
     FOREIGN_KEY_MAP = "foreignKeyMap",
     FOREIGN_KEYS = "foreignKeys",
     PRIMARY_KEY = "primaryKey",
-    UNINSERTABLE = "uninsertable"
+    UNINSERTABLE = "uninsertable",
+    FOREIGN_PRIMARY_KEY_MAP = "fkToPkMap",
+    FOREIGN_PRIMARY_OBJECT_KEY_MAP = "foToPkMap"
 }
 
 export function Table(tableName: string) {
@@ -44,10 +46,25 @@ export function ForeignKey(type: any) {
         fkMap[columnName[propertyKey]] = [propertyKey, type]
         Reflect.defineMetadata(DecoratorType.FOREIGN_KEY_MAP, fkMap, target);
 
-
+        // collection of foreign keys
         const columns = Reflect.getMetadata(DecoratorType.FOREIGN_KEYS, target) || [];
         columns.push(propertyKey);
         Reflect.defineMetadata(DecoratorType.FOREIGN_KEYS, columns, target);
+
+        // {"AddressId" : "address_id"}
+
+        const fieldMap = Reflect.getMetadata(DecoratorType.FIELD_MAP, type.prototype) || {};
+        const foreignKey = Reflect.getMetadata('primaryKey', type);
+        const foreignPrimaryKey = Reflect.getMetadata(DecoratorType.FOREIGN_PRIMARY_KEY_MAP, target) || {};
+        foreignPrimaryKey[fieldMap[foreignKey]] = foreignKey
+        Reflect.defineMetadata(DecoratorType.FOREIGN_PRIMARY_KEY_MAP, foreignPrimaryKey, target);
+
+        // "Address": "AddressId"
+        const foreignObjectMap = Reflect.getMetadata(DecoratorType.FOREIGN_PRIMARY_OBJECT_KEY_MAP, target) || {};
+        foreignObjectMap[propertyKey] = fieldMap[foreignKey]
+        Reflect.defineMetadata(DecoratorType.FOREIGN_PRIMARY_OBJECT_KEY_MAP, foreignObjectMap, target);
+
+        // fk map of pks -> 
     }
 }
 
@@ -68,17 +85,3 @@ export function UnInsertable() {
 export function Optional() {
 }
 
-export function getMetadataForProperties(target: Model) {
-    // Create a temporary instance of the class
-    const metadata: { [key: string]: string } = {};
-    const instanceFields = Object.keys(target)//instance);
-
-    instanceFields.forEach(field => {
-        const columnName = Reflect.getMetadata(DecoratorType.COLUMN_NAME, target, field);
-        if (columnName) {
-            metadata[field] = columnName;
-        }
-    })
-
-    return metadata;
-}

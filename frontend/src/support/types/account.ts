@@ -1,14 +1,13 @@
 import { Address } from "./address";
 
-export const UserRole = {
+export const UserRoleOptions = {
     CUSTOMER: 'c',
     TRAINER: 'T',
     EMPLOYEE: 'E',
-    USER: 'U',
     NOTKNOWN: '/',
 } as const;
 
-export type UserRole = typeof UserRole[keyof typeof UserRole];
+export type UserRole = typeof UserRoleOptions[keyof typeof UserRoleOptions];
 
 export interface Account {
     AccountId: number;
@@ -20,9 +19,9 @@ export interface Account {
     IsActive: Boolean;
     CreateDate: Date;
     LastOnline: Date;
-    Password: string;
-    Address: Address;
+    Address?: Address;
     Credits: number;
     Login: string;
     ClerkId: string;
+    ProfilePictureUrl: string;
 }

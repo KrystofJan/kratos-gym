@@ -1,5 +1,4 @@
 import { IDictionary, logger } from "../utils";
-import { getMetadataForProperties } from "../database";
 import { DatabaseType } from "../utils/utilities";
 
 
@@ -32,7 +31,4 @@ export class Model {
         return true;
     }
 
-    getKeysDictionary() {
-        return getMetadataForProperties(this)
-    }
 }

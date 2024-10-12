@@ -19,6 +19,7 @@
     "sass": "^1.69.5",
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
+    "ts-pattern": "^5.4.0",
     "vee-validate": "^4.13.2",
     "vue": "^3.4.37",
     "vue-clerk": "^0.6.15",

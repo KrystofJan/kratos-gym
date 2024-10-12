@@ -48,7 +48,7 @@ export class AccountService {
     }
 
 
-    static async SetAddressIdById(id: number, body: Partial<Address>): Promise<Address> {
+    static async SetAddressIdById(id: number, body: Partial<Address>): Promise<Account> {
         const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Update(Account, id, body));
@@ -57,12 +57,14 @@ export class AccountService {
             throw databaseErr;
         }
 
-        const model = new Address(databaseResponse.Body)
+        const model = new Account(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAccountById failed")
             logger.error(err)
             throw err;
         }
+
+        model.Address = new Address(databaseResponse.Body)
         return model;
     }
 

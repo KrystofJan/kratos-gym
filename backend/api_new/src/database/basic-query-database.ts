@@ -155,24 +155,28 @@ export class BasicQueryDatabase extends Database {
         const foreignKeyMap = Reflect.getMetadata(DecoratorType.FOREIGN_KEY_MAP, modelType.prototype);
         const foreignKeys = Reflect.getMetadata(DecoratorType.FOREIGN_KEYS, modelType.prototype);
         const pkey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, modelType);
+        const fkToPkMap = Reflect.getMetadata(DecoratorType.FOREIGN_PRIMARY_KEY_MAP, modelType.prototype)
+        const foreignObjectMap = Reflect.getMetadata(DecoratorType.FOREIGN_PRIMARY_OBJECT_KEY_MAP, modelType.prototype);
 
-        console.log(columnMap)
+
+        console.log(fkToPkMap)
+        console.log(Object.keys(fkToPkMap))
 
         // Filter out null or undefined values from the body
         const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
 
         const processedData: IDictionary<any> = {};
 
-        console.log(foreignKeyMap)
         try {
             for (const [key, value] of Object.entries(filteredBody)) {
                 console.log(key)
-                console.log(columnMap[key])
                 // TODO: Map AddressId to address_id
-                let k = columnMap[key];;
-                // if (foreignKeys.includes(key)) {
-                //     k = key
-                // }
+                let k = columnMap[key];
+                if (Object.keys(fkToPkMap).includes(key)) {
+                    k = fkToPkMap[key];
+                    processedData[k] = value
+                    console.log(processedData)
+                }
                 const columnMapped = k
                 processedData[columnMapped] = typeof value === "boolean"
                     ? Number(value).toString()
