@@ -1,25 +1,51 @@
 import { Request, Response } from 'express';
-import { ExerciseTypeService } from '.';
+import {
+    MachineService,
+    Machine,
+    machineErrorHandler
+} from '.'
 import { CreatedResponse, FailedResponse, OkResponse } from '../../request-utility';
-import { ExerciseType } from '.';
 import { logger } from '../../utils';
 import { CodedError, ErrorCode } from '../../errors';
-import { exerciseTypeErrorHandler } from '.';
 import { safeAwait } from '../../utils/utilities';
 import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response';
+import { ExerciseTypeService } from '../exercise-type';
 
 
-export class ExerciseTypeController {
+export class MachineController {
 
     static async FindAll(req: Request, res: Response) {
-        const [err, data] = await safeAwait(ExerciseTypeService.GetAllExerciseTypes());
+        const [err, data] = await safeAwait(MachineService.GetAllMachines());
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError;
-            const statusCode = exerciseTypeErrorHandler.handleError(error);
+            const statusCode = machineErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
+        }
+
+        for (const machine of data) {
+            if (!machine.MachineId) {
+                const error = new CodedError(ErrorCode.MAPPING_ERROR, "machine id is null");
+                logger.error(error)
+                const statusCode = machineErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+
+            const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByMachineId(Number(machine.MachineId)))
+
+            if (typeErr !== null) {
+                logger.error(typeErr)
+                const error = typeErr as CodedError;
+                const statusCode = machineErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            machine.ExerciseTypes = type
         }
 
         const response = new OkResponse("found all data successfully", data);
@@ -28,46 +54,53 @@ export class ExerciseTypeController {
 
     static async FindById(req: Request, res: Response) {
         const id = Number(req.params["id"])
-        const [err, data] = await safeAwait(ExerciseTypeService.GetExerciseTypesById(id));
+        const [err, data] = await safeAwait(MachineService.GetMachineById(id));
+
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError;
-            const statusCode = exerciseTypeErrorHandler.handleError(error);
+            const statusCode = machineErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
-        const response = new OkResponse("found all data successfully", data);
-        response.buildResponse(req, res)
-    }
 
-
-    static async FindByMachineId(req: Request, res: Response) {
-        const id = Number(req.params["id"])
-        const [err, data] = await safeAwait(ExerciseTypeService.GetTypesByMachineId(id));
-        if (err !== null) {
-            logger.error(err)
-            const error = err as CodedError;
-            const statusCode = exerciseTypeErrorHandler.handleError(error);
+        if (!data.MachineId) {
+            const error = new CodedError(ErrorCode.MAPPING_ERROR, "machine id is null");
+            logger.error(error)
+            const statusCode = machineErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
+
+        const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByMachineId(Number(data.MachineId)))
+
+        if (typeErr !== null) {
+            logger.error(typeErr)
+            const error = typeErr as CodedError;
+            const statusCode = machineErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        data.ExerciseTypes = type
         const response = new OkResponse("found all data successfully", data);
         response.buildResponse(req, res)
     }
+
 
     static async UpdateById(req: Request, res: Response) {
         const id = Number(req.params["id"])
         const body = req.body;
-        const model: Partial<ExerciseType> = new ExerciseType(body);
+        const model: Partial<Machine> = new Machine(body);
 
-        const [err, data] = await safeAwait(ExerciseTypeService.UpdateExerciseTypeById(id, model))
+        const [err, data] = await safeAwait(MachineService.UpdateMachineById(id, model))
 
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError;
-            const statusCode = exerciseTypeErrorHandler.handleError(error);
+            const statusCode = machineErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
@@ -79,28 +112,28 @@ export class ExerciseTypeController {
 
     static async DeleteById(req: Request, res: Response) {
         const id = Number(req.params["id"])
-        const [err, data] = await safeAwait(ExerciseTypeService.DeleteExerciseTypeById(id));
+        const [err, data] = await safeAwait(MachineService.DeleteMachineById(id));
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError;
-            const statusCode = exerciseTypeErrorHandler.handleError(error);
+            const statusCode = machineErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
-        const response = new DeletedResponse("Successfully deleted ExerciseType", data);
+        const response = new DeletedResponse("Successfully deleted Machine", data);
         response.buildResponse(req, res)
     }
 
     static async Create(req: Request, res: Response) {
         const body = req.body;
-        const model = new ExerciseType(body);
+        const model = new Machine(body);
 
         logger.info(model)
         if (!model.checkForUnneededData(body)) {
             const error = new CodedError(ErrorCode.MAPPING_ERROR, "TODO: Change the message");
             logger.error(error)
-            const statusCode = exerciseTypeErrorHandler.handleError(error);
+            const statusCode = machineErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
@@ -108,18 +141,18 @@ export class ExerciseTypeController {
         if (!model.validateAttrs()) {
             const error = new CodedError(ErrorCode.VALIDATION_ERROR, "Validation failed");
             logger.error(error)
-            const statusCode = exerciseTypeErrorHandler.handleError(error);
+            const statusCode = machineErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
 
-        const [err, id] = await safeAwait(ExerciseTypeService.CreateExerciseType(model));
+        const [err, id] = await safeAwait(MachineService.CreateMachine(model));
         if (err !== null) {
 
             logger.error(err)
             const error = err as CodedError;
-            const statusCode = exerciseTypeErrorHandler.handleError(error);
+            const statusCode = machineErrorHandler.handleError(error);
             logger.info(statusCode)
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)

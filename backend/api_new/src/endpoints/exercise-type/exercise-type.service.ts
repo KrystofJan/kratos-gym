@@ -87,8 +87,6 @@ export class ExerciseTypeService {
         return model;
     }
 
-
-
     static async DeleteExerciseTypeById(id: number): Promise<number> {
         const db = new BasicQueryDatabase()
 
@@ -105,4 +103,22 @@ export class ExerciseTypeService {
         return databaseResponse.Body;
     }
 
+    static async GetTypesByMachineId(id: number): Promise<ExerciseType[]> {
+        const db = new BasicQueryDatabase()
+
+        const [databaseErr, databaseResponse] = await safeAwait(db.SelectOnForeignTable(ExerciseType, "machine_exercise_type", "machine_id", id));
+        if (databaseErr !== null) {
+            logger.error(databaseErr)
+            throw databaseErr;
+        }
+
+        try {
+            const models = databaseResponse.Body.map((model: ExerciseType) => new ExerciseType(model))
+            return models;
+        } catch (err) {
+            logger.error(err)
+            throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllAccount failed")
+        }
+    }
 }
+

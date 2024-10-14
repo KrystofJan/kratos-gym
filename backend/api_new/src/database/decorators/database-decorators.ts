@@ -85,3 +85,8 @@ export function UnInsertable() {
 export function Optional() {
 }
 
+export function ManyToMany(type: any, table: string) {
+    return function(target: Model, propertyKey: string) {
+
+    }
+}

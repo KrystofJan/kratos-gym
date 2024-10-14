@@ -11,6 +11,10 @@ ExerciseTypeRouter.get('/:id', async (req: Request, res: Response) => {
     await ExerciseTypeController.FindById(req, res)
 });
 
+ExerciseTypeRouter.get('/machine/:id', async (req: Request, res: Response) => {
+    await ExerciseTypeController.FindByMachineId(req, res)
+});
+
 ExerciseTypeRouter.post('/', async (req: Request, res: Response) => {
     await ExerciseTypeController.Create(req, res)
 });

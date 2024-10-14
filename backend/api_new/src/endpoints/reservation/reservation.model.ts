@@ -2,6 +2,7 @@ import { IDictionary } from '../../utils';
 import { Address } from '../address/address.model';
 import { Model } from '../Model';
 import { Column, ForeignKey, PrimaryKey, Table } from "../../database";
+import { CodedError, ErrorCode } from '../../errors/base.error';
 import { UnInsertable } from '../../database/decorators/database-decorators';
 
 export enum UserRole {

@@ -85,6 +85,32 @@ export class BasicQueryDatabase extends Database {
         }
     }
 
+    async SelectOnForeignTable<T extends Model>(
+        modelType: new (data: IDictionary<DatabaseType>) => T,
+        foreignType: string,
+        idKey: string,
+        idValue: number,
+    ): Promise<DatabaseFoundMultiple<T>> {
+        const tableName = Reflect.getMetadata('tableName', modelType);
+        const columns = Reflect.getMetadata(DecoratorType.COLUMN_NAME, modelType.prototype);
+        const pkey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, modelType);
+
+        try {
+            const result: T[] = await this.sql<T[]>`
+                Select ${this.sql(tableName)}.* 
+                from ${this.sql(tableName)} inner join ${this.sql(foreignType)} 
+                on ${this.sql(tableName)}.${this.sql(pkey)}= ${this.sql(foreignType)}.${this.sql(pkey)}
+                where ${this.sql(idKey)} = ${idValue}
+            `;
+            logger.info(`Select by attribute from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
+            return new DatabaseFoundMultiple<T>(result);
+        } catch (error) {
+            const err = error as Error;
+            logger.error(err)
+            throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
+        }
+    }
+
     async Insert<T extends Model>(
         modelType: new (data: IDictionary<DatabaseType>) => T,
         body: T
@@ -154,6 +180,7 @@ export class BasicQueryDatabase extends Database {
         const tableName = Reflect.getMetadata(DecoratorType.TABLE_NAME, modelType);
         const pkey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, modelType);
         const fkToPkMap = Reflect.getMetadata(DecoratorType.FOREIGN_PRIMARY_KEY_MAP, modelType.prototype)
+        const unInsertables = Reflect.getMetadata(DecoratorType.UNINSERTABLE, modelType.prototype);
 
         const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
 
@@ -161,7 +188,10 @@ export class BasicQueryDatabase extends Database {
 
         try {
             for (const [key, value] of Object.entries(filteredBody)) {
-                console.log(key)
+
+                if (unInsertables?.includes(key)) {
+                    continue;
+                }
                 let k = columnMap[key];
                 if (fkToPkMap && Object.keys(fkToPkMap).includes(key)) {
                     k = fkToPkMap[key];
