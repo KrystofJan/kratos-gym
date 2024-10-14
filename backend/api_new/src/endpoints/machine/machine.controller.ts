@@ -162,4 +162,22 @@ export class MachineController {
         const response = new CreatedResponse("created successfully", id);
         response.buildResponse(req, res)
     }
+
+    static async AddType(req: Request, res: Response) {
+        const machineId = Number(req.params["machineId"])
+        const typeId = Number(req.params["typeId"])
+
+        const [err, data] = await safeAwait(MachineService.AddExerciseType(machineId, typeId));
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = machineErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        const response = new OkResponse("found all data successfully", data);
+        response.buildResponse(req, res)
+    }
 }

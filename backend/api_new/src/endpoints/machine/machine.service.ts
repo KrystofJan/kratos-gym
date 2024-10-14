@@ -3,6 +3,7 @@ import { logger } from "../../utils"
 import { Machine } from "."
 import { safeAwait } from "../../utils/utilities"
 import { CodedError, ErrorCode } from "../../errors/base.error"
+import { ExerciseType } from "../exercise-type"
 
 export class MachineService {
 
@@ -80,6 +81,21 @@ export class MachineService {
 
         if (databaseResponse.Body === undefined) {
             throw new CodedError(ErrorCode.NOT_FOUND_ERROR, `Machine with an id: '${id}' was not Deleted`)
+        }
+
+        return databaseResponse.Body;
+    }
+
+    static async AddExerciseType(machineId: number, typeId: number): Promise<Machine> {
+        const db = new BasicQueryDatabase()
+        const [databaseErr, databaseResponse] = await safeAwait(db.InsertManyToMany(Machine, machineId, "machine_exercise_type", "exercise_type_id", typeId));
+        if (databaseErr !== null) {
+            logger.error(databaseErr)
+            throw databaseErr;
+        }
+
+        if (databaseResponse.Body === undefined) {
+            throw new CodedError(ErrorCode.NOT_FOUND_ERROR, `Machine with an id: '${typeId}' was not Added`)
         }
 
         return databaseResponse.Body;

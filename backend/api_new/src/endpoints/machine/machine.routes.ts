@@ -11,8 +11,14 @@ MachineRouter.get('/:id', async (req: Request, res: Response) => {
     await MachineController.FindById(req, res)
 });
 
+
 MachineRouter.post('/', async (req: Request, res: Response) => {
     await MachineController.Create(req, res)
+});
+
+// TODO: Add to body ??/
+MachineRouter.post('/:machineId/type/:typeId', async (req: Request, res: Response) => {
+    await MachineController.AddType(req, res)
 });
 
 MachineRouter.delete('/:id', async (req: Request, res: Response) => {

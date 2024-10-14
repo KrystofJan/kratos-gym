@@ -111,6 +111,31 @@ export class BasicQueryDatabase extends Database {
         }
     }
 
+    async InsertManyToMany<T extends Model>(
+        modelType: new (data: IDictionary<DatabaseType>) => T,
+        id: number,
+        foreignType: string,
+        idKey: string,
+        idValue: number,
+    ): Promise<DatabaseCreated<T>> {
+        const pkey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, modelType);
+        try {
+            const [result] = await this.sql<T[]>`
+                insert into ${this.sql(foreignType)} 
+                    (${this.sql(pkey)}, ${this.sql(idKey)})
+                values (${id}, ${idValue})
+                returning *
+            `;
+            logger.info(`Insert into ${foreignType} was successful\n${JSON.stringify(result, null, 4)}`);
+            return new DatabaseCreated<T>(result);
+        } catch (error) {
+            const err = error as Error;
+            logger.error(err)
+            throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
+        }
+    }
+
+
     async Insert<T extends Model>(
         modelType: new (data: IDictionary<DatabaseType>) => T,
         body: T
