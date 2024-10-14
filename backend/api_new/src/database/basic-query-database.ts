@@ -152,17 +152,9 @@ export class BasicQueryDatabase extends Database {
     ): Promise<DatabaseCreated<T>> {
         const columnMap = Reflect.getMetadata(DecoratorType.COLUMN_MAP, modelType.prototype);
         const tableName = Reflect.getMetadata(DecoratorType.TABLE_NAME, modelType);
-        const foreignKeyMap = Reflect.getMetadata(DecoratorType.FOREIGN_KEY_MAP, modelType.prototype);
-        const foreignKeys = Reflect.getMetadata(DecoratorType.FOREIGN_KEYS, modelType.prototype);
         const pkey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, modelType);
         const fkToPkMap = Reflect.getMetadata(DecoratorType.FOREIGN_PRIMARY_KEY_MAP, modelType.prototype)
-        const foreignObjectMap = Reflect.getMetadata(DecoratorType.FOREIGN_PRIMARY_OBJECT_KEY_MAP, modelType.prototype);
 
-
-        console.log(fkToPkMap)
-        console.log(Object.keys(fkToPkMap))
-
-        // Filter out null or undefined values from the body
         const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
 
         const processedData: IDictionary<any> = {};
@@ -170,14 +162,15 @@ export class BasicQueryDatabase extends Database {
         try {
             for (const [key, value] of Object.entries(filteredBody)) {
                 console.log(key)
-                // TODO: Map AddressId to address_id
                 let k = columnMap[key];
-                if (Object.keys(fkToPkMap).includes(key)) {
+                if (fkToPkMap && Object.keys(fkToPkMap).includes(key)) {
                     k = fkToPkMap[key];
                     processedData[k] = value
-                    console.log(processedData)
                 }
+                console.log("asdasdasd")
                 const columnMapped = k
+                console.log(columnMapped)
+                console.log(value)
                 processedData[columnMapped] = typeof value === "boolean"
                     ? Number(value).toString()
                     : value;
@@ -188,6 +181,7 @@ export class BasicQueryDatabase extends Database {
             throw new CodedError(ErrorCode.INTERNAL_ERROR, "Error processing body data.");
         }
 
+        logger.info("Asdasdasd")
         try {
             const [result] = await this.sql<T[]>`
                 UPDATE ${this.sql(tableName)}
