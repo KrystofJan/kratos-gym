@@ -42,10 +42,10 @@ export function Column(name: string) {
 export function ForeignKey(type: any) {
     return function(target: Model, propertyKey: string) {
         const fkMap = Reflect.getMetadata(DecoratorType.FOREIGN_KEY_MAP, target) || {};
-        const columnName = Reflect.getMetadata(DecoratorType.COLUMN_NAME, target) || [];
-        fkMap[columnName[propertyKey]] = [propertyKey, type]
+        const columnMap = Reflect.getMetadata(DecoratorType.COLUMN_MAP, target) || [];
+        fkMap[columnMap[propertyKey]] = [propertyKey, type]
         Reflect.defineMetadata(DecoratorType.FOREIGN_KEY_MAP, fkMap, target);
-
+        //
         // collection of foreign keys
         const columns = Reflect.getMetadata(DecoratorType.FOREIGN_KEYS, target) || [];
         columns.push(propertyKey);

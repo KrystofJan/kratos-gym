@@ -149,6 +149,7 @@ export class BasicQueryDatabase extends Database {
         const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
         const columns: string[] = Object.keys(filteredBody);
 
+
         const processedData: IDictionary<any> = {};
 
         try {
@@ -177,6 +178,7 @@ export class BasicQueryDatabase extends Database {
             logger.error(err);
             throw new CodedError(ErrorCode.INTERNAL_ERROR, "Error processing body data.");
         }
+
 
         const columnNames = Object.keys(processedData);
 
@@ -236,7 +238,6 @@ export class BasicQueryDatabase extends Database {
             throw new CodedError(ErrorCode.INTERNAL_ERROR, "Error processing body data.");
         }
 
-        logger.info("Asdasdasd")
         try {
             const [result] = await this.sql<T[]>`
                 UPDATE ${this.sql(tableName)}
