@@ -48,7 +48,7 @@ export class Account extends Model {
 
     @ForeignKey(Address)
     @Column("address_id")
-    public Address: Address;
+    public Address: Address | undefined;
 
     @Column("credits")
     public Credits: number;

@@ -10,8 +10,10 @@ export enum DecoratorType {
     FOREIGN_KEYS = "foreignKeys",
     PRIMARY_KEY = "primaryKey",
     UNINSERTABLE = "uninsertable",
+    UNUPDATABLE = "unupdatable",
     FOREIGN_PRIMARY_KEY_MAP = "fkToPkMap",
-    FOREIGN_PRIMARY_OBJECT_KEY_MAP = "foToPkMap"
+    FOREIGN_PRIMARY_OBJECT_KEY_MAP = "foToPkMap",
+    FOREIGN_KEYS_KEYS = "fkk"
 }
 
 export function Table(tableName: string) {
@@ -59,6 +61,11 @@ export function ForeignKey(type: any) {
         foreignPrimaryKey[fieldMap[foreignKey]] = foreignKey
         Reflect.defineMetadata(DecoratorType.FOREIGN_PRIMARY_KEY_MAP, foreignPrimaryKey, target);
 
+        // ["AddressId", "AccountId"]
+        const foreignKeyString = Reflect.getMetadata(DecoratorType.FOREIGN_KEYS_KEYS, target) || [];
+        foreignKeyString.push(fieldMap[foreignKey])
+        Reflect.defineMetadata(DecoratorType.FOREIGN_KEYS_KEYS, foreignKeyString, target);
+
         // "Address": "AddressId"
         const foreignObjectMap = Reflect.getMetadata(DecoratorType.FOREIGN_PRIMARY_OBJECT_KEY_MAP, target) || {};
         foreignObjectMap[propertyKey] = fieldMap[foreignKey]
@@ -79,6 +86,14 @@ export function UnInsertable() {
         const unInsertable = Reflect.getMetadata(DecoratorType.UNINSERTABLE, target) || [];
         unInsertable.push(propertyKey);
         Reflect.defineMetadata(DecoratorType.UNINSERTABLE, unInsertable, target);
+    }
+}
+
+export function UnUpdatable() {
+    return function(target: Model, propertyKey: string) {
+        const unInsertable = Reflect.getMetadata(DecoratorType.UNUPDATABLE, target) || [];
+        unInsertable.push(propertyKey);
+        Reflect.defineMetadata(DecoratorType.UNUPDATABLE, unInsertable, target);
     }
 }
 

@@ -67,23 +67,27 @@ export class BasicQueryDatabase extends Database {
         modelType: new (data: IDictionary<DatabaseType>) => T,
         attrValue: SimpleDatabaseType,
         attrName: string
-    ): Promise<DatabaseFoundSingle<T>> {
+    ): Promise<DatabaseFoundSingle<T> | DatabaseFoundMultiple<T>> {
         const tableName = Reflect.getMetadata('tableName', modelType);
 
         try {
             logger.info(`Select * from ${tableName} where ${attrName} = ${attrValue}`)
-            const [result]: T[] = await this.sql<T[]>`
+            const result: T[] = await this.sql<T[]>`
                 Select * from ${this.sql(tableName)}
                 where ${this.sql(attrName)} = ${attrValue}
             `;
             logger.info(`Select by attribute from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
-            return new DatabaseFoundSingle<T>(result);
+            if (result.length > 1) {
+                return new DatabaseFoundMultiple<T>(result);
+            }
+            return new DatabaseFoundSingle<T>(result[0]);
         } catch (error) {
             const err = error as Error;
             logger.error(err)
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
         }
     }
+
 
     async SelectOnForeignTable<T extends Model>(
         modelType: new (data: IDictionary<DatabaseType>) => T,
@@ -201,22 +205,26 @@ export class BasicQueryDatabase extends Database {
     async Update<T extends Model>(
         modelType: new (data: IDictionary<DatabaseType>) => T,
         id: number,
-        body: Partial<T>
+        body: Partial<T>,
+        otherIdKey?: string,
+        otherIdValue?: number
     ): Promise<DatabaseCreated<T>> {
         const columnMap = Reflect.getMetadata(DecoratorType.COLUMN_MAP, modelType.prototype);
         const tableName = Reflect.getMetadata(DecoratorType.TABLE_NAME, modelType);
         const pkey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, modelType);
         const fkToPkMap = Reflect.getMetadata(DecoratorType.FOREIGN_PRIMARY_KEY_MAP, modelType.prototype)
         const unInsertables = Reflect.getMetadata(DecoratorType.UNINSERTABLE, modelType.prototype);
+        const unUpdatables = Reflect.getMetadata(DecoratorType.UNUPDATABLE, modelType.prototype);
 
         const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
 
+        console.log(filteredBody)
         const processedData: IDictionary<any> = {};
 
         try {
             for (const [key, value] of Object.entries(filteredBody)) {
 
-                if (unInsertables?.includes(key)) {
+                if (unInsertables?.includes(key) || unUpdatables?.includes(key)) {
                     continue;
                 }
                 let k = columnMap[key];
@@ -224,7 +232,6 @@ export class BasicQueryDatabase extends Database {
                     k = fkToPkMap[key];
                     processedData[k] = value
                 }
-                console.log("asdasdasd")
                 const columnMapped = k
                 console.log(columnMapped)
                 console.log(value)
@@ -238,11 +245,14 @@ export class BasicQueryDatabase extends Database {
             throw new CodedError(ErrorCode.INTERNAL_ERROR, "Error processing body data.");
         }
 
+        console.log(`
+
+            `)
         try {
             const [result] = await this.sql<T[]>`
                 UPDATE ${this.sql(tableName)}
                 SET ${this.sql(processedData)}
-                WHERE ${this.sql(pkey)} = ${id}
+                WHERE ${this.sql(pkey)} = ${id} ${(otherIdKey && otherIdValue) ? this.sql(otherIdKey) + ' = ' + otherIdValue : ""}
                 RETURNING *
             `;
             logger.info(`Update in ${tableName} was successful\n${JSON.stringify(result, null, 4)}`);
@@ -282,4 +292,35 @@ export class BasicQueryDatabase extends Database {
         }
     }
 
+
+    async DeleteManyToMany<T extends Model>(
+        modelType: new (data: IDictionary<DatabaseType>) => T,
+        id: number,
+        foreignType: string,
+        idKey: string,
+        idValue: number,
+    ): Promise<DatabaseDeleted> {
+        const tableName = Reflect.getMetadata(DecoratorType.TABLE_NAME, modelType);
+        const pkey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, modelType);
+
+        try {
+            const result = await this.sql`
+                DELETE FROM ${this.sql(foreignType)}
+                WHERE ${this.sql(pkey)} = ${id} AND ${this.sql(idKey)} = ${idValue}
+            `;
+            logger.info(`Delete from ${tableName} was successful. Rows affected: ${result.count}`);
+
+            if (!result.count) {
+                throw new CodedError(ErrorCode.NOT_FOUND_ERROR, `Cannot find a record with ${id} id`)
+            }
+            return new DatabaseDeleted(id);
+        } catch (error) {
+            if (error instanceof CodedError) {
+                throw error;
+            }
+            const err = error as Error;
+            logger.error(err);
+            throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message);
+        }
+    }
 }

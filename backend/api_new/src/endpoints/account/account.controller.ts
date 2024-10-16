@@ -22,7 +22,7 @@ export class AccountController {
         }
 
         for (const account of data) {
-            if (!account.Address.AddressId) {
+            if (!account.Address || !account.Address.AddressId) {
                 const error = new CodedError(ErrorCode.MAPPING_ERROR, "Account address id is not null");
                 logger.error(error)
                 const statusCode = accountErrorHandler.handleError(error);
@@ -60,7 +60,7 @@ export class AccountController {
         }
 
 
-        if (!data.Address.AddressId) {
+        if (!data.Address || !data.Address.AddressId) {
             const response = new OkResponse("Found data withou the address", data);
             response.buildResponse(req, res)
             return;
@@ -94,7 +94,7 @@ export class AccountController {
         }
 
 
-        if (!data.Address.AddressId) {
+        if (!data.Address || !data.Address.AddressId) {
             const response = new OkResponse("Found data withou the address", data);
             response.buildResponse(req, res)
             return;

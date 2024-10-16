@@ -1,6 +1,6 @@
+import { DecoratorType } from "../database/decorators/database-decorators";
 import { IDictionary, logger } from "../utils";
 import { DatabaseType } from "../utils/utilities";
-
 
 export class Model {
 
@@ -23,8 +23,9 @@ export class Model {
 
     checkForUnneededData(json: IDictionary<DatabaseType>) {
         const thisProps = Object.keys(this)
-        for (const prop of Object.keys(json)) {
-            if (!thisProps.includes(prop)) {
+        const foreignKeys = Reflect.getMetadata(DecoratorType.FOREIGN_KEYS_KEYS, Object.getPrototypeOf(this)); for (const prop of Object.keys(json)) {
+            if (!thisProps.includes(prop) && !foreignKeys.includes(prop)) {
+                logger.warn(prop)
                 return false;
             }
         }
