@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { useStorage } from '@vueuse/core';
 import { BaseService } from '@/services/base/ApiService';
@@ -81,7 +81,7 @@ const submit = async () => {
     await postData();
 }
 
-const moveNext = (stepNumber) => {
+const moveNext = (stepNumber: number) => {
     if (StepNumber.value == stepNumber) {
         StepNumber.value++;
     }

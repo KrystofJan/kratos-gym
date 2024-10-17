@@ -1,14 +1,28 @@
-<script setup>
-import { onMounted, ref, computed } from 'vue';
-import { BaseService } from '@/services/base/ApiService';
-import { useStorage } from '@vueuse/core';
+<script setup lang="ts">
+import { onMounted, ref, watch, watchEffect } from 'vue';
+import { SignedIn, SignedOut, useUser } from 'vue-clerk'
+import { currentAccount, fetchAccount } from "../../../store/accountStore";
+import { Alert, AlertDescription, AlertTitle } from '@/components/shadcn/ui/alert'
+import { Progress } from '@/components/shadcn/ui/progress'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/shadcn/ui/card'
 
-const UserInfo = ref({}); 
-const isLogedIn = ref(false);
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from '@/components/shadcn/ui/avatar/'
+
 const isLoading = ref(true);
-let userId = useStorage('userId'); 
-
-let UserService = {};
+const error = ref(false)
+const progressAmount = ref(0)
+const { user, isLoaded: isUserLoaded } = useUser();
 
 const roleDictionary = {
     "c": "Customer",
@@ -16,134 +30,153 @@ const roleDictionary = {
     "e": "Employee"
 };
 
-const isActive = computed(() => {
-    return (isLogedIn && UserInfo.value.IsActive == "1"); 
-})
-
-const prepareServices = async () => {
-    UserService = new BaseService('user');
-}
-
-const fetchData = async () => {
-    try {
-        const userData = await UserService.getId(userId.value);
-        UserInfo.value = userData;
-        setTimeout(() => {
-            isLoading.value = false;            
-        }, 500);
-    } catch (error) {
-        console.error('Error fetching data:', error);
+const loadAccount = async () => {
+    if (!currentAccount.value && user.value) {
+        try {
+            await fetchAccount(user.value.id);
+            console.log(currentAccount.value)
+            progressAmount.value = 100
+        } catch (error) {
+            error.value = true;
+            console.error('Error fetching data:', error);
+        }
     }
-}
+    isLoading.value = false;
+};
+
+// NOTE: Maybe not this, but it looks a bit better
+watchEffect((cleanupFn) => {
+    const timer = setInterval(() => {
+        if (progressAmount.value < 90) {
+            progressAmount.value += 10
+        }
+
+    }, 100)
+    cleanupFn(() => clearTimeout(timer))
+})
 
 onMounted(async () => {
-    prepareServices();
-    
-    if (userId.value){
-        await fetchData();
-        isLogedIn.value = true;
+    if (isUserLoaded.value) {
+        await loadAccount();
     }
-    else{
-        isLoading.value = false;
-    }
+});
 
-})
+watch(isUserLoaded, (newValue) => {
+    if (newValue) {
+        loadAccount();
+    }
+});
 </script>
 
 <template>
-    <div v-if="isLoading" class="Loading MarginedComponent">
-    Loading...
-    </div>
-    <div v-else-if="!isLogedIn && !isLoading" class="ErrorMessage ErrorMessage--notLogedIn MarginedComponent">
-            You need to be logged in !
-    </div>
-        
-    <div v-else class="Profile MarginedComponent"> 
-        <h1>Profile</h1>
-        
-        <div class="ProfileInfo">
-            <div :class="{'active': isActive}" class="ProfileInfo-picture">
-                <span> 
-                   {{ UserInfo.FirstName[0] + UserInfo.LastName[0] }}
-                </span>
-            </div>
-            <div class="ProfileInfo-contact">
-            <h2>Contact Info</h2>
-
-                Email: 
-                {{ UserInfo.Email }} <br />
-                Phone: 
-                {{ UserInfo.PhoneNumber }} <br/>
-            </div>
-            <div class="ProfileInfo-name">
-                <h2>Main info</h2>
-
-                First name:
-                {{ UserInfo.FirstName }} <br /> 
-                Last Name: 
-                {{ UserInfo.LastName }}
-            </div>
-            <div class="ProfileInfo-other">
-                <h2>Other</h2>
-                Role: 
-                {{ roleDictionary[UserInfo.Role] }} <br/>
-
-            </div>
+    <SignedOut>
+        <Alert>
+            <Terminal class="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+                You need to be logged in !
+            </AlertDescription>
+        </Alert>
+        <div class="ErrorMessage ErrorMessage--notLogedIn MarginedComponent">
         </div>
-<div class="Helper">
-    {{ UserInfo }}
+    </SignedOut>
+    <SignedIn>
+        <div v-if="isLoading" class="Loading MarginedComponent">
+            <Progress v-if="!error" v-model="progressAmount" class="w-3/5 m-auto " />
+        </div>
+        <div v-else-if="currentAccount" class="Profile MarginedComponent">
+            <Card class="max-w-96">
+                <CardHeader class="grid grid-cols-2 gap-4 content-center">
+                    <Avatar class="w-32 h-32">
+                        <AvatarImage :src="currentAccount.ProfilePictureUrl" alt="@radix-vue" />
+                        <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <div class="align-middle h-fit w-fit my-auto">
+                        <CardTitle>
+                            {{ `${currentAccount.FirstName} ${currentAccount.LastName}` }}
+                        </CardTitle>
+                        <CardDescription>{{ roleDictionary[currentAccount.Role] }}</CardDescription>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <ul>
+                        <li>Phone: {{ currentAccount.Phone ?? "-" }}</li>
+                        <li>Email: {{ currentAccount.Email }}</li>
+                        <li>Joinded on: {{ currentAccount.CreateDate.split("T")[0] }}</li>
+                        <li>Last online: {{ currentAccount.LastOnline.split("T")[0] }}</li>
+                        <li>Credits: {{ currentAccount.Credits }}</li>
+                        <li>Address: {{ currentAccount.Credits }}</li>
+                    </ul>
+                </CardContent>
 
-</div>
-    </div>
 
+            </Card>
+        </div>
+        <div v-else class="ErrorMessage MarginedComponent">
+            Failed to load account data.
+        </div>
+    </SignedIn>
 </template>
-
 <style lang="scss" scoped>
-.Loading{
+.Loading {
     color: white;
     text-align: center;
     font-size: 3rem;
 }
 
-.Helper{
+.Helper {
     display: none;
 }
 
-.Profile{
+.Profile {
     color: white;
     width: 75%;
-    
 
-    &Info{
+
+    &Info {
         display: grid;
         grid-template-columns: 10rem 1fr;
 
-        &-picture{
+        &-picture {
             display: flex;
+            position: relative;
             justify-content: center;
             align-items: center;
-            width: 5rem;
-            height: 5rem;
-            border-radius: 50%;
-            background: var(--baseRed);
+            width: 10rem;
+            height: 10rem;
             align-self: center;
             margin: auto;
 
 
-            &.active{
-                background: var(--baseBlue);
+            &.active {
+
+                &:after {
+                    content: '';
+                    position: absolute;
+                    top: 1rem;
+                    right: 0rem;
+                    width: 1.5rem;
+                    height: 1.5rem;
+                    background: var(--baseBlue);
+                    border-radius: 50%;
+                    transform: translate(-50%, -50%);
+                    z-index: 1;
+                }
             }
-            
-            span{
-                font-size: 1.5rem;
-                line-height: 1.5rem;
-            }      
+
+            img {
+                width: 100%;
+                height: auto;
+                border-radius: 50%;
+                ;
+            }
+
         }
 
     }
 }
 
-.ErrorMessage{
+.ErrorMessage {
     color: var(--baseRed);
     display: block;
     padding: 1rem 2rem;

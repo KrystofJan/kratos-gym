@@ -1,4 +1,12 @@
 # gym-reservation-system
+## TODO:
+- finish reverse proxy set up for local dev
+- finish clerk auth
+- fix colors on frontend
+- finish other endpoints
+
+
+
 ## Update APR 01. 2024
 * Refactored the whole backend to typescript
 * Split Reservation to multiple components on the fe

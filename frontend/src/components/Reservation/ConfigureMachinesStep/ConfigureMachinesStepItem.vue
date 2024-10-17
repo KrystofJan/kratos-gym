@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, defineProps, onMounted } from 'vue';
 import { PlanMachineService } from '@/services/PlanMachineService';
 
