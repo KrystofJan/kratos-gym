@@ -1,4 +1,3 @@
-import postgres from 'postgres';
 import "dotenv/config";
 import { IDictionary } from '../utils';
 import { DatabaseDeleted, DatabaseFoundSingle, DatabaseFoundMultiple, DatabaseCreated } from './database-response';
@@ -217,7 +216,6 @@ export class BasicQueryDatabase extends Database {
 
         const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
 
-        console.log(filteredBody)
         const processedData: IDictionary<any> = {};
 
         try {

@@ -11,9 +11,7 @@ export class AuthController {
 
     static async CreateAccount(req: Request, res: Response) {
         const body = req.body;
-        console.log
         const model = new Auth(body);
-        console.log(model)
 
         if (!model.checkForUnneededData(body)) {
             const error = new CodedError(ErrorCode.MAPPING_ERROR, "TODO: Change the message");

@@ -13,7 +13,6 @@ AccountRouter.get('/query', async (req: Request, res: Response) => {
         .Limit(10)
         .Offset(5);
 
-    console.log(query.toSQL());
     res.send(query.toSQL());
 });
 

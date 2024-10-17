@@ -111,7 +111,6 @@ export class PlanService {
         const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectOnForeignTable(Machine, "plan_machine", "plan_machine.plan_id", id));
-        console.log(databaseResponse)
         if (databaseErr !== null) {
             logger.error(databaseErr)
             throw databaseErr;

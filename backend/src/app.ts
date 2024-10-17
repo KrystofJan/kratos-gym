@@ -3,11 +3,12 @@ import * as dotevnv from "dotenv"
 import cors from "cors"
 import helmet from "helmet"
 import { setRoutes } from "./router/router"
+import { logger } from "./utils"
 
 dotevnv.config()
 
 if (!process.env.PORT) {
-    console.log(`No port value specified...`)
+    logger.info(`No port value specified...`)
 }
 
 const PORT = parseInt(process.env.PORT as string, 10)
@@ -22,6 +23,6 @@ app.use(helmet())
 setRoutes(app)
 
 app.listen(PORT, () => {
-    console.log(`Server asdasd is listening on port ${PORT}`)
+    logger.info(`Server asdasd is listening on port ${PORT}`)
 })
 
