@@ -96,7 +96,6 @@ export class BasicQueryDatabase extends Database {
         idValue: number,
     ): Promise<DatabaseFoundMultiple<T>> {
         const tableName = Reflect.getMetadata('tableName', modelType);
-        const columns = Reflect.getMetadata(DecoratorType.COLUMN_NAME, modelType.prototype);
         const pkey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, modelType);
 
         try {
@@ -233,11 +232,7 @@ export class BasicQueryDatabase extends Database {
                     processedData[k] = value
                 }
                 const columnMapped = k
-                console.log(columnMapped)
-                console.log(value)
-                processedData[columnMapped] = typeof value === "boolean"
-                    ? Number(value).toString()
-                    : value;
+                processedData[columnMapped] = value
             }
         } catch (error) {
             const err = error as Error;
@@ -245,14 +240,12 @@ export class BasicQueryDatabase extends Database {
             throw new CodedError(ErrorCode.INTERNAL_ERROR, "Error processing body data.");
         }
 
-        console.log(`
-
-            `)
         try {
             const [result] = await this.sql<T[]>`
                 UPDATE ${this.sql(tableName)}
                 SET ${this.sql(processedData)}
-                WHERE ${this.sql(pkey)} = ${id} ${(otherIdKey && otherIdValue) ? this.sql(otherIdKey) + ' = ' + otherIdValue : ""}
+                WHERE ${this.sql(pkey)} = ${id}
+                ${otherIdKey && otherIdValue ? this.sql`AND ${this.sql(otherIdKey)} = ${otherIdValue}` : this.sql``}
                 RETURNING *
             `;
             logger.info(`Update in ${tableName} was successful\n${JSON.stringify(result, null, 4)}`);

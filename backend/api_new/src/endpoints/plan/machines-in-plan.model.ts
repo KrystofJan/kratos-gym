@@ -37,6 +37,5 @@ export class MachinesInPlan extends Model {
         this.StartTime = jsonData["StartTime"] ?? jsonData["start_time"]
         this.EndTime = jsonData["EndTime"] ?? jsonData["end_time"]
         this.CanDisturb = jsonData["CanDisturb"] ?? jsonData["can_disturb"]
-
     }
 }
