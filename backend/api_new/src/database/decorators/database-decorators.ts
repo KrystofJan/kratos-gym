@@ -13,7 +13,8 @@ export enum DecoratorType {
     UNUPDATABLE = "unupdatable",
     FOREIGN_PRIMARY_KEY_MAP = "fkToPkMap",
     FOREIGN_PRIMARY_OBJECT_KEY_MAP = "foToPkMap",
-    FOREIGN_KEYS_KEYS = "fkk"
+    FOREIGN_KEYS_KEYS = "fkk",
+    DIFERENTLY_NAMED_FOREIGN_KEYS = "differentFks"
 }
 
 export function Table(tableName: string) {
@@ -88,6 +89,17 @@ export function UnInsertable() {
         Reflect.defineMetadata(DecoratorType.UNINSERTABLE, unInsertable, target);
     }
 }
+
+
+export function DifferentlyNamedForeignKey(name: string) {
+    return function(target: Model, propertyKey: string) {
+        const differentlyNamedFks = Reflect.getMetadata(DecoratorType.DIFERENTLY_NAMED_FOREIGN_KEYS, target) || [];
+        differentlyNamedFks.push(propertyKey);
+        differentlyNamedFks.push(name);
+        Reflect.defineMetadata(DecoratorType.DIFERENTLY_NAMED_FOREIGN_KEYS, differentlyNamedFks, target);
+    }
+}
+
 
 export function UnUpdatable() {
     return function(target: Model, propertyKey: string) {

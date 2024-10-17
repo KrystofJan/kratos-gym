@@ -1,34 +1,24 @@
 import express, { Request, Response, Router } from 'express';
-import { Address } from '../address/address.model';
-import { SelectQuery } from '../../database/query-builder';
-import { AccountController } from './reservation.controller';
+import { ReservationController } from './reservation.controller';
 
-export const AccountRouter: Router = express.Router();
+export const ReservationRouter: Router = express.Router();
 
-AccountRouter.get('/query', async (req: Request, res: Response) => {
-    const query = new SelectQuery(Address)
-        .Params("AddressId", 'City')
-        .Where({ 'City': ['=', 'Frýdek-Místek'] })
-        .OrderBy('City', 'desc')
-        .Limit(10)
-        .Offset(5);
-
-    console.log(query.toSQL());
-    res.send(query.toSQL());
+ReservationRouter.get('/', async (req: Request, res: Response) => {
+    await ReservationController.FindAll(req, res)
 });
 
-AccountRouter.get('/', async (req: Request, res: Response) => {
-    await AccountController.FindAll(req, res)
+ReservationRouter.get('/:id', async (req: Request, res: Response) => {
+    await ReservationController.FindById(req, res)
 });
 
-AccountRouter.get('/:id', async (req: Request, res: Response) => {
-    await AccountController.FindById(req, res)
+ReservationRouter.post('/', async (req: Request, res: Response) => {
+    await ReservationController.Create(req, res)
 });
 
-AccountRouter.get('/clerk/:id', async (req: Request, res: Response) => {
-    await AccountController.FindByClerkId(req, res)
+ReservationRouter.delete('/:id', async (req: Request, res: Response) => {
+    await ReservationController.DeleteById(req, res)
 });
 
-AccountRouter.patch('/:id/address/set', async (req: Request, res: Response) => {
-    await AccountController.SetAddressId(req, res)
+ReservationRouter.patch('/:id', async (req: Request, res: Response) => {
+    await ReservationController.UpdateById(req, res)
 });

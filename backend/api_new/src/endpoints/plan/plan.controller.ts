@@ -9,7 +9,6 @@ import { safeAwait } from '../../utils/utilities';
 import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response';
 import { AccountService } from '../account/account.service';
 import { MachinesInPlan } from './machines-in-plan.model';
-import { Machine } from '../machine';
 
 export class PlanController {
 

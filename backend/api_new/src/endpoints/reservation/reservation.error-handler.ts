@@ -1,11 +1,11 @@
 import { ErrorHandler } from "../../errors";
+import { StatusCodes } from "http-status-codes";
 
-class AccountErrorHandler extends ErrorHandler {
+class ReservationErrorHandler extends ErrorHandler {
 
     constructor() {
         super()
     }
 }
 
-export const accountErrorHandler = new AccountErrorHandler()
-
+export const reservationErrorHandler = new ReservationErrorHandler()

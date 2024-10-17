@@ -1,81 +1,116 @@
 import { Request, Response } from 'express';
-import { AccountService } from './reservation.service';
-import { AddressService, Address } from '../address';
-import { CreatedResponse, CustomResponse, FailedResponse, OkResponse } from '../../request-utility';
-import { Account } from './reservation.model';
-import { CodedError, ErrorCode } from '../../errors';
+import { CreatedResponse, FailedResponse, OkResponse } from '../../request-utility';
 import { logger } from '../../utils';
-import { accountErrorHandler } from './reservation.error-handler';
+import { CodedError, ErrorCode } from '../../errors';
+import { } from './reservation.error-handler';
 import { safeAwait } from '../../utils/utilities';
+import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response';
+import { ReservationService, reservationErrorHandler, Reservation } from "."
+import { AccountService } from '../account';
+import { PlanService } from '../plan';
+import { ExerciseTypeService } from '../exercise-type';
 
-export class AccountController {
+export class ReservationController {
 
     static async FindAll(req: Request, res: Response) {
-        const [err, data] = await safeAwait(AccountService.GetAllAccounts());
+        const [err, data] = await safeAwait(ReservationService.GetAllReservationes());
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError;
-            const statusCode = accountErrorHandler.handleError(error);
+            const statusCode = reservationErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
 
-        for (const account of data) {
-            if (!account.Address.AddressId) {
-                const error = new CodedError(ErrorCode.MAPPING_ERROR, "Account address id is not null");
+        for (const reservation of data) {
+            if (!reservation.Customer) {
+                const error = new CodedError(ErrorCode.MAPPING_ERROR, "Customer was not found for " + reservation.ReservationId + " reservation");
                 logger.error(error)
-                const statusCode = accountErrorHandler.handleError(error);
+                const statusCode = reservationErrorHandler.handleError(error);
                 const response = new FailedResponse(error.message, statusCode, error.code);
                 response.buildResponse(req, res)
                 return;
             }
-            const [err, address] = await safeAwait(AddressService.GetAddressById(Number(account.Address.AddressId)));
-            if (err !== null) {
-                logger.error(err)
-                const error = err as CodedError;
-                const statusCode = accountErrorHandler.handleError(error);
+
+            const [errAccount, account] = await safeAwait(AccountService.GetAccountById(reservation.Customer.AccountId));
+            if (errAccount !== null) {
+                logger.error(errAccount)
+                const error = errAccount as CodedError;
+                const statusCode = reservationErrorHandler.handleError(error);
                 const response = new FailedResponse(error.message, statusCode, error.code);
                 response.buildResponse(req, res)
                 return;
             }
-            account.Address = address;
+            reservation.Customer = account;
+            reservation.Customer.Address = undefined;
+            reservation.Customer.ClerkId = undefined;
+
+            if (!reservation.Plan) {
+                const error = new CodedError(ErrorCode.MAPPING_ERROR, "Customer was not found for " + reservation.ReservationId + " reservation");
+                logger.error(error)
+                const statusCode = reservationErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+
+            const [errPlan, plan] = await safeAwait(PlanService.GetPlanById(reservation.Plan.PlanId));
+            if (errPlan !== null) {
+                logger.error(errPlan)
+                const error = errPlan as CodedError;
+                const statusCode = reservationErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+
+            reservation.Plan = plan;
+            if (reservation.Plan.User) {
+                reservation.Plan.User.Address = undefined;
+            }
+
+            const [errMachines, machines] = await safeAwait(PlanService.GetMachinesInPlan(plan.PlanId));
+            if (errMachines !== null) {
+                logger.error(errMachines)
+                const error = errMachines as CodedError;
+                const statusCode = reservationErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+
+            reservation.Plan.Machines = machines
+
+            const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByMachineId(plan.PlanId))
+
+            if (typeErr !== null) {
+                logger.error(typeErr)
+                const error = typeErr as CodedError;
+                const statusCode = reservationErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            reservation.Plan.ExerciseTypes = type
+
+            if (reservation.Trainer) {
+
+                const [errTrainer, trainer] = await safeAwait(AccountService.GetAccountById(reservation.Trainer.AccountId));
+                if (errTrainer !== null) {
+                    logger.error(errTrainer)
+                    const error = errTrainer as CodedError;
+                    const statusCode = reservationErrorHandler.handleError(error);
+                    const response = new FailedResponse(error.message, statusCode, error.code);
+                    response.buildResponse(req, res)
+                    return;
+                }
+
+                reservation.Trainer = trainer;
+                reservation.Trainer.Address = undefined;
+                reservation.Trainer.ClerkId = undefined;
+            }
         }
-
-        const response = new OkResponse("found all data successfully", data);
-        response.buildResponse(req, res)
-    }
-
-    static async FindByClerkId(req: Request, res: Response) {
-        const clerk_id = String(req.params["id"])
-        console.log(clerk_id)
-        const [err, data] = await safeAwait(AccountService.GetAccountByClerkId(clerk_id));
-        if (err !== null) {
-            logger.error(err)
-            const error = err as CodedError;
-            const statusCode = accountErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
-            response.buildResponse(req, res)
-            return;
-        }
-
-
-        if (!data.Address.AddressId) {
-            const response = new OkResponse("Found data withou the address", data);
-            response.buildResponse(req, res)
-            return;
-        }
-
-        const [addrErr, address] = await safeAwait(AddressService.GetAddressById(Number(data.Address.AddressId)));
-        if (addrErr !== null) {
-            logger.error(addrErr)
-            const error = addrErr as CodedError;
-            const statusCode = accountErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
-            response.buildResponse(req, res)
-            return;
-        }
-        data.Address = address;
 
         const response = new OkResponse("found all data successfully", data);
         response.buildResponse(req, res)
@@ -83,62 +118,181 @@ export class AccountController {
 
     static async FindById(req: Request, res: Response) {
         const id = Number(req.params["id"])
-        const [err, data] = await safeAwait(AccountService.GetAccountById(id));
+        const [err, reservation] = await safeAwait(ReservationService.GetReservationById(id));
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError;
-            const statusCode = accountErrorHandler.handleError(error);
+            const statusCode = reservationErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
 
-
-        if (!data.Address.AddressId) {
-            const response = new OkResponse("Found data withou the address", data);
-            response.buildResponse(req, res)
-            return;
-        }
-
-        const [addrErr, address] = await safeAwait(AddressService.GetAddressById(Number(data.Address.AddressId)));
-        if (addrErr !== null) {
-            const error = addrErr as CodedError;
-            const statusCode = accountErrorHandler.handleError(error);
+        if (!reservation.Customer) {
+            const error = new CodedError(ErrorCode.MAPPING_ERROR, "Customer was not found for " + reservation.ReservationId + " reservation");
+            logger.error(error)
+            const statusCode = reservationErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
-        data.Address = address;
 
+        const [errAccount, account] = await safeAwait(AccountService.GetAccountById(reservation.Customer.AccountId));
+        if (errAccount !== null) {
+            logger.error(errAccount)
+            const error = errAccount as CodedError;
+            const statusCode = reservationErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        reservation.Customer = account;
+        reservation.Customer.Address = undefined;
+        reservation.Customer.ClerkId = undefined;
+
+        if (!reservation.Plan) {
+            const error = new CodedError(ErrorCode.MAPPING_ERROR, "Customer was not found for " + reservation.ReservationId + " reservation");
+            logger.error(error)
+            const statusCode = reservationErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        const [errPlan, plan] = await safeAwait(PlanService.GetPlanById(reservation.Plan.PlanId));
+        if (errPlan !== null) {
+            logger.error(errPlan)
+            const error = errPlan as CodedError;
+            const statusCode = reservationErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        reservation.Plan = plan;
+        if (reservation.Plan.User) {
+            reservation.Plan.User.Address = undefined;
+        }
+
+        const [errMachines, machines] = await safeAwait(PlanService.GetMachinesInPlan(plan.PlanId));
+        if (errMachines !== null) {
+            logger.error(errMachines)
+            const error = errMachines as CodedError;
+            const statusCode = reservationErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        reservation.Plan.Machines = machines
+
+        const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByMachineId(plan.PlanId))
+
+        if (typeErr !== null) {
+            logger.error(typeErr)
+            const error = typeErr as CodedError;
+            const statusCode = reservationErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        reservation.Plan.ExerciseTypes = type
+
+        if (reservation.Trainer) {
+
+            const [errTrainer, trainer] = await safeAwait(AccountService.GetAccountById(reservation.Trainer.AccountId));
+            if (errTrainer !== null) {
+                logger.error(errTrainer)
+                const error = errTrainer as CodedError;
+                const statusCode = reservationErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+
+            reservation.Trainer = trainer;
+            reservation.Trainer.Address = undefined;
+            reservation.Trainer.ClerkId = undefined;
+        }
+
+        const response = new OkResponse("found all data successfully", reservation);
+        response.buildResponse(req, res)
+    }
+
+    static async UpdateById(req: Request, res: Response) {
+        const id = Number(req.params["id"])
+        const body = req.body;
+        const model: Partial<Reservation> = new Reservation(body);
+
+        if (!model.Customer || !model.Customer.AccountId) {
+            model.Customer = undefined
+        }
+
+
+        const [err, data] = await safeAwait(ReservationService.UpdateReservationById(id, model))
+
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = reservationErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
         const response = new OkResponse("found all data successfully", data);
         response.buildResponse(req, res)
     }
 
-    static async SetAddressId(req: Request, res: Response) {
-        const id = Number(req.params["id"])
-        const body = req.body;
-        const model: Partial<Address> = new Address(body)
-        const addressId = model.AddressId
-        if (!addressId) {
-            logger.error("Cannot insert this id " + addressId);
-            const error = new CodedError(ErrorCode.ARGUMENT_ERROR, `Could not change address id to ${addressId}`)
-            const statusCode = accountErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
-            response.buildResponse(req, res)
-            return;
-        }
 
-        const [err, data] = await safeAwait(AccountService.SetAddressIdById(id, model));
+    static async DeleteById(req: Request, res: Response) {
+        const id = Number(req.params["id"])
+        const [err, data] = await safeAwait(ReservationService.DeleteReservationById(id));
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError;
-            const statusCode = accountErrorHandler.handleError(error);
+            const statusCode = reservationErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        const response = new DeletedResponse("Successfully deleted Reservation", data);
+        response.buildResponse(req, res)
+    }
+
+    static async Create(req: Request, res: Response) {
+        const body = req.body;
+        const model = new Reservation(body);
+
+        logger.info(model)
+        if (!model.checkForUnneededData(body)) {
+            const error = new CodedError(ErrorCode.MAPPING_ERROR, "TODO: Change the message");
+            logger.error(error)
+            const statusCode = reservationErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        if (!model.validateAttrs()) {
+            const error = new CodedError(ErrorCode.VALIDATION_ERROR, "Validation failed");
+            logger.error(error)
+            const statusCode = reservationErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        const [err, id] = await safeAwait(ReservationService.CreateReservation(model));
+        if (err !== null) {
+
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = reservationErrorHandler.handleError(error);
+            logger.info(statusCode)
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
 
-        const response = new OkResponse("found all data successfully", data);
+        const response = new CreatedResponse("created successfully", id);
         response.buildResponse(req, res)
     }
 }

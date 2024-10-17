@@ -1,95 +1,107 @@
 import { BasicQueryDatabase } from "../../database"
 import { logger } from "../../utils"
-import { Account } from "./reservation.model"
-import { CodedError, ErrorCode } from "../../errors/base.error"
+import { Reservation } from "."
 import { safeAwait } from "../../utils/utilities"
-import { DecoratorType } from "../../database/decorators/database-decorators"
-import { Address } from "../address"
+import { CodedError, ErrorCode } from "../../errors/base.error"
 
-export class AccountService {
+export class ReservationService {
 
-    static async GetAllAccounts(): Promise<Array<Account>> {
+    static async GetAllReservationes(): Promise<Array<Reservation>> {
         const db = new BasicQueryDatabase()
 
-        const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(Account));
+        const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(Reservation));
         if (databaseErr !== null) {
             logger.error(databaseErr)
             throw databaseErr;
         }
 
         try {
-            const models = databaseResponse.Body.map((model: Account) => new Account(model))
+            const models = databaseResponse.Body.map((model: Reservation) => new Reservation(model))
             return models;
         } catch (err) {
             logger.error(err)
-            throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllAccount failed")
+            throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllReservationes failed")
         }
     }
 
-    static async GetAccountById(id: number): Promise<Account> {
+    static async GetReservationById(id: number): Promise<Reservation> {
         const db = new BasicQueryDatabase()
 
-        const [databaseErr, databaseResponse] = await safeAwait(db.SelectSpecific(Account, id));
+        const [databaseErr, databaseResponse] = await safeAwait(db.SelectSpecific(Reservation, id));
         if (databaseErr !== null) {
             logger.error(databaseErr)
             throw databaseErr;
         }
         if (databaseResponse.Body === undefined) {
-            throw new CodedError(ErrorCode.NOT_FOUND_ERROR, `Account with an id: '${id}' was not found`)
+            throw new CodedError(ErrorCode.NOT_FOUND_ERROR, `Reservation with an id: '${id}' was not found`)
         }
 
-        const model = new Account(databaseResponse.Body)
+        const model = new Reservation(databaseResponse.Body)
         if (!model) {
-            const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAccountById failed")
+            const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetReservationById failed")
             logger.error(err)
             throw err;
         }
         return model;
     }
 
-
-    static async SetAddressIdById(id: number, body: Partial<Address>): Promise<Account> {
+    static async UpdateReservationById(id: number, body: Partial<Reservation>): Promise<Reservation> {
         const db = new BasicQueryDatabase()
 
-        const [databaseErr, databaseResponse] = await safeAwait(db.Update(Account, id, body));
-        if (databaseErr !== null) {
-            logger.error(databaseErr)
-            throw databaseErr;
-        }
-
-        const model = new Account(databaseResponse.Body)
-        if (!model) {
-            const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAccountById failed")
-            logger.error(err)
-            throw err;
-        }
-
-        model.Address = new Address(databaseResponse.Body)
-        return model;
-    }
-
-
-    static async GetAccountByClerkId(clerkId: string): Promise<Account> {
-        const db = new BasicQueryDatabase()
-
-        const colMap = Reflect.getMetadata(DecoratorType.COLUMN_MAP, Account.prototype)
-
-        const [databaseErr, databaseResponse] = await safeAwait(db.SelectAttrIs(Account, clerkId, colMap["ClerkId"]));
+        const [databaseErr, databaseResponse] = await safeAwait(db.Update(Reservation, id, body));
         if (databaseErr !== null) {
             logger.error(databaseErr)
             throw databaseErr;
         }
 
         if (databaseResponse.Body === undefined) {
-            throw new CodedError(ErrorCode.NOT_FOUND_ERROR, `Account with an clerk id: '${clerkId}' was not found`)
+            throw new CodedError(ErrorCode.NOT_FOUND_ERROR, `Reservation with an id: '${id}' was not Deleted`)
         }
 
-        const model = new Account(databaseResponse.Body)
+        const model = new Reservation(databaseResponse.Body)
         if (!model) {
-            const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAccountById failed")
+            const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetReservationById failed")
             logger.error(err)
             throw err;
         }
+
         return model;
+    }
+
+
+    static async DeleteReservationById(id: number): Promise<number> {
+        const db = new BasicQueryDatabase()
+
+        const [databaseErr, databaseResponse] = await safeAwait(db.Delete(Reservation, id));
+        if (databaseErr !== null) {
+            logger.error(databaseErr)
+            throw databaseErr;
+        }
+
+        if (databaseResponse.Body === undefined) {
+            throw new CodedError(ErrorCode.NOT_FOUND_ERROR, `Reservation with an id: '${id}' was not Deleted`)
+        }
+
+        return databaseResponse.Body;
+    }
+
+    static async CreateReservation(body: Reservation): Promise<number> {
+        const db = new BasicQueryDatabase()
+
+        const [databaseErr, databaseResponse] = await safeAwait(db.Insert(Reservation, body));
+        if (databaseErr !== null) {
+            logger.error(databaseErr)
+            throw databaseErr;
+        }
+
+        const model = new Reservation(databaseResponse.Body)
+        if (!model) {
+            const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at CreateReservation failed")
+            logger.error(err)
+            throw err;
+        }
+
+        return Number(model.ReservationId);
     }
 }
+

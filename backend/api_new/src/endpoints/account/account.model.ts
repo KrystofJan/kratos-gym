@@ -106,6 +106,9 @@ export class Account extends Model {
             this.Address = jsonData["address"]
         } else {
             this.Address = new Address(jsonData)
+            if (!this.Address.AddressId) {
+                this.Address = undefined
+            }
         }
         this.ClerkId = jsonData["clerk_id"] ?? jsonData["ClerkId"];
         this.ProfilePictureUrl = jsonData["profile_picture_url"] ?? jsonData["ProfilePictureUrl"];
