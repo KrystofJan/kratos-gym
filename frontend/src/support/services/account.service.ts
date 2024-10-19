@@ -71,4 +71,35 @@ export class AccountService {
             throw error
         }
     }
+
+
+    async UpdateAccount(account: Partial<Account>, accountId: number) {
+        if (!account) {
+            throw new Error("Cannot update account because the request body is not working")
+        }
+
+        try {
+            const res = await fetch(
+                `${KRATOS_API_URL}/api/account/${accountId}/`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    body: JSON.stringify(account)
+                }
+            );
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const data = await res.json();
+            return data;
+        } catch (error) {
+            console.error(error)
+            throw error
+        }
+    }
+
 }

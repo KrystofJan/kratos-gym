@@ -64,6 +64,24 @@ export class AccountService {
     }
 
 
+    static async UpdateAccount(id: number, body: Partial<Account>): Promise<Account> {
+        const db = new BasicQueryDatabase()
+
+        const [databaseErr, databaseResponse] = await safeAwait(db.Update(Account, id, body));
+        if (databaseErr !== null) {
+            throw databaseErr;
+        }
+
+        const model = new Account(databaseResponse.Body)
+        if (!model) {
+            const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAccountById failed")
+            throw err;
+        }
+
+        return model;
+    }
+
+
     static async GetAccountByClerkId(clerkId: string): Promise<Account> {
         const db = new BasicQueryDatabase()
 

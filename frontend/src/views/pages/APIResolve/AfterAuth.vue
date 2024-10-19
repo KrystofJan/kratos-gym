@@ -24,13 +24,16 @@ const address: Ref<Address> = ref({
     ApartmentNumber: '',
 });
 
+const phoneNumber: Ref<string> = ref("")
+
 const addressSchema = z.object({
+    PhoneNumber: z.string().min(9).max(50),
     Street: z.string().min(2).max(50),
     City: z.string().min(2).max(50),
     Country: z.string().min(2).max(50),
     PostalCode: z.string().min(2).max(50),
     BuildingNumber: z.string().min(2).max(50),
-    ApartmentNumber: z.string().min(2).max(50),
+    ApartmentNumber: z.string().min(2).max(50).optional(),
 });
 
 const createAccount = async () => {
@@ -60,6 +63,7 @@ const createAccount = async () => {
 };
 
 const createAddress = async (values: Record<string, any>) => {
+    // Maybe make this a transaction
     let data: Record<string, any>
     try {
         const addressService = new AddressService();
@@ -71,6 +75,7 @@ const createAddress = async (values: Record<string, any>) => {
             BuildingNumber: values["BuildingNumber"],
             ApartmentNumber: values["ApartmentNumber"]
         }
+        phoneNumber.value = values["PhoneNumber"]
 
         data = await addressService.CreateAddress(addressBody);
         const model: Address = {
@@ -92,6 +97,15 @@ const createAddress = async (values: Record<string, any>) => {
         loadMessage.value = 'Error fetching data';
         console.error('Error fetching data:', error);
     }
+
+    try {
+        const accService = new AccountService()
+        const _ = accService.UpdateAccount({ PhoneNumber: phoneNumber.value }, currentAccount.value.AccountId)
+        currentAccount.value.PhoneNumber = phoneNumber.value
+    } catch (err) {
+        loadMessage.value = 'Error fetching data';
+        console.error('Error fetching data:', err);
+    }
 };
 
 onMounted(async () => {
@@ -112,6 +126,7 @@ watch(isUserLoaded, async (newValue) => {
         <div v-if="isLoading">
             Loading...
         </div>
+
         <AutoForm v-else-if="currentAccount" class="w-2/3 space-y-6" :schema="addressSchema" @submit="createAddress">
             <Button type="submit">
                 Submit

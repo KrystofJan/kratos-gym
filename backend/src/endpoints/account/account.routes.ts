@@ -31,3 +31,7 @@ AccountRouter.get('/clerk/:id', async (req: Request, res: Response) => {
 AccountRouter.patch('/:id/address/set', async (req: Request, res: Response) => {
     await AccountController.SetAddressId(req, res)
 });
+
+AccountRouter.patch('/:id', async (req: Request, res: Response) => {
+    await AccountController.EditAccount(req, res)
+});

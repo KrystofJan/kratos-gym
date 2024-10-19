@@ -105,7 +105,9 @@ watch(isUserLoaded, (newValue) => {
                         <li>Joinded on: {{ currentAccount.CreateDate.split("T")[0] }}</li>
                         <li>Last online: {{ currentAccount.LastOnline.split("T")[0] }}</li>
                         <li>Credits: {{ currentAccount.Credits }}</li>
-                        <li>Address: {{ currentAccount.Credits }}</li>
+                        <li>Address:
+                            {{ `${currentAccount.Address.Street} ${currentAccount.Address.BuildingNumber}
+                            ${currentAccount.Address.City}` }}</li>
                     </ul>
                 </CardContent>
 

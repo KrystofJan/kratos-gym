@@ -6,6 +6,7 @@ import { CodedError, ErrorCode } from '../../errors';
 import { logger } from '../../utils';
 import { accountErrorHandler } from './account.error-handler';
 import { safeAwait } from '../../utils/utilities';
+import { Account } from './account.model';
 
 export class AccountController {
 
@@ -139,4 +140,25 @@ export class AccountController {
         const response = new OkResponse("found all data successfully", data);
         response.buildResponse(req, res)
     }
+
+
+    static async EditAccount(req: Request, res: Response) {
+        const id = Number(req.params["id"])
+        const body = req.body;
+        const model: Partial<Account> = new Account(body)
+        const [err, data] = await safeAwait(AccountService.SetAddressIdById(id, model));
+
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = accountErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        const response = new OkResponse("changed data successfully", data);
+        response.buildResponse(req, res)
+    }
+
 }
