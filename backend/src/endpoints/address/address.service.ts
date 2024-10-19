@@ -2,8 +2,6 @@ import { BasicQueryDatabase } from "../../database"
 import { logger } from "../../utils"
 import { Address } from "./address.model"
 import { safeAwait } from "../../utils/utilities"
-import { addressErrorHandler } from "./address.error-handler"
-import { StatusCodes } from "http-status-codes"
 import { CodedError, ErrorCode } from "../../errors/base.error"
 
 export class AddressService {

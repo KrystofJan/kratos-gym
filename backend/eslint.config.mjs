@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 
 export default [
     {
-        files: ["./src/*.{js,mjs,cjs,ts}"],
+        files: ["**/*.{js,mjs,cjs,ts}"],
     },
     {
         languageOptions: { globals: globals.node },
@@ -15,7 +15,8 @@ export default [
     {
         rules: {
             "no-console": "error",
-            "@typescript-eslint/no-explicit-any": "warn"
+            "@typescript-eslint/no-explicit-any": "warn",
+            "@typescript-eslint/no-unsafe-function-type": "off"
         }
     }
 ];

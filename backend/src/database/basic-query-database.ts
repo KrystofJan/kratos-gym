@@ -148,7 +148,7 @@ export class BasicQueryDatabase extends Database {
         const unInsertables = Reflect.getMetadata(DecoratorType.UNINSERTABLE, modelType.prototype);
 
         // Filter out null or undefined values from the body
-        const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
+        const filteredBody = Object.fromEntries(Object.entries(body).filter(([, value]) => value != null));
         const columns: string[] = Object.keys(filteredBody);
 
 
@@ -163,7 +163,7 @@ export class BasicQueryDatabase extends Database {
 
                 // Handle foreign key mapping
                 if (foreignKeyMap?.[columnMapped]) {
-                    const [_, fkPrototype] = foreignKeyMap[columnMapped];
+                    const [, fkPrototype] = foreignKeyMap[columnMapped];
                     const foreignKey = Reflect.getMetadata('primaryKey', fkPrototype);
                     const fieldMap = Reflect.getMetadata('fieldMap', fkPrototype.prototype);
 
@@ -214,7 +214,7 @@ export class BasicQueryDatabase extends Database {
         const unInsertables = Reflect.getMetadata(DecoratorType.UNINSERTABLE, modelType.prototype);
         const unUpdatables = Reflect.getMetadata(DecoratorType.UNUPDATABLE, modelType.prototype);
 
-        const filteredBody = Object.fromEntries(Object.entries(body).filter(([_, value]) => value != null));
+        const filteredBody = Object.fromEntries(Object.entries(body).filter(([, value]) => value != null));
 
         const processedData: IDictionary<any> = {};
 

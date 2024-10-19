@@ -1,5 +1,5 @@
 import { Column, PrimaryKey, Table } from "../../database";
-import { DatabaseType, IDictionary } from "../../utils/utilities";
+import { IDictionary } from "../../utils/utilities";
 import { Model } from "../Model";
 
 @Table("account")

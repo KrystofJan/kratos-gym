@@ -3,7 +3,6 @@ import { logger } from "../../utils"
 import { Machine } from "."
 import { safeAwait } from "../../utils/utilities"
 import { CodedError, ErrorCode } from "../../errors/base.error"
-import { ExerciseType } from "../exercise-type"
 
 export class MachineService {
 

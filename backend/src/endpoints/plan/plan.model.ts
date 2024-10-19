@@ -2,7 +2,6 @@ import { IDictionary } from '../../utils';
 import { Account } from '../account/account.model';
 import { Model } from '../Model';
 import { Column, UnInsertable, ManyToMany, ForeignKey, PrimaryKey, Table } from "../../database";
-import { Machine } from '../machine';
 import { MachinesInPlan } from './machines-in-plan.model';
 import { ExerciseType } from '../exercise-type';
 

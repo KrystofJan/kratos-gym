@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { AccountService } from './account.service';
 import { AddressService, Address } from '../address';
-import { CreatedResponse, CustomResponse, FailedResponse, OkResponse } from '../../request-utility';
-import { Account } from './account.model';
+import { FailedResponse, OkResponse } from '../../request-utility';
 import { CodedError, ErrorCode } from '../../errors';
 import { logger } from '../../utils';
 import { accountErrorHandler } from './account.error-handler';

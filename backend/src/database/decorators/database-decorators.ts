@@ -14,7 +14,14 @@ export enum DecoratorType {
     FOREIGN_PRIMARY_KEY_MAP = "fkToPkMap",
     FOREIGN_PRIMARY_OBJECT_KEY_MAP = "foToPkMap",
     FOREIGN_KEYS_KEYS = "fkk",
-    DIFERENTLY_NAMED_FOREIGN_KEYS = "differentFks"
+    DIFERENTLY_NAMED_FOREIGN_KEYS = "differentFks",
+    MANY_TO_MANY = "m2m"
+}
+
+interface ManyToManyData {
+    key: string,
+    refersTo: unknown,
+    tableName: string
 }
 
 export function Table(tableName: string) {
@@ -112,8 +119,16 @@ export function UnUpdatable() {
 export function Optional() {
 }
 
-export function ManyToMany(type: any, table: string) {
+export function ManyToMany(type: unknown, table: string) {
     return function(target: Model, propertyKey: string) {
+        const data: ManyToManyData = {
+            key: propertyKey,
+            refersTo: type,
+            tableName: table
+        }
 
+        const m2m = Reflect.getMetadata(DecoratorType.MANY_TO_MANY, target) || [];
+        m2m[propertyKey] = data
+        Reflect.defineMetadata(DecoratorType.MANY_TO_MANY, m2m, target);
     }
 }
