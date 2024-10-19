@@ -23,6 +23,6 @@ app.use(helmet())
 setRoutes(app)
 
 app.listen(PORT, () => {
-    logger.info(`Server asdasd is listening on port ${PORT}`)
+    logger.info(`Server asdasd is listening on http://localhost:${PORT}`)
 })
 

@@ -4,7 +4,6 @@ export interface DatabaseResponse<T> {
     Body: T;
 }
 
-// TODO: Dont use any
 export class DatabaseFoundSingle<T extends Model> implements DatabaseResponse<T> {
     public Body: T
     constructor(body: T) {

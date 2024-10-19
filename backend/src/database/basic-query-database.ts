@@ -152,7 +152,7 @@ export class BasicQueryDatabase extends Database {
         const columns: string[] = Object.keys(filteredBody);
 
 
-        const processedData: IDictionary<any> = {};
+        const processedData: IDictionary<SimpleDatabaseType> = {};
 
         try {
             for (const column of columns) {
@@ -216,7 +216,7 @@ export class BasicQueryDatabase extends Database {
 
         const filteredBody = Object.fromEntries(Object.entries(body).filter(([, value]) => value != null));
 
-        const processedData: IDictionary<any> = {};
+        const processedData: IDictionary<SimpleDatabaseType> = {};
 
         try {
             for (const [key, value] of Object.entries(filteredBody)) {

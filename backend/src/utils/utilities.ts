@@ -4,8 +4,8 @@ export interface IDictionary<T> {
     [key: string]: T
 }
 
-export type DatabaseType = number | string | boolean | Model | IDictionary<DatabaseType> | Model[];
-export type SimpleDatabaseType = number | string | boolean;
+export type SimpleDatabaseType = number | string | boolean | Date;
+export type DatabaseType = SimpleDatabaseType | Model | IDictionary<DatabaseType> | Model[];
 
 export async function safeAwait<T>(promise: Promise<T>): Promise<[Error, null] | [null, T]> {
     try {
