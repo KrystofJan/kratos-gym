@@ -11,7 +11,6 @@ export class ExerciseTypeService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(ExerciseType));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -29,7 +28,6 @@ export class ExerciseTypeService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectSpecific(ExerciseType, id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
         if (databaseResponse.Body === undefined) {
@@ -39,7 +37,6 @@ export class ExerciseTypeService {
         const model = new ExerciseType(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAccountById failed")
-            logger.error(err)
             throw err;
         }
         return model;
@@ -50,14 +47,12 @@ export class ExerciseTypeService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Insert(ExerciseType, body));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
         const model = new ExerciseType(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at CreateExerciseType failed")
-            logger.error(err)
             throw err;
         }
 
@@ -69,7 +64,6 @@ export class ExerciseTypeService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Update(ExerciseType, id, body));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -80,7 +74,6 @@ export class ExerciseTypeService {
         const model = new ExerciseType(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetExerciseTyoeById failed")
-            logger.error(err)
             throw err;
         }
 
@@ -92,7 +85,6 @@ export class ExerciseTypeService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Delete(ExerciseType, id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -108,7 +100,6 @@ export class ExerciseTypeService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectOnForeignTable(ExerciseType, "machine_exercise_type", "machine_id", id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 

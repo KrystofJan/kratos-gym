@@ -11,7 +11,6 @@ export class AddressService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(Address));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -29,7 +28,6 @@ export class AddressService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectSpecific(Address, id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
         if (databaseResponse.Body === undefined) {
@@ -39,7 +37,6 @@ export class AddressService {
         const model = new Address(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAddressById failed")
-            logger.error(err)
             throw err;
         }
         return model;
@@ -50,7 +47,6 @@ export class AddressService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Update(Address, id, body));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -61,7 +57,6 @@ export class AddressService {
         const model = new Address(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAddressById failed")
-            logger.error(err)
             throw err;
         }
 
@@ -74,7 +69,6 @@ export class AddressService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Delete(Address, id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -90,14 +84,12 @@ export class AddressService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Insert(Address, body));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
         const model = new Address(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at CreateAddress failed")
-            logger.error(err)
             throw err;
         }
 

@@ -14,7 +14,6 @@ export class PlanService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(Plan));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -32,7 +31,6 @@ export class PlanService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectSpecific(Plan, id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
         if (databaseResponse.Body === undefined) {
@@ -42,7 +40,6 @@ export class PlanService {
         const model = new Plan(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetPlanById failed")
-            logger.error(err)
             throw err;
         }
         return model;
@@ -53,7 +50,6 @@ export class PlanService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Update(Plan, id, body));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -64,7 +60,6 @@ export class PlanService {
         const model = new Plan(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetPlanById failed")
-            logger.error(err)
             throw err;
         }
 
@@ -77,7 +72,6 @@ export class PlanService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Delete(Plan, id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -93,14 +87,12 @@ export class PlanService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Insert(Plan, body));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
         const model = new Plan(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at CreatePlan failed")
-            logger.error(err)
             throw err;
         }
 
@@ -112,7 +104,6 @@ export class PlanService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectOnForeignTable(Machine, "plan_machine", "plan_machine.plan_id", id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -130,7 +121,6 @@ export class PlanService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectAttrIs(MachinesInPlan, id, "plan_id"))
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -155,7 +145,6 @@ export class PlanService {
         const db = new BasicQueryDatabase()
         const [databaseErr, databaseResponse] = await safeAwait(db.Insert(MachinesInPlan, body))
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -166,7 +155,6 @@ export class PlanService {
         const model = new MachinesInPlan(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at CreatePlan failed")
-            logger.error(err)
             throw err;
         }
 
@@ -177,7 +165,6 @@ export class PlanService {
         const db = new BasicQueryDatabase()
         const [databaseErr, databaseResponse] = await safeAwait(db.InsertManyToMany(Plan, planId, "plan_type", "exercise_type_id", typeId));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -193,7 +180,6 @@ export class PlanService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectOnForeignTable(ExerciseType, "plan_type", "plan_id", id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -211,7 +197,6 @@ export class PlanService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.DeleteManyToMany(Plan, planId, "plan_machine", "machine_id", machineId));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -227,7 +212,6 @@ export class PlanService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.DeleteManyToMany(Plan, planId, "plan_type", "exercise_type_id", typeId));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -244,7 +228,6 @@ export class PlanService {
         // TODO: figure this out... this does not work for some reason
         const [databaseErr, databaseResponse] = await safeAwait(db.Update(MachinesInPlan, planId, body, "machine_id", machineId));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -255,7 +238,6 @@ export class PlanService {
         const model = new MachinesInPlan(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetPlanById failed")
-            logger.error(err)
             throw err;
         }
 

@@ -36,7 +36,6 @@ export class BasicQueryDatabase extends Database {
             return new DatabaseFoundMultiple<T>(result);
         } catch (error) {
             const err = error as Error;
-            logger.error(err)
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
         }
     }
@@ -57,7 +56,6 @@ export class BasicQueryDatabase extends Database {
             return new DatabaseFoundSingle<T>(result);
         } catch (error) {
             const err = error as Error;
-            logger.error(err)
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
         }
     }
@@ -82,7 +80,6 @@ export class BasicQueryDatabase extends Database {
             return new DatabaseFoundSingle<T>(result[0]);
         } catch (error) {
             const err = error as Error;
-            logger.error(err)
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
         }
     }
@@ -108,7 +105,6 @@ export class BasicQueryDatabase extends Database {
             return new DatabaseFoundMultiple<T>(result);
         } catch (error) {
             const err = error as Error;
-            logger.error(err)
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
         }
     }
@@ -132,7 +128,6 @@ export class BasicQueryDatabase extends Database {
             return new DatabaseCreated<T>(result);
         } catch (error) {
             const err = error as Error;
-            logger.error(err)
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
         }
     }
@@ -177,7 +172,7 @@ export class BasicQueryDatabase extends Database {
             }
         } catch (error) {
             const err = error as Error;
-            logger.error(err);
+            logger.error(err)
             throw new CodedError(ErrorCode.INTERNAL_ERROR, "Error processing body data.");
         }
 
@@ -194,7 +189,6 @@ export class BasicQueryDatabase extends Database {
             return new DatabaseCreated<T>(result);
         } catch (error) {
             const err = error as Error;
-            logger.error(err)
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
         }
     }
@@ -234,7 +228,7 @@ export class BasicQueryDatabase extends Database {
             }
         } catch (error) {
             const err = error as Error;
-            logger.error(err);
+            logger.error(err)
             throw new CodedError(ErrorCode.INTERNAL_ERROR, "Error processing body data.");
         }
 
@@ -250,7 +244,6 @@ export class BasicQueryDatabase extends Database {
             return new DatabaseCreated<T>(result);
         } catch (error) {
             const err = error as Error;
-            logger.error(err);
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message);
         }
     }
@@ -278,7 +271,6 @@ export class BasicQueryDatabase extends Database {
                 throw error;
             }
             const err = error as Error;
-            logger.error(err);
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message);
         }
     }
@@ -310,7 +302,6 @@ export class BasicQueryDatabase extends Database {
                 throw error;
             }
             const err = error as Error;
-            logger.error(err);
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message);
         }
     }

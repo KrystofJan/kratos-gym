@@ -11,7 +11,6 @@ export class MachineService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(Machine));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -29,7 +28,6 @@ export class MachineService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectSpecific(Machine, id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
         if (databaseResponse.Body === undefined) {
@@ -39,7 +37,6 @@ export class MachineService {
         const model = new Machine(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetMachineById failed")
-            logger.error(err)
             throw err;
         }
         return model;
@@ -50,7 +47,6 @@ export class MachineService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Update(Machine, id, body));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -61,7 +57,6 @@ export class MachineService {
         const model = new Machine(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetMachineById failed")
-            logger.error(err)
             throw err;
         }
 
@@ -74,7 +69,6 @@ export class MachineService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Delete(Machine, id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -89,7 +83,6 @@ export class MachineService {
         const db = new BasicQueryDatabase()
         const [databaseErr, databaseResponse] = await safeAwait(db.InsertManyToMany(Machine, machineId, "machine_exercise_type", "exercise_type_id", typeId));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -105,14 +98,12 @@ export class MachineService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Insert(Machine, body));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
         const model = new Machine(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at CreateMachine failed")
-            logger.error(err)
             throw err;
         }
 

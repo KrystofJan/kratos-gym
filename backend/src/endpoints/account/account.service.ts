@@ -13,7 +13,6 @@ export class AccountService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(Account));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -31,7 +30,6 @@ export class AccountService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectSpecific(Account, id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
         if (databaseResponse.Body === undefined) {
@@ -41,7 +39,6 @@ export class AccountService {
         const model = new Account(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAccountById failed")
-            logger.error(err)
             throw err;
         }
         return model;
@@ -53,14 +50,12 @@ export class AccountService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Update(Account, id, body));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
         const model = new Account(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAccountById failed")
-            logger.error(err)
             throw err;
         }
 
@@ -76,7 +71,6 @@ export class AccountService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectAttrIs(Account, clerkId, colMap["ClerkId"]));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -87,7 +81,6 @@ export class AccountService {
         const model = new Account(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAccountById failed")
-            logger.error(err)
             throw err;
         }
         return model;

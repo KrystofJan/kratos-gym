@@ -11,7 +11,6 @@ export class ReservationService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(Reservation));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -29,7 +28,6 @@ export class ReservationService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectSpecific(Reservation, id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
         if (databaseResponse.Body === undefined) {
@@ -39,7 +37,6 @@ export class ReservationService {
         const model = new Reservation(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetReservationById failed")
-            logger.error(err)
             throw err;
         }
         return model;
@@ -50,7 +47,6 @@ export class ReservationService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Update(Reservation, id, body));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -61,7 +57,6 @@ export class ReservationService {
         const model = new Reservation(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetReservationById failed")
-            logger.error(err)
             throw err;
         }
 
@@ -74,7 +69,6 @@ export class ReservationService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Delete(Reservation, id));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
@@ -90,14 +84,12 @@ export class ReservationService {
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Insert(Reservation, body));
         if (databaseErr !== null) {
-            logger.error(databaseErr)
             throw databaseErr;
         }
 
         const model = new Reservation(databaseResponse.Body)
         if (!model) {
             const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at CreateReservation failed")
-            logger.error(err)
             throw err;
         }
 
