@@ -1,11 +1,17 @@
 # gym-reservation-system
-## TODO:
-- finish reverse proxy set up for local dev
-- finish clerk auth
-- fix colors on frontend
-- finish other endpoints
+## Update Nov 21. 2024
+* refactor backend to use the new structure
+* refactor frontend to utilize shadcn and typescript
+* Reservations won't work now, but this will be resolved in another PR
+* Made a docker image of the backend
+* Using Clerk for frontend authentication
+* dumped neon db for local dev
 
-
+### Next steps
+* [ ] Dockerize frontend
+* [ ] Make docker-compose for the backend with the database and the app
+* [ ] Make it so that the endpoints that require authentication get authenticated
+* [ ] The rest is in Clickup
 
 ## Update APR 01. 2024
 * Refactored the whole backend to typescript
