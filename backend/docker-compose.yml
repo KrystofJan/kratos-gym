@@ -9,10 +9,11 @@ services:
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
-      -'5432:5432'
+      - 5432:5432
   api:
     image: krystofjan/kratos-gym-be:1.0
     depends_on:
       - postgres
+    network_mode: "host"
     ports:
-      -'7000:7000'
+      - 7000:7000
