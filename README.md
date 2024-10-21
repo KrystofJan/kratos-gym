@@ -9,7 +9,7 @@
 
 ### Next steps
 * [ ] Dockerize frontend
-* [ ] Make docker-compose for the backend with the database and the app
+* [x] Make docker-compose for the backend with the database and the app
 * [ ] Make it so that the endpoints that require authentication get authenticated
 * [ ] The rest is in Clickup
 
