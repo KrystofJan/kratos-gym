@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: kratos-dev
+
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      -'5432:5432'
+  api:
+    image: krystofjan/kratos-gym-be:1.0
+    depends_on:
+      - postgres
+    ports:
+      -'7000:7000'
