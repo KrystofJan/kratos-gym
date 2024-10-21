@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, defineProps, onMounted } from 'vue';
 import { BaseService } from '@/services/base/ApiService';
 import Step from './Step.vue';

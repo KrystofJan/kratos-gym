@@ -1,0 +1,23 @@
+{
+    "include": ["src/**/*.ts", "src/**/*.tsx"],
+    "compilerOptions": {
+            "esModuleInterop": true,
+    },
+    "ts-node": {
+        "transpileOnly": true,
+        "compilerOptions": {
+            "target": "ES2022",
+            "module": "NodeNext",
+            "moduleResolution": "NodeNext",
+            "strict": true,
+            "esModuleInterop": true,
+            "skipLibCheck": true,
+            "forceConsistentCasingInFileNames": true,
+            "resolveJsonModule": true,
+            "experimentalDecorators": true,
+            "emitDecoratorMetadata": true,
+            "useDefineForClassFields": false
+        },
+        "esm": true
+    }
+}

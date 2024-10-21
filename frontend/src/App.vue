@@ -1,28 +1,50 @@
-<script setup>
+<script setup lang="ts">
+import { onMounted, ref, watch } from 'vue';
+import { useUser } from 'vue-clerk'
 import AppHeader from './components/Header/Header.vue';
 import Footer from './components/Footer/Footer.vue';
+import { currentAccount, fetchAccount } from "./store/accountStore";
 
-const stickyScroll = () => {
-  const navbar = document.querySelector('.NavMenu');
+const { user, isLoaded: isUserLoaded } = useUser();
 
-  if (window.scrollY > navbar.offsetTop){
-      navbar.classList.add('sticky');
-  }
-  else{
-    navbar.classList.remove('sticky');
-  }
-}
+const loadAccount = async () => {
+    if (!currentAccount.value && user.value) {
+        console.log("I'm trying")
+        try {
+            await fetchAccount(user.value.id);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+};
 
-window.addEventListener('scroll', stickyScroll);
+onMounted(async () => {
+    if (isUserLoaded.value) {
+        await loadAccount();
+    }
+});
+
+watch(isUserLoaded, async (newValue) => {
+    if (newValue) {
+        await loadAccount();
+    }
+});
+
+watch(currentAccount, async (newValue) => {
+    if (newValue) {
+        await loadAccount();
+    }
+});
+
 </script>
 <template>
     <AppHeader />
-    <router-view v-slot="{Component}">
-      <component :is="Component"/>
+    <router-view v-slot="{ Component }">
+        <component :is="Component" />
     </router-view>
     <Footer />
 </template>
 
-<style scoped>
-
+<style scoped lang="scss">
+@import './styles/sass/base/color-define.scss'
 </style>

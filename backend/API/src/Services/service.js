@@ -1,1 +1,0 @@
-// call db request from a dao and return model
