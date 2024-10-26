@@ -23,6 +23,7 @@ jobs:
 
       - name: Pull Docker Image
         run: |
+          echo "Pulling Docker image with tag: ${{ env.docker_tag }}"
           docker pull krystofjan/kratos-gym-be:${{ env.docker_tag }}
 
       - name: Run Tests in Docker Container

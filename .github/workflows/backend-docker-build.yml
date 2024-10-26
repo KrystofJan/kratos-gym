@@ -32,10 +32,11 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" == "push" ]]; then
             echo "tag=latest" >> $GITHUB_ENV
+            echo "::set-output name=tag::latest"
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "tag=pr-${{ github.event.number }}" >> $GITHUB_ENV
+            echo "::set-output name=tag::pr-${{ github.event.number }}"
           fi
-          echo "::set-output name=tag::${{ env.tag }}"  
 
       - name: build docker image
         run: |
