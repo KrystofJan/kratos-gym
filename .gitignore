@@ -1,6 +1,5 @@
 backend/db/.idea
-backend/node_modules
-backend/pgdata
+backend/API/node_modules
 Logs/
 frontend/.vscode
 node_modules

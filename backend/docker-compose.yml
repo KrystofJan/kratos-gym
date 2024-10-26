@@ -11,7 +11,7 @@ services:
     ports:
       - 5432:5432
   api:
-    image: krystofjan/kratos-gym-be:latest
+    image: krystofjan/kratos-gym-be:1.0
     depends_on:
       - postgres
     network_mode: "host"
