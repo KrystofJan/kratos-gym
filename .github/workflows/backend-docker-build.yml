@@ -1,13 +1,19 @@
-name: Build docker image
+name: Build Docker Image
 on:
   push:
     branches: [master, main]
+    paths:
+      - 'backend/**' 
   pull_request:
     types: [opened, synchronize]
+    paths:
+      - 'backend/**'  
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      docker_tag: ${{ steps.docker_tag.outputs.tag }}  
     steps: 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -29,6 +35,7 @@ jobs:
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "tag=pr-${{ github.event.number }}" >> $GITHUB_ENV
           fi
+          echo "::set-output name=tag::${{ env.tag }}"  
 
       - name: build docker image
         run: |
