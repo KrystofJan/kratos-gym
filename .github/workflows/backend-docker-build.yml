@@ -26,5 +26,5 @@ jobs:
 
       - name: Push Docker imag
         run: |
-          docker push kratos-gym-be:latest
+          docker push krystofjan/kratos-gym-be:latest
 

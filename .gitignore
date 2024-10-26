@@ -2,6 +2,5 @@ backend/db/.idea
 backend/node_modules
 backend/pgdata
 Logs/
-frontend/.vscode
 node_modules
 .env
