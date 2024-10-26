@@ -22,9 +22,9 @@ jobs:
 
       - name: build docker image
         run: |
-          docker build -t krystofjan/kratos-gym-be:tagname ./backend
+          docker build -t krystofjan/kratos-gym-be:latest ./backend
 
       - name: Push Docker imag
         run: |
-          docker push my-backend-image:latest
+          docker push kratos-gym-be:latest
 
