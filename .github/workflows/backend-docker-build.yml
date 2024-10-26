@@ -1,11 +1,14 @@
-name: Build docker image
+name: Build Docker Image
 on:
   push:
     branches: [master, main]
+    paths:
+      - 'backend/**' 
   pull_request:
     types: [opened, synchronize]
+    paths:
+      - 'backend/**'  
 
-jobs:
   build:
     runs-on: ubuntu-latest
     steps: 
