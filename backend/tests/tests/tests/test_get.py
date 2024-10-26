@@ -24,7 +24,9 @@ ENDPOINTS = [
 class TestGet:
     @pytest.mark.parametrize("endpoint", ENDPOINTS)
     def test_endpoint_status_2xx(self, endpoint):
-        """Test that each endpoint returns a 2xx status code."""
+        """
+        Test that each endpoint returns a 2xx status code.
+        """
         url = f"{BASE_URL}{endpoint}"
         print(url)
         response = requests.get(url)
