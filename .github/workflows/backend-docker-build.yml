@@ -69,4 +69,4 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}/backend/tests:/app/tests \
             krystofjan/kratos-gym-be:${{ needs.build.outputs.docker_tag }} \
-            sh -c "pip install -r requirements.txt && pytest"
+            sh -c "cd /app/tests && apt-get update && apt-get install -y python3-pip && python3 -m pip install -r requirements.txt && python3 -m pytest"
