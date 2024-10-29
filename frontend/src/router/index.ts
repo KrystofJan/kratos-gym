@@ -36,6 +36,12 @@ const routes = [
         path: '/form-test',
         name: 'Form Test',
         component: () => import('@/views/pages/FormKitTest/FormKitTest.vue')
+    },
+
+    {
+        path: '/reservation/:id',
+        name: 'Form Test',
+        component: () => import('@/components/Reservation/Detail.vue')
     }
 ];
 

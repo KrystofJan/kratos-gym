@@ -4,6 +4,7 @@ export const UserRoleOptions = {
     CUSTOMER: 'c',
     TRAINER: 'T',
     EMPLOYEE: 'E',
+    AUTHOR: 'A',
     NOTKNOWN: '/',
 } as const;
 

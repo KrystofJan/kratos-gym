@@ -132,7 +132,8 @@ export class PlanService {
             if (databaseResponse instanceof DatabaseFoundMultiple) {
                 const models = databaseResponse.Body.map((model: MachinesInPlan) => new MachinesInPlan(model))
                 return models;
-            } return [new MachinesInPlan(databaseResponse.Body)];
+            }
+            return [new MachinesInPlan(databaseResponse.Body)];
         } catch (err) {
             logger.error(err)
             throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllAccount failed")

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Account } from '../../../support/types'
+import { Account, UserRole, UserRoleOptions } from '../../../support/types'
 import {
     Card,
     CardContent,
@@ -16,16 +16,28 @@ import {
 } from '../../../components/shadcn/ui/avatar'
 
 
-const roleDictionary = {
-    "c": "Customer",
-    "t": "Trainer",
-    "e": "Employee"
-};
+const roleDictionary = new Map([
+    ["c", "Customer"],
+    ["t", "Trainer"],
+    ["e", "Employee"],
+    ["a", "Author"]
+]);
 
 interface Props {
-    currentAccount: Account
+    currentAccount: Account,
+    role?: UserRole
 }
+
+
 const props = defineProps<Props>()
+
+const handleRole = () => {
+    switch (props.role) {
+        case UserRoleOptions.AUTHOR: return roleDictionary.get("a");
+        case UserRoleOptions.TRAINER: return roleDictionary.get("t");
+        default: return roleDictionary.get(props.currentAccount.Role)
+    }
+}
 </script>
 
 <template>
@@ -39,7 +51,7 @@ const props = defineProps<Props>()
                 <CardTitle>
                     {{ `${currentAccount.FirstName} ${currentAccount.LastName}` }}
                 </CardTitle>
-                <CardDescription>{{ roleDictionary[currentAccount.Role] }}</CardDescription>
+                <CardDescription>{{ handleRole() }}</CardDescription>
             </div>
         </CardHeader>
         <CardContent>
@@ -49,7 +61,7 @@ const props = defineProps<Props>()
                 <li>Joinded on: {{ currentAccount.CreateDate.split("T")[0] }}</li>
                 <li>Last online: {{ currentAccount.LastOnline.split("T")[0] }}</li>
                 <li>Credits: {{ currentAccount.Credits }}</li>
-                <li>Address:
+                <li v-if="currentAccount.Address">Address:
                     {{ `${currentAccount.Address.Street} ${currentAccount.Address.BuildingNumber}
                     ${currentAccount.Address.City}` }}</li>
             </ul>

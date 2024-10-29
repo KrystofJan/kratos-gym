@@ -18,9 +18,9 @@ const loadAccount = async () => {
         try {
             await fetchAccount(user.value.id);
             progressAmount.value = 100
-        } catch (error) {
+        } catch (err) {
             error.value = true;
-            console.error('Error fetching data:', error);
+            console.error('Error fetching data:', err);
         }
     }
     isLoading.value = false;
