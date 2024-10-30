@@ -1,11 +1,10 @@
-import { Account } from './account'
+import { Account, ExerciseType, MachinesInPlan } from '..'
 
 export interface Plan {
     PlanId: number;
     PlanName: string;
     User: Account | undefined;
-    // TODO: finish
-    // Machines: MachinesInPlan[]
-    // ExerciseTypes: ExerciseType[]
+    Machines: MachinesInPlan[]
+    ExerciseTypes: ExerciseType[]
 }
 

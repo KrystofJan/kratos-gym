@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import StickyText from './Item/StickyText.vue';
+import { StickyText } from '@/components';
+import { StickyTextData } from '@/support';
 import { ref, onMounted } from 'vue';
 import content from '@/siteContent/_hp-sticky-text-content.json';
 
-const TextData = ref([]);
+
+const TextData = ref<StickyTextData[]>([]);
 const isLoaded = ref(false);
 const fetchData = async () => {
     TextData.value = content;

@@ -9,11 +9,11 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '../../../components/shadcn/ui/table'
+} from '@/components/shadcn/ui/table'
 import {
     Button
-} from '../../../components/shadcn/ui/button'
-import { currentAccount } from "../../../store/accountStore"
+} from '@/components/shadcn/ui/button'
+import { currentAccount } from "@/store/accountStore"
 import { Reservation } from '@/support/types';
 import { ReservationService } from '@/support/services';
 

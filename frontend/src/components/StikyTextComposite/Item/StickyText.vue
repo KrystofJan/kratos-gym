@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
 
-const prop = defineProps(['data']);
-
+import {
+    StickyTextData
+} from '@/support'
+interface Props {
+    data: StickyTextData
+}
+const props = defineProps<Props>()
 </script>
 
 <template>

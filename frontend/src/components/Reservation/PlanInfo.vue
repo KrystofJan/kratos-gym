@@ -6,8 +6,8 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from '@/components/shadcn/ui/card'
-import { Reservation } from '@/support/types';
+} from '@/components/shadcn/'
+import { Reservation } from '@/support';
 
 interface Props {
     reservation: Reservation
@@ -27,7 +27,7 @@ const props = defineProps<Props>()
             </CardDescription>
         </CardHeader>
 
-        <CardContent>
+        <CardContent class="flex gap-4 justify-between">
             <ul>
                 <li>
                     Date of reservation: {{ reservation.ReservationTime }}
@@ -43,6 +43,12 @@ const props = defineProps<Props>()
                     PlanName: {{ reservation.Plan?.PlanName }}
                 </li>
             </ul>
+            <div class="flex flex-row gap-4 flex-wrap">
+                <div v-for="(item, index) in reservation.Plan?.ExerciseTypes" :key="index">
+                    <!-- So here I want to add some icons based on the category... I can't find any icons yet but I'll look into it -->
+                    {{ item.Category }}
+                </div>
+            </div>
         </CardContent>
     </Card>
 </template>

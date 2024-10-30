@@ -111,5 +111,23 @@ export class ExerciseTypeService {
             throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllAccount failed")
         }
     }
+
+
+    static async GetTypesByPlanId(id: number): Promise<ExerciseType[]> {
+        const db = new BasicQueryDatabase()
+
+        const [databaseErr, databaseResponse] = await safeAwait(db.SelectOnForeignTable(ExerciseType, "plan_type", "plan_id", id));
+        if (databaseErr !== null) {
+            throw databaseErr;
+        }
+
+        try {
+            const models = databaseResponse.Body.map((model: ExerciseType) => new ExerciseType(model))
+            return models;
+        } catch (err) {
+            logger.error(err)
+            throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllAccount failed")
+        }
+    }
 }
 

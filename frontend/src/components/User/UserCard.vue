@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Account, UserRole, UserRoleOptions } from '../../../support/types'
+import { Account, UserRole, UserRoleOptions } from '@/support/types'
 import {
     Card,
     CardContent,
@@ -7,13 +7,13 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from '../../../components/shadcn/ui/card'
+} from '@/components/shadcn/ui/card'
 
 import {
     Avatar,
     AvatarFallback,
     AvatarImage,
-} from '../../../components/shadcn/ui/avatar'
+} from '@/components/shadcn/ui/avatar'
 
 
 const roleDictionary = new Map([
@@ -54,7 +54,7 @@ const handleRole = () => {
                 <CardDescription>{{ handleRole() }}</CardDescription>
             </div>
         </CardHeader>
-        <CardContent>
+        <CardContent v-if="!role">
             <ul>
                 <li>Phone: {{ currentAccount.PhoneNumber ?? "-" }}</li>
                 <li>Email: {{ currentAccount.Email }}</li>

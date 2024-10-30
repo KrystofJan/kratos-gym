@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, watchEffect } from 'vue';
 import { SignedIn, SignedOut, useUser } from 'vue-clerk'
-import { currentAccount, fetchAccount } from "../../../store/accountStore";
+import { currentAccount, fetchAccount } from "@/store/accountStore";
 import { Alert, AlertDescription, AlertTitle } from '@/components/shadcn/ui/alert'
 import { Progress } from '@/components/shadcn/ui/progress'
-import UserCard from './UserCard.vue'
-import SessionsGrid from './SessionsGrid.vue'
+import UserCard from '@/components/User/UserCard.vue'
+import SessionsGrid from '@/components/User/SessionsGrid.vue'
 
 const isLoading = ref(true);
 const error = ref(false)

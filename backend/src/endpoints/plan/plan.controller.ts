@@ -57,7 +57,7 @@ export class PlanController {
 
             plan.Machines = machines
 
-            const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByMachineId(plan.PlanId))
+            const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByPlanId(plan.PlanId))
 
             if (typeErr !== null) {
                 logger.error(typeErr)

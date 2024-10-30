@@ -3,13 +3,13 @@ import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import type { Ref } from "vue";
 import { SignedIn, SignedOut, useUser } from 'vue-clerk'
-import { currentAccount, createAccount as createAccountRequest, fetchAccount } from "../../../store/accountStore";
-import { AccountCreate, Address } from "../../../support/types";
-import { AddressService, AccountService } from '../../../support/services'
+import { currentAccount, createAccount as createAccountRequest, fetchAccount } from "@/store/accountStore";
+import { AccountCreate, Address } from "@/support/types";
+import { AddressService, AccountService } from '@/support/services'
 import { toTypedSchema } from "@vee-validate/zod"
 import * as z from "zod"
 import { useForm } from 'vee-validate'
-import { AutoForm } from '../../../components/shadcn/ui/auto-form'
+import { AutoForm } from '@/components/shadcn/ui/auto-form'
 
 const isLoading = ref(true);
 const loadMessage = ref('Loading...')
