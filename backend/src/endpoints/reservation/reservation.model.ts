@@ -64,7 +64,10 @@ export class Reservation extends Model {
             }
         }
 
-        if (jsonData["plan"]) {
+        if (jsonData["Plan"]) {
+            this.Plan = new Plan(jsonData["Plan"]);
+        }
+        else if (jsonData["plan"]) {
             this.Plan = new Plan(jsonData["plan"]);
         } else {
             this.Plan = new Plan(jsonData)

@@ -15,6 +15,10 @@ ReservationRouter.post('/', async (req: Request, res: Response) => {
     await ReservationController.Create(req, res)
 });
 
+ReservationRouter.post('/full', async (req: Request, res: Response) => {
+    await ReservationController.CreateFullReservation(req, res)
+});
+
 ReservationRouter.delete('/:id', async (req: Request, res: Response) => {
     await ReservationController.DeleteById(req, res)
 });

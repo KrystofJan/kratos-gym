@@ -25,7 +25,7 @@ export class Plan extends Model {
 
 
     @UnInsertable()
-    @ManyToMany(MachinesInPlan, "plan_types")
+    @ManyToMany(ExerciseType, "plan_types")
     public ExerciseTypes: ExerciseType[]
 
     constructor(jsonData: IDictionary<any>) {
@@ -41,6 +41,15 @@ export class Plan extends Model {
             }
         }
         this.Machines = []
+        if (jsonData["Machines"]) {
+            for (const machine of jsonData["Machines"])
+                this.Machines.push(new MachinesInPlan(machine))
+        }
         this.ExerciseTypes = []
+
+        if (jsonData["ExerciseTypes"]) {
+            for (const type of jsonData["ExerciseTypes"])
+                this.ExerciseTypes.push(new ExerciseType(type))
+        }
     }
 }
