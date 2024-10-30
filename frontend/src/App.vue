@@ -4,6 +4,7 @@ import { useUser } from 'vue-clerk'
 import AppHeader from './components/Header/Header.vue';
 import Footer from './components/Footer/Footer.vue';
 import { currentAccount, fetchAccount } from "./store/accountStore";
+import Toaster from '@/components/shadcn/ui/toast/Toaster.vue'
 
 const { user, isLoaded: isUserLoaded } = useUser();
 
@@ -43,6 +44,7 @@ watch(currentAccount, async (newValue) => {
         <component :is="Component" />
     </router-view>
     <Footer />
+    <Toaster />
 </template>
 
 <style scoped lang="scss">

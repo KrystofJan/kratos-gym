@@ -1,5 +1,5 @@
 import { Account } from "./account";
-import { Plan } from "./plan"
+import { Plan, PlanPost } from "./plan"
 export interface Reservation {
     ReservationId: number;
     AmountOfPeople: number;
@@ -9,3 +9,9 @@ export interface Reservation {
     Plan: Plan | undefined;
 }
 
+export interface ReservationPost {
+    AmountOfPeople: number;
+    ReservationTime: Date;
+    CustomerId: number;
+    Plan: PlanPost;
+}

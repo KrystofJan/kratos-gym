@@ -6,10 +6,10 @@ import { CodedError, ErrorCode } from "../../errors/base.error"
 
 export class MachineService {
 
-    static async GetAllMachines(): Promise<Array<Machine>> {
+    static async GetAllMachines(limit?: number, page?: number): Promise<Array<Machine>> {
         const db = new BasicQueryDatabase()
 
-        const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(Machine));
+        const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(Machine, limit, page));
         if (databaseErr !== null) {
             throw databaseErr;
         }

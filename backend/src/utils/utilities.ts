@@ -1,4 +1,4 @@
-import { Model } from "../endpoints/Model"
+import { Model } from "../endpoints/base"
 
 export interface IDictionary<T> {
     [key: string]: T

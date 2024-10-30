@@ -1,9 +1,19 @@
+import { Time } from "@internationalized/date";
 
 export interface MachinesInPlan {
-    PlanId: number;
+    PlanId?: number;
     MachineId: number;
     Sets: number;
     Reps: number;
-    StartTime: Date;
-    EndTime: Date;
+    StartTime: Time;
+    EndTime: Time;
+}
+
+export interface MachinesInPlanPost {
+    PlanId?: number;
+    MachineId: number;
+    Sets: number;
+    Reps: number;
+    StartTime: string;
+    EndTime: string;
 }

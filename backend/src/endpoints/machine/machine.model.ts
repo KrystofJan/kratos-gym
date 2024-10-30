@@ -1,5 +1,5 @@
 import { IDictionary } from "../../utils"
-import { Model } from '../Model'
+import { Model } from '../base'
 import {
     Column,
     ManyToMany,

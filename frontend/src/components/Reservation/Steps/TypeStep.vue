@@ -1,0 +1,118 @@
+<script setup lang="ts">
+import { ref, onMounted, computed } from 'vue';
+import Step from '../Step.vue';
+import { ExerciseCategory, ExerciseCategoryService } from '@/support';
+import { CommandEmpty, CommandGroup, CommandItem, CommandList } from '@/components/shadcn/ui/command'
+import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/shadcn/ui/tags-input'
+import { ComboboxAnchor, ComboboxContent, ComboboxInput, ComboboxPortal, ComboboxRoot } from 'radix-vue'
+import {
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/shadcn/ui/form'
+import { TypedSchema } from 'vee-validate';
+
+
+interface Props {
+    setFieldValue: (field: any, value: any) => void
+}
+
+const props = defineProps<Props>()
+
+const types = ref<ExerciseCategory[]>([])
+
+const fetchData = async () => {
+    try {
+        const data = await new ExerciseCategoryService().FetchExerciseCategory({ limit: 100 })
+        types.value = data
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
+
+
+const builderText = ref({
+    heading: 'Now Pick types of workout that are contained here',
+    text: '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>'
+});
+
+
+const modelValue = ref<ExerciseCategory[]>([])
+const open = ref(false)
+const searchTerm = ref('')
+
+const filteredCategories = computed(
+    () =>
+        types.value.filter(i => !modelValue.value.filter(j => j.CategoryName === i.CategoryName)[0])
+)
+onMounted(async () => {
+    await fetchData();
+});
+
+const removeItem = (item: ExerciseCategory) => {
+    modelValue.value = modelValue.value.filter(x => x.CategoryId !== item.CategoryId)
+
+    props.setFieldValue(`exerciseCategories`, modelValue.value)
+}
+</script>
+
+<template>
+    <Step :builderText="builderText" :builderItemClasses="'BuilderItemGrid'">
+        <FormField name="exerciseCategories">
+            <FormItem>
+                <FormLabel>Fruits</FormLabel>
+                <FormControl>
+                    <TagsInput class="px-0 gap-0 w-80" :model-value="modelValue">
+                        <div class="flex gap-2 flex-wrap items-center px-3">
+                            <TagsInputItem v-for="item in modelValue" :key="item.CategoryId" :value="item.CategoryName">
+                                <TagsInputItemText />
+                                <TagsInputItemDelete @click="removeItem(item)" />
+                            </TagsInputItem>
+                        </div>
+
+                        <ComboboxRoot v-model="modelValue" v-model:open="open" v-model:search-term="searchTerm"
+                            class="w-full">
+                            <ComboboxAnchor as-child>
+                                <ComboboxInput placeholder="Category..." as-child>
+                                    <TagsInputInput class="w-full px-3" :class="modelValue.length > 0 ? 'mt-2' : ''"
+                                        @keydown.enter.prevent />
+                                </ComboboxInput>
+                            </ComboboxAnchor>
+
+                            <ComboboxPortal>
+                                <ComboboxContent>
+                                    <CommandList position="popper"
+                                        class="w-[--radix-popper-anchor-width] rounded-md mt-2 border bg-popover text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2">
+                                        <CommandEmpty />
+                                        <CommandGroup>
+                                            <CommandItem v-for="category in filteredCategories"
+                                                :key="category.CategoryId" :value="category.CategoryName"
+                                                @select.prevent="(ev) => {
+                                                    modelValue.push(category)
+
+                                                    setFieldValue(`exerciseCategories`, modelValue)
+                                                    if (filteredCategories.length === 0) {
+                                                        open = false
+                                                    }
+                                                }">
+                                                {{ category.CategoryName }}
+                                            </CommandItem>
+                                        </CommandGroup>
+                                    </CommandList>
+                                </ComboboxContent>
+                            </ComboboxPortal>
+                        </ComboboxRoot>
+                    </TagsInput>
+                </FormControl>
+                <FormDescription>
+                    Select your favorite fruits.
+                </FormDescription>
+                <FormMessage />
+            </FormItem>
+        </FormField>
+    </Step>
+</template>
+
+<style lang="scss"></style>

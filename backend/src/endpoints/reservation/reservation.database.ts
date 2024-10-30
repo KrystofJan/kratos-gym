@@ -1,6 +1,6 @@
 import { IDictionary } from '../../utils';
 import { DatabaseDeleted, DatabaseFoundSingle, DatabaseFoundMultiple, DatabaseCreated } from '../../database/database-response';
-import { Model } from '../Model';
+import { Model } from '../base';
 import { Reservation } from './reservation.model';
 import { logger } from '../../utils/logger';
 import { DatabaseType, SimpleDatabaseType } from '../../utils/utilities';
@@ -10,6 +10,7 @@ import { DecoratorType } from '../../database/decorators/database-decorators'
 import { Plan } from '../plan';
 import { MachinesInPlan } from '../plan/machines-in-plan.model';
 import { ExerciseType } from '../exercise-type';
+import { ExerciseCategory } from '../exercise-category';
 
 export class ReservationDatabase extends Database {
     constructor() {
@@ -106,18 +107,18 @@ export class ReservationDatabase extends Database {
 
                 planModel.Machines = machines
 
-                const typePKey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, ExerciseType);
-                for (const exType of body.Plan.ExerciseTypes) {
+                const typePKey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, ExerciseCategory);
+                for (const exType of body.Plan.ExerciseCategories) {
                     const [type] = await sql<Model[]>`
-                        insert into ${sql("plan_type")} 
+                        insert into ${sql("plan_category")} 
                         (${this.sql(typePKey)}, ${this.sql("plan_id")})
-                        values (${exType.ExerciseTypeId}, ${planModel.PlanId})
+                        values (${exType.CategoryId}, ${planModel.PlanId})
                         returning *
                     `
-                    types.push(new ExerciseType(type))
+                    types.push(new ExerciseCategory(type))
                 }
 
-                planModel.ExerciseTypes = types
+                planModel.ExerciseCategories = types
                 body.Plan = planModel
 
                 const [resTableName, resProcessedData, resColumnNames] = await this.ProcessInsertData(Reservation, body)

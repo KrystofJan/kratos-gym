@@ -1,9 +1,9 @@
 import { IDictionary } from '../../utils';
 import { Account } from '../account/account.model';
-import { Model } from '../Model';
+import { Model } from '../base';
 import { Column, UnInsertable, ManyToMany, ForeignKey, PrimaryKey, Table } from "../../database";
 import { MachinesInPlan } from './machines-in-plan.model';
-import { ExerciseType } from '../exercise-type';
+import { ExerciseCategory } from '../exercise-category';
 
 @Table("plan")
 @PrimaryKey("plan_id")
@@ -25,8 +25,8 @@ export class Plan extends Model {
 
 
     @UnInsertable()
-    @ManyToMany(ExerciseType, "plan_types")
-    public ExerciseTypes: ExerciseType[]
+    @ManyToMany(ExerciseCategory, "plan_category")
+    public ExerciseCategories: ExerciseCategory[]
 
     constructor(jsonData: IDictionary<any>) {
         super();
@@ -45,11 +45,11 @@ export class Plan extends Model {
             for (const machine of jsonData["Machines"])
                 this.Machines.push(new MachinesInPlan(machine))
         }
-        this.ExerciseTypes = []
+        this.ExerciseCategories = []
 
-        if (jsonData["ExerciseTypes"]) {
-            for (const type of jsonData["ExerciseTypes"])
-                this.ExerciseTypes.push(new ExerciseType(type))
+        if (jsonData["ExerciseCategories"]) {
+            for (const type of jsonData["ExerciseCategories"])
+                this.ExerciseCategories.push(new ExerciseCategory(type))
         }
     }
 }

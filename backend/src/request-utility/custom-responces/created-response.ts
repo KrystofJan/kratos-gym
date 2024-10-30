@@ -2,7 +2,7 @@ import { CustomResponse } from './response';
 import { ResponseStatus } from '../common/response-status';
 import { PostResponseBody, PostMultipleResponseBody } from './response-body';
 import { StatusCodes } from 'http-status-codes';
-import { Model } from '../../endpoints/Model';
+import { Model } from '../../endpoints/base';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 
 export class CreatedResponse implements CustomResponse {

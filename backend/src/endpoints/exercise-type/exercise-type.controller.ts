@@ -7,6 +7,7 @@ import { CodedError, ErrorCode } from '../../errors';
 import { exerciseTypeErrorHandler } from '.';
 import { safeAwait } from '../../utils/utilities';
 import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response';
+import { ExerciseCategoryService } from '../exercise-category';
 
 
 export class ExerciseTypeController {
@@ -22,13 +23,34 @@ export class ExerciseTypeController {
             return;
         }
 
+        for (const type of data) {
+            if (!type.Category || !type.Category.CategoryId) {
+                const error = new CodedError(ErrorCode.MAPPING_ERROR, "Account address id is not null");
+                logger.error(error)
+                const statusCode = exerciseTypeErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            const [err, category] = await safeAwait(ExerciseCategoryService.GetExerciseCategoryById(Number(type.Category.CategoryId)));
+            if (err !== null) {
+                logger.error(err)
+                const error = err as CodedError;
+                const statusCode = exerciseTypeErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            type.Category = category
+        }
+
         const response = new OkResponse("found all data successfully", data);
         response.buildResponse(req, res)
     }
 
     static async FindById(req: Request, res: Response) {
         const id = Number(req.params["id"])
-        const [err, data] = await safeAwait(ExerciseTypeService.GetExerciseTypesById(id));
+        const [err, type] = await safeAwait(ExerciseTypeService.GetExerciseTypesById(id));
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError;
@@ -37,7 +59,26 @@ export class ExerciseTypeController {
             response.buildResponse(req, res)
             return;
         }
-        const response = new OkResponse("found all data successfully", data);
+
+        if (!type.Category || !type.Category.CategoryId) {
+            const error = new CodedError(ErrorCode.MAPPING_ERROR, "Account address id is not null");
+            logger.error(error)
+            const statusCode = exerciseTypeErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        const [catErr, category] = await safeAwait(ExerciseCategoryService.GetExerciseCategoryById(Number(type.Category.CategoryId)));
+        if (catErr !== null) {
+            logger.error(catErr)
+            const error = catErr as CodedError;
+            const statusCode = exerciseTypeErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        type.Category = category
+        const response = new OkResponse("found all data successfully", type);
         response.buildResponse(req, res)
     }
 
@@ -52,6 +93,26 @@ export class ExerciseTypeController {
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
+        }
+        for (const type of data) {
+            if (!type.Category || !type.Category.CategoryId) {
+                const error = new CodedError(ErrorCode.MAPPING_ERROR, "Account address id is not null");
+                logger.error(error)
+                const statusCode = exerciseTypeErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            const [err, category] = await safeAwait(ExerciseCategoryService.GetExerciseCategoryById(Number(type.Category.CategoryId)));
+            if (err !== null) {
+                logger.error(err)
+                const error = err as CodedError;
+                const statusCode = exerciseTypeErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            type.Category = category
         }
         const response = new OkResponse("found all data successfully", data);
         response.buildResponse(req, res)

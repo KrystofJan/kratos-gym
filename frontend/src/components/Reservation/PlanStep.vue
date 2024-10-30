@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import Step from './Step.vue';
-import Plan from '@/store/PlanStore.js';
-import AmmountOfPeopleStep from '@/components/Reservation/AmmountOfPeopleStep.vue';
-import Reservation from '@/store/ReservationStore.js';
-
+import Step from '../Step.vue';
 import NumberInput from '@/components/Form/NumberInput/NumberInput.vue';
 
 const emit = defineEmits(['next']);
@@ -21,39 +17,39 @@ const isAOPEmpty = ref(false);
 
 const validateYear = async () => {
     // TODO: Validate year
-    isDateEmpty.value = false;
-    const year = parseInt(Reservation.value.ReservationTime.split('-')[0]);
-    if (Reservation.value.ReservationTime.split('-')[0].length < 4) {
-        return;
-    }
-
-    if (year > 2100) {
-        Reservation.value.ReservationTime = Reservation.value.ReservationTime.replace(year.toString(), '2100');
-    }
-
-
-
-    let date = await new Date();
-    let currentYear = await date.getFullYear();
-    console.log(year < currentYear);
-    if (year < currentYear) {
-        Reservation.value.ReservationTime = Reservation.value.ReservationTime.replace(year.toString(), currentYear.toString());
-    }
+    // isDateEmpty.value = false;
+    // const year = parseInt(Reservation.value.ReservationTime.split('-')[0]);
+    // if (Reservation.value.ReservationTime.split('-')[0].length < 4) {
+    //     return;
+    // }
+    //
+    // if (year > 2100) {
+    //     Reservation.value.ReservationTime = Reservation.value.ReservationTime.replace(year.toString(), '2100');
+    // }
+    //
+    //
+    //
+    // let date = new Date();
+    // let currentYear = date.getFullYear();
+    // console.log(year < currentYear);
+    // if (year < currentYear) {
+    //     Reservation.value.ReservationTime = Reservation.value.ReservationTime.replace(year.toString(), currentYear.toString());
+    // }
 }
 
 const clickHandle = () => {
-    if (!Plan.value.PlanName) {
-        isPlanNameEmpty.value = true;
-        return;
-    }
-    if (!Reservation.value.ReservationTime) {
-        isDateEmpty.value = true;
-        return;
-    }
-    if (!Reservation.value.AmmoutOfPeople) {
-        isAOPEmpty.value = true;
-        return;
-    }
+    // if (!Plan.value.PlanName) {
+    //     isPlanNameEmpty.value = true;
+    //     return;
+    // }
+    // if (!Reservation.value.ReservationTime) {
+    //     isDateEmpty.value = true;
+    //     return;
+    // }
+    // if (!Reservation.value.AmmoutOfPeople) {
+    //     isAOPEmpty.value = true;
+    //     return;
+    // }
     emit('next');
     showButton.value = false;
 }
@@ -70,8 +66,7 @@ const clickHandle = () => {
                 <label for="plan-name">
                     PlanName:
                 </label>
-                <input type="text" name="plan-name" id="plan-name" v-model="Plan.PlanName" required
-                    @change="isPlanNameEmpty = false">
+                <input type="text" name="plan-name" id="plan-name" required @change="isPlanNameEmpty = false">
             </div>
         </div>
         <div class="PlanStepItem">
@@ -82,8 +77,7 @@ const clickHandle = () => {
                 <label for="arrival-date">
                     ArrivalDate:
                 </label>
-                <input type="datetime-local" name="arrival-date" @input="validateYear"
-                    v-model="Reservation.ReservationTime" required>
+                <input type="datetime-local" name="arrival-date" @input="validateYear" required>
             </div>
         </div>
         <div class="PlanStepItem">
@@ -94,9 +88,7 @@ const clickHandle = () => {
                 <label for="amount-of-people">
                     Amout of people:
                 </label>
-                <NumberInput :min="1" :max="4" @change="isAOPEmpty = false"
-                    @value-change="(val) => Reservation.AmmoutOfPeople = val" :id="'amount-of-people'"
-                    :name="'amount-of-people'" />
+                <NumberInput :min="1" :max="4" @change="isAOPEmpty = false" :name="'amount-of-people'" />
             </div>
         </div>
     </Step>

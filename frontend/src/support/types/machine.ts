@@ -1,7 +1,7 @@
 import { ExerciseType } from "..";
 
 export interface Machine {
-    MachineId: number | null;
+    MachineId: number;
     MachineName: string;
     MaxWeight: number;
     MinWeight: number;

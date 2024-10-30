@@ -3,4 +3,5 @@ export { MachineController } from "./machine.controller"
 export { Machine } from "./machine.model"
 export { MachineService } from "./machine.service"
 export { MachineRouter } from "./machine.routes"
+export { MachineQueryParams } from './machine.params'
 

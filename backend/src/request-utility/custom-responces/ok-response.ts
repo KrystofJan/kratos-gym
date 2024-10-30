@@ -1,7 +1,7 @@
 import { CustomResponse } from './response';
 import { ResponseStatus } from '../common/response-status';
 import { GetResponseBody } from './response-body';
-import { Model } from '../../endpoints/Model';
+import { Model } from '../../endpoints/base';
 import { StatusCodes } from 'http-status-codes';
 import { Request as expressRequest, Response as expressResponse } from 'express';
 

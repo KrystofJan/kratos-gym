@@ -19,6 +19,7 @@ ENDPOINTS = [
     "/api/exercise-type/",
     "/api/exercise-type/1",
     "/api/exercise-type/machine/1",
+
 ]
 
 class TestGet:

@@ -10,6 +10,7 @@ import { ReservationService, reservationErrorHandler, Reservation } from "."
 import { AccountService } from '../account';
 import { PlanService } from '../plan';
 import { ExerciseTypeService } from '../exercise-type';
+import { ExerciseCategoryService } from '../exercise-category';
 
 export class ReservationController {
 
@@ -83,7 +84,7 @@ export class ReservationController {
 
             reservation.Plan.Machines = machines
 
-            const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByMachineId(plan.PlanId))
+            const [typeErr, type] = await safeAwait(ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId))
 
             if (typeErr !== null) {
                 logger.error(typeErr)
@@ -93,7 +94,7 @@ export class ReservationController {
                 response.buildResponse(req, res)
                 return;
             }
-            reservation.Plan.ExerciseTypes = type
+            reservation.Plan.ExerciseCategories = type
 
             if (reservation.Trainer) {
 
@@ -187,17 +188,17 @@ export class ReservationController {
 
         reservation.Plan.Machines = machines
 
-        const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByPlanId(plan.PlanId))
+        const [categoriesErr, categories] = await safeAwait(ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId))
 
-        if (typeErr !== null) {
-            logger.error(typeErr)
-            const error = typeErr as CodedError;
+        if (categoriesErr !== null) {
+            logger.error(categoriesErr)
+            const error = categoriesErr as CodedError;
             const statusCode = reservationErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
-        reservation.Plan.ExerciseTypes = type
+        reservation.Plan.ExerciseCategories = categories
 
         if (reservation.Trainer) {
 

@@ -1,15 +1,9 @@
 <script setup lang="ts">
-import { ref, defineProps, onMounted } from 'vue';
-import { MachineService } from '@/services/MachineService';
-import Step from './Step.vue';
+import { ref, onMounted } from 'vue';
+import Step from '../Step.vue';
+import { Machine } from '@/support';
 
-let machineService = {};
-
-const prepareServices = () => {
-    machineService = new MachineService();
-}
-
-const Machines = ref([]);
+const Machines = ref<Machine>([]);
 const selectedMachines = ref([]);
 const builderText = ref({
     heading: 'Pick your machines',
@@ -18,8 +12,6 @@ const builderText = ref({
 
 const fetchData = async () => {
     try {
-        const machineData = await machineService.getAll();
-        Machines.value = machineData;
 
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -27,17 +19,15 @@ const fetchData = async () => {
 };
 
 onMounted(async () => {
-    prepareServices();
     await fetchData();
 })
 </script>
 
 <template>
     <Step :builderText="builderText" :builderItemClasses="'BuilderItemGrid'">
-        <div class="BuilderItem-machine" v-for="machine in Machines">
-            <input type="checkbox" :name="'machine-' + machine.WrkOutMachineId"
-                :id="'machine-' + machine.WrkOutMachineId" :value="machine" v-model="selectedMachines"
-                @change="$emit('machineSelected', selectedMachines)" />
+        <div class="BuilderItem-machine" v-for="(machine, _ ) in Machines">
+            <input type="checkbox" :name="'machine-' + machine" :id="'machine-' + Number(machine.MachineId)"
+                :value="machine" v-model="selectedMachines" @change="$emit('machineSelected', selectedMachines)" />
             <label :for="'machine-' + machine.WrkOutMachineId">{{ machine.MachineName }}</label>
         </div>
     </Step>

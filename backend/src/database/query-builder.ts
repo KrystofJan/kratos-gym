@@ -1,4 +1,4 @@
-import { Model } from '../endpoints/Model';
+import { Model } from '../endpoints/base';
 import { DatabaseType, IDictionary } from '../utils/utilities';
 import { DecoratorType } from './decorators/database-decorators';
 import 'reflect-metadata'; // Assuming Reflect metadata is used for decorators
