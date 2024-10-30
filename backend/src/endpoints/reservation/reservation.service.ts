@@ -1,4 +1,4 @@
-import { BasicQueryDatabase } from "../../database"
+import { BasicQueryDatabase, DatabaseFoundMultiple } from "../../database"
 import { logger } from "../../utils"
 import { Reservation } from "."
 import { safeAwait } from "../../utils/utilities"
@@ -94,6 +94,30 @@ export class ReservationService {
         }
 
         return Number(model.ReservationId);
+    }
+
+    static async GetReservationByAccountId(id: number): Promise<Reservation[]> {
+        const db = new BasicQueryDatabase()
+
+        const [databaseErr, databaseResponse] = await safeAwait(db.SelectAttrIs(Reservation, id, "customer_id"));
+        if (databaseErr !== null) {
+            throw databaseErr;
+        }
+
+        if (databaseResponse.Body === undefined) {
+            return []
+        }
+
+        try {
+            if (databaseResponse instanceof DatabaseFoundMultiple) {
+                const models = databaseResponse.Body.map((model: Reservation) => new Reservation(model))
+                return models;
+            }
+            return [new Reservation(databaseResponse.Body)];
+        } catch (err) {
+            logger.error(err)
+            throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllAccount failed")
+        }
     }
 }
 

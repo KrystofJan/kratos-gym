@@ -7,6 +7,7 @@ import { logger } from '../../utils';
 import { accountErrorHandler } from './account.error-handler';
 import { safeAwait } from '../../utils/utilities';
 import { Account } from './account.model';
+import { ReservationService } from '../reservation';
 
 export class AccountController {
 
@@ -110,6 +111,40 @@ export class AccountController {
         data.Address = address;
 
         const response = new OkResponse("found all data successfully", data);
+        response.buildResponse(req, res)
+    }
+
+
+    static async FindAccountsReservations(req: Request, res: Response) {
+        const id = Number(req.params["id"])
+        const [err, reservations] = await safeAwait(ReservationService.GetReservationByAccountId(id));
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = accountErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        for (const data of reservations) {
+            if (!data.Trainer || !data.Trainer.AccountId) {
+                continue;
+            }
+
+            const [trainerErr, trainer] = await safeAwait(AccountService.GetAccountById(data.Trainer.AccountId));
+            if (trainerErr !== null) {
+                const error = trainerErr as CodedError;
+                const statusCode = accountErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return
+            }
+            data.Trainer = trainer;
+            data.Trainer.ClerkId = undefined
+        }
+
+        const response = new OkResponse("found all data successfully", reservations);
         response.buildResponse(req, res)
     }
 
