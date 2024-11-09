@@ -25,7 +25,7 @@ defineExpose({
 
 const builderText = ref({
     heading: 'Pick your machines',
-    text: '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>'
+    text: '<p>In this step you need to choose between our available machines</p>'
 });
 
 const fetchData = async () => {

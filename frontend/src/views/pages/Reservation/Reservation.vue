@@ -11,13 +11,13 @@ import { Machine, MachinesInPlan } from '@/support';
 import { ConfigureMachinesStep, PlanStep, PickMachineStep, TypeStep } from '@/components/Reservation/Steps/'
 import { ReservationPost } from '@/support/types/reservation';
 import { Time } from '@internationalized/date';
-import { SignedOut, SignInButton, SignUpButton, SignedIn, SignOutButton } from 'vue-clerk'
+import { SignedOut, SignedIn } from 'vue-clerk'
 import { ReservationService } from '@/support';
 import { currentAccount } from "@/store/accountStore"
 
 const formSchema = toTypedSchema(z.object({
     planName: z.string().min(5).max(50),
-    amountOfPeople: z.number().min(1).max(11),
+    amountOfPeople: z.number().min(1).max(5).default(1),
     arrivalDate: z.any(),
     machines: z.array(z.object({
         MachineId: z.number(),
@@ -29,15 +29,15 @@ const formSchema = toTypedSchema(z.object({
         PopularityScore: z.number(),
     })).min(1),
     machinesInPlan: z.array(z.object({
-        Reps: z.number(),
-        Sets: z.number(),
+        Reps: z.number().default(6),
+        Sets: z.number().default(4),
         StartTime: z.object({
-            hour: z.number().min(0).max(24),
-            minute: z.number().min(0).max(59),
+            hour: z.number().min(0).max(24).default(0),
+            minute: z.number().min(0).max(59).default(0),
         }),
         EndTime: z.object({
-            hour: z.number().min(0).max(24),
-            minute: z.number().min(0).max(59),
+            hour: z.number().min(0).max(24).default(0),
+            minute: z.number().min(0).max(59).default(0),
         }),
     })),
     exerciseCategories: z.array(z.object({
@@ -127,15 +127,17 @@ watch(() => Form.values.machines, (newMachines) => {
         </Alert>
     </SignedOut>
     <SignedIn>
-        <form class="w-2/3 space-y-6" @submit="onSubmit">
-            <PlanStep @next="moveNext(1)" :setFieldValue="Form.setFieldValue" />
-            <PickMachineStep ref="machineSelector" />
-            <ConfigureMachinesStep :selectedMachines="selectedMachines" :setFieldValue="Form.setFieldValue" />
-            <TypeStep :setFieldValue="Form.setFieldValue" />
-            <Button type="submit">
-                Submit
-            </Button>
-        </form>
+        <div class="flex justify-center">
+            <form class="w-2/3 space-y-6" @submit="onSubmit">
+                <PlanStep @next="moveNext(1)" :setFieldValue="Form.setFieldValue" />
+                <PickMachineStep ref="machineSelector" />
+                <ConfigureMachinesStep :selectedMachines="selectedMachines" :setFieldValue="Form.setFieldValue" />
+                <TypeStep :setFieldValue="Form.setFieldValue" />
+                <Button type="submit">
+                    Submit
+                </Button>
+            </form>
+        </div>
     </SignedIn>
 </template>
 

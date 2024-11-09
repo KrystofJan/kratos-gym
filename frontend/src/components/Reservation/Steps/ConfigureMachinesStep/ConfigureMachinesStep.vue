@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import { ConfigureMachinesStepItem } from '.'
 import Step from '../../Step.vue';
 import { Machine } from '@/support';
-import { TypedSchema } from 'vee-validate';
 import { FieldArray } from 'vee-validate';
 const emit = defineEmits(['next']);
 interface Props {
@@ -13,22 +12,14 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const showButton = ref(true);
-
 const builderText = ref({
     heading: 'Now pick time for each machine',
-    text: '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>'
+    text: '<p>In this step you need to pick a time and amount of work you\'ll be doing on this specific machine</p>'
 });
-
-const clickHandle = () => {
-    emit('next');
-    showButton.value = false;
-}
 </script>
 
 <template>
-    asdasd
-    <Step :builderText="builderText">
+    <Step v-if="selectedMachines.length > 0" :builderText="builderText">
         <div class="grid grid-cols-2 md:grid-cols-3 grid-auto-columns-1/2 md:grid-auto-columns-1/3 gap-4">
             <FieldArray name="machinesInPlan">
                 <ConfigureMachinesStepItem v-for="(machine, index) in selectedMachines" :key="index" :machine="machine"

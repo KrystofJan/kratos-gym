@@ -44,7 +44,7 @@ const emit = defineEmits(['next']);
 
 const builderText = ref({
     heading: 'Pick a name and time for your plan!',
-    text: '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>'
+    text: '<p>In this step you need to pick a name for your workout plan along with the date when you want to have make a reservation and amount of people included in your reservation</p>'
 });
 
 const showButton = ref(true);
@@ -124,12 +124,6 @@ const clickHandle = () => {
                 <FormMessage />
             </FormItem>
         </FormField>
-
-        <Button v-if="showButton" @click="clickHandle" variant="outline" as-child>
-            <span>
-                Next ->
-            </span>
-        </Button>
     </Step>
 
 

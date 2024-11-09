@@ -34,8 +34,8 @@ const fetchData = async () => {
 
 
 const builderText = ref({
-    heading: 'Now Pick types of workout that are contained here',
-    text: '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis aliquid enim voluptatum molestias maxime voluptate, quae repellat quidem laboriosam eveniet aut perspiciatis odio minus dolorum voluptatem error, deleniti ducimus!</p>'
+    heading: 'Select category',
+    text: '<p>And finally in this step you need to choose the category for this workout</p>'
 });
 
 
@@ -62,7 +62,7 @@ const removeItem = (item: ExerciseCategory) => {
     <Step :builderText="builderText" :builderItemClasses="'BuilderItemGrid'">
         <FormField name="exerciseCategories">
             <FormItem>
-                <FormLabel>Fruits</FormLabel>
+                <FormLabel>Category</FormLabel>
                 <FormControl>
                     <TagsInput class="px-0 gap-0 w-80" :model-value="modelValue">
                         <div class="flex gap-2 flex-wrap items-center px-3">
@@ -106,9 +106,6 @@ const removeItem = (item: ExerciseCategory) => {
                         </ComboboxRoot>
                     </TagsInput>
                 </FormControl>
-                <FormDescription>
-                    Select your favorite fruits.
-                </FormDescription>
                 <FormMessage />
             </FormItem>
         </FormField>
