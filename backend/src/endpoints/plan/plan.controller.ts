@@ -9,6 +9,7 @@ import { safeAwait } from '../../utils/utilities';
 import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response';
 import { AccountService } from '../account/account.service';
 import { MachinesInPlan } from './machines-in-plan.model';
+import { ExerciseCategory, ExerciseCategoryService } from '../exercise-category';
 
 export class PlanController {
 
@@ -57,7 +58,7 @@ export class PlanController {
 
             plan.Machines = machines
 
-            const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByPlanId(plan.PlanId))
+            const [typeErr, type] = await safeAwait(ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId))
 
             if (typeErr !== null) {
                 logger.error(typeErr)
@@ -67,7 +68,7 @@ export class PlanController {
                 response.buildResponse(req, res)
                 return;
             }
-            plan.ExerciseTypes = type
+            plan.ExerciseCategories = type
         }
         const response = new OkResponse("found all data successfully", data);
         response.buildResponse(req, res)
@@ -119,7 +120,7 @@ export class PlanController {
 
         plan.Machines = machines
 
-        const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByMachineId(plan.PlanId))
+        const [typeErr, category] = await safeAwait(ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId))
 
         if (typeErr !== null) {
             logger.error(typeErr)
@@ -129,7 +130,7 @@ export class PlanController {
             response.buildResponse(req, res)
             return;
         }
-        plan.ExerciseTypes = type
+        plan.ExerciseCategories = category
 
         const response = new OkResponse("found all data successfully", plan);
         response.buildResponse(req, res)

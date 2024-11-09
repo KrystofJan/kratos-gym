@@ -44,9 +44,9 @@ const props = defineProps<Props>()
                 </li>
             </ul>
             <div class="flex flex-row gap-4 flex-wrap">
-                <div v-for="(item, index) in reservation.Plan?.ExerciseTypes" :key="index">
+                <div v-for="(item, index) in reservation.Plan?.ExerciseCategories" :key="index">
                     <!-- So here I want to add some icons based on the category... I can't find any icons yet but I'll look into it -->
-                    {{ item.Category }}
+                    {{ item.CategoryName }}
                 </div>
             </div>
         </CardContent>

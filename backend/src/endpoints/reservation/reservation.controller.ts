@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { ReservationDatabase } from './reservation.database';
 import { CreatedResponse, FailedResponse, OkResponse } from '../../request-utility';
 import { logger } from '../../utils';
 import { CodedError, ErrorCode } from '../../errors';
@@ -9,6 +10,7 @@ import { ReservationService, reservationErrorHandler, Reservation } from "."
 import { AccountService } from '../account';
 import { PlanService } from '../plan';
 import { ExerciseTypeService } from '../exercise-type';
+import { ExerciseCategoryService } from '../exercise-category';
 
 export class ReservationController {
 
@@ -82,7 +84,7 @@ export class ReservationController {
 
             reservation.Plan.Machines = machines
 
-            const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByMachineId(plan.PlanId))
+            const [typeErr, type] = await safeAwait(ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId))
 
             if (typeErr !== null) {
                 logger.error(typeErr)
@@ -92,7 +94,7 @@ export class ReservationController {
                 response.buildResponse(req, res)
                 return;
             }
-            reservation.Plan.ExerciseTypes = type
+            reservation.Plan.ExerciseCategories = type
 
             if (reservation.Trainer) {
 
@@ -186,17 +188,17 @@ export class ReservationController {
 
         reservation.Plan.Machines = machines
 
-        const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByPlanId(plan.PlanId))
+        const [categoriesErr, categories] = await safeAwait(ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId))
 
-        if (typeErr !== null) {
-            logger.error(typeErr)
-            const error = typeErr as CodedError;
+        if (categoriesErr !== null) {
+            logger.error(categoriesErr)
+            const error = categoriesErr as CodedError;
             const statusCode = reservationErrorHandler.handleError(error);
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
         }
-        reservation.Plan.ExerciseTypes = type
+        reservation.Plan.ExerciseCategories = categories
 
         if (reservation.Trainer) {
 
@@ -283,6 +285,50 @@ export class ReservationController {
         const [err, id] = await safeAwait(ReservationService.CreateReservation(model));
         if (err !== null) {
 
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = reservationErrorHandler.handleError(error);
+            logger.info(statusCode)
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        const response = new CreatedResponse("created successfully", id);
+        response.buildResponse(req, res)
+    }
+
+    static async CreateFullReservation(req: Request, res: Response) {
+        const body = req.body;
+        const model = new Reservation(body);
+
+        if (!model.checkForUnneededData(body)) {
+            const error = new CodedError(ErrorCode.MAPPING_ERROR, "TODO: Change the message");
+            logger.error(error)
+            const statusCode = reservationErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        if (!model.validateAttrs()) {
+            const error = new CodedError(ErrorCode.VALIDATION_ERROR, "Validation failed");
+            logger.error(error)
+            const statusCode = reservationErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        if (!model.Plan) {
+            const error = new CodedError(ErrorCode.ARGUMENT_ERROR, "Cannot have empty Plan");
+            logger.error(error)
+            const statusCode = reservationErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        const [err, id] = await safeAwait(ReservationService.CreateFullReservation(model));
+
+        if (err !== null) {
             logger.error(err)
             const error = err as CodedError;
             const statusCode = reservationErrorHandler.handleError(error);

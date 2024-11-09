@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import {
     MachineService,
     Machine,
-    machineErrorHandler
+    machineErrorHandler,
+    MachineQueryParams,
 } from '.'
 import { CreatedResponse, FailedResponse, OkResponse } from '../../request-utility';
 import { logger } from '../../utils';
@@ -15,7 +16,8 @@ import { ExerciseTypeService } from '../exercise-type';
 export class MachineController {
 
     static async FindAll(req: Request, res: Response) {
-        const [err, data] = await safeAwait(MachineService.GetAllMachines());
+        const { limit, page } = req.query as MachineQueryParams
+        const [err, data] = await safeAwait(MachineService.GetAllMachines(limit, page));
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError;

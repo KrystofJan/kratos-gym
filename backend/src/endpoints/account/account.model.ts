@@ -1,6 +1,6 @@
 import { IDictionary } from '../../utils';
 import { Address } from '../address/address.model';
-import { Model } from '../Model';
+import { Model } from '../base';
 import { Column, ForeignKey, PrimaryKey, Table } from "../../database";
 import { UnInsertable } from '../../database/decorators/database-decorators';
 

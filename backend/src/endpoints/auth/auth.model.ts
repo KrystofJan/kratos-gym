@@ -1,6 +1,6 @@
 import { Column, PrimaryKey, Table } from "../../database";
 import { IDictionary } from "../../utils/utilities";
-import { Model } from "../Model";
+import { Model } from "../base";
 
 @Table("account")
 @PrimaryKey("account_id")

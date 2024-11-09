@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+interface Props {
+    builderText: {
+        heading: string,
+        text: string
+    },
+    builderItemClasses: string
+}
 
-
-const props = defineProps({
-    builderText: ref(Object),
-    builderItemClasses: ref(String),
-});
+const props = defineProps<Props>();
 </script>
 
 <template>

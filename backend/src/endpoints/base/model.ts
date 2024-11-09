@@ -1,6 +1,6 @@
-import { DecoratorType } from "../database/decorators/database-decorators";
-import { IDictionary, logger } from "../utils";
-import { DatabaseType } from "../utils/utilities";
+import { DecoratorType } from "../../database/decorators/database-decorators";
+import { IDictionary, logger } from "../../utils";
+import { DatabaseType } from "../../utils/utilities";
 
 export class Model {
 

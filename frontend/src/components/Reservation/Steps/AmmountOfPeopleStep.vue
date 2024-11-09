@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import Step from './Step.vue';
+import Step from '../Step.vue';
 
-import Reservation from '@/store/ReservationStore.js';
-
+const esketit = ref(0)
 </script>
 
 <template>
@@ -13,7 +12,7 @@ import Reservation from '@/store/ReservationStore.js';
         </label>
 
         <FormKit type="number" validation="required|number|between:1,4" validation-visibility="live" id="aop" name="aop"
-            v-model="Reservation.AmmoutOfPeople" value="1" step="1" />
+            v-model="esketit" value="1" step="1" />
     </Step>
 </template>
 

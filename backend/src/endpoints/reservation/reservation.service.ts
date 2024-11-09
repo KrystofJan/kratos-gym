@@ -3,6 +3,7 @@ import { logger } from "../../utils"
 import { Reservation } from "."
 import { safeAwait } from "../../utils/utilities"
 import { CodedError, ErrorCode } from "../../errors/base.error"
+import { ReservationDatabase } from "./reservation.database"
 
 export class ReservationService {
 
@@ -83,6 +84,24 @@ export class ReservationService {
         const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(db.Insert(Reservation, body));
+        if (databaseErr !== null) {
+            throw databaseErr;
+        }
+
+        const model = new Reservation(databaseResponse.Body)
+        if (!model) {
+            const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at CreateReservation failed")
+            throw err;
+        }
+
+        return Number(model.ReservationId);
+    }
+
+
+    static async CreateFullReservation(body: Reservation): Promise<number> {
+        const db = new ReservationDatabase()
+
+        const [databaseErr, databaseResponse] = await safeAwait(db.InsertFullReservation(body));
         if (databaseErr !== null) {
             throw databaseErr;
         }

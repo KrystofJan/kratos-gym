@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Model } from '../../endpoints/Model';
+import { Model } from '../../endpoints/base';
 
 export enum DecoratorType {
     TABLE_NAME = "tableName",

@@ -10,6 +10,12 @@ docker pull krystofjan/kratos-gym-be
 docker run -p 7000:7000 fca83ebbcc1 --network="host
 ```
 
+There is also a PR tag with this format: ```PR-{{PR-NUMBEr}}```
+
+### alternative
+You can use docker compose
+
+
 ## Local dev
 ```bash
 npm run dev

@@ -1,115 +1,144 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
-import { useStorage } from '@vueuse/core';
-import { BaseService } from '@/services/base/ApiService';
-import { PlanService as PlanServiceObj } from '@/services/PlanService';
-import { PlanMachineService as PlanMachineServiceObj } from '@/services/PlanMachineService';
-import { ReservationService as ReservationServiceObj } from '@/services/ReservationService';
+import { Button } from '@/components/shadcn/ui/button'
+import { ref, watch } from 'vue';
+import { Input } from '@/components/shadcn/ui/input'
+import { toast } from '@/components/shadcn/ui/toast'
+import { toTypedSchema } from '@vee-validate/zod'
+import { useForm } from 'vee-validate'
+import { h } from 'vue'
+import * as z from 'zod'
+import { Machine, MachinesInPlan } from '@/support';
+import { ConfigureMachinesStep, PlanStep, PickMachineStep, TypeStep } from '@/components/Reservation/Steps/'
+import { ReservationPost } from '@/support/types/reservation';
+import { Time } from '@internationalized/date';
+import { SignedOut, SignedIn } from 'vue-clerk'
+import { ReservationService } from '@/support';
+import { currentAccount } from "@/store/accountStore"
 
-import PlanStep from '@/components/Reservation/PlanStep.vue';
-import PickMachineStep from '@/components/Reservation/PickMachineStep.vue';
-import ConfigureMachinesStep from '@/components/Reservation/ConfigureMachinesStep/ConfigureMachinesStep.vue';
-import ExTypeStep from '@/components/Reservation/ExTypeStep.vue';
+const formSchema = toTypedSchema(z.object({
+    planName: z.string().min(5).max(50),
+    amountOfPeople: z.number().min(1).max(5).default(1),
+    arrivalDate: z.any(),
+    machines: z.array(z.object({
+        MachineId: z.number(),
+        MachineName: z.string(),
+        MaxWeight: z.number(),
+        MinWeight: z.number(),
+        MaxPeople: z.number(),
+        AvgTimeTaken: z.number(),
+        PopularityScore: z.number(),
+    })).min(1),
+    machinesInPlan: z.array(z.object({
+        Reps: z.number().default(6),
+        Sets: z.number().default(4),
+        StartTime: z.object({
+            hour: z.number().min(0).max(24).default(0),
+            minute: z.number().min(0).max(59).default(0),
+        }),
+        EndTime: z.object({
+            hour: z.number().min(0).max(24).default(0),
+            minute: z.number().min(0).max(59).default(0),
+        }),
+    })),
+    exerciseCategories: z.array(z.object({
+        CategoryId: z.number(),
+        CategoryName: z.string()
+    }))
+}))
 
-import Plan from '@/store/PlanStore.js';
-import PlanMachine from '@/store/PlanMachineStore.js';
-import Reservation from '@/store/ReservationStore.js';
-import PlanType from '@/store/PlanTypeStore.js';
-import userId from '@/store/userStore';
+const Form = useForm({
+    validationSchema: formSchema,
+})
 
-const SelectedMachines = ref([]);
-const StepNumber = ref(1);
+const onSubmit = Form.handleSubmit(async (values) => {
 
-let PlanService = {};
-let PlanTypeService = {};
-let PlanMachineService = {};
-let ReservationService = {};
-
-const prepareServices = () => {
-    PlanService = new PlanServiceObj();
-    PlanMachineService = new PlanMachineServiceObj();
-    ReservationService = new ReservationServiceObj();
-    PlanTypeService = new BaseService('plan-type');
-}
-
-
-const addMachine = async (machines) => {
-    SelectedMachines.value = machines;
-}
-
-watch(SelectedMachines, () => {
-    PlanMachine.value.WrkOutMachines = SelectedMachines.value.map(machine => ({ "WrkOutMachineId": machine.WrkOutMachineId }));
-    // TODO: Go back if there are no selectedMachines
-    // if(SelectedMachines.value.length == 0){
-    //     StepNumber.value = 2;
-    // }
-});
-
-watch(userId, () => {
-    Plan.value.UserId = parseInt(userId.value);
-    Reservation.value.CustomerId = parseInt(userId.value);
-});
-
-const postData = async () => {
+    // TODO: CREATE A RESERVATION AND ROUTE TO DETAIL
     try {
-        const planRes = await PlanService.post(Plan.value);
-        const r1 = await planRes.json();
-        console.log(r1);
-
-        Reservation.value.WrkOutPlanId = r1.CreatedId;
-
-        // something goes wrong here
-        const planMachineRes = await PlanMachineService.post(PlanMachine.value, r1.CreatedId);
-        const r2 = await planMachineRes.json();
-        console.log(r2);
-
-        const planTypeRes = await PlanTypeService.post(PlanType.value, r1.CreatedId);
-        const r3 = await planTypeRes.json();
-        console.log(r3);
-
-        const reservationRes = await ReservationService.post(Reservation.value)
-        const r4 = await reservationRes.json();
-        console.log(r4);
-        alert(r4);
+        const reservationService = new ReservationService();
+        const reservation: ReservationPost = {
+            AmountOfPeople: values.amountOfPeople,
+            ReservationTime: new Date(values.arrivalDate.year, values.arrivalDate.month, values.arrivalDate.day),
+            CustomerId: Number(currentAccount.value?.AccountId),
+            Plan: {
+                PlanName: values.planName,
+                AccountId: Number(currentAccount.value?.AccountId),
+                Machines: values.machinesInPlan.map((mip, index) => {
+                    const StartTime = new Time(mip.StartTime.hour, mip.StartTime.minute)
+                    const EndTime = new Time(mip.EndTime.hour, mip.EndTime.minute)
+                    return {
+                        ...mip,
+                        MachineId: values.machines[index].MachineId,
+                        StartTime: StartTime.toString(),
+                        EndTime: EndTime.toString(),
+                    }
+                }),
+                ExerciseCategories: values.exerciseCategories
+            }
+        }
+        const data = await reservationService.CreateFullReservation(reservation);
+        toast({
+            title: 'Sucessfully created a reservation',
+            description: `Reservation id: ${data.CreatedId}`
+        })
+    } catch (err) {
+        toast({
+            title: 'Error when trying to create reservation',
+            description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
+                h('code', { class: 'text-white' }, err?.toString())),
+        })
     }
-    catch (err) {
-        alert(err);
-    }
-}
+})
 
-const submit = async () => {
-    await postData();
-}
-
+const StepNumber = ref(1);
 const moveNext = (stepNumber: number) => {
     if (StepNumber.value == stepNumber) {
         StepNumber.value++;
     }
 }
-onMounted(async () => {
-    prepareServices();
-});
+
+const selectedMachines = ref<Machine[]>([]);
+const machineSelector = ref<InstanceType<typeof PickMachineStep> | null>(null);
+
+watch(Form.errors, (errors) => {
+    console.log(errors);
+}, { deep: true });
+
+watch(() => Form.values.machines, (newMachines) => {
+    if (!newMachines) {
+        selectedMachines.value = [];
+        return;
+    }
+
+    selectedMachines.value = newMachines.map(machine => ({
+        ...machine,
+        ExerciseTypes: []
+    }));
+}, { deep: true });
 </script>
 
 <template>
-    <div class="logInPls" v-if="!userId">
-        Log in lol</div>
-    <form v-else @submit.prevent="submit" class="ReservationBuilder Builder">
-        <PlanStep @next="moveNext(1)" />
-        <PickMachineStep v-if="StepNumber >= 2" @machine-selected="addMachine" />
-        <ConfigureMachinesStep @next="moveNext(2)" :SelectedMachines="SelectedMachines" />
-        <ExTypeStep @next="moveNext(3)" v-if="StepNumber >= 3" />
-
-        <div class="BuilderItem" v-if="PlanType.ExerciseTypeIds.length > 0">
-            <input type="submit" value="Postik">
+    <SignedOut>
+        <Alert title="Error">
+            <Terminal class="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+                You need to be logged in !
+            </AlertDescription>
+        </Alert>
+    </SignedOut>
+    <SignedIn>
+        <div class="flex justify-center">
+            <form class="w-2/3 space-y-6" @submit="onSubmit">
+                <PlanStep @next="moveNext(1)" :setFieldValue="Form.setFieldValue" />
+                <PickMachineStep ref="machineSelector" />
+                <ConfigureMachinesStep :selectedMachines="selectedMachines" :setFieldValue="Form.setFieldValue" />
+                <TypeStep :setFieldValue="Form.setFieldValue" />
+                <Button type="submit">
+                    Submit
+                </Button>
+            </form>
         </div>
-    </form>
+    </SignedIn>
 </template>
 
-<style scoped lang="scss">
-@import '@/styles/sass/Reservation/Builder.scss';
-
-.logInPls {
-    color: white;
-}
-</style>
+<style scoped lang="scss"></style>

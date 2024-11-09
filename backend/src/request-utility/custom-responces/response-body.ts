@@ -1,4 +1,4 @@
-import { Model } from '../../endpoints/Model';
+import { Model } from '../../endpoints/base';
 import { ResponseStatus } from '../common/response-status';
 
 export interface ResponseBody {
