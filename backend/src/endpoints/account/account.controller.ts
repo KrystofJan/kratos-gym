@@ -15,12 +15,12 @@ export class AccountController {
     static async FindAll(req: Request, res: Response) {
 
         const { role } = req.query
-        let roleAttr: UserRole | undefined = AccountController.AssignRole(role)
         let result: [Error, null] | [null, Account[]];
-        if (roleAttr === undefined) {
-            result = await safeAwait(AccountService.GetAllAccounts());
-        } else {
+        if (role !== undefined) {
+            let roleAttr: UserRole = AccountController.AssignRole(role)
             result = await safeAwait(AccountService.GetAllAccountsByRole(roleAttr));
+        } else {
+            result = await safeAwait(AccountService.GetAllAccounts());
         }
         const [err, data] = result
         if (err !== null) {
@@ -204,17 +204,17 @@ export class AccountController {
         response.buildResponse(req, res)
     }
 
-    private static AssignRole(role?: any): UserRole | undefined {
+    private static AssignRole(role?: any): UserRole {
         console.log(role)
         console.log(role.toString().toLowerCase())
         if (role === undefined) {
-            return undefined
+            return UserRole.NOTKNOWN
         }
         switch (role.toString().toLowerCase()) {
             case "customer": return UserRole.CUSTOMER;
             case "trainer": return UserRole.TRAINER;
             case "employee": return UserRole.EMPLOYEE
-            default: return undefined
+            default: return UserRole.NOTKNOWN
         }
     }
 
