@@ -6,9 +6,9 @@ import { UnInsertable } from '../../database/decorators/database-decorators';
 
 export enum UserRole {
     CUSTOMER = 'c',
-    TRAINER = 'T',
-    EMPLOYEE = 'E',
-    USER = 'U',
+    TRAINER = 't',
+    EMPLOYEE = 'e',
+    USER = 'u',
     NOTKNOWN = '/',
 }
 

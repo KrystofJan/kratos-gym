@@ -3,7 +3,7 @@ import { Address } from "./address";
 export const UserRoleOptions = {
     CUSTOMER: 'c',
     TRAINER: 'T',
-    EMPLOYEE: 'E',
+    EMPLOYEE: 'e',
     AUTHOR: 'A',
     NOTKNOWN: '/',
 } as const;
