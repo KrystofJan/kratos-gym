@@ -1,5 +1,12 @@
 
 import { createRouter, createWebHistory } from 'vue-router';
+import { machineRoutes } from './admin-machine';
+import { accountRoutes } from './admin-account';
+import { categoryRoutes } from './admin-category';
+import { typesRoutes } from './admin-types';
+import { plansRoutes } from './admin-plans';
+import { reservation } from '@/store/ReservationStore';
+import { reservationsRoutes } from './admin-reservation';
 
 const routes = [
     {
@@ -36,6 +43,24 @@ const routes = [
         path: '/reservation/:id',
         name: 'Form Test',
         component: () => import('@/components/Reservation/Detail.vue')
+    },
+    {
+        path: '/admin',
+        name: 'Administration',
+        component: () => import('@/views/Admin/Admin.vue'),
+        children: [
+            {
+                path: '/admin/dashboard',
+                name: 'Dashboard',
+                component: () => import('@/views/Admin/Dashboard.vue'),
+            },
+            machineRoutes,
+            accountRoutes,
+            categoryRoutes,
+            typesRoutes,
+            plansRoutes,
+            reservationsRoutes,
+        ]
     }
 ];
 
