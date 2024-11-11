@@ -14,14 +14,8 @@ import {
     AvatarFallback,
     AvatarImage,
 } from '@/components/shadcn/ui/avatar'
+import { roleDictionary } from '@/support/types';
 
-
-const roleDictionary = new Map([
-    ["c", "Customer"],
-    ["t", "Trainer"],
-    ["e", "Employee"],
-    ["a", "Author"]
-]);
 
 interface Props {
     currentAccount: Account,

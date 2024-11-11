@@ -1,6 +1,6 @@
 import { BasicQueryDatabase } from "../../database"
 import { logger } from "../../utils"
-import { Account } from "./account.model"
+import { Account, UserRole } from "./account.model"
 import { CodedError, ErrorCode } from "../../errors/base.error"
 import { safeAwait } from "../../utils/utilities"
 import { DecoratorType } from "../../database/decorators/database-decorators"
@@ -25,6 +25,37 @@ export class AccountService {
         }
     }
 
+
+    static async GetAllAccountsByRole(role: UserRole): Promise<Array<Account>> {
+        const db = new BasicQueryDatabase()
+
+        console.log(role)
+        const [databaseErr, databaseResponse] = await safeAwait(db.SelectAttrIs(Account, role.toString().toLowerCase(), 'role'));
+        if (databaseErr !== null) {
+            throw databaseErr;
+        }
+
+        try {
+            let models: Account[]
+            if (Array.isArray(databaseResponse.Body)) {
+                models = databaseResponse.Body.map((model: Account) => new Account(model))
+            } else {
+                models = []
+                const model = new Account(databaseResponse.Body)
+                if (!model) {
+                    const err = new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllAccoutsByRole failed")
+                    throw err;
+                }
+
+                model.Address = new Address(databaseResponse.Body)
+                models.push(model)
+            }
+            return models;
+        } catch (err) {
+            logger.error(err)
+            throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllAccount failed")
+        }
+    }
     static async GetAccountById(id: number): Promise<Account> {
         const db = new BasicQueryDatabase()
 

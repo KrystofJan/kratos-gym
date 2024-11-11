@@ -26,3 +26,17 @@ export interface Account {
     ClerkId: string;
     ProfilePictureUrl: string;
 }
+
+export const roleDictionary = new Map([
+    ["c", "Customer"],
+    ["t", "Trainer"],
+    ["e", "Employee"],
+    ["a", "Author"]
+]);
+
+export const roleMap = new Map([
+    [UserRoleOptions.CUSTOMER, "Customer"],
+    [UserRoleOptions.TRAINER, "Trainer"],
+    [UserRoleOptions.EMPLOYEE, "Employee"],
+    [UserRoleOptions.AUTHOR, "Author"]
+]);

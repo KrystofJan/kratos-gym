@@ -13,5 +13,6 @@ export interface ReservationPost {
     AmountOfPeople: number;
     ReservationTime: Date;
     CustomerId: number;
+    TrainerId?: number;
     Plan: PlanPost;
 }

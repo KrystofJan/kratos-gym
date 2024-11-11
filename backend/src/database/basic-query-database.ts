@@ -17,7 +17,7 @@ export class BasicQueryDatabase extends Database {
     async SelectAll<T extends Model>(
         modelType: new (data: IDictionary<DatabaseType>) => T,
         limit: number = 10,
-        page: number = 0
+        page: number = 0,
     ): Promise<DatabaseFoundMultiple<T>> {
 
         const tableName = Reflect.getMetadata(DecoratorType.TABLE_NAME, modelType);
