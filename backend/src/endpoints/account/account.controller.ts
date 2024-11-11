@@ -1,3 +1,4 @@
+
 import { Request, Response } from 'express';
 import { AccountService } from './account.service';
 import { AddressService, Address } from '../address';
@@ -6,13 +7,22 @@ import { CodedError, ErrorCode } from '../../errors';
 import { logger } from '../../utils';
 import { accountErrorHandler } from './account.error-handler';
 import { safeAwait } from '../../utils/utilities';
-import { Account } from './account.model';
+import { Account, UserRole } from './account.model';
 import { ReservationService } from '../reservation';
 
 export class AccountController {
 
     static async FindAll(req: Request, res: Response) {
-        const [err, data] = await safeAwait(AccountService.GetAllAccounts());
+
+        const { role } = req.query
+        let roleAttr: UserRole | undefined = AccountController.AssignRole(role)
+        let result: [Error, null] | [null, Account[]];
+        if (roleAttr === undefined) {
+            result = await safeAwait(AccountService.GetAllAccounts());
+        } else {
+            result = await safeAwait(AccountService.GetAllAccountsByRole(roleAttr));
+        }
+        const [err, data] = result
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError;
@@ -93,7 +103,6 @@ export class AccountController {
             return;
         }
 
-
         if (!data.Address || !data.Address.AddressId) {
             const response = new OkResponse("Found data withou the address", data);
             response.buildResponse(req, res)
@@ -113,7 +122,6 @@ export class AccountController {
         const response = new OkResponse("found all data successfully", data);
         response.buildResponse(req, res)
     }
-
 
     static async FindAccountsReservations(req: Request, res: Response) {
         const id = Number(req.params["id"])
@@ -194,6 +202,20 @@ export class AccountController {
 
         const response = new OkResponse("changed data successfully", data);
         response.buildResponse(req, res)
+    }
+
+    private static AssignRole(role?: any): UserRole | undefined {
+        console.log(role)
+        console.log(role.toString().toLowerCase())
+        if (role === undefined) {
+            return undefined
+        }
+        switch (role.toString().toLowerCase()) {
+            case "customer": return UserRole.CUSTOMER;
+            case "trainer": return UserRole.TRAINER;
+            case "employee": return UserRole.EMPLOYEE
+            default: return undefined
+        }
     }
 
 }

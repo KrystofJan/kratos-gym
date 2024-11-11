@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import { Address } from '../address/address.model';
 import { SelectQuery } from '../../database/query-builder';
 import { AccountController } from './account.controller';
+import { clerkClient, requireAuth } from '@clerk/express'
 
 export const AccountRouter: Router = express.Router();
 
@@ -21,6 +22,10 @@ AccountRouter.get('/', async (req: Request, res: Response) => {
 });
 
 AccountRouter.get('/:id', async (req: Request, res: Response) => {
+    await AccountController.FindById(req, res)
+});
+
+AccountRouter.get('/trainer/:id', async (req: Request, res: Response) => {
     await AccountController.FindById(req, res)
 });
 

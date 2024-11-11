@@ -1,5 +1,6 @@
-import express, { Request, Response, Router } from 'express';
+import express, { Request, Response, Router, NextFunction } from 'express';
 import { MachineController } from '.';
+import { requireAuth } from '@clerk/express'
 
 export const MachineRouter: Router = express.Router();
 

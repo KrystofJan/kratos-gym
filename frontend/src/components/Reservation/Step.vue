@@ -1,10 +1,8 @@
 <script setup lang="ts">
+import { BuilderText } from '@/support';
 interface Props {
-    builderText: {
-        heading: string,
-        text: string
-    },
-    builderItemClasses: string
+    builderText: BuilderText
+    builderItemClasses?: string
 }
 
 const props = defineProps<Props>();
@@ -12,7 +10,7 @@ const props = defineProps<Props>();
 
 <template>
     <div class="BuilderStep">
-        <div v-if="builderText" class="BuilderText">
+        <div v-if="builderText">
             <h2>{{ builderText.heading }}</h2>
             <div class="BaseText" v-html="builderText.text" />
         </div>

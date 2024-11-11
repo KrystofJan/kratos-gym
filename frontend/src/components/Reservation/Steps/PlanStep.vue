@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { Account } from '@/support';
+import { ref, computed } from 'vue';
 import Step from '../Step.vue';
 import NumberInput from '@/components/Form/NumberInput/NumberInput.vue';
-import { reservation } from '@/store/ReservationStore';
-import { toTypedSchema } from '@vee-validate/zod'
-import * as z from 'zod'
 import {
     FormControl,
     FormDescription,
@@ -21,10 +19,19 @@ import {
     NumberFieldInput,
 } from '@/components/shadcn/ui/number-field'
 import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from '@/components/shadcn/ui/command'
+import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from '@/components/shadcn/ui/popover'
+import { Check, ChevronsUpDown } from 'lucide-vue-next'
 
 import { Button } from '@/components/shadcn/ui/button'
 import { Calendar } from '@/components/shadcn/ui/calendar'
@@ -32,7 +39,8 @@ import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
 import { Calendar as CalendarIcon } from 'lucide-vue-next'
 import { Input } from '@/components/shadcn/ui/input'
-import { TypedSchema } from 'vee-validate';
+import { AccountService, BuilderText, UserRoleOptions } from '@/support';
+import { onMounted } from 'vue';
 
 interface Props {
     setFieldValue: (field: any, value: any) => void
@@ -42,17 +50,37 @@ const props = defineProps<Props>()
 
 const emit = defineEmits(['next']);
 
-const builderText = ref({
+const builderText: BuilderText = {
     heading: 'Pick a name and time for your plan!',
     text: '<p>In this step you need to pick a name for your workout plan along with the date when you want to have make a reservation and amount of people included in your reservation</p>'
-});
+};
 
-const showButton = ref(true);
+const trainers = ref<Account[]>([])
 
-const clickHandle = () => {
-    emit('next');
-    showButton.value = false;
-}
+const fetchData = async () => {
+    try {
+        const data = await new AccountService().fetchAccountByRole(UserRoleOptions.TRAINER)
+        trainers.value = data
+        console.log(data)
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
+
+
+const selectedTrainer = ref<Account | null>(null);
+
+const selectTrainer = (trainer: Account) => {
+    selectedTrainer.value = trainer;
+    props.setFieldValue('trainer', trainer);
+};
+
+const getFullName = (trainer: Account | null) => {
+    return trainer ? `${trainer.FirstName} ${trainer.LastName}` : '';
+};
+onMounted(async () => {
+    await fetchData()
+})
 
 </script>
 
@@ -121,6 +149,41 @@ const clickHandle = () => {
                 <FormDescription>
                     Date of arival
                 </FormDescription>
+                <FormMessage />
+            </FormItem>
+        </FormField>
+        <FormField v-slot="{ value }" name="trainer">
+            <FormItem>
+                <FormLabel>Trainer</FormLabel>
+                <Popover>
+                    <PopoverTrigger as-child>
+                        <FormControl>
+                            <Button variant="outline" role="combobox"
+                                :class="cn('w-[200px] justify-between', !selectedTrainer ? 'text-muted-foreground' : '')">
+                                {{ selectedTrainer ? selectedTrainer.FirstName + ' ' + selectedTrainer.LastName :
+                                    'Select trainer...' }}
+                                <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                        </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent class="w-[200px] p-0">
+                        <Command>
+                            <CommandInput placeholder="Search trainer..." />
+                            <CommandEmpty>No trainers found.</CommandEmpty>
+                            <CommandList>
+                                <CommandGroup>
+                                    <CommandItem v-for="trainer in trainers" :key="trainer.AccountId"
+                                        :value="`${trainer.FirstName} ${trainer.LastName}`"
+                                        @select="selectTrainer(trainer)">
+                                        <Check
+                                            :class="cn('mr-2 h-4 w-4', trainer.AccountId === selectedTrainer?.AccountId ? 'opacity-100' : 'opacity-0')" />
+                                        {{ `${trainer.FirstName} ${trainer.LastName}` }}
+                                    </CommandItem>
+                                </CommandGroup>
+                            </CommandList>
+                        </Command>
+                    </PopoverContent>
+                </Popover>
                 <FormMessage />
             </FormItem>
         </FormField>

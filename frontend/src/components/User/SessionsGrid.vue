@@ -10,6 +10,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/shadcn/ui/table'
+import { ScrollArea } from '@/components/shadcn/ui/scroll-area'
 import {
     Button
 } from '@/components/shadcn/ui/button'
@@ -36,8 +37,8 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div>
-        <Table>
+    <ScrollArea class="h-96 rounded-md border">
+        <Table class="p-4">
             <TableCaption>Reservations</TableCaption>
             <TableHeader>
                 <TableRow>
@@ -83,5 +84,5 @@ onMounted(async () => {
                 </TableRow>
             </TableBody>
         </Table>
-    </div>
+    </ScrollArea>
 </template>

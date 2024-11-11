@@ -19,6 +19,16 @@ const formSchema = toTypedSchema(z.object({
     planName: z.string().min(5).max(50),
     amountOfPeople: z.number().min(1).max(5).default(1),
     arrivalDate: z.any(),
+    trainer: z.object({
+        AccountId: z.number(),
+        FirstName: z.string(),
+        LastName: z.string(),
+        Email: z.string(),
+        PhoneNumber: z.string(),
+        Login: z.string(),
+        ClerkId: z.string(),
+        ProfilePictureUrl: z.string().optional()
+    }).optional(),
     machines: z.array(z.object({
         MachineId: z.number(),
         MachineName: z.string(),
@@ -59,6 +69,7 @@ const onSubmit = Form.handleSubmit(async (values) => {
             AmountOfPeople: values.amountOfPeople,
             ReservationTime: new Date(values.arrivalDate.year, values.arrivalDate.month, values.arrivalDate.day),
             CustomerId: Number(currentAccount.value?.AccountId),
+            TrainerId: values.trainer?.AccountId,
             Plan: {
                 PlanName: values.planName,
                 AccountId: Number(currentAccount.value?.AccountId),
@@ -129,7 +140,7 @@ watch(() => Form.values.machines, (newMachines) => {
     <SignedIn>
         <div class="flex justify-center">
             <form class="w-2/3 space-y-6" @submit="onSubmit">
-                <PlanStep @next="moveNext(1)" :setFieldValue="Form.setFieldValue" />
+                <PlanStep :setFieldValue="Form.setFieldValue" />
                 <PickMachineStep ref="machineSelector" />
                 <ConfigureMachinesStep :selectedMachines="selectedMachines" :setFieldValue="Form.setFieldValue" />
                 <TypeStep :setFieldValue="Form.setFieldValue" />
