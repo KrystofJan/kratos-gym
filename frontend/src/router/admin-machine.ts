@@ -7,7 +7,7 @@ export const machineRoutes = {
         {
             path: '/admin/machines/list',
             name: '',
-            component: () => import('@/views/Admin/machines/machine-list.vue'),
+            component: () => import('@/views/Admin/machines/list/machine-list.vue'),
         },
         {
             path: '/admin/machines/create',
