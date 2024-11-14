@@ -35,6 +35,21 @@ export class ReservationService {
         }
     }
 
+    async FetchReservations(): Promise<Reservation[]> {
+        try {
+            const res = await fetch(`${KRATOS_API_URL}/api/reservation`);
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const data = await res.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching account:', error);
+            throw error;
+        }
+    }
+
+
     async CreateFullReservation(reservation: ReservationPost) {
         try {
             const res = await fetch(`${KRATOS_API_URL}/api/reservation/full`, {

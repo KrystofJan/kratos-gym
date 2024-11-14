@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { MoreHorizontal } from 'lucide-vue-next'
 const props = defineProps<{
     id: number,
+    editTableUrl: string,
     deleteFunc: (id: number) => Promise<number>
 }>()
 
@@ -39,7 +40,9 @@ async function deleteEmit(id: number) {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem @click="deleteEmit(id)">Delete</DropdownMenuItem>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <router-link :to="editTableUrl" as-child>
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+            </router-link>
         </DropdownMenuContent>
     </DropdownMenu>
 </template>

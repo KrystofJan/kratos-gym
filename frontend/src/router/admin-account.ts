@@ -7,7 +7,7 @@ export const accountRoutes = {
         {
             path: '/admin/account/list',
             name: '',
-            component: () => import('@/views/Admin/account/account-list.vue'),
+            component: () => import('@/views/Admin/account/list/account-list.vue'),
         },
     ]
 }

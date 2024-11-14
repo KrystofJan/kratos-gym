@@ -7,7 +7,7 @@ export const categoryRoutes = {
         {
             path: '/admin/category/list',
             name: '',
-            component: () => import('@/views/Admin/categories/category-list.vue'),
+            component: () => import('@/views/Admin/categories/list/category-list.vue'),
         },
         {
             path: '/admin/category/create',

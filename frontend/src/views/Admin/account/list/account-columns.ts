@@ -3,17 +3,17 @@ import { Button } from '@/components/shadcn/ui/button'
 import type {
     ColumnDef,
 } from '@tanstack/vue-table'
-import { ExerciseType, Machine } from '@/support'
+import { Account } from '@/support'
 
 import { ArrowUpDown, ChevronDown } from 'lucide-vue-next'
 import { Checkbox } from '@/components/shadcn/ui/checkbox'
 import { DataGridActions } from '@/components/DataGrid'
-import { MachineService } from '@/support/services/machine.service'
+import { AccountService } from '@/support/services/account.service'
 import { toast } from '@/components/shadcn/ui/toast'
 
-export const values = ref<Machine[]>([])
+export const values = ref<Account[]>([])
 
-export const columns: ColumnDef<Machine>[] = [
+export const columns: ColumnDef<Account>[] = [
     {
         id: 'select',
         header: ({ table }) => h(Checkbox, {
@@ -33,7 +33,7 @@ export const columns: ColumnDef<Machine>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: 'MachineId',
+        accessorKey: 'AccountId',
         header: ({ column }) => {
             return h(
                 Button,
@@ -46,16 +46,16 @@ export const columns: ColumnDef<Machine>[] = [
                 },
                 () => [
                     h(ArrowUpDown, { class: 'opacity-0 group-hover:opacity-100 mr-2 h-4 w-4' }),
-                    h('span', { class: 'group' }, 'Machine id'),
+                    h('span', { class: 'group' }, 'Account id'),
                 ]
             )
         },
         cell: ({ row }) => {
-            return h('div', { class: 'text-right font-medium' }, row.getValue('MachineId'))
+            return h('div', { class: 'text-right font-medium' }, row.getValue('AccountId'))
         }
     },
     {
-        accessorKey: 'MachineName',
+        accessorKey: 'FirstName',
         header: ({ column }) => {
             return h(
                 Button,
@@ -68,16 +68,16 @@ export const columns: ColumnDef<Machine>[] = [
                 },
                 () => [
                     h(ArrowUpDown, { class: 'opacity-0 group-hover:opacity-100 mr-2 h-4 w-4' }),
-                    h('span', { class: 'group' }, 'Name'),
+                    h('span', { class: 'group' }, 'Fist Name'),
                 ]
             )
         },
         cell: ({ row }) => {
-            return h('div', { class: 'text-right font-medium' }, row.getValue('MachineName'))
+            return h('div', { class: 'text-right font-medium' }, row.getValue('FistName'))
         }
     },
     {
-        accessorKey: 'MaxWeight',
+        accessorKey: 'LastName',
         header: ({ column }) => {
             return h(
                 Button,
@@ -90,16 +90,16 @@ export const columns: ColumnDef<Machine>[] = [
                 },
                 () => [
                     h(ArrowUpDown, { class: 'opacity-0 group-hover:opacity-100 mr-2 h-4 w-4' }),
-                    h('span', { class: 'group' }, 'Maximum weight'),
+                    h('span', { class: 'group' }, 'Last Name'),
                 ]
             )
         },
         cell: ({ row }) => {
-            return h('div', { class: 'text-right font-medium' }, row.getValue('MaxWeight'))
+            return h('div', { class: 'text-right font-medium' }, row.getValue('LastName'))
         }
     },
     {
-        accessorKey: 'MinWeight',
+        accessorKey: 'Role',
         header: ({ column }) => {
             return h(
                 Button,
@@ -112,12 +112,12 @@ export const columns: ColumnDef<Machine>[] = [
                 },
                 () => [
                     h(ArrowUpDown, { class: 'opacity-0 group-hover:opacity-100 mr-2 h-4 w-4' }),
-                    h('span', { class: 'group' }, 'Minimum weight'),
+                    h('span', { class: 'group' }, 'Role'),
                 ]
             )
         },
         cell: ({ row }) => {
-            return h('div', { class: 'text-right font-medium' }, row.getValue('MinWeight'))
+            return h('div', { class: 'text-right font-medium' }, row.getValue('Role'))
         }
     },
     {
@@ -144,29 +144,7 @@ export const columns: ColumnDef<Machine>[] = [
         }
     },
     {
-        accessorKey: 'PopularityScore',
-        header: ({ column }) => {
-            return h(
-                Button,
-                {
-                    class: 'group text-right',
-                    variant: 'ghost',
-                    onClick: () => {
-                        return column.toggleSorting(column.getIsSorted() === 'asc')
-                    },
-                },
-                () => [
-                    h(ArrowUpDown, { class: 'opacity-0 group-hover:opacity-100 mr-2 h-4 w-4' }),
-                    h('span', { class: 'group' }, 'Popularity score'),
-                ]
-            )
-        },
-        cell: ({ row }) => {
-            return h('div', { class: 'text-right font-medium' }, row.getValue('PopularityScore'))
-        }
-    },
-    {
-        accessorKey: 'ExerciseTypes',
+        accessorKey: 'Email',
         header: ({ column }) => {
             return h(
 
@@ -180,66 +158,84 @@ export const columns: ColumnDef<Machine>[] = [
                 },
                 () => [
                     h(ArrowUpDown, { class: 'opacity-0 group-hover:opacity-100 mr-2 h-4 w-4' }),
-                    h('span', { class: 'group' }, 'Exercise types'),
+                    h('span', { class: 'group' }, 'Email'),
                 ]
             )
         },
         cell: ({ row }) => {
-            const value: ExerciseType[] = row.getValue('ExerciseTypes')
-            let result = "N/A"
-            if (value.length > 0) {
-                result = value[0].TypeName
-            }
-            return h('div', { class: 'text-right font-medium' }, result)
+            return h('div', { class: 'text-right font-medium' }, row.getValue('Email'))
+        }
+    },
+    {
+        accessorKey: 'PhoneNumber',
+        header: ({ column }) => {
+            return h(
+
+                Button,
+                {
+                    class: 'group text-right',
+                    variant: 'ghost',
+                    onClick: () => {
+                        return column.toggleSorting(column.getIsSorted() === 'asc')
+                    },
+                },
+                () => [
+                    h(ArrowUpDown, { class: 'opacity-0 group-hover:opacity-100 mr-2 h-4 w-4' }),
+                    h('span', { class: 'group' }, 'Phone number'),
+                ]
+            )
+        },
+        cell: ({ row }) => {
+            return h('div', { class: 'text-right font-medium' }, row.getValue('PhoneNumber'))
+        }
+    },
+    {
+        accessorKey: 'Login',
+        header: ({ column }) => {
+            return h(
+
+                Button,
+                {
+                    class: 'group text-right',
+                    variant: 'ghost',
+                    onClick: () => {
+                        return column.toggleSorting(column.getIsSorted() === 'asc')
+                    },
+                },
+                () => [
+                    h(ArrowUpDown, { class: 'opacity-0 group-hover:opacity-100 mr-2 h-4 w-4' }),
+                    h('span', { class: 'group' }, 'Login'),
+                ]
+            )
+        },
+        cell: ({ row }) => {
+            return h('div', { class: 'text-right font-medium' }, row.getValue('Login'))
         }
     },
     {
         id: 'actions',
         enableHiding: false,
         cell: ({ row }) => {
-            const prop: Machine = row.original
+            const prop: Account = row.original
             const deleteFunc = async (id: number) => {
-                try {
-                    const data = await new MachineService().DeleteMachine(id)
-                    toast({
-                        title: 'Successfully deleted machine',
-                        description: `Reservation id: ${data.DeletedId}`
-                    })
-                    values.value = values.value.filter(x => x.MachineId !== data.DeletedId)
-                    return row.index
-                } catch (err) {
-                    toast({
-                        title: 'Error while deleting data',
-                        description: h(`${err}`, { class: "text-red" })
-                    })
-                    return -1
-                }
+                toast({
+                    title: 'Cannot delete accounts'
+                })
+                return -1
             }
 
             return h('div', { class: 'relative' }, h(DataGridActions, {
-                id: prop.MachineId,
-                editTableUrl: '/admin/machine/edit',
+                id: prop.AccountId,
+                editTableUrl: '/admin/account/edit',
                 deleteFunc,
-            }
-            ))
+            }))
         },
     },
 ]
 
 export async function deleteSelected(ids: number[]) {
-    for (const id of ids) {
-        try {
-            const responseData = await new MachineService().DeleteMachine(id)
-            values.value = values.value.filter(x => x.MachineId !== responseData.DeletedId)
-        } catch (err) {
-            toast({
-                title: 'Error while deleting data',
-                description: h(`ADD ERROR`, { class: "text-red" })
-            })
-        }
-    }
     toast({
-        title: 'Deleted all seleceted rows',
-        description: h('deleted rows: ${ids.join(", ").toString()}', { class: "" })
+        title: 'Cannot delete accounts'
     })
 }
+

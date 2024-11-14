@@ -7,7 +7,7 @@ export const plansRoutes = {
         {
             path: '/admin/plans/list',
             name: '',
-            component: () => import('@/views/Admin/plans/plan-list.vue'),
+            component: () => import('@/views/Admin/plans/list/plan-list.vue'),
         },
     ]
 }

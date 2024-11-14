@@ -7,7 +7,7 @@ export const typesRoutes = {
         {
             path: '/admin/types/list',
             name: '',
-            component: () => import('@/views/Admin/types/types-list.vue'),
+            component: () => import('@/views/Admin/types/list/type-list.vue'),
         },
         {
             path: '/admin/types/create',
