@@ -81,7 +81,6 @@ watch(mostFrequentCategoryId, async (newId) => {
             return type.Category.CategoryId === newId
         }).length > 0
     })[0].MachineId
-    console.log(machineId)
     try {
         const data = await new MachineService().FetchRecommendMachine(machineId)
         recommendMachines.value = data.filter(
