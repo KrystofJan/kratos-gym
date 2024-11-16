@@ -76,8 +76,14 @@ watch(mostFrequentCategoryId, async (newId) => {
     }
 
     const machineids = selectedMachines.value.map(x => x.MachineId)
+    const machineId = machines.value.filter((machine: Machine) => {
+        return machine.ExerciseTypes.filter((type: ExerciseType) => {
+            return type.Category.CategoryId === newId
+        }).length > 0
+    })[0].MachineId
+    console.log(machineId)
     try {
-        const data = await new MachineService().FetchRecommendMachine(newId)
+        const data = await new MachineService().FetchRecommendMachine(machineId)
         recommendMachines.value = data.filter(
             (machine: Machine) => !machineids.includes(machine.MachineId)
         ).slice(0, 5);
