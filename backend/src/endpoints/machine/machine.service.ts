@@ -3,6 +3,7 @@ import { logger } from "../../utils"
 import { Machine } from "."
 import { safeAwait } from "../../utils/utilities"
 import { CodedError, ErrorCode } from "../../errors/base.error"
+import { MachineDatabase } from "./machine.database"
 
 export class MachineService {
 
@@ -10,6 +11,24 @@ export class MachineService {
         const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(db.SelectAll(Machine, limit, page));
+        if (databaseErr !== null) {
+            throw databaseErr;
+        }
+
+        try {
+            const models = databaseResponse.Body.map((model: Machine) => new Machine(model))
+            return models;
+        } catch (err) {
+            logger.error(err)
+            throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllMachinees failed")
+        }
+    }
+
+
+    static async GetRecommendedMachines(id: number): Promise<Array<Machine>> {
+        const db = new MachineDatabase()
+
+        const [databaseErr, databaseResponse] = await safeAwait(db.SelectMachinesWithinTheSameCategory(id));
         if (databaseErr !== null) {
             throw databaseErr;
         }

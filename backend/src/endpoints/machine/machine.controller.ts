@@ -54,6 +54,45 @@ export class MachineController {
         response.buildResponse(req, res)
     }
 
+    static async RecommendById(req: Request, res: Response) {
+        const id = Number(req.params["id"])
+        const [err, data] = await safeAwait(MachineService.GetRecommendedMachines(id));
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = machineErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        for (const machine of data) {
+            if (!machine.MachineId) {
+                const error = new CodedError(ErrorCode.MAPPING_ERROR, "machine id is null");
+                logger.error(error)
+                const statusCode = machineErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+
+            const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByMachineId(Number(machine.MachineId)))
+
+            if (typeErr !== null) {
+                logger.error(typeErr)
+                const error = typeErr as CodedError;
+                const statusCode = machineErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            machine.ExerciseTypes = type
+        }
+
+        const response = new OkResponse("found all data successfully", data);
+        response.buildResponse(req, res)
+    }
+
     static async FindById(req: Request, res: Response) {
         const id = Number(req.params["id"])
         const [err, data] = await safeAwait(MachineService.GetMachineById(id));

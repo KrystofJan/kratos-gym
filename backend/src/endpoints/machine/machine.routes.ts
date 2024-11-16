@@ -29,5 +29,9 @@ MachineRouter.patch('/:id', async (req: Request, res: Response) => {
     await MachineController.UpdateById(req, res)
 });
 
+MachineRouter.get('/recommend/:id', async (req: Request, res: Response) => {
+    await MachineController.RecommendById(req, res)
+});
+
 // recommend
 // is occupied

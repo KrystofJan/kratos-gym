@@ -58,6 +58,8 @@ export class ReservationDatabase extends Database {
             const err = error as Error;
             logger.error(err)
             throw new CodedError(ErrorCode.INTERNAL_ERROR, "Error processing body data.");
+        } finally {
+            this.sql.end()
         }
 
 
