@@ -7,17 +7,6 @@ import MainNav from './MainNav.vue'
 import UserMenu from './UserMenu.vue'
 import { SignedOut, SignInButton, SignUpButton, SignedIn, SignOutButton } from 'vue-clerk'
 
-// TODO: figure out how to make it reacitve or use the vueuse lib
-
-const showLog = ref<boolean>(false);
-
-const toggleMenu = () => {
-    const menu = document.querySelector('.NavMenu');
-    const hamburger = document.querySelector('.hamburger');
-
-    menu.classList.toggle('show-menu');
-    hamburger.classList.toggle('active');
-}
 </script>
 
 <template>

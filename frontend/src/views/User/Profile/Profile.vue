@@ -6,6 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/shadcn/ui/aler
 import { Progress } from '@/components/shadcn/ui/progress'
 import UserCard from '@/components/User/UserCard.vue'
 import SessionsGrid from '@/components/User/SessionsGrid.vue'
+import { Terminal } from 'lucide-vue-next'
 
 const isLoading = ref(true);
 const error = ref(false)

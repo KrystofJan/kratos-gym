@@ -18,6 +18,7 @@ import {
 
 import { SignedOut, SignInButton, SignUpButton, SignedIn, SignOutButton } from 'vue-clerk'
 import { currentAccount } from "../../store/accountStore"
+import { UserRoleOptions } from '@/support'
 
 </script>
 
@@ -56,6 +57,9 @@ import { currentAccount } from "../../store/accountStore"
 
                 <DropdownMenuItem class="p-0">
                     <router-link to="/profile" class="py-1.5 px-2  w-full h-full">Settings</router-link>
+                </DropdownMenuItem>
+                <DropdownMenuItem class="p-0" v-if="currentAccount.Role === UserRoleOptions.EMPLOYEE">
+                    <router-link to="/admin" class="py-1.5 px-2  w-full h-full">Administration</router-link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>

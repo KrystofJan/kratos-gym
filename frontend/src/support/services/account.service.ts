@@ -22,6 +22,20 @@ export class AccountService {
         }
     }
 
+    async fetchAccounts(): Promise<Account[]> {
+        try {
+            const res = await fetch(`${KRATOS_API_URL}/api/account`);
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const data = await res.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching account:', error);
+            throw error;
+        }
+    }
+
     async fetchAccountByRole(role: UserRole): Promise<Account[]> {
         try {
             const res = await fetch(`${KRATOS_API_URL}/api/account?role=${roleDictionary.get(role.toLowerCase())}`);

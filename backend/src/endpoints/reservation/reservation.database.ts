@@ -72,6 +72,8 @@ export class ReservationDatabase extends Database {
         // 2. Create plan machines
         // 3. Create plan types
         // 4. Create reservations
+        //
+        // TODO: Add to docs
 
         // TODO: Ensure plan exists on higher layer
         if (!body.Plan) {

@@ -5,6 +5,11 @@ import AppHeader from './components/Header/Header.vue';
 import Footer from './components/Footer/Footer.vue';
 import { currentAccount, fetchAccount } from "./store/accountStore";
 import Toaster from '@/components/shadcn/ui/toast/Toaster.vue'
+import { useRouter, useRoute } from 'vue-router'
+import { computed } from 'vue';
+
+const router = useRouter()
+const route = useRoute()
 
 const { user, isLoaded: isUserLoaded } = useUser();
 
@@ -37,13 +42,16 @@ watch(currentAccount, async (newValue) => {
     }
 });
 
+const showHeaderAndFooter = computed(() => {
+    return !route.path.includes("/admin")
+})
 </script>
 <template>
-    <AppHeader />
+    <AppHeader v-if="showHeaderAndFooter" />
     <router-view v-slot="{ Component }">
         <component :is="Component" />
     </router-view>
-    <Footer />
+    <Footer v-if="showHeaderAndFooter" />
     <Toaster />
 </template>
 
