@@ -10,10 +10,16 @@ import { DeletedResponse } from '../../request-utility/custom-responces/deleted-
 import { AccountService } from '../account/account.service';
 import { MachinesInPlan } from './machines-in-plan.model';
 import { ExerciseCategory, ExerciseCategoryService } from '../exercise-category';
+import { PlanQueryParams } from './plan.params';
 
 export class PlanController {
 
     static async FindAll(req: Request, res: Response) {
+        if (req.query) {
+            await this.FindPlansOnDate(req, res)
+            return
+        }
+
         const [err, data] = await safeAwait(PlanService.GetAllPlanes());
         if (err !== null) {
             logger.error(err)
@@ -360,4 +366,74 @@ export class PlanController {
         response.buildResponse(req, res)
     }
 
+    static async FindPlansOnDate(req: Request, res: Response) {
+        const { date, machine_id } = req.query as PlanQueryParams
+        if (!date || !machine_id) {
+            const err = new CodedError(ErrorCode.ARGUMENT_ERROR, "Need both date and machine id query parameter")
+            logger.error(err)
+            const statusCode = planErrorHandler.handleError(err);
+            const response = new FailedResponse(err.message, statusCode, err.code);
+            response.buildResponse(req, res)
+            return;
+
+        }
+        const [err, data] = await safeAwait(PlanService.GetPlansOnDate(machine_id, new Date(date)));
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = planErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        for (const plan of data) {
+            if (!plan.User) {
+                const error = new CodedError(ErrorCode.MAPPING_ERROR, "Account was not found for " + plan.PlanId + " plan");
+                logger.error(error)
+                const statusCode = planErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            const [err, account] = await safeAwait(AccountService.GetAccountById(plan.User.AccountId));
+            if (err !== null) {
+                logger.error(err)
+                const error = err as CodedError;
+                const statusCode = planErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            plan.User = account;
+            plan.User.Address = undefined;
+            plan.User.ClerkId = undefined;
+
+            const [errMachines, machines] = await safeAwait(PlanService.GetMachinesInPlan(plan.PlanId));
+            if (errMachines !== null) {
+                logger.error(errMachines)
+                const error = errMachines as CodedError;
+                const statusCode = planErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+
+            plan.Machines = machines
+
+            const [typeErr, type] = await safeAwait(ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId))
+
+            if (typeErr !== null) {
+                logger.error(typeErr)
+                const error = typeErr as CodedError;
+                const statusCode = planErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            plan.ExerciseCategories = type
+        }
+        const response = new OkResponse("found all data successfully", data);
+        response.buildResponse(req, res)
+    }
 }

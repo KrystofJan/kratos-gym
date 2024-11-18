@@ -18,7 +18,6 @@ export class MachineDatabase extends Database {
                 FROM get_machines_in_same_category(${id})
             `;
             logger.info(`Recommend machine reuqest was successful\n${JSON.stringify(result, null, 4)}`)
-            this.sql.end()
             return new DatabaseFoundMultiple<Machine>(result);
         } catch (error) {
             const err = error as Error;
