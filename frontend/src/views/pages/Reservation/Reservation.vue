@@ -14,6 +14,7 @@ import { Time } from '@internationalized/date';
 import { SignedOut, SignedIn } from 'vue-clerk'
 import { ReservationService } from '@/support';
 import { currentAccount } from "@/store/accountStore"
+import {PlanService} from "@/support/services"
 
 const formSchema = toTypedSchema(z.object({
     planName: z.string().min(5).max(50),
@@ -124,6 +125,23 @@ watch(() => Form.values.machines, (newMachines) => {
         ...machine,
         ExerciseTypes: []
     }));
+}, { deep: true });
+
+
+const concurrentPlans = ref<Plan[]>([])
+watch(() => Form.values.arrivalDate, (newDate) => {
+    if (!newDate) {
+        concurrentPlans.value = []
+        return;
+    }
+    
+    try {
+        const data = await new PlanService().FetchPlansOnDate({machine_id: })
+    } catch (err) {
+        console.error("error fetching concurrent plans", err)
+    }
+
+    concurrentPlans.value = 
 }, { deep: true });
 </script>
 

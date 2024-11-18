@@ -13,16 +13,9 @@ export class PlanDatabase extends Database {
 
     async SelectMachinesUsedOnDate(id: number, date: Date) {
 
-        logger.warn(`
-                select ${this.sql("plan")}.*
-                from ${this.sql("plan_machine")}
-                    inner join ${this.sql("plan")}
-                        on ${this.sql("plan_machine")}.${this.sql("plan_id")} = ${this.sql("plan")}.${this.sql("plan_id")}
-                    inner join ${this.sql("reservation")}
-                               on ${this.sql("Plan")}.${this.sql("plan_id")} = ${this.sql("reservation")}.${this.sql("plan_id")}
-                where machine_id = ${id}
-                    and TO_CHAR(reservation_time, 'YYYY-MM-DD') = '${format(date, "yyyy-MM-dd")}' 
-`)
+        // NOTE: make this one more time without id, so it returns all plans from here
+        //
+        // another option i can add all machines selected in body and find in array query
         try {
             const result: Plan[] = await this.sql<Plan[]>`
                 select ${this.sql("plan")}.* 
