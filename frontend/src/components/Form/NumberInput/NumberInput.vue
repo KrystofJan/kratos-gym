@@ -23,7 +23,6 @@ const handleChange = () => {
 }
 
 const validateNumberRange = () => {
-    console.log("hihihi");
     if (Value.value > props.max) {
         MaxError.value = true;
         Error.value = true;

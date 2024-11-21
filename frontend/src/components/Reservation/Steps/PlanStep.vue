@@ -61,7 +61,6 @@ const fetchData = async () => {
     try {
         const data = await new AccountService().fetchAccountByRole(UserRoleOptions.TRAINER)
         trainers.value = data
-        console.log(data)
     } catch (error) {
         console.error('Error fetching data:', error);
     }

@@ -14,48 +14,63 @@ import { Time } from '@internationalized/date';
 import { SignedOut, SignedIn } from 'vue-clerk'
 import { ReservationService } from '@/support';
 import { currentAccount } from "@/store/accountStore"
-import {PlanService} from "@/support/services"
+import { PlanService } from "@/support/services"
+import { Plan } from '@/support';
+import { format, parse } from 'date-fns'
 
+// Trainer Schema
+const trainerSchema = z.object({
+    AccountId: z.number(),
+    FirstName: z.string(),
+    LastName: z.string(),
+    Email: z.string(),
+    PhoneNumber: z.string(),
+    Login: z.string(),
+    ClerkId: z.string(),
+    ProfilePictureUrl: z.string().optional(),
+});
+
+// Machine Schema
+const machineSchema = z.object({
+    MachineId: z.number(),
+    MachineName: z.string(),
+    MaxWeight: z.number(),
+    MinWeight: z.number(),
+    MaxPeople: z.number(),
+    AvgTimeTaken: z.number(),
+    PopularityScore: z.number(),
+});
+
+// Machine In Plan Schema
+const machinesInPlanSchema = z.object({
+    Reps: z.number().default(6),
+    Sets: z.number().default(4),
+    StartTime: z.object({
+        hour: z.number().min(0).max(24).default(0),
+        minute: z.number().min(0).max(59).default(0),
+    }),
+    EndTime: z.object({
+        hour: z.number().min(0).max(24).default(0),
+        minute: z.number().min(0).max(59).default(0),
+    }),
+});
+
+// Exercise Category Schema
+const exerciseCategorySchema = z.object({
+    CategoryId: z.number(),
+    CategoryName: z.string(),
+});
+
+// Main Schema
 const formSchema = toTypedSchema(z.object({
     planName: z.string().min(5).max(50),
     amountOfPeople: z.number().min(1).max(5).default(1),
     arrivalDate: z.any(),
-    trainer: z.object({
-        AccountId: z.number(),
-        FirstName: z.string(),
-        LastName: z.string(),
-        Email: z.string(),
-        PhoneNumber: z.string(),
-        Login: z.string(),
-        ClerkId: z.string(),
-        ProfilePictureUrl: z.string().optional()
-    }).optional(),
-    machines: z.array(z.object({
-        MachineId: z.number(),
-        MachineName: z.string(),
-        MaxWeight: z.number(),
-        MinWeight: z.number(),
-        MaxPeople: z.number(),
-        AvgTimeTaken: z.number(),
-        PopularityScore: z.number(),
-    })).min(1),
-    machinesInPlan: z.array(z.object({
-        Reps: z.number().default(6),
-        Sets: z.number().default(4),
-        StartTime: z.object({
-            hour: z.number().min(0).max(24).default(0),
-            minute: z.number().min(0).max(59).default(0),
-        }),
-        EndTime: z.object({
-            hour: z.number().min(0).max(24).default(0),
-            minute: z.number().min(0).max(59).default(0),
-        }),
-    })),
-    exerciseCategories: z.array(z.object({
-        CategoryId: z.number(),
-        CategoryName: z.string()
-    }))
-}))
+    trainer: trainerSchema.optional(),
+    machines: z.array(machineSchema).min(1),
+    machinesInPlan: z.array(machinesInPlanSchema),
+    exerciseCategories: z.array(exerciseCategorySchema),
+}));
 
 const Form = useForm({
     validationSchema: formSchema,
@@ -101,12 +116,6 @@ const onSubmit = Form.handleSubmit(async (values) => {
     }
 })
 
-const StepNumber = ref(1);
-const moveNext = (stepNumber: number) => {
-    if (StepNumber.value == stepNumber) {
-        StepNumber.value++;
-    }
-}
 
 const selectedMachines = ref<Machine[]>([]);
 const machineSelector = ref<InstanceType<typeof PickMachineStep> | null>(null);
@@ -129,19 +138,28 @@ watch(() => Form.values.machines, (newMachines) => {
 
 
 const concurrentPlans = ref<Plan[]>([])
-watch(() => Form.values.arrivalDate, (newDate) => {
+watch(() => Form.values.machines, async () => {
+    concurrentPlans.value = []
+    const newDate = Form.values.arrivalDate
     if (!newDate) {
-        concurrentPlans.value = []
         return;
     }
-    
-    try {
-        const data = await new PlanService().FetchPlansOnDate({machine_id: })
-    } catch (err) {
-        console.error("error fetching concurrent plans", err)
-    }
 
-    concurrentPlans.value = 
+    const date = parse(`${newDate.year}-${newDate.month}-${newDate.day}`, "yyyy-MM-dd", new Date())
+    for (const machine of selectedMachines.value) {
+        try {
+            const data = await new PlanService().FetchPlansOnDate({
+                machine_id: machine.MachineId,
+                date
+            })
+
+            data.forEach((element: Plan) => {
+                concurrentPlans.value.push(element)
+            });
+        } catch (err) {
+            console.error("error fetching concurrent plans", err)
+        }
+    }
 }, { deep: true });
 </script>
 

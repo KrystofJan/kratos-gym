@@ -10,7 +10,6 @@ const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 const CLERK_SECRET_KEY = import.meta.env.VITE_CLERK_SECRET_KEY
 
 if (!CLERK_PUBLISHABLE_KEY) {
-    console.log(import.meta.env)
     throw new Error('Missing Publishable Key')
 }
 

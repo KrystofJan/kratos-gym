@@ -25,7 +25,6 @@ onMounted(async () => {
         try {
             const data = await new ReservationService().FetchReservationsByAddressId(currentAccount.value?.AccountId);
             reservations.value = data
-            console.log("asdasd")
         } catch (error) {
             console.error('Error fetching account:', error);
             // Instead of throwing, we set currentAccount to null to indicate a failed fetch
