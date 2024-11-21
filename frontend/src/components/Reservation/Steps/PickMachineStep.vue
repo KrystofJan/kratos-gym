@@ -133,7 +133,7 @@ onMounted(async () => {
 
 <template>
     <Step :builderText="builderText">
-        <form class="w-2/3 space-y-6" @submit="onSubmit">
+        <form class="w-2/3 space-y-6 justify-center flex" @submit="onSubmit">
             <FormField name="machines">
                 <div v-for="(item, index) in machineArray" :key="item.MachineId ?? index">
                     <FormItem class="flex flex-row items-start space-x-3 space-y-0">

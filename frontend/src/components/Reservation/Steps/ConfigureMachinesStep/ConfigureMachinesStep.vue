@@ -54,7 +54,7 @@ const onSubmit = handleSubmit(values => {
 <template>
     <Step v-if="selectedMachines.length > 0" :builderText="builderText">
 
-        <form class="w-2/3 space-y-6" @submit="onSubmit">
+        <form class="w-2/3 space-y-6 justify-center flex" @submit="onSubmit">
             <div class="grid grid-cols-2 md:grid-cols-3 grid-auto-columns-1/2 md:grid-auto-columns-1/3 gap-4">
                 <FieldArray name="machinesInPlan">
                     <ConfigureMachinesStepItem v-for="(machine, index) in selectedMachines" :key="index"

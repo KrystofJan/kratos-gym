@@ -34,6 +34,7 @@ import {
 } from '@/components/shadcn/ui/popover'
 import { Check, ChevronsUpDown } from 'lucide-vue-next'
 
+
 import { Button } from '@/components/shadcn/ui/button'
 import { Calendar } from '@/components/shadcn/ui/calendar'
 import { format } from 'date-fns'
@@ -109,9 +110,7 @@ onMounted(async () => {
 
 <template>
     <Step :builderText="builderText">
-
-        <form class="w-2/3 space-y-6" @submit="onSubmit">
-
+        <form class="w-2/3 space-y-6 justify-center flex flex-col" @submit="onSubmit">
             <FormField v-slot="{ componentField }" name="planName">
                 <FormItem>
                     <FormLabel>Plan name</FormLabel>
