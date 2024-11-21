@@ -18,91 +18,40 @@ import { PlanService } from "@/support/services"
 import { Plan } from '@/support';
 import { format, parse } from 'date-fns'
 
-// Trainer Schema
-const trainerSchema = z.object({
-    AccountId: z.number(),
-    FirstName: z.string(),
-    LastName: z.string(),
-    Email: z.string(),
-    PhoneNumber: z.string(),
-    Login: z.string(),
-    ClerkId: z.string(),
-    ProfilePictureUrl: z.string().optional(),
-});
+const reservation = ref<Partial<ReservationPost>>({})
+const stepIndex = ref<number>(0)
+const selectedMachines = ref<Machine[]>([]);
 
-// Machine Schema
-const machineSchema = z.object({
-    MachineId: z.number(),
-    MachineName: z.string(),
-    MaxWeight: z.number(),
-    MinWeight: z.number(),
-    MaxPeople: z.number(),
-    AvgTimeTaken: z.number(),
-    PopularityScore: z.number(),
-});
-
-// Machine In Plan Schema
-const machinesInPlanSchema = z.object({
-    Reps: z.number().default(6),
-    Sets: z.number().default(4),
-    StartTime: z.object({
-        hour: z.number().min(0).max(24).default(0),
-        minute: z.number().min(0).max(59).default(0),
-    }),
-    EndTime: z.object({
-        hour: z.number().min(0).max(24).default(0),
-        minute: z.number().min(0).max(59).default(0),
-    }),
-});
 
 // Exercise Category Schema
-const exerciseCategorySchema = z.object({
-    CategoryId: z.number(),
-    CategoryName: z.string(),
-});
-
-// Main Schema
-const formSchema = toTypedSchema(z.object({
-    planName: z.string().min(5).max(50),
-    amountOfPeople: z.number().min(1).max(5).default(1),
-    arrivalDate: z.any(),
-    trainer: trainerSchema.optional(),
-    machines: z.array(machineSchema).min(1),
-    machinesInPlan: z.array(machinesInPlanSchema),
-    exerciseCategories: z.array(exerciseCategorySchema),
-}));
-
-const Form = useForm({
-    validationSchema: formSchema,
-})
-
-const onSubmit = Form.handleSubmit(async (values) => {
+const onSubmit = async () => {
 
     // TODO: CREATE A RESERVATION AND ROUTE TO DETAIL
     try {
         const reservationService = new ReservationService();
-        const reservation: ReservationPost = {
-            AmountOfPeople: values.amountOfPeople,
-            ReservationTime: new Date(values.arrivalDate.year, values.arrivalDate.month, values.arrivalDate.day),
+        if (!reservation.value.Plan) {
+            throw new Error("Plan was not set")
+        }
+        const reserv: Partial<ReservationPost> = {
+            ...reservation.value,
             CustomerId: Number(currentAccount.value?.AccountId),
-            TrainerId: values.trainer?.AccountId,
             Plan: {
-                PlanName: values.planName,
+                ...reservation.value.Plan,
                 AccountId: Number(currentAccount.value?.AccountId),
-                Machines: values.machinesInPlan.map((mip, index) => {
+                Machines: reservation.value.Plan.Machines.map((mip, index) => {
                     const StartTime = new Time(mip.StartTime.hour, mip.StartTime.minute)
                     const EndTime = new Time(mip.EndTime.hour, mip.EndTime.minute)
                     return {
                         ...mip,
-                        MachineId: values.machines[index].MachineId,
+                        MachineId: selectedMachines.value[index].MachineId,
                         StartTime: StartTime.toString(),
                         EndTime: EndTime.toString(),
                     }
                 }),
-                ExerciseCategories: values.exerciseCategories
             }
         }
-        const data = await reservationService.CreateFullReservation(reservation);
+        console.log(reserv)
+        const data = await reservationService.CreateFullReservation(reserv);
         toast({
             title: 'Sucessfully created a reservation',
             description: `Reservation id: ${data.CreatedId}`
@@ -114,38 +63,18 @@ const onSubmit = Form.handleSubmit(async (values) => {
                 h('code', { class: 'text-white' }, err?.toString())),
         })
     }
-})
-
-
-const selectedMachines = ref<Machine[]>([]);
-const machineSelector = ref<InstanceType<typeof PickMachineStep> | null>(null);
-
-watch(Form.errors, (errors) => {
-    console.log(errors);
-}, { deep: true });
-
-watch(() => Form.values.machines, (newMachines) => {
-    if (!newMachines) {
-        selectedMachines.value = [];
-        return;
-    }
-
-    selectedMachines.value = newMachines.map(machine => ({
-        ...machine,
-        ExerciseTypes: []
-    }));
-}, { deep: true });
+}
 
 
 const concurrentPlans = ref<Plan[]>([])
-watch(() => Form.values.machines, async () => {
+watch(() => selectedMachines, async () => {
     concurrentPlans.value = []
-    const newDate = Form.values.arrivalDate
+    const newDate = reservation.value.ReservationTime
     if (!newDate) {
         return;
     }
 
-    const date = parse(`${newDate.year}-${newDate.month}-${newDate.day}`, "yyyy-MM-dd", new Date())
+    const date = parse(`${newDate.getFullYear()}-${newDate.getMonth()}-${newDate.getDay()}`, "yyyy-MM-dd", new Date())
     for (const machine of selectedMachines.value) {
         try {
             const data = await new PlanService().FetchPlansOnDate({
@@ -175,11 +104,66 @@ watch(() => Form.values.machines, async () => {
     </SignedOut>
     <SignedIn>
         <div class="flex justify-center">
-            <form class="w-2/3 space-y-6" @submit="onSubmit">
-                <PlanStep :setFieldValue="Form.setFieldValue" />
-                <PickMachineStep ref="machineSelector" />
-                <ConfigureMachinesStep :selectedMachines="selectedMachines" :setFieldValue="Form.setFieldValue" />
-                <TypeStep :setFieldValue="Form.setFieldValue" />
+            <form class="w-2/3 space-y-6" @submit.prevent="onSubmit">
+                <PlanStep @submit="value => {
+                    reservation.AmountOfPeople = value.amountOfPeople
+                    reservation.ReservationTime = new Date(
+                        value.arrivalDate.year,
+                        value.arrivalDate.month,
+                        value.arrivalDate.day
+                    )
+                    reservation.TrainerId = value.trainer?.AccountId
+                    reservation.Plan = { PlanName: value.planName }
+                    stepIndex++
+
+                    toast({
+                        title: 'Sucessfully created a reservation',
+                        description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
+                            h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
+                    });
+                }" />
+                <PickMachineStep @submit="value => {
+                    selectedMachines = [...value.machines.map(machine => {
+                        return {
+                            ...machine,
+                            ExerciseTypes: []
+                        }
+                    })]
+
+                    stepIndex++
+
+                    toast({
+                        title: 'Sucessfully created a reservation',
+                        description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
+                            h('code', { class: 'text-white' }, JSON.stringify(selectedMachines, null, 4))),
+                    });
+                }" />
+                <ConfigureMachinesStep :selectedMachines="selectedMachines" @submit="value => {
+                    const plan = reservation.Plan
+                    reservation.Plan = {
+                        ...plan,
+                        Machines: value
+                    }
+
+                    toast({
+                        title: 'Sucessfully created a reservation',
+                        description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
+                            h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
+                    });
+                }" />
+                <TypeStep @submit="value => {
+                    const plan = reservation.Plan
+                    reservation.Plan = {
+                        ...plan,
+                        ExerciseCategories: value
+                    }
+
+                    toast({
+                        title: 'Sucessfully created a reservation',
+                        description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
+                            h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
+                    });
+                }" />
                 <Button type="submit">
                     Submit
                 </Button>

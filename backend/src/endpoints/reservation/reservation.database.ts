@@ -58,10 +58,7 @@ export class ReservationDatabase extends Database {
             const err = error as Error;
             logger.error(err)
             throw new CodedError(ErrorCode.INTERNAL_ERROR, "Error processing body data.");
-        } finally {
-            this.sql.end()
         }
-
 
         const columnNames = Object.keys(processedData);
         return [tableName, processedData, columnNames]
@@ -84,6 +81,7 @@ export class ReservationDatabase extends Database {
         const [planTableName, planProcessedData, planColumnNames] = await this.ProcessInsertData(Plan, body.Plan)
         try {
 
+            logger.info("esketit")
             const res = await this.sql.begin(async sql => {
 
                 const [plan] = await sql<Plan[]>`
@@ -92,6 +90,7 @@ export class ReservationDatabase extends Database {
                     returning *
                 `
 
+                logger.info("plan done")
                 const planModel = new Plan(plan)
                 const machines = []
                 const types = []
@@ -108,6 +107,7 @@ export class ReservationDatabase extends Database {
                     `
                     machines.push(new MachinesInPlan(machine))
                 }
+                logger.info("machine done")
 
                 planModel.Machines = machines
 
@@ -121,6 +121,7 @@ export class ReservationDatabase extends Database {
                     `
                     types.push(new ExerciseCategory(type))
                 }
+                logger.info("extype done")
 
                 planModel.ExerciseCategories = types
                 body.Plan = planModel
@@ -131,13 +132,18 @@ export class ReservationDatabase extends Database {
                     ${this.sql(resProcessedData, resColumnNames)}
                     returning *
                 `
+
+                logger.info("res done")
                 return reservation
             })
             return new DatabaseCreated<Reservation>(res)
         } catch (error) {
             const err = error as Error;
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
+        } finally {
+            this.sql.end()
         }
+
 
     }
 }

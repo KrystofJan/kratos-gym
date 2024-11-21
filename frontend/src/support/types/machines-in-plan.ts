@@ -9,11 +9,3 @@ export interface MachinesInPlan {
     EndTime: Time;
 }
 
-export interface MachinesInPlanPost {
-    PlanId?: number;
-    MachineId: number;
-    Sets: number;
-    Reps: number;
-    StartTime: string;
-    EndTime: string;
-}
