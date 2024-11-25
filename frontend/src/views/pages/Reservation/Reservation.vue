@@ -67,31 +67,9 @@ const onSubmit = async () => {
 }
 
 
-const concurrentPlans = ref<Plan[]>([])
-watch(() => selectedMachines, async () => {
-    concurrentPlans.value = []
-    const newDate = reservation.value.ReservationTime
-    if (!newDate) {
-        return;
-    }
-
-    const date = parse(`${newDate.getFullYear()}-${newDate.getMonth()}-${newDate.getDay()}`, "yyyy-MM-dd", new Date())
-    for (const machine of selectedMachines.value) {
-        try {
-            const data = await new PlanService().FetchPlansOnDate({
-                machine_id: machine.MachineId,
-                date
-            })
-
-            data.forEach((element: Plan) => {
-                concurrentPlans.value.push(element)
-            });
-        } catch (err) {
-            console.error("error fetching concurrent plans", err)
-        }
-    }
-}, { deep: true });
-
+watch(() => reservation.value, () => {
+    console.log(reservation.value)
+}, { deep: true })
 const steps = [
     { step: 1, title: 'Plan Details', description: 'Provide plan details like name and trainer.' },
     { step: 2, title: 'Pick Machines', description: 'Select the machines for your plan.' },
@@ -143,11 +121,16 @@ const steps = [
                         <template v-if="stepIndex === 1">
                             <PlanStep @submit="value => {
                                 reservation.AmountOfPeople = value.amountOfPeople
-                                reservation.ReservationTime = new Date(
-                                    value.arrivalDate.year,
-                                    value.arrivalDate.month,
-                                    value.arrivalDate.day
+                                reservation.ReservationTime = parse(
+                                    `${value.arrivalDate.month}-${value.arrivalDate.day}-${value.arrivalDate.year}`,
+                                    'MM-dd-yyyy',
+                                    new Date()
                                 )
+                                console.log(reservation.ReservationTime)
+
+                                console.log(value.arrivalDate.year)
+                                console.log(value.arrivalDate.month)
+                                console.log(value.arrivalDate.day)
                                 reservation.TrainerId = value.trainer?.AccountId
                                 reservation.Plan = { PlanName: value.planName }
                                 stepIndex++
@@ -179,21 +162,22 @@ const steps = [
                             }" />
                         </template>
                         <template v-if="stepIndex === 3">
-                            <ConfigureMachinesStep :selectedMachines="selectedMachines" @submit="value => {
-                                const plan = reservation.Plan
-                                reservation.Plan = {
-                                    ...plan,
-                                    Machines: value
-                                }
+                            <ConfigureMachinesStep :reservation-time="reservation.ReservationTime"
+                                :selectedMachines="selectedMachines" @submit="value => {
+                                    const plan = reservation.Plan
+                                    reservation.Plan = {
+                                        ...plan,
+                                        Machines: value
+                                    }
 
-                                stepIndex++
+                                    stepIndex++
 
-                                toast({
-                                    title: 'Sucessfully created a reservation',
-                                    description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
-                                        h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
-                                });
-                            }" />
+                                    toast({
+                                        title: 'Sucessfully created a reservation',
+                                        description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
+                                            h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
+                                    });
+                                }" />
                         </template>
                         <template v-if="stepIndex === 4">
                             <TypeStep @submit="value => {
