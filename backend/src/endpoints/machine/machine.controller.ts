@@ -4,6 +4,7 @@ import {
     Machine,
     machineErrorHandler,
     MachineQueryParams,
+    MachineUsageQueryParams
 } from '.'
 import { CreatedResponse, FailedResponse, OkResponse } from '../../request-utility';
 import { logger } from '../../utils';
@@ -11,6 +12,7 @@ import { CodedError, ErrorCode } from '../../errors';
 import { safeAwait } from '../../utils/utilities';
 import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response';
 import { ExerciseTypeService } from '../exercise-type';
+import { PlanService } from '../plan';
 
 
 export class MachineController {
@@ -216,6 +218,97 @@ export class MachineController {
             const response = new FailedResponse(error.message, statusCode, error.code);
             response.buildResponse(req, res)
             return;
+        }
+
+        const response = new OkResponse("found all data successfully", data);
+        response.buildResponse(req, res)
+    }
+
+    static async FindUsageForDate(req: Request, res: Response) {
+        const machine_id = Number(req.params["id"])
+        const { desired_date } = req.query as MachineUsageQueryParams
+        if (!machine_id || !desired_date) {
+            const error = new CodedError(ErrorCode.ARGUMENT_ERROR, "You need both machine_id and desired_date filled in in order to get machine usage data")
+            const statusCode = machineErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        const [err, data] = await safeAwait(MachineService.GetMachineUsageByDate(machine_id, desired_date));
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = machineErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        for (const machineUsg of data) {
+            if (!machineUsg.Plan || !machineUsg.Plan.PlanId) {
+                const error = new CodedError(ErrorCode.MAPPING_ERROR, "plan id is null");
+                logger.error(error)
+                const statusCode = machineErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+
+            const [planErr, plan] = await safeAwait(PlanService.GetPlanById(Number(machineUsg.Plan.PlanId)))
+
+            if (planErr !== null) {
+                logger.error(planErr)
+                const error = planErr as CodedError;
+                const statusCode = machineErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            machineUsg.Plan = plan
+
+
+            if (!machineUsg.PreviousPlan.PlanId) {
+                const error = new CodedError(ErrorCode.MAPPING_ERROR, "prev plan id is null");
+                logger.error(error)
+                const statusCode = machineErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+
+            const [prevPlanErr, prevPlan] = await safeAwait(PlanService.GetPlanById(Number(machineUsg.PreviousPlan.PlanId)))
+
+            if (prevPlanErr !== null) {
+                logger.error(prevPlanErr)
+                const error = prevPlanErr as CodedError;
+                const statusCode = machineErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            machineUsg.PreviousPlan = prevPlan
+
+
+            if (!machineUsg.NextPlan.PlanId) {
+                const error = new CodedError(ErrorCode.MAPPING_ERROR, "next plan id is null");
+                logger.error(error)
+                const statusCode = machineErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+
+            const [nextPlanErr, nextPlan] = await safeAwait(PlanService.GetPlanById(Number(machineUsg.NextPlan.PlanId)))
+
+            if (nextPlanErr !== null) {
+                logger.error(nextPlanErr)
+                const error = nextPlanErr as CodedError;
+                const statusCode = machineErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            machineUsg.NextPlan = nextPlan
         }
 
         const response = new OkResponse("found all data successfully", data);

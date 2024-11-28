@@ -1,5 +1,8 @@
 import { RequestQueryParams } from "../base";
 
 export interface MachineQueryParams extends RequestQueryParams {
-    esketit?: number
+}
+
+export interface MachineUsageQueryParams extends RequestQueryParams {
+    desired_date?: Date
 }

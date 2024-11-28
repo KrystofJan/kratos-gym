@@ -1,6 +1,6 @@
 import { BasicQueryDatabase } from "../../database"
 import { logger } from "../../utils"
-import { Machine } from "."
+import { Machine, MachineUsage } from "."
 import { safeAwait } from "../../utils/utilities"
 import { CodedError, ErrorCode } from "../../errors/base.error"
 import { MachineDatabase } from "./machine.database"
@@ -127,6 +127,23 @@ export class MachineService {
         }
 
         return Number(model.MachineId);
+    }
+
+    static async GetMachineUsageByDate(id: number, date: Date): Promise<Array<MachineUsage>> {
+        const db = new MachineDatabase()
+
+        const [databaseErr, databaseResponse] = await safeAwait(db.SelectMachineUsageByDate(id, date));
+        if (databaseErr !== null) {
+            throw databaseErr;
+        }
+
+        try {
+            const models = databaseResponse.Body.map((model: MachineUsage) => new MachineUsage(model))
+            return models;
+        } catch (err) {
+            logger.error(err)
+            throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllMachinees failed")
+        }
     }
 }
 
