@@ -1,7 +1,6 @@
 import { IDictionary } from '../../utils';
 import { Model } from '../base';
 import { Column, ForeignKey, Table, PrimaryKey, DifferentlyNamedForeignKey } from "../../database";
-
 import { Plan } from '../plan/plan.model';
 import { Machine } from './machine.model';
 
@@ -28,7 +27,7 @@ export class MachineUsage extends Model {
     @ForeignKey(Plan)
     @DifferentlyNamedForeignKey("PreviousPlanId")
     @Column("previous_plan_id")
-    public PreviousPlan: Plan
+    public PreviousPlan: Plan | null
 
     @Column("previous_start_time")
     public PreviousStartTime: Date;
@@ -40,7 +39,7 @@ export class MachineUsage extends Model {
     @ForeignKey(Plan)
     @DifferentlyNamedForeignKey("NextPlanId")
     @Column("next_plan_id")
-    public NextPlan: Plan
+    public NextPlan: Plan | null
 
     @Column("next_start_time")
     public NextStartTime: Date;
@@ -69,7 +68,12 @@ export class MachineUsage extends Model {
         if (jsonData["previous_plan"]) {
             this.PreviousPlan = jsonData["previous_plan"]
         } else {
-            this.PreviousPlan = new Plan(jsonData)
+            const tmp = { ...jsonData }
+            tmp["plan_id"] = tmp["previous_plan_id"] ?? jsonData["PreviousPlanId"]
+            this.PreviousPlan = new Plan(tmp)
+            if (!this.PreviousPlan.PlanId) {
+                this.PreviousPlan = null
+            }
         }
 
         this.PreviousStartTime = jsonData["PreviousStartTime"] ?? jsonData["previous_start_time"]
@@ -79,9 +83,17 @@ export class MachineUsage extends Model {
         if (jsonData["next_plan"]) {
             this.NextPlan = jsonData["next_plan"]
         } else {
-            this.NextPlan = new Plan(jsonData)
+            const tmp = { ...jsonData }
+            tmp["plan_id"] = tmp["next_plan_id"] ?? jsonData["NextPlanId"]
+            this.NextPlan = new Plan(tmp)
+
+            if (!this.NextPlan.PlanId) {
+                this.NextPlan = null
+            }
         }
         this.NextStartTime = jsonData["NextStartTime"] ?? jsonData["next_start_time"]
         this.NextEndTime = jsonData["NextEndTime"] ?? jsonData["next_end_time"]
     }
 }
+
+

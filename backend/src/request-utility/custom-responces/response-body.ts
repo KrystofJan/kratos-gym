@@ -1,4 +1,5 @@
 import { Model } from '../../endpoints/base';
+import { Suggestion } from '../../endpoints/machine';
 import { ResponseStatus } from '../common/response-status';
 
 export interface ResponseBody {
@@ -23,7 +24,7 @@ export interface PostMultipleResponseBody extends ResponseBody {
 }
 
 export interface GetResponseBody extends ResponseBody {
-    Body: Array<Model> | Model;
+    Body: Array<Model> | Model | Suggestion;
 }
 
 export interface LogInResponseBody extends ResponseBody {
