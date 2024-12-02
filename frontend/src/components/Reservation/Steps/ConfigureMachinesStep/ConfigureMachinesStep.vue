@@ -8,18 +8,42 @@ import { z } from 'zod';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import { Button } from '@/components/shadcn/ui/button';
-import { PlanService } from "@/support/services"
+import { PlanService, MachineService } from "@/support/services"
 import { format, max, parse } from 'date-fns'
 import { onMounted } from 'vue';
 import { reservation } from '@/store/ReservationStore';
 import { Time } from "@internationalized/date";
+import { TimeSuggestion } from '@/support';
 import { start } from 'repl';
 import { argv0 } from 'process';
+import { computed } from '@vue/reactivity';
 
-const emit = defineEmits(['submit']);
+const emit = defineEmits(['submit', 'prev']);
 interface Props {
     reservationTime?: Date,
     selectedMachines: Machine[],
+}
+
+const timeRecs = ref<Map<number, TimeSuggestion>>(new Map())
+
+
+function formatTime(time: TimeSuggestion | undefined): string {
+    if (!time) {
+        return ""
+    }
+    const prevHours = time.Previous[0].hour.toString().padStart(2, "0");
+    const prevMinutes = time.Previous[0].minute.toString().padStart(2, "0");
+    const prevHoursTwo = time.Previous[1].hour.toString().padStart(2, "0");
+    const prevMinutesTwo = time.Previous[1].minute.toString().padStart(2, "0");
+
+    const nextHours = time.Next[0].hour.toString().padStart(2, "0");
+    const nextMinutes = time.Next[0].minute.toString().padStart(2, "0");
+    const nextHoursTwo = time.Next[1].hour.toString().padStart(2, "0");
+    const nextMinutesTwo = time.Next[1].minute.toString().padStart(2, "0");
+    return `
+${prevHours}:${prevMinutes} - ${prevHoursTwo}:${prevMinutesTwo}
+${nextHours}:${nextMinutes} - ${nextHoursTwo}:${nextMinutesTwo}
+    `;
 }
 
 const props = defineProps<Props>();
@@ -52,6 +76,7 @@ const schema = toTypedSchema(
                 }, { message: "Start time cannot be after End Time" }
             )).refine(
                 (data) => {
+                    timeRecs.value.clear()
                     for (let i = 0; i < data.length; ++i) {
                         const startTime = data[i].StartTime.hour * 60 + data[i].StartTime.minute
                         const endTime = data[i].EndTime.hour * 60 + data[i].EndTime.minute
@@ -68,16 +93,29 @@ const schema = toTypedSchema(
                             const minEndTime = machineEndTime <= endTime ? machineEndTime : endTime
                             const maxStartTime = machineStartTime >= startTime ? machineStartTime : startTime
 
+
+
                             if (
                                 maxStartTime <= minEndTime
                             ) {
+
+                                const startTimeTime = new Time(data[i].StartTime.hour, data[i].StartTime.minute)
+                                const endTimeTime = new Time(data[i].EndTime.hour, data[i].EndTime.minute)
+                                suggestTime(machine.MachineId, {
+                                    desired_date: props.reservationTime ?? new Date(),
+                                    desired_start_time: startTimeTime,
+                                    desired_end_time: endTimeTime
+                                })
                                 return false
                             }
                         }
                     }
+
                     return true
                 },
-                { message: "There is a value a reservation in this timeframe try a different one" } // NOTE: Get free timeframe
+                {
+                    message: "Machines colide"
+                }
             )
     })
 );
@@ -107,14 +145,32 @@ const fetchConcurrentPlans = async () => {
     }
 }
 
+const suggestTime = async (id: number, vars: {
+    desired_date: Date,
+    desired_start_time: Time,
+    desired_end_time: Time,
+}) => {
+    try {
+        const data = await new MachineService().SuggestTime(id, vars)
+        timeRecs.value.set(id, data)
+    } catch (error) {
+        console.error('Error fetching account:', error);
+        timeRecs.value.delete(id)
+    }
+}
+
+
 const { handleSubmit, setFieldValue } = useForm({
     validationSchema: schema,
 })
 
 const onSubmit = handleSubmit(values => {
-    console.log(values)
     emit('submit', values.machinesInPlan)
 })
+
+const prev = () => {
+    emit('prev')
+}
 
 onMounted(async () => {
     await fetchConcurrentPlans()
@@ -123,25 +179,37 @@ onMounted(async () => {
 </script>
 
 <template>
+
     <Step v-if="selectedMachines.length > 0" :builderText="builderText">
-        <pre>
-            <code>
-                {{ concurrentPlans }}
-            </code>
-        </pre>
-        <form class="w-2/3 space-y-6 justify-center flex" @submit="onSubmit">
+        <form class="justify-center flex flex-col gap-4" @submit="onSubmit">
             <div class="grid grid-cols-2 md:grid-cols-3 grid-auto-columns-1/2 md:grid-auto-columns-1/3 gap-4">
                 <FieldArray name="machinesInPlan">
-                    <ConfigureMachinesStepItem v-for="(machine, index) in selectedMachines" :key="index"
-                        :machine="machine" :set-field-value="setFieldValue" :index="index" />
+                    <div v-for="(machine, index) in selectedMachines" :key="index">
+                        <ConfigureMachinesStepItem :machine="machine" :set-field-value="setFieldValue" :index="index" />
+                        <span>
+                            {{ formatTime(timeRecs.get(machine.MachineId)) }}
+                        </span>
+                    </div>
                 </FieldArray>
             </div>
 
-            <Button type="submit">
-                Next
-            </Button>
+            <div>
+                <Button @click="prev">
+                    Prev
+                </Button>
+
+                <Button type="submit">
+                    Next
+                </Button>
+            </div>
         </form>
     </Step>
+
+    <pre>
+        <code>
+            {{ concurrentPlans }}
+        </code>
+    </pre>
 </template>
 
 <style lang="scss"></style>

@@ -118,56 +118,80 @@ const steps = [
                 </div>
                 <form class="w-full space-y-6" @submit.prevent="onSubmit">
                     <div class="flex flex-col gap-4">
-                        <template v-if="stepIndex === 1">
-                            <PlanStep @submit="value => {
-                                reservation.AmountOfPeople = value.amountOfPeople
-                                reservation.ReservationTime = parse(
-                                    `${value.arrivalDate.month}-${value.arrivalDate.day}-${value.arrivalDate.year}`,
-                                    'MM-dd-yyyy',
-                                    new Date()
-                                )
-                                console.log(reservation.ReservationTime)
+                        <KeepAlive>
+                            <template v-if="stepIndex === 1">
+                                <PlanStep @submit="value => {
+                                    reservation.AmountOfPeople = value.amountOfPeople
+                                    reservation.ReservationTime = parse(
+                                        `${value.arrivalDate.month}-${value.arrivalDate.day}-${value.arrivalDate.year}`,
+                                        'MM-dd-yyyy',
+                                        new Date()
+                                    )
+                                    console.log(reservation.ReservationTime)
 
-                                console.log(value.arrivalDate.year)
-                                console.log(value.arrivalDate.month)
-                                console.log(value.arrivalDate.day)
-                                reservation.TrainerId = value.trainer?.AccountId
-                                reservation.Plan = { PlanName: value.planName }
-                                stepIndex++
+                                    console.log(value.arrivalDate.year)
+                                    console.log(value.arrivalDate.month)
+                                    console.log(value.arrivalDate.day)
+                                    reservation.TrainerId = value.trainer?.AccountId
+                                    reservation.Plan = { PlanName: value.planName }
+                                    stepIndex++
 
-                                toast({
-                                    title: 'Sucessfully created a reservation',
-                                    description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
-                                        h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
-                                });
-                            }" />
+                                    toast({
+                                        title: 'Sucessfully created a reservation',
+                                        description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
+                                            h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
+                                    });
+                                }" />
+                            </template>
 
-                        </template>
-                        <template v-if="stepIndex === 2">
-                            <PickMachineStep @submit="value => {
-                                selectedMachines = [...value.machines.map(machine => {
-                                    return {
-                                        ...machine,
-                                        ExerciseTypes: []
-                                    }
-                                })]
+                        </KeepAlive>
+                        <KeepAlive>
+                            <template v-if="stepIndex === 2">
+                                <PickMachineStep @prev="stepIndex = 1" @submit="value => {
+                                    selectedMachines = [...value.machines.map(machine => {
+                                        return {
+                                            ...machine,
+                                            ExerciseTypes: []
+                                        }
+                                    })]
 
-                                stepIndex++
+                                    stepIndex++
 
-                                toast({
-                                    title: 'Sucessfully created a reservation',
-                                    description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
-                                        h('code', { class: 'text-white' }, JSON.stringify(selectedMachines, null, 4))),
-                                });
-                            }" />
-                        </template>
-                        <template v-if="stepIndex === 3">
-                            <ConfigureMachinesStep :reservation-time="reservation.ReservationTime"
-                                :selectedMachines="selectedMachines" @submit="value => {
+                                    toast({
+                                        title: 'Sucessfully created a reservation',
+                                        description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
+                                            h('code', { class: 'text-white' }, JSON.stringify(selectedMachines, null, 4))),
+                                    });
+                                }" />
+                            </template>
+                        </KeepAlive>
+                        <KeepAlive>
+                            <template v-if="stepIndex === 3">
+                                <ConfigureMachinesStep :reservation-time="reservation.ReservationTime"
+                                    @prev="stepIndex = 2" :selectedMachines="selectedMachines" @submit="value => {
+                                        const plan = reservation.Plan
+                                        reservation.Plan = {
+                                            ...plan,
+                                            Machines: value
+                                        }
+
+                                        stepIndex++
+
+                                        toast({
+                                            title: 'Sucessfully created a reservation',
+                                            description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
+                                                h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
+                                        });
+                                    }" />
+                            </template>
+                        </KeepAlive>
+                        <KeepAlive>
+                            <template v-if="stepIndex === 4">
+                                <TypeStep @prev="stepIndex = 3" @submit="value => {
                                     const plan = reservation.Plan
                                     reservation.Plan = {
                                         ...plan,
-                                        Machines: value
+                                        ExerciseCategories: value
                                     }
 
                                     stepIndex++
@@ -178,25 +202,9 @@ const steps = [
                                             h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
                                     });
                                 }" />
-                        </template>
-                        <template v-if="stepIndex === 4">
-                            <TypeStep @submit="value => {
-                                const plan = reservation.Plan
-                                reservation.Plan = {
-                                    ...plan,
-                                    ExerciseCategories: value
-                                }
+                            </template>
 
-                                stepIndex++
-
-                                toast({
-                                    title: 'Sucessfully created a reservation',
-                                    description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
-                                        h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
-                                });
-                            }" />
-                        </template>
-
+                        </KeepAlive>
                         <template v-if="stepIndex === 5">
 
                             <pre class="mt-2 w-[340px] rounded-md bg-slate-950 p-4">

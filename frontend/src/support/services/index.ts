@@ -4,4 +4,4 @@ export { ReservationService } from './reservation.service'
 export { PlanService } from './plan.service'
 export { ExerciseTypeService } from './exercise-type.service'
 export { ExerciseCategoryService } from './exercise-category.service'
-
+export { MachineService } from './machine.service'

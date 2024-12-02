@@ -15,8 +15,9 @@ import {
 import { z } from 'zod';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
+import { Button } from '@/components/shadcn/ui/button'
 
-const emit = defineEmits(['submit']);
+const emit = defineEmits(['submit', 'prev']);
 const types = ref<ExerciseCategory[]>([])
 
 const fetchData = async () => {
@@ -49,6 +50,10 @@ const onSubmit = handleSubmit(value => {
     emit('submit', value.exerciseCategories)
 })
 
+
+const prev = () => {
+    emit('prev')
+}
 const builderText = ref({
     heading: 'Select category',
     text: '<p>And finally in this step you need to choose the category for this workout</p>'
@@ -127,9 +132,15 @@ const removeItem = (item: ExerciseCategory) => {
                 </FormItem>
             </FormField>
 
-            <Button type="submit">
-                Next
-            </Button>
+            <div>
+                <Button @click="prev">
+                    Prev
+                </Button>
+
+                <Button type="submit">
+                    Next
+                </Button>
+            </div>
         </form>
     </Step>
 </template>

@@ -19,7 +19,7 @@ import { toast } from '@/components/shadcn/ui/toast';
 import { Button } from '@/components/shadcn/ui/button';
 
 
-const emit = defineEmits(['submit']);
+const emit = defineEmits(['submit', 'prev']);
 
 const machineArray = ref<Machine[]>([]);
 
@@ -126,6 +126,11 @@ const onSubmit = handleSubmit(
     }
 )
 
+
+const prev = () => {
+    emit('prev')
+}
+
 onMounted(async () => {
     await fetchData();
 });
@@ -133,50 +138,67 @@ onMounted(async () => {
 
 <template>
     <Step :builderText="builderText">
-        <form class="w-2/3 space-y-6 justify-center flex" @submit="onSubmit">
+        <form class="w-full flex flex-col gap-4" @submit="onSubmit">
             <FormField name="machines">
-                <div v-for="(item, index) in machineArray" :key="item.MachineId ?? index">
-                    <FormItem class="flex flex-row items-start space-x-3 space-y-0">
-                        <FormControl>
-                            <Checkbox :checked="selectedMachines?.some(machine => machine.MachineId === item.MachineId)"
-                                @update:checked="(checked) => {
-                                    const newValue = checked
-                                        ? [...(selectedMachines || []), item]
-                                        : (selectedMachines || []).filter(machine => machine.MachineId !== item.MachineId);
-                                    assignCategories(newValue)
-                                    handleChange(newValue);
-                                }" />
-                        </FormControl>
-                        <FormLabel class="font-normal">
-                            {{ item.MachineName }}<br>
-                        </FormLabel>
-                    </FormItem>
+                <div class="grid fieldGrid">
+                    <div v-for="(item, index) in machineArray" :key="item.MachineId ?? index">
+                        <FormItem class="flex gap-2 items-center">
+                            <FormControl>
+                                <Checkbox
+                                    :checked="selectedMachines?.some(machine => machine.MachineId === item.MachineId)"
+                                    @update:checked="(checked) => {
+                                        const newValue = checked
+                                            ? [...(selectedMachines || []), item]
+                                            : (selectedMachines || []).filter(machine => machine.MachineId !== item.MachineId);
+                                        assignCategories(newValue)
+                                        handleChange(newValue);
+                                    }" />
+                            </FormControl>
+                            <FormLabel class="font-normal">
+                                {{ item.MachineName }}
+                            </FormLabel>
+                        </FormItem>
+                    </div>
                 </div>
 
                 <h3>Recommended machines</h3>
-                <div v-for="(item, index) in recommendMachines" :key="item.MachineId ?? index">
-                    <FormItem class="flex flex-row items-start space-x-3 space-y-0">
-                        <FormControl>
-                            <Checkbox :checked="selectedMachines?.some(machine => machine.MachineId === item.MachineId)"
-                                @update:checked="(checked) => {
-                                    const newValue = checked
-                                        ? [...(selectedMachines || []), item]
-                                        : (selectedMachines || []).filter(machine => machine.MachineId !== item.MachineId);
-                                    assignCategories(newValue)
-                                    handleChange(newValue);
-                                }" />
-                        </FormControl>
-                        <FormLabel class="font-normal">
-                            {{ item.MachineName }}<br>
-                        </FormLabel>
-                    </FormItem>
+                <div class="grid fieldGrid w-full">
+                    <div v-for="(item, index) in recommendMachines" :key="item.MachineId ?? index">
+                        <FormItem class="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                                <Checkbox
+                                    :checked="selectedMachines?.some(machine => machine.MachineId === item.MachineId)"
+                                    @update:checked="(checked) => {
+                                        const newValue = checked
+                                            ? [...(selectedMachines || []), item]
+                                            : (selectedMachines || []).filter(machine => machine.MachineId !== item.MachineId);
+                                        assignCategories(newValue)
+                                        handleChange(newValue);
+                                    }" />
+                            </FormControl>
+                            <FormLabel class="font-normal">
+                                {{ item.MachineName }}<br>
+                            </FormLabel>
+                        </FormItem>
+                    </div>
                 </div>
                 <FormMessage />
             </FormField>
-            <Button type="submit">
-                Next
-            </Button>
+            <div>
+                <Button @click="prev">
+                    Prev
+                </Button>
 
+                <Button type="submit">
+                    Next
+                </Button>
+            </div>
         </form>
     </Step>
 </template>
+
+<style lang="scss">
+.fieldGrid {
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+}
+</style>
