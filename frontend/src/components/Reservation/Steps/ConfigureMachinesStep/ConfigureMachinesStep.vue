@@ -3,7 +3,8 @@ import { ref } from 'vue';
 import { ConfigureMachinesStepItem } from '.'
 import Step from '../../Step.vue';
 import { Machine, Plan, PlanPost, MachinesInPlan, MachinesInPlanPost } from '@/support';
-import { FieldArray } from 'vee-validate';
+import { FormMessage } from '@/components/shadcn/ui/form'
+import { FieldArray, } from 'vee-validate';
 import { z } from 'zod';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
@@ -26,25 +27,6 @@ interface Props {
 
 const timeRecs = ref<Map<number, TimeSuggestion>>(new Map())
 
-
-function formatTime(time: TimeSuggestion | undefined): string {
-    if (!time) {
-        return ""
-    }
-    const prevHours = time.Previous[0].hour.toString().padStart(2, "0");
-    const prevMinutes = time.Previous[0].minute.toString().padStart(2, "0");
-    const prevHoursTwo = time.Previous[1].hour.toString().padStart(2, "0");
-    const prevMinutesTwo = time.Previous[1].minute.toString().padStart(2, "0");
-
-    const nextHours = time.Next[0].hour.toString().padStart(2, "0");
-    const nextMinutes = time.Next[0].minute.toString().padStart(2, "0");
-    const nextHoursTwo = time.Next[1].hour.toString().padStart(2, "0");
-    const nextMinutesTwo = time.Next[1].minute.toString().padStart(2, "0");
-    return `
-${prevHours}:${prevMinutes} - ${prevHoursTwo}:${prevMinutesTwo}
-${nextHours}:${nextMinutes} - ${nextHoursTwo}:${nextMinutesTwo}
-    `;
-}
 
 const props = defineProps<Props>();
 
@@ -72,7 +54,7 @@ const schema = toTypedSchema(
                 (data) => {
                     const startTime = new Time(data.StartTime.hour, data.StartTime.minute)
                     const endTime = new Time(data.EndTime.hour, data.EndTime.minute)
-                    return startTime <= endTime
+                    return startTime < endTime
                 }, { message: "Start time cannot be after End Time" }
             )).refine(
                 (data) => {
@@ -93,14 +75,13 @@ const schema = toTypedSchema(
                             const minEndTime = machineEndTime <= endTime ? machineEndTime : endTime
                             const maxStartTime = machineStartTime >= startTime ? machineStartTime : startTime
 
-
-
                             if (
-                                maxStartTime <= minEndTime
+                                maxStartTime < minEndTime
                             ) {
 
                                 const startTimeTime = new Time(data[i].StartTime.hour, data[i].StartTime.minute)
                                 const endTimeTime = new Time(data[i].EndTime.hour, data[i].EndTime.minute)
+                                console.log("Asdasd")
                                 suggestTime(machine.MachineId, {
                                     desired_date: props.reservationTime ?? new Date(),
                                     desired_start_time: startTimeTime,
@@ -159,7 +140,6 @@ const suggestTime = async (id: number, vars: {
     }
 }
 
-
 const { handleSubmit, setFieldValue } = useForm({
     validationSchema: schema,
 })
@@ -185,11 +165,10 @@ onMounted(async () => {
             <div class="grid grid-cols-2 md:grid-cols-3 grid-auto-columns-1/2 md:grid-auto-columns-1/3 gap-4">
                 <FieldArray name="machinesInPlan">
                     <div v-for="(machine, index) in selectedMachines" :key="index">
-                        <ConfigureMachinesStepItem :machine="machine" :set-field-value="setFieldValue" :index="index" />
-                        <span>
-                            {{ formatTime(timeRecs.get(machine.MachineId)) }}
-                        </span>
+                        <ConfigureMachinesStepItem :machine="machine" :set-field-value="setFieldValue" :index="index"
+                            :time-recs="timeRecs" />
                     </div>
+                    <!-- <FormMessage /> -->
                 </FieldArray>
             </div>
 
@@ -205,11 +184,11 @@ onMounted(async () => {
         </form>
     </Step>
 
-    <pre>
-        <code>
-            {{ concurrentPlans }}
-        </code>
-    </pre>
+    <!-- <pre> -->
+    <!--     <code> -->
+    <!--         {{ concurrentPlans }} -->
+    <!--     </code> -->
+    <!-- </pre> -->
 </template>
 
 <style lang="scss"></style>

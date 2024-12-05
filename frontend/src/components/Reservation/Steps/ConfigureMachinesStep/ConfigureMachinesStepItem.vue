@@ -26,14 +26,57 @@ import {
     NumberFieldIncrement,
     NumberFieldInput,
 } from '@/components/shadcn/ui/number-field'
+import { TimeSuggestion } from '@/support';
 
 interface Props {
     machine: Machine,
     setFieldValue: (field: any, value: any) => void,
-    index: number
+    timeRecs: Map<number, TimeSuggestion>,
+    index: number,
 }
 
 const props = defineProps<Props>()
+
+
+const setPrevTime = (time: TimeSuggestion) => {
+    props.setFieldValue(`machinesInPlan.${props.index}.StartTime.hour`, time.Previous[0].hour)
+    props.setFieldValue(`machinesInPlan.${props.index}.StartTime.minute`, time.Previous[0].minute)
+    props.setFieldValue(`machinesInPlan.${props.index}.EndTime.hour`, time.Previous[1].hour)
+    props.setFieldValue(`machinesInPlan.${props.index}.EndTime.minute`, time.Previous[1].minute)
+}
+
+const setNextTime = (time: TimeSuggestion) => {
+    props.setFieldValue(`machinesInPlan.${props.index}.StartTime.hour`, time.Next[0].hour)
+    props.setFieldValue(`machinesInPlan.${props.index}.StartTime.minute`, time.Next[0].minute)
+    props.setFieldValue(`machinesInPlan.${props.index}.EndTime.hour`, time.Next[1].hour)
+    props.setFieldValue(`machinesInPlan.${props.index}.EndTime.minute`, time.Next[1].minute)
+}
+
+function formatNextTime(time: TimeSuggestion | undefined): string {
+    if (!time) {
+        return ""
+    }
+
+    const nextHours = time.Next[0].hour.toString().padStart(2, "0");
+    const nextMinutes = time.Next[0].minute.toString().padStart(2, "0");
+    const nextHoursTwo = time.Next[1].hour.toString().padStart(2, "0");
+    const nextMinutesTwo = time.Next[1].minute.toString().padStart(2, "0");
+
+    return `${nextHours}:${nextMinutes} - ${nextHoursTwo}:${nextMinutesTwo}`;
+}
+
+function formatPrevTime(time: TimeSuggestion | undefined): string {
+    if (!time) {
+        return ""
+    }
+    const prevHours = time.Previous[0].hour.toString().padStart(2, "0");
+    const prevMinutes = time.Previous[0].minute.toString().padStart(2, "0");
+    const prevHoursTwo = time.Previous[1].hour.toString().padStart(2, "0");
+    const prevMinutesTwo = time.Previous[1].minute.toString().padStart(2, "0");
+
+    return `${prevHours}:${prevMinutes} - ${prevHoursTwo}:${prevMinutesTwo}`;
+}
+
 </script>
 
 <template>
@@ -212,6 +255,18 @@ const props = defineProps<Props>()
 
         </CardContent>
 
+        <CardFooter>
+            <div :class="{ 'opacity-0': timeRecs.get(machine.MachineId) === undefined }">
+                <p>Machine is occupid at this time, here are the free closest times</p>
+                <a class="mr-4 time-link" @click.prevent="setPrevTime(timeRecs.get(machine.MachineId))" href="#">
+                    {{ formatPrevTime(timeRecs.get(machine.MachineId)) }}
+                </a>
+
+                <a class="time-link" @click.prevent="setNextTime(timeRecs.get(machine.MachineId))" href="#">
+                    {{ formatNextTime(timeRecs.get(machine.MachineId)) }}
+                </a>
+            </div>
+        </CardFooter>
     </Card>
 </template>
 

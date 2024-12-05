@@ -33,8 +33,9 @@ import {
     PopoverTrigger,
 } from '@/components/shadcn/ui/popover'
 import { Check, ChevronsUpDown } from 'lucide-vue-next'
+import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date'
 
-
+import { parse } from 'date-fns';
 import { Button } from '@/components/shadcn/ui/button'
 import { Calendar } from '@/components/shadcn/ui/calendar'
 import { format } from 'date-fns'
@@ -61,7 +62,7 @@ const trainers = ref<Account[]>([])
 const schema = toTypedSchema(z.object({
     planName: z.string().min(5).max(50),
     amountOfPeople: z.number().min(1).max(5).default(1),
-    arrivalDate: z.any(), // TODO: 
+    arrivalDate: z.string().date(),
     trainer: z.object({
         AccountId: z.number(),
         FirstName: z.string(),
@@ -70,8 +71,21 @@ const schema = toTypedSchema(z.object({
 }));
 
 
-const { handleSubmit, setFieldValue } = useForm({
+const { handleSubmit, setFieldValue, values } = useForm({
     validationSchema: schema,
+})
+
+
+const val = computed({
+    get: () => values.arrivalDate ? parseDate(values.arrivalDate) : undefined,
+    set: (value: CalendarDate) => {
+        console.log(value)
+        return parse(
+            `${value.year}-${value.month}-${value.day}`,
+            "yyyy-MM-dd",
+            new Date()
+        ).toString()
+    }
 })
 
 
@@ -105,6 +119,7 @@ const onSubmit = handleSubmit(
 onMounted(async () => {
     await fetchData()
 })
+const placeholder = ref()
 
 </script>
 
@@ -150,7 +165,7 @@ onMounted(async () => {
                 </FormItem>
             </FormField>
 
-            <FormField v-slot="{ componentField, value }" name="arrivalDate">
+            <FormField name="arrivalDate">
                 <FormItem class="flex flex-col">
                     <FormLabel>Date</FormLabel>
                     <Popover>
@@ -158,16 +173,24 @@ onMounted(async () => {
                             <FormControl>
                                 <Button variant="outline" :class="cn(
                                     'w-[240px] ps-3 text-start font-normal',
-                                    !value && 'text-muted-foreground',
+                                    !val && 'text-muted-foreground',
                                 )">
-                                    <span>{{ value ? format(value, "PPP") : "Pick a date" }}</span>
+                                    <span>{{ val ? format(val.toString(), "PPP") : "Pick a date" }}</span>
                                     <CalendarIcon class="ms-auto h-4 w-4 opacity-50" />
                                 </Button>
                             </FormControl>
                         </PopoverTrigger>
                         <PopoverContent class="p-0">
                             <!-- TODO: Make this work -->
-                            <Calendar v-bind="componentField" />
+                            <Calendar v-model:placeholder="placeholder" v-model="val"
+                                :min-value="today(getLocalTimeZone())" @update:model-value="(v) => {
+                                    if (v) {
+                                        setFieldValue('arrivalDate', v.toString())
+                                    }
+                                    else {
+                                        setFieldValue('arrivalDate', undefined)
+                                    }
+                                }" />
                         </PopoverContent>
                     </Popover>
                     <FormDescription>

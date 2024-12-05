@@ -3,10 +3,7 @@ import { Button } from '@/components/shadcn/ui/button'
 import { ref, watch } from 'vue';
 import { Input } from '@/components/shadcn/ui/input'
 import { toast } from '@/components/shadcn/ui/toast'
-import { toTypedSchema } from '@vee-validate/zod'
-import { useForm } from 'vee-validate'
 import { h } from 'vue'
-import * as z from 'zod'
 import { Machine, MachinesInPlan } from '@/support';
 import { ConfigureMachinesStep, PlanStep, PickMachineStep, TypeStep } from '@/components/Reservation/Steps/'
 import { ReservationPost } from '@/support/types/reservation';
@@ -51,7 +48,6 @@ const onSubmit = async () => {
                 }),
             }
         }
-        console.log(reserv)
         const data = await reservationService.CreateFullReservation(reserv);
         toast({
             title: 'Sucessfully created a reservation',
@@ -122,25 +118,16 @@ const steps = [
                             <template v-if="stepIndex === 1">
                                 <PlanStep @submit="value => {
                                     reservation.AmountOfPeople = value.amountOfPeople
+                                    console.log(value.arrivalDate)
                                     reservation.ReservationTime = parse(
-                                        `${value.arrivalDate.month}-${value.arrivalDate.day}-${value.arrivalDate.year}`,
-                                        'MM-dd-yyyy',
+                                        value.arrivalDate,
+                                        'yyyy-MM-dd',
                                         new Date()
                                     )
-                                    console.log(reservation.ReservationTime)
 
-                                    console.log(value.arrivalDate.year)
-                                    console.log(value.arrivalDate.month)
-                                    console.log(value.arrivalDate.day)
                                     reservation.TrainerId = value.trainer?.AccountId
                                     reservation.Plan = { PlanName: value.planName }
                                     stepIndex++
-
-                                    toast({
-                                        title: 'Sucessfully created a reservation',
-                                        description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
-                                            h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
-                                    });
                                 }" />
                             </template>
 
@@ -156,12 +143,6 @@ const steps = [
                                     })]
 
                                     stepIndex++
-
-                                    toast({
-                                        title: 'Sucessfully created a reservation',
-                                        description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
-                                            h('code', { class: 'text-white' }, JSON.stringify(selectedMachines, null, 4))),
-                                    });
                                 }" />
                             </template>
                         </KeepAlive>
@@ -176,12 +157,6 @@ const steps = [
                                         }
 
                                         stepIndex++
-
-                                        toast({
-                                            title: 'Sucessfully created a reservation',
-                                            description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
-                                                h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
-                                        });
                                     }" />
                             </template>
                         </KeepAlive>
@@ -195,12 +170,6 @@ const steps = [
                                     }
 
                                     stepIndex++
-
-                                    toast({
-                                        title: 'Sucessfully created a reservation',
-                                        description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' },
-                                            h('code', { class: 'text-white' }, JSON.stringify(reservation, null, 4))),
-                                    });
                                 }" />
                             </template>
 
