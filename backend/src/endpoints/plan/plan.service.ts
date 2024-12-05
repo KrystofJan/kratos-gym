@@ -227,7 +227,6 @@ export class PlanService {
     static async UpdateMachineInPlan(planId: number, machineId: number, body: Partial<MachinesInPlan>): Promise<MachinesInPlan> {
         const db = new BasicQueryDatabase()
 
-        // TODO: figure this out... this does not work for some reason
         const [databaseErr, databaseResponse] = await safeAwait(db.Update(MachinesInPlan, planId, body, "machine_id", machineId));
         if (databaseErr !== null) {
             throw databaseErr;
