@@ -6,6 +6,7 @@ import { Plan } from "."
 import { safeAwait } from "../../utils/utilities"
 import { CodedError, ErrorCode } from "../../errors/base.error"
 import { MachinesInPlan } from "./machines-in-plan.model"
+import { PlanDatabase } from "./plan.database"
 
 export class PlanService {
 
@@ -226,7 +227,6 @@ export class PlanService {
     static async UpdateMachineInPlan(planId: number, machineId: number, body: Partial<MachinesInPlan>): Promise<MachinesInPlan> {
         const db = new BasicQueryDatabase()
 
-        // TODO: figure this out... this does not work for some reason
         const [databaseErr, databaseResponse] = await safeAwait(db.Update(MachinesInPlan, planId, body, "machine_id", machineId));
         if (databaseErr !== null) {
             throw databaseErr;
@@ -243,6 +243,23 @@ export class PlanService {
         }
 
         return model;
+    }
+
+    static async GetPlansOnDate(id: number, date: Date): Promise<Array<Plan>> {
+        const db = new PlanDatabase()
+
+        const [databaseErr, databaseResponse] = await safeAwait(db.SelectMachinesUsedOnDate(id, date));
+        if (databaseErr !== null) {
+            throw databaseErr;
+        }
+
+        try {
+            const models = databaseResponse.Body.map((model: Plan) => new Plan(model))
+            return models;
+        } catch (err) {
+            logger.error(err)
+            throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping model at GetAllPlanes failed")
+        }
     }
 }
 

@@ -8,7 +8,6 @@ export class AddressService {
     }
     async CreateAddress(address: Address) {
         try {
-            console.log(JSON.stringify(address))
             const res = await fetch(`${KRATOS_API_URL}/api/address`, {
                 method: 'POST',
                 headers: {

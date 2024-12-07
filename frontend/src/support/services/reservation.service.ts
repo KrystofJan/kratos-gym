@@ -50,7 +50,7 @@ export class ReservationService {
     }
 
 
-    async CreateFullReservation(reservation: ReservationPost) {
+    async CreateFullReservation(reservation: Partial<ReservationPost>) {
         try {
             const res = await fetch(`${KRATOS_API_URL}/api/reservation/full`, {
                 method: 'POST',

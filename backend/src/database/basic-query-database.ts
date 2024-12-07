@@ -33,11 +33,12 @@ export class BasicQueryDatabase extends Database {
                 offset ${offset}
             `;
             logger.info(`Select all from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
-            this.sql.end()
             return new DatabaseFoundMultiple<T>(result);
         } catch (error) {
             const err = error as Error;
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
+        } finally {
+            this.sql.end()
         }
     }
 
@@ -54,12 +55,14 @@ export class BasicQueryDatabase extends Database {
                 where ${this.sql(pkey)} = ${id}
             `;
             logger.info(`Select by id from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
-            this.sql.end()
             return new DatabaseFoundSingle<T>(result);
         } catch (error) {
             const err = error as Error;
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
+        } finally {
+            this.sql.end()
         }
+
     }
 
     async SelectAttrIs<T extends Model>(
@@ -79,12 +82,14 @@ export class BasicQueryDatabase extends Database {
             if (result.length > 1) {
                 return new DatabaseFoundMultiple<T>(result);
             }
-            this.sql.end()
             return new DatabaseFoundSingle<T>(result[0]);
         } catch (error) {
             const err = error as Error;
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
+        } finally {
+            this.sql.end()
         }
+
     }
 
 
@@ -105,12 +110,14 @@ export class BasicQueryDatabase extends Database {
                 where ${this.sql(idKey)} = ${idValue}
             `;
             logger.info(`Select by attribute from ${tableName} table was successful\n${JSON.stringify(result, null, 4)}`)
-            this.sql.end()
             return new DatabaseFoundMultiple<T>(result);
         } catch (error) {
             const err = error as Error;
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
+        } finally {
+            this.sql.end()
         }
+
     }
 
     async InsertManyToMany<T extends Model>(
@@ -129,12 +136,14 @@ export class BasicQueryDatabase extends Database {
                 returning *
             `;
             logger.info(`Insert into ${foreignType} was successful\n${JSON.stringify(result, null, 4)}`);
-            this.sql.end()
             return new DatabaseCreated<T>(result);
         } catch (error) {
             const err = error as Error;
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
+        } finally {
+            this.sql.end()
         }
+
     }
 
 
@@ -191,12 +200,14 @@ export class BasicQueryDatabase extends Database {
                 returning *
             `;
             logger.info(`Insert into ${tableName} was successful\n${JSON.stringify(result, null, 4)}`);
-            this.sql.end()
             return new DatabaseCreated<T>(result);
         } catch (error) {
             const err = error as Error;
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
+        } finally {
+            this.sql.end()
         }
+
     }
 
 
@@ -247,12 +258,14 @@ export class BasicQueryDatabase extends Database {
                 RETURNING *
             `;
             logger.info(`Update in ${tableName} was successful\n${JSON.stringify(result, null, 4)}`);
-            this.sql.end()
             return new DatabaseCreated<T>(result);
         } catch (error) {
             const err = error as Error;
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message);
+        } finally {
+            this.sql.end()
         }
+
     }
 
     async Delete<T extends Model>(
@@ -269,7 +282,6 @@ export class BasicQueryDatabase extends Database {
             `;
             logger.info(`Delete from ${tableName} was successful. Rows affected: ${result.count}`);
 
-            this.sql.end()
             if (!result.count) {
                 throw new CodedError(ErrorCode.NOT_FOUND_ERROR, `Cannot find a record with ${id} id`)
             }
@@ -280,7 +292,10 @@ export class BasicQueryDatabase extends Database {
             }
             const err = error as Error;
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message);
+        } finally {
+            this.sql.end()
         }
+
     }
 
 
@@ -301,7 +316,6 @@ export class BasicQueryDatabase extends Database {
             `;
             logger.info(`Delete from ${tableName} was successful. Rows affected: ${result.count}`);
 
-            this.sql.end()
             if (!result.count) {
                 throw new CodedError(ErrorCode.NOT_FOUND_ERROR, `Cannot find a record with ${id} id`)
             }
@@ -312,6 +326,9 @@ export class BasicQueryDatabase extends Database {
             }
             const err = error as Error;
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message);
+        } finally {
+            this.sql.end()
         }
+
     }
 }

@@ -63,6 +63,7 @@ export function ForeignKey(type: any) {
 
         // {"AddressId" : "address_id"}
 
+        console.log(type, propertyKey)
         const fieldMap = Reflect.getMetadata(DecoratorType.FIELD_MAP, type.prototype) || {};
         const foreignKey = Reflect.getMetadata('primaryKey', type);
         const foreignPrimaryKey = Reflect.getMetadata(DecoratorType.FOREIGN_PRIMARY_KEY_MAP, target) || {};
