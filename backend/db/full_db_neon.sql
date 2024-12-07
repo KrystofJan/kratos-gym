@@ -45,6 +45,51 @@ $$;
 
 ALTER FUNCTION public.get_machines_in_same_category(input_machine_id integer) OWNER TO postgres;
 
+--
+-- Name: get_plan_machines_with_next_and_prev(integer, date); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_plan_machines_with_next_and_prev(input_machine_id integer, input_reservation_date date) RETURNS TABLE(plan_id integer, machine_id integer, start_time time without time zone, end_time time without time zone, previous_plan_id integer, previous_start_time time without time zone, previous_end_time time without time zone, next_plan_id integer, next_start_time time without time zone, next_end_time time without time zone)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY
+        SELECT
+            pm.plan_id,
+            pm.machine_id,
+            pm.start_time AS current_start_time,
+            pm.end_time AS current_end_time,
+            LAG(pm.plan_id) OVER (
+                ORDER BY pm.start_time, pm.end_time
+                ) AS previous_plan_id,
+            LAG(pm.start_time) OVER (
+                ORDER BY pm.start_time, pm.end_time
+                ) AS previous_start_time,
+            LAG(pm.end_time) OVER (
+                ORDER BY pm.start_time, pm.end_time
+                ) AS previous_end_time,
+            LEAD(pm.plan_id) OVER (
+                ORDER BY pm.start_time, pm.end_time
+                ) AS next_plan_id,
+            LEAD(pm.start_time) OVER (
+                ORDER BY pm.start_time, pm.end_time
+                ) AS next_start_time,
+            LEAD(pm.end_time) OVER (
+                ORDER BY pm.start_time, pm.end_time
+                ) AS next_end_time
+        FROM
+            plan_machine pm inner join reservation on pm.plan_id = reservation.plan_id
+        WHERE
+            pm.machine_id = input_machine_id
+          and TO_CHAR(reservation_time, 'YYYY-MM-DD') = TO_CHAR(input_reservation_date, 'YYYY-MM-DD')
+        ORDER BY
+            current_start_time, current_end_time;
+END;
+$$;
+
+
+ALTER FUNCTION public.get_plan_machines_with_next_and_prev(input_machine_id integer, input_reservation_date date) OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -691,6 +736,20 @@ INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (34, 'asddsd', 1
 INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (35, 'asdasd', 1);
 INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (36, 'asdasd', 1);
 INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (37, 'asdfasdf', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (42, 'Teemo', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (43, 'sadfasdf', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (44, 'sdfsdf', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (45, 'asdasd', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (46, 'asdfasdfasdf', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (47, 'gsdfgsdfg', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (48, 'JeffNumber2', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (49, 'Blue suede', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (50, 'sdafasdf', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (51, 'asdasdgjhghgjfhjdghdgfhdsdtyhrdhgc', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (52, 'asdasdgjhghgjfhjdghdgfhdsdtyhrdhgc', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (53, 'sredyt', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (54, 'xdvcghfgh', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (55, 'asdfasdfhyjgfhj', 1);
 
 
 --
@@ -716,6 +775,20 @@ INSERT INTO public.plan_category (plan_id, category_id) VALUES (34, 2);
 INSERT INTO public.plan_category (plan_id, category_id) VALUES (35, 2);
 INSERT INTO public.plan_category (plan_id, category_id) VALUES (36, 2);
 INSERT INTO public.plan_category (plan_id, category_id) VALUES (37, 1);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (42, 2);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (43, 1);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (44, 2);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (45, 2);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (46, 1);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (47, 2);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (48, 2);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (49, 1);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (50, 2);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (51, 2);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (52, 2);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (53, 3);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (54, 2);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (55, 1);
 
 
 --
@@ -746,6 +819,25 @@ INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, en
 INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (36, 28, 4, 6, '00:00:00', '00:00:00', false);
 INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (37, 25, 3, 8, '02:01:00', '00:00:00', false);
 INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (37, 29, 4, 6, '00:00:00', '00:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (42, 25, 4, 6, '00:00:00', '00:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (43, 25, 4, 6, '00:00:00', '00:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (43, 3, 4, 6, '00:00:00', '00:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (43, 2, 4, 6, '00:00:00', '00:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (44, 36, 4, 6, '00:00:00', '00:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (45, 40, 4, 6, '00:00:00', '00:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (45, 39, 4, 6, '00:00:00', '00:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (46, 25, 4, 6, '00:00:00', '01:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (47, 25, 4, 6, '23:22:00', '23:44:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (48, 25, 4, 5, '10:13:00', '10:15:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (49, 25, 4, 8, '10:15:00', '10:25:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (50, 25, 4, 6, '01:15:00', '01:35:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (51, 25, 4, 6, '03:00:00', '04:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (51, 29, 4, 6, '00:00:00', '00:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (52, 25, 4, 6, '03:00:00', '04:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (52, 29, 4, 6, '00:00:00', '00:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (53, 25, 4, 6, '10:25:00', '10:28:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (54, 25, 4, 6, '00:00:00', '00:00:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (55, 25, 4, 6, '01:15:00', '01:30:00', false);
 
 
 --
@@ -785,6 +877,20 @@ INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_ti
 INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (28, 2, '2024-12-11 23:00:00', 1, NULL, 35);
 INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (29, 2, '2024-12-11 23:00:00', 1, 6, 36);
 INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (30, 1, '2024-12-13 23:00:00', 1, 4, 37);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (31, 1, '2024-12-21 23:00:00', 1, 6, 42);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (32, 1, '2024-12-21 23:00:00', 1, 6, 43);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (33, 1, '2024-12-22 23:00:00', 1, NULL, 44);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (34, 1, '2024-12-27 23:00:00', 1, 6, 45);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (35, 1, '2024-12-11 23:00:00', 1, NULL, 46);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (36, 1, '2024-12-11 23:00:00', 1, NULL, 47);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (48, 1, '2024-12-11 23:00:00', 1, NULL, 48);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (37, 1, '2024-12-11 23:00:00', 1, NULL, 49);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (38, 1, '2024-12-10 23:00:00', 1, NULL, 50);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (39, 1, '2024-12-10 23:00:00', 1, NULL, 51);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (40, 1, '2024-12-10 23:00:00', 1, NULL, 52);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (41, 1, '2024-12-10 23:00:00', 1, NULL, 53);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (42, 1, '2024-12-10 23:00:00', 1, NULL, 54);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (43, 1, '2024-12-10 23:00:00', 1, NULL, 55);
 
 
 --
@@ -792,6 +898,7 @@ INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_ti
 --
 
 INSERT INTO public.test (id, test) VALUES (1, 'asdasd');
+INSERT INTO public.test (id, test) VALUES (2, 'testststst');
 
 
 --
@@ -826,14 +933,14 @@ SELECT pg_catalog.setval('public.exercisetype_exercisetypeid_seq', 28, true);
 -- Name: reservation_reservetionid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.reservation_reservetionid_seq', 30, true);
+SELECT pg_catalog.setval('public.reservation_reservetionid_seq', 43, true);
 
 
 --
 -- Name: test_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.test_id_seq', 1, true);
+SELECT pg_catalog.setval('public.test_id_seq', 2, true);
 
 
 --
@@ -847,7 +954,7 @@ SELECT pg_catalog.setval('public.wrkoutmachine_wrkoutmachineid_seq', 49, true);
 -- Name: wrkoutplan_wrkoutplanid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.wrkoutplan_wrkoutplanid_seq', 37, true);
+SELECT pg_catalog.setval('public.wrkoutplan_wrkoutplanid_seq', 55, true);
 
 
 --
