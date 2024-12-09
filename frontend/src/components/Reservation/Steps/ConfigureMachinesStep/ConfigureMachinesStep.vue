@@ -23,10 +23,10 @@ const emit = defineEmits(['submit', 'prev']);
 interface Props {
     reservationTime?: Date,
     selectedMachines: Machine[],
+    amountOfPeople?: number
 }
 
 const timeRecs = ref<Map<number, TimeSuggestion>>(new Map())
-
 
 const props = defineProps<Props>();
 
@@ -50,6 +50,7 @@ const schema = toTypedSchema(
                     hour: z.number().min(0).max(24).default(0),
                     minute: z.number().min(0).max(59).default(0),
                 }),
+                CanDisturb: z.boolean()
             }).refine(
                 (data) => {
                     const startTime = new Time(data.StartTime.hour, data.StartTime.minute)
@@ -81,11 +82,12 @@ const schema = toTypedSchema(
 
                                 const startTimeTime = new Time(data[i].StartTime.hour, data[i].StartTime.minute)
                                 const endTimeTime = new Time(data[i].EndTime.hour, data[i].EndTime.minute)
-                                console.log("Asdasd")
                                 suggestTime(machine.MachineId, {
                                     desired_date: props.reservationTime ?? new Date(),
                                     desired_start_time: startTimeTime,
-                                    desired_end_time: endTimeTime
+                                    desired_end_time: endTimeTime,
+                                    amount_of_people: props.amountOfPeople || 1,
+                                    can_disturb: data[i].CanDisturb
                                 })
                                 return false
                             }
@@ -109,7 +111,6 @@ const fetchConcurrentPlans = async () => {
         return;
     }
 
-    console.log()
     for (const machine of props.selectedMachines) {
         try {
             const data = await new PlanService().FetchPlansOnDate({
@@ -130,9 +131,12 @@ const suggestTime = async (id: number, vars: {
     desired_date: Date,
     desired_start_time: Time,
     desired_end_time: Time,
+    amount_of_people: number,
+    can_disturb: boolean
 }) => {
     try {
         const data = await new MachineService().SuggestTime(id, vars)
+
         timeRecs.value.set(id, data)
     } catch (error) {
         console.error('Error fetching account:', error);
@@ -186,7 +190,7 @@ onMounted(async () => {
 
     <!-- <pre> -->
     <!--     <code> -->
-    <!--         {{ concurrentPlans }} -->
+    <!--         {{ timeRecs }} -->
     <!--     </code> -->
     <!-- </pre> -->
 </template>

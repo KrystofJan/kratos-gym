@@ -149,7 +149,8 @@ const steps = [
                         <KeepAlive>
                             <template v-if="stepIndex === 3">
                                 <ConfigureMachinesStep :reservation-time="reservation.ReservationTime"
-                                    @prev="stepIndex = 2" :selectedMachines="selectedMachines" @submit="value => {
+                                    @prev="stepIndex = 2" :selectedMachines="selectedMachines"
+                                    :amount-of-people="reservation.AmountOfPeople" @submit="value => {
                                         const plan = reservation.Plan
                                         reservation.Plan = {
                                             ...plan,

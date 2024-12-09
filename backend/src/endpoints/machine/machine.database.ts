@@ -29,14 +29,32 @@ export class MachineDatabase extends Database {
         }
     }
 
-    async SelectMachineUsageByDate(id: number, date: Date) {
+    async SelectMachineUsageByDate(id: number, date: Date, amount_of_people: number) {
         try {
             const result: MachineUsage[] = await this.sql<MachineUsage[]>`
                 SELECT * 
-                FROM get_plan_machines_with_next_and_prev(${id}, ${format(date, 'yyyy-MM-dd')})
+                FROM get_plan_machines_occupancy_for_reservation(${id}, ${format(date, 'yyyy-MM-dd')}, ${amount_of_people})
             `;
             logger.info(`GetMachineUsage requestwas successful\n${JSON.stringify(result, null, 4)}`)
             return new DatabaseFoundMultiple<MachineUsage>(result);
+        } catch (error) {
+            const err = error as Error;
+            throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
+        } finally {
+            this.sql.end()
+        }
+    }
+
+
+    async CheckIfCanFit(id: number, date: Date, amount_of_people: number): Promise<boolean> {
+        interface Result {
+            check_can_fit: boolean
+        }
+        try {
+            const result: Result[] = await this.sql<Result[]>`
+                select * from check_can_fit(${id}, ${id}, ${format(date, 'yyyy-MM-dd')}, ${amount_of_people})
+            `;
+            return result[0].check_can_fit
         } catch (error) {
             const err = error as Error;
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)

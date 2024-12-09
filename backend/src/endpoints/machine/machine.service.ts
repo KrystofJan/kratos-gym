@@ -130,10 +130,10 @@ export class MachineService {
         return Number(model.MachineId);
     }
 
-    static async GetMachineUsageByDate(id: number, date: Date): Promise<Array<MachineUsage>> {
+    static async GetMachineUsageByDate(id: number, date: Date, amount_of_people: number): Promise<Array<MachineUsage>> {
         const db = new MachineDatabase()
 
-        const [databaseErr, databaseResponse] = await safeAwait(db.SelectMachineUsageByDate(id, date));
+        const [databaseErr, databaseResponse] = await safeAwait(db.SelectMachineUsageByDate(id, date, amount_of_people));
         if (databaseErr !== null) {
             throw databaseErr;
         }
@@ -149,8 +149,7 @@ export class MachineService {
 
 
 
-    static async SuggestTimes(machineUsage: MachineUsage[], desiredTimeRange: TimeRange): Promise<Suggestion> {
-
+    static async SuggestTimes(machineUsage: MachineUsage[], desiredTimeRange: TimeRange, canDisturb: boolean): Promise<Suggestion> {
         const { StartTime, EndTime } = desiredTimeRange
         const desiredStartInt = StartTime.hour * 60 + StartTime.minute
         const desiredEndInt = EndTime.hour * 60 + EndTime.minute
@@ -160,6 +159,8 @@ export class MachineService {
                 PlanId: id.PlanId,
                 StartTime: id.StartTime.toString(),
                 EndTime: id.EndTime.toString(),
+                CanDisturb: id.CanDisturb,
+                CanFit: id.CanFit,
                 Next: findPlan(id.NextId),
                 Prev: findPlan(id.PrevId),
             }
@@ -177,6 +178,8 @@ export class MachineService {
                     PlanId: res.PlanId,
                     StartTime: res.StartTime.toString(),
                     EndTime: res.EndTime.toString(),
+                    CanFit: res.CanFit,
+                    CanDisturb: res.CanDisturb,
                 }
             }
 
@@ -190,19 +193,22 @@ export class MachineService {
                 next = x.NextPlan.PlanId
             }
 
-
             let prev: number | null = null
             if (x.PreviousPlan) {
                 prev = x.PreviousPlan.PlanId
             }
             const result: PlanRaw = {
-                ...x,
                 PlanId: x.Plan.PlanId,
+                StartTime: x.StartTime,
+                EndTime: x.EndTime,
+                CanDisturb: x.CanDisturb,
+                CanFit: x.CanFit,
                 NextId: next,
                 PrevId: prev
             }
             return result
         }
+
         const colidingPlan = machineUsage.map((x: MachineUsage) => {
             const result = mapRes(x)
             return findPlanFull(result)
@@ -224,11 +230,16 @@ export class MachineService {
             return new Time(timeHour, timeMinute)
         }
 
-
         const determineClosestTime = (
             item: SimplifiedMachineUsage,
             visited: Set<number> = new Set()
         ): Suggestion => {
+            if (canDisturb && item.CanFit && item.CanDisturb) {
+                return {
+                    PrevSuggestion: desiredTimeRange,
+                    NextSuggestion: desiredTimeRange
+                }
+            }
             const duration = desiredEndInt - desiredStartInt;
 
             const parseTimeToMinutes = (time: string): number => {
@@ -236,9 +247,10 @@ export class MachineService {
                 return hour * 60 + minute;
             };
 
-            const createSuggestion = (start: number): { StartTime: Time; EndTime: Time } => ({
+            const createSuggestion = (start: number, collides: boolean): TimeRange => ({
                 StartTime: getTimeFromInt(start),
                 EndTime: getTimeFromInt(start + duration),
+                isColiding: collides
             });
 
             const startInt = parseTimeToMinutes(item.StartTime);
@@ -249,20 +261,20 @@ export class MachineService {
 
             let prevSuggestion = null;
             let nextSuggestion = null;
-            let realPrev: { StartTime: Time; EndTime: Time } = { StartTime: new Time(), EndTime: new Time() };
-            let next: { StartTime: Time; EndTime: Time } = { StartTime: new Time(), EndTime: new Time() };
+            let realPrev: TimeRange = { StartTime: new Time(), EndTime: new Time(), isColiding: false };
+            let next: TimeRange = { StartTime: new Time(), EndTime: new Time(), isColiding: false };
 
             // Previous suggestion
             if (prevEndInt === null || prevEndInt + duration <= startInt) {
                 const startSuggest = startInt - duration;
-                prevSuggestion = createSuggestion(startSuggest);
+                prevSuggestion = createSuggestion(startSuggest, false);
                 realPrev = prevSuggestion;
             }
 
             // Next suggestion
             if (nextStartInt === null || nextStartInt - duration >= endInt) {
                 const startSuggest = endInt;
-                nextSuggestion = createSuggestion(startSuggest);
+                nextSuggestion = createSuggestion(startSuggest, false);
                 next = nextSuggestion;
             }
 
@@ -273,8 +285,7 @@ export class MachineService {
                     NextSuggestion: next,
                 };
             }
-
-            visited.add(item.PlanId); // Mark this plan as visited
+            visited.add(item.PlanId);
 
             // Recursive search for previous suggestion
             if (prevSuggestion === null && item.Prev !== null) {
@@ -310,7 +321,8 @@ export class MachineService {
             };
         };
 
-        return determineClosestTime(colidingPlan[0])
+        const result = determineClosestTime(colidingPlan[0])
+        return result
     }
 }
 

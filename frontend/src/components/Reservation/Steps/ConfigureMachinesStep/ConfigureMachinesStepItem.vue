@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { Machine } from '@/support';
 import { TypedSchema } from 'vee-validate';
 
@@ -19,6 +20,7 @@ import {
     FormMessage,
 } from '@/components/shadcn/ui/form'
 
+import { Checkbox } from '@/components/shadcn/ui/checkbox'
 import {
     NumberField,
     NumberFieldContent,
@@ -27,6 +29,7 @@ import {
     NumberFieldInput,
 } from '@/components/shadcn/ui/number-field'
 import { TimeSuggestion } from '@/support';
+import { computed } from 'vue';
 
 interface Props {
     machine: Machine,
@@ -38,29 +41,39 @@ interface Props {
 const props = defineProps<Props>()
 
 
+const collision = computed(() => {
+    for (const x of props.timeRecs.values()) {
+        if (x.Previous.isColiding || x.Next.isColiding) {
+            return true
+        }
+    }
+    return false
+})
+
 const setPrevTime = (time: TimeSuggestion) => {
-    props.setFieldValue(`machinesInPlan.${props.index}.StartTime.hour`, time.Previous[0].hour)
-    props.setFieldValue(`machinesInPlan.${props.index}.StartTime.minute`, time.Previous[0].minute)
-    props.setFieldValue(`machinesInPlan.${props.index}.EndTime.hour`, time.Previous[1].hour)
-    props.setFieldValue(`machinesInPlan.${props.index}.EndTime.minute`, time.Previous[1].minute)
+    props.setFieldValue(`machinesInPlan.${props.index}.StartTime.hour`, time.Previous.time[0].hour)
+    props.setFieldValue(`machinesInPlan.${props.index}.StartTime.minute`, time.Previous.time[0].minute)
+    props.setFieldValue(`machinesInPlan.${props.index}.EndTime.hour`, time.Previous.time[1].hour)
+    props.setFieldValue(`machinesInPlan.${props.index}.EndTime.minute`, time.Previous.time[1].minute)
 }
 
 const setNextTime = (time: TimeSuggestion) => {
-    props.setFieldValue(`machinesInPlan.${props.index}.StartTime.hour`, time.Next[0].hour)
-    props.setFieldValue(`machinesInPlan.${props.index}.StartTime.minute`, time.Next[0].minute)
-    props.setFieldValue(`machinesInPlan.${props.index}.EndTime.hour`, time.Next[1].hour)
-    props.setFieldValue(`machinesInPlan.${props.index}.EndTime.minute`, time.Next[1].minute)
+    props.setFieldValue(`machinesInPlan.${props.index}.StartTime.hour`, time.Next.time[0].hour)
+    props.setFieldValue(`machinesInPlan.${props.index}.StartTime.minute`, time.Next.time[0].minute)
+    props.setFieldValue(`machinesInPlan.${props.index}.EndTime.hour`, time.Next.time[1].hour)
+    props.setFieldValue(`machinesInPlan.${props.index}.EndTime.minute`, time.Next.time[1].minute)
 }
+
 
 function formatNextTime(time: TimeSuggestion | undefined): string {
     if (!time) {
         return ""
     }
 
-    const nextHours = time.Next[0].hour.toString().padStart(2, "0");
-    const nextMinutes = time.Next[0].minute.toString().padStart(2, "0");
-    const nextHoursTwo = time.Next[1].hour.toString().padStart(2, "0");
-    const nextMinutesTwo = time.Next[1].minute.toString().padStart(2, "0");
+    const nextHours = time.Next.time[0].hour.toString().padStart(2, "0");
+    const nextMinutes = time.Next.time[0].minute.toString().padStart(2, "0");
+    const nextHoursTwo = time.Next.time[1].hour.toString().padStart(2, "0");
+    const nextMinutesTwo = time.Next.time[1].minute.toString().padStart(2, "0");
 
     return `${nextHours}:${nextMinutes} - ${nextHoursTwo}:${nextMinutesTwo}`;
 }
@@ -69,10 +82,10 @@ function formatPrevTime(time: TimeSuggestion | undefined): string {
     if (!time) {
         return ""
     }
-    const prevHours = time.Previous[0].hour.toString().padStart(2, "0");
-    const prevMinutes = time.Previous[0].minute.toString().padStart(2, "0");
-    const prevHoursTwo = time.Previous[1].hour.toString().padStart(2, "0");
-    const prevMinutesTwo = time.Previous[1].minute.toString().padStart(2, "0");
+    const prevHours = time.Previous.time[0].hour.toString().padStart(2, "0");
+    const prevMinutes = time.Previous.time[0].minute.toString().padStart(2, "0");
+    const prevHoursTwo = time.Previous.time[1].hour.toString().padStart(2, "0");
+    const prevMinutesTwo = time.Previous.time[1].minute.toString().padStart(2, "0");
 
     return `${prevHours}:${prevMinutes} - ${prevHoursTwo}:${prevMinutesTwo}`;
 }
@@ -83,6 +96,7 @@ function formatPrevTime(time: TimeSuggestion | undefined): string {
     <Card>
         <CardHeader>
             <CardTitle class="text-center md:text-left">{{ machine.MachineName }}</CardTitle>
+            {{ collision }}
             <CardDescription class="text-center md:text-left">
             </CardDescription>
         </CardHeader>
@@ -140,6 +154,16 @@ function formatPrevTime(time: TimeSuggestion | undefined): string {
                     </FormField>
 
 
+                    <FormField v-slot="{ value, handleChange }" type="checkbox"
+                        :name="`machinesInPlan[${index}].CanDisturb`">
+                        <FormItem class="flex flex-row items-start gap-x-3 space-y-0 py-4">
+                            <FormControl>
+                                <Checkbox :checked="value" @update:checked="handleChange" />
+                            </FormControl>
+                            <FormLabel>Can you be disturbed?</FormLabel>
+                            <FormMessage />
+                        </FormItem>
+                    </FormField>
                     <div class="flex gap-8">
                         <!-- make a field form group -->
                         <FormField v-slot="{ value }" :name="`machinesInPlan[${index}].StartTime`">
@@ -253,18 +277,26 @@ function formatPrevTime(time: TimeSuggestion | undefined): string {
                 </FormItem>
             </FormField>
 
+
         </CardContent>
 
         <CardFooter>
             <div :class="{ 'opacity-0': timeRecs.get(machine.MachineId) === undefined }">
-                <p>Machine is occupid at this time, here are the free closest times</p>
-                <a class="mr-4 time-link" @click.prevent="setPrevTime(timeRecs.get(machine.MachineId))" href="#">
-                    {{ formatPrevTime(timeRecs.get(machine.MachineId)) }}
-                </a>
+                <template v-if="!collision">
+                    <p>Machine is occupid at this time, here are the free closest times</p>
+                    <a class="mr-4 time-link" @click.prevent="setPrevTime(timeRecs.get(machine.MachineId))" href="#">
+                        {{ formatPrevTime(timeRecs.get(machine.MachineId)) }}
+                    </a>
 
-                <a class="time-link" @click.prevent="setNextTime(timeRecs.get(machine.MachineId))" href="#">
-                    {{ formatNextTime(timeRecs.get(machine.MachineId)) }}
-                </a>
+                    <a class="time-link" @click.prevent="setNextTime(timeRecs.get(machine.MachineId))" href="#">
+                        {{ formatNextTime(timeRecs.get(machine.MachineId)) }}
+                    </a>
+                </template>
+                <template v-else>
+                    <span class="mr-4 time-link">
+                        Selected time is coliding with another one
+                    </span>
+                </template>
             </div>
         </CardFooter>
     </Card>

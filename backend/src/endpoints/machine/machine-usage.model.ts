@@ -3,6 +3,7 @@ import { Model } from '../base';
 import { Column, ForeignKey, Table, PrimaryKey, DifferentlyNamedForeignKey } from "../../database";
 import { Plan } from '../plan/plan.model';
 import { Machine } from './machine.model';
+import { json } from 'express';
 
 
 @Table("get_plan_machines_with_next_and_prev")
@@ -47,9 +48,12 @@ export class MachineUsage extends Model {
     @Column("next_end_time")
     public NextEndTime: Date;
 
-    // TODO: Add can disturb id DB for each
-    // @Column("can_disturb")
-    // public CanDisturb: boolean;
+    @Column("can_disturb")
+    public CanDisturb: boolean;
+
+
+    @Column("can_fit")
+    public CanFit: boolean;
 
     constructor(jsonData: IDictionary<any>) {
         super();
@@ -63,7 +67,8 @@ export class MachineUsage extends Model {
             this.Plan = new Plan(jsonData)
         }
         this.Machine = new Machine(jsonData)
-
+        this.CanDisturb = jsonData["CanDisturb"] ?? jsonData["can_disturb"]
+        this.CanFit = jsonData["CanFit"] ?? jsonData["can_fit"]
 
         if (jsonData["previous_plan"]) {
             this.PreviousPlan = jsonData["previous_plan"]

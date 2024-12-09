@@ -3,6 +3,7 @@ import type { Machine, TimeSuggestion } from '../types';
 import { fillParamValues } from '../request-utils';
 import { Time } from "@internationalized/date";
 import { format } from 'date-fns';
+import { AlarmClockPlus } from 'lucide-vue-next';
 
 const KRATOS_API_URL = import.meta.env.VITE_KRATOS_API_URL
 
@@ -83,14 +84,19 @@ export class MachineService {
         desired_date: Date,
         desired_start_time: Time,
         desired_end_time: Time,
+        amount_of_people: number,
+        can_disturb: boolean
     }): Promise<TimeSuggestion> {
         const {
             desired_date,
             desired_start_time,
             desired_end_time,
+            amount_of_people,
+            can_disturb
         } = vars
         try {
-            const res = await fetch(`${KRATOS_API_URL}/api/machine/usage/${id}?desired_date=${format(desired_date, "yyyy-MM-dd")}&desired_start_time=${desired_start_time.hour}:${desired_start_time.minute}&desired_end_time=${desired_end_time.hour}:${desired_end_time.minute}`);
+            const res = await fetch(`${KRATOS_API_URL}/api/machine/usage/${id}?desired_date=${format(desired_date, "yyyy-MM-dd")}&desired_start_time=${desired_start_time.hour}:${desired_start_time.minute}&desired_end_time=${desired_end_time.hour}:${desired_end_time.minute}&amount_of_people=${amount_of_people}&can_disturb=${can_disturb}`);
+
             if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}`);
             }
@@ -98,16 +104,22 @@ export class MachineService {
             const prevSugg: [Time, Time] = [data.PrevSuggestion.StartTime, data.PrevSuggestion.EndTime]
             const nextSugg: [Time, Time] = [data.NextSuggestion.StartTime, data.NextSuggestion.EndTime]
 
-
             return {
-                Previous: [
-                    new Time(prevSugg[0].hour, prevSugg[0].minute),
-                    new Time(prevSugg[1].hour, prevSugg[1].minute),
-                ],
-                Next: [
-                    new Time(nextSugg[0].hour, nextSugg[0].minute),
-                    new Time(nextSugg[1].hour, nextSugg[1].minute),
-                ]
+                Previous: {
+                    time: [
+                        new Time(prevSugg[0].hour, prevSugg[0].minute),
+                        new Time(prevSugg[1].hour, prevSugg[1].minute),
+                    ],
+                    isColiding: data.PrevSuggestion.isColiding
+                },
+                Next: {
+                    time: [
+                        new Time(nextSugg[0].hour, nextSugg[0].minute),
+                        new Time(nextSugg[1].hour, nextSugg[1].minute),
+                    ],
+                    isColiding: data.NextSuggestion.isColiding
+                }
+
             };
         } catch (error) {
             console.error('Error creating account:', error);

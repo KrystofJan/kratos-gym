@@ -2,15 +2,18 @@ import { Plan } from '../plan'
 import { Time } from "@internationalized/date";
 
 
+export interface Suggestion {
+    PrevSuggestion: TimeRange,
+    NextSuggestion: TimeRange
+}
+
 
 export interface PlanShort {
     PlanId: number
     StartTime: string
     EndTime: string
-}
-
-export interface SimplifiedPlan {
-
+    CanDisturb: boolean
+    CanFit: boolean
 }
 
 export interface SimplifiedMachineUsage {
@@ -19,6 +22,8 @@ export interface SimplifiedMachineUsage {
     EndTime: string
     Prev: PlanShort | null
     Next: PlanShort | null
+    CanDisturb: boolean
+    CanFit: boolean
 }
 
 export interface PlanRaw {
@@ -27,11 +32,14 @@ export interface PlanRaw {
     EndTime: Date
     PrevId: number | null
     NextId: number | null
+    CanDisturb: boolean
+    CanFit: boolean
 }
 
 export interface TimeRange {
     StartTime: Time,
     EndTime: Time,
+    isColiding: boolean
 }
 
 export interface Suggestion {

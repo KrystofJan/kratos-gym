@@ -1,6 +1,11 @@
 import { Time } from "@internationalized/date";
 
 export interface TimeSuggestion {
-    Previous: [Time, Time],
-    Next: [Time, Time]
+    Previous: TimeRange
+    Next: TimeRange
+}
+
+export interface TimeRange {
+    time: [Time, Time],
+    isColiding: boolean
 }
