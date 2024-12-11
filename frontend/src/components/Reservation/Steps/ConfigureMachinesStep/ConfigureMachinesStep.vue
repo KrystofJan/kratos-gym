@@ -50,7 +50,7 @@ const schema = toTypedSchema(
                     hour: z.number().min(0).max(24).default(0),
                     minute: z.number().min(0).max(59).default(0),
                 }),
-                CanDisturb: z.boolean()
+                CanDisturb: z.boolean().default(false)
             }).refine(
                 (data) => {
                     const startTime = new Time(data.StartTime.hour, data.StartTime.minute)

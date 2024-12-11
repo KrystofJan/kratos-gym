@@ -22,6 +22,7 @@ const getCurrentMachineInPlan = (id: number | null) => {
 }
 </script>
 <template>
+    asdasd
     <div v-for="(machine, index) in machines" :key="index">
         <Card>
             <CardHeader class="grid grid-cols-2 gap-4 items-center md:grid-cols-1">

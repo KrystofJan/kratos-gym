@@ -42,7 +42,7 @@ const routes = [
     {
         path: '/reservation/:id',
         name: 'Form Test',
-        component: () => import('@/components/Reservation/Detail.vue')
+        component: () => import('@/components/Reservation/RouteDetail.vue')
     },
     {
         path: '/admin',

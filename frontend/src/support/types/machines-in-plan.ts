@@ -7,6 +7,7 @@ export interface MachinesInPlan {
     Reps: number;
     StartTime: Time;
     EndTime: Time;
+    CanDisturb: boolean
 }
 
 export interface MachinesInPlanPost {
@@ -16,4 +17,5 @@ export interface MachinesInPlanPost {
     Reps: number;
     StartTime: string;
     EndTime: string;
+    CanDisturb: boolean
 }

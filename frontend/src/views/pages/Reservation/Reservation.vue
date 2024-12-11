@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Button } from '@/components/shadcn/ui/button'
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { Input } from '@/components/shadcn/ui/input'
 import { toast } from '@/components/shadcn/ui/toast'
 import { h } from 'vue'
@@ -15,6 +15,17 @@ import { PlanService } from "@/support/services"
 import { Plan } from '@/support';
 import { format, parse } from 'date-fns'
 import { Stepper, StepperItem, StepperTrigger, StepperSeparator, StepperTitle, StepperDescription } from '@/components/shadcn/ui/stepper';
+import { ReservationSummary } from '.'
+
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/shadcn/ui/card'
+
 
 const reservation = ref<Partial<ReservationPost>>({})
 const stepIndex = ref<number>(1)
@@ -61,8 +72,6 @@ const onSubmit = async () => {
         })
     }
 }
-
-
 watch(() => reservation.value, () => {
     console.log(reservation.value)
 }, { deep: true })
@@ -176,12 +185,12 @@ const steps = [
 
                         </KeepAlive>
                         <template v-if="stepIndex === 5">
-
-                            <pre class="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                                <code class="text-white">
-                                    {{ JSON.stringify(reservation, null, 4) }}
-                                </code>
-                            </pre>
+                            <ReservationSummary :reservation="reservation" />
+                            <!-- <pre class="mt-2 w-[340px] rounded-md bg-slate-950 p-4"> -->
+                            <!--     <code class="text-white"> -->
+                            <!--         {{ JSON.stringify(reservation, null, 4) }} -->
+                            <!--     </code> -->
+                            <!-- </pre> -->
                             <Button type="submit">
                                 Submit
                             </Button>

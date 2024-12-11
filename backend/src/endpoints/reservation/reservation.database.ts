@@ -50,9 +50,7 @@ export class ReservationDatabase extends Database {
                     processedData[columnMapped] = filteredBody[column][fieldMap[foreignKey]];
                 } else {
                     // Handle boolean conversion
-                    processedData[columnMapped] = typeof filteredBody[column] === "boolean"
-                        ? Number(filteredBody[column]).toString()
-                        : filteredBody[column];
+                    processedData[columnMapped] = filteredBody[column];
                 }
             }
         } catch (error) {
@@ -81,7 +79,6 @@ export class ReservationDatabase extends Database {
         const [planTableName, planProcessedData, planColumnNames] = await this.ProcessInsertData(Plan, body.Plan)
         try {
 
-            logger.info("esketit")
             const res = await this.sql.begin(async sql => {
 
                 const [planErr, pl] = await safeAwait(sql<Plan[]>`
@@ -106,7 +103,10 @@ export class ReservationDatabase extends Database {
 
                 for (const machineInPlan of body.Plan.Machines) {
                     machineInPlan.PlanId = planModel.PlanId
+
                     const [mTableName, mProcessedData, mColumnNames] = await this.ProcessInsertData(MachinesInPlan, machineInPlan)
+
+                    logger.info(mProcessedData)
                     const [machineErr, ma] = await safeAwait(sql<Model[]>`
                         insert into ${sql(mTableName)} 
                         ${this.sql(mProcessedData, mColumnNames)}
