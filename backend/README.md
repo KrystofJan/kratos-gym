@@ -64,6 +64,7 @@ CREATE OR REPLACE FUNCTION get_plan_machines_with_next_and_prev(input_machine_id
     RETURNS TABLE(
         plan_id INT,
         machine_id INT,
+        can_disturb boolean,
         start_time time,
         end_time time,
         previous_plan_id INT,
@@ -78,6 +79,7 @@ BEGIN
         SELECT
             pm.plan_id,
             pm.machine_id,
+            pm.can_disturb,
             pm.start_time AS current_start_time,
             pm.end_time AS current_end_time,
             LAG(pm.plan_id) OVER (
@@ -105,6 +107,48 @@ BEGIN
           and TO_CHAR(reservation_time, 'YYYY-MM-DD') = TO_CHAR(input_reservation_date, 'YYYY-MM-DD')
         ORDER BY
             current_start_time, current_end_time;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+
+- There is also this function which gets the same result, but with the addition of checking if the desired amount of people can fit along with canDisturb check
+```plpgsql
+CREATE OR REPLACE FUNCTION get_plan_machines_occupancy_for_reservation(input_machine_id INT, input_reservation_date DATE, input_amount_of_people INT)
+    RETURNS TABLE(
+     plan_id INT,
+     machine_id INT,
+     can_disturb boolean,
+     start_time time,
+     end_time time,
+     previous_plan_id INT,
+     previous_start_time time,
+     previous_end_time time,
+     next_plan_id INT,
+     next_start_time time,
+     next_end_time time,
+     can_fit boolean
+ ) AS $$
+BEGIN
+    RETURN QUERY
+SELECT pm.*,
+    CASE
+        WHEN
+            ((pm.previous_start_time <= pm.end_time AND pm.previous_end_time >= pm.start_time) OR
+             (pm.previous_start_time <= pm.next_end_time AND pm.previous_end_time >= pm.next_start_time) OR
+             (pm.start_time <= pm.next_end_time AND pm.end_time >= pm.next_start_time))
+            AND m.max_people >= SUM(r.amount_of_people) + input_amount_of_people
+        THEN true
+        ELSE false
+    END AS can_fit
+FROM get_plan_machines_with_next_and_prev(input_machine_id, input_reservation_date) pm
+INNER JOIN reservation r ON r.plan_id = pm.plan_id
+INNER JOIN machine m ON m.machine_id = pm.machine_id
+GROUP BY
+    pm.plan_id, pm.machine_id, pm.can_disturb, pm.start_time, pm.end_time,
+    pm.previous_plan_id, pm.previous_start_time, pm.previous_end_time,
+    pm.next_plan_id, pm.next_start_time, pm.next_end_time,
+    r.amount_of_people, m.max_people;
 END;
 $$ LANGUAGE plpgsql;
 ```

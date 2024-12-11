@@ -18,6 +18,35 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: check_can_fit(integer, date, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.check_can_fit(input_machine_id integer, input_reservation_date date, input_amount_of_people integer) RETURNS boolean
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN (
+        SELECT
+            CASE
+                WHEN SUM(r.amount_of_people) IS NOT NULL THEN true
+                ELSE false
+            END AS can_fit
+        FROM get_plan_machines_with_next_and_prev(input_machine_id, input_reservation_date) pm
+        INNER JOIN reservation r ON r.plan_id = pm.plan_id
+        INNER JOIN machine m ON m.machine_id = pm.machine_id
+        WHERE ((pm.previous_start_time <= pm.end_time AND pm.previous_end_time >= pm.start_time) OR
+               (pm.previous_start_time <= pm.next_end_time AND pm.previous_end_time >= pm.next_start_time) OR
+               (pm.start_time <= pm.next_end_time AND pm.end_time >= pm.next_start_time))
+          AND pm.can_disturb = true
+          AND m.max_people >= r.amount_of_people + input_amount_of_people
+    );
+END;
+$$;
+
+
+ALTER FUNCTION public.check_can_fit(input_machine_id integer, input_reservation_date date, input_amount_of_people integer) OWNER TO postgres;
+
+--
 -- Name: get_machines_in_same_category(integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -46,10 +75,43 @@ $$;
 ALTER FUNCTION public.get_machines_in_same_category(input_machine_id integer) OWNER TO postgres;
 
 --
+-- Name: get_plan_machines_occupancy_for_reservation(integer, date, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_plan_machines_occupancy_for_reservation(input_machine_id integer, input_reservation_date date, input_amount_of_people integer) RETURNS TABLE(plan_id integer, machine_id integer, can_disturb boolean, start_time time without time zone, end_time time without time zone, previous_plan_id integer, previous_start_time time without time zone, previous_end_time time without time zone, next_plan_id integer, next_start_time time without time zone, next_end_time time without time zone, can_fit boolean)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY
+SELECT pm.*,
+    CASE
+        WHEN
+            ((pm.previous_start_time <= pm.end_time AND pm.previous_end_time >= pm.start_time) OR
+             (pm.previous_start_time <= pm.next_end_time AND pm.previous_end_time >= pm.next_start_time) OR
+             (pm.start_time <= pm.next_end_time AND pm.end_time >= pm.next_start_time))
+            AND m.max_people >= SUM(r.amount_of_people) + input_amount_of_people
+        THEN true
+        ELSE false
+    END AS can_fit
+FROM get_plan_machines_with_next_and_prev(input_machine_id, input_reservation_date) pm
+INNER JOIN reservation r ON r.plan_id = pm.plan_id
+INNER JOIN machine m ON m.machine_id = pm.machine_id
+GROUP BY
+    pm.plan_id, pm.machine_id, pm.can_disturb, pm.start_time, pm.end_time,
+    pm.previous_plan_id, pm.previous_start_time, pm.previous_end_time,
+    pm.next_plan_id, pm.next_start_time, pm.next_end_time,
+    r.amount_of_people, m.max_people;
+END;
+$$;
+
+
+ALTER FUNCTION public.get_plan_machines_occupancy_for_reservation(input_machine_id integer, input_reservation_date date, input_amount_of_people integer) OWNER TO postgres;
+
+--
 -- Name: get_plan_machines_with_next_and_prev(integer, date); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_plan_machines_with_next_and_prev(input_machine_id integer, input_reservation_date date) RETURNS TABLE(plan_id integer, machine_id integer, start_time time without time zone, end_time time without time zone, previous_plan_id integer, previous_start_time time without time zone, previous_end_time time without time zone, next_plan_id integer, next_start_time time without time zone, next_end_time time without time zone)
+CREATE FUNCTION public.get_plan_machines_with_next_and_prev(input_machine_id integer, input_reservation_date date) RETURNS TABLE(plan_id integer, machine_id integer, can_disturb boolean, start_time time without time zone, end_time time without time zone, previous_plan_id integer, previous_start_time time without time zone, previous_end_time time without time zone, next_plan_id integer, next_start_time time without time zone, next_end_time time without time zone)
     LANGUAGE plpgsql
     AS $$
 BEGIN
@@ -57,6 +119,7 @@ BEGIN
         SELECT
             pm.plan_id,
             pm.machine_id,
+            pm.can_disturb,
             pm.start_time AS current_start_time,
             pm.end_time AS current_end_time,
             LAG(pm.plan_id) OVER (
@@ -750,6 +813,8 @@ INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (52, 'asdasdgjhg
 INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (53, 'sredyt', 1);
 INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (54, 'xdvcghfgh', 1);
 INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (55, 'asdfasdfhyjgfhj', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (56, 'Testing1231', 1);
+INSERT INTO public.plan (plan_id, plan_name, account_id) VALUES (57, 'Linecke kolecka', 1);
 
 
 --
@@ -789,6 +854,8 @@ INSERT INTO public.plan_category (plan_id, category_id) VALUES (52, 2);
 INSERT INTO public.plan_category (plan_id, category_id) VALUES (53, 3);
 INSERT INTO public.plan_category (plan_id, category_id) VALUES (54, 2);
 INSERT INTO public.plan_category (plan_id, category_id) VALUES (55, 1);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (56, 1);
+INSERT INTO public.plan_category (plan_id, category_id) VALUES (57, 2);
 
 
 --
@@ -828,16 +895,18 @@ INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, en
 INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (45, 39, 4, 6, '00:00:00', '00:00:00', false);
 INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (46, 25, 4, 6, '00:00:00', '01:00:00', false);
 INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (47, 25, 4, 6, '23:22:00', '23:44:00', false);
-INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (48, 25, 4, 5, '10:13:00', '10:15:00', false);
-INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (49, 25, 4, 8, '10:15:00', '10:25:00', false);
 INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (50, 25, 4, 6, '01:15:00', '01:35:00', false);
 INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (51, 25, 4, 6, '03:00:00', '04:00:00', false);
 INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (51, 29, 4, 6, '00:00:00', '00:00:00', false);
 INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (52, 25, 4, 6, '03:00:00', '04:00:00', false);
 INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (52, 29, 4, 6, '00:00:00', '00:00:00', false);
 INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (53, 25, 4, 6, '10:25:00', '10:28:00', false);
-INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (54, 25, 4, 6, '00:00:00', '00:00:00', false);
-INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (55, 25, 4, 6, '01:15:00', '01:30:00', false);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (56, 25, 4, 6, '10:25:00', '10:35:00', true);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (55, 25, 4, 6, '01:15:00', '01:30:00', true);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (48, 25, 4, 5, '10:13:00', '10:15:00', true);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (49, 25, 4, 8, '10:15:00', '10:25:00', true);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (54, 25, 4, 6, '00:00:00', '00:00:00', true);
+INSERT INTO public.plan_machine (plan_id, machine_id, sets, reps, start_time, end_time, can_disturb) VALUES (57, 25, 4, 4, '10:15:00', '10:20:00', true);
 
 
 --
@@ -891,6 +960,8 @@ INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_ti
 INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (41, 1, '2024-12-10 23:00:00', 1, NULL, 53);
 INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (42, 1, '2024-12-10 23:00:00', 1, NULL, 54);
 INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (43, 1, '2024-12-10 23:00:00', 1, NULL, 55);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (44, 1, '2024-12-10 23:00:00', 1, NULL, 56);
+INSERT INTO public.reservation (reservation_id, amount_of_people, reservation_time, customer_id, trainer_id, plan_id) VALUES (45, 1, '2024-12-11 23:00:00', 4, NULL, 57);
 
 
 --
@@ -933,7 +1004,7 @@ SELECT pg_catalog.setval('public.exercisetype_exercisetypeid_seq', 28, true);
 -- Name: reservation_reservetionid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.reservation_reservetionid_seq', 43, true);
+SELECT pg_catalog.setval('public.reservation_reservetionid_seq', 45, true);
 
 
 --
@@ -954,7 +1025,7 @@ SELECT pg_catalog.setval('public.wrkoutmachine_wrkoutmachineid_seq', 49, true);
 -- Name: wrkoutplan_wrkoutplanid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.wrkoutplan_wrkoutplanid_seq', 55, true);
+SELECT pg_catalog.setval('public.wrkoutplan_wrkoutplanid_seq', 57, true);
 
 
 --
