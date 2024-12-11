@@ -11,6 +11,7 @@ import { Plan } from '../plan';
 import { MachinesInPlan } from '../plan/machines-in-plan.model';
 import { ExerciseType } from '../exercise-type';
 import { ExerciseCategory } from '../exercise-category';
+import { safeAwait } from '../../utils/utilities';
 
 export class ReservationDatabase extends Database {
     constructor() {
@@ -49,9 +50,7 @@ export class ReservationDatabase extends Database {
                     processedData[columnMapped] = filteredBody[column][fieldMap[foreignKey]];
                 } else {
                     // Handle boolean conversion
-                    processedData[columnMapped] = typeof filteredBody[column] === "boolean"
-                        ? Number(filteredBody[column]).toString()
-                        : filteredBody[column];
+                    processedData[columnMapped] = filteredBody[column];
                 }
             }
         } catch (error) {
@@ -59,7 +58,6 @@ export class ReservationDatabase extends Database {
             logger.error(err)
             throw new CodedError(ErrorCode.INTERNAL_ERROR, "Error processing body data.");
         }
-
 
         const columnNames = Object.keys(processedData);
         return [tableName, processedData, columnNames]
@@ -75,7 +73,6 @@ export class ReservationDatabase extends Database {
         //
         // TODO: Add to docs
 
-        // TODO: Ensure plan exists on higher layer
         if (!body.Plan) {
             throw new CodedError(ErrorCode.ARGUMENT_ERROR, "Plan has to be in the request body")
         }
@@ -84,26 +81,44 @@ export class ReservationDatabase extends Database {
 
             const res = await this.sql.begin(async sql => {
 
-                const [plan] = await sql<Plan[]>`
+                const [planErr, pl] = await safeAwait(sql<Plan[]>`
                     insert into ${sql(planTableName)} 
                     ${this.sql(planProcessedData, planColumnNames)}
                     returning *
-                `
+                `)
+
+                if (planErr !== null) {
+                    logger.error(planErr)
+                    throw new CodedError(ErrorCode.DATABASE_ERROR, "Could not create plan")
+                }
+
+                const [plan] = pl
 
                 const planModel = new Plan(plan)
                 const machines = []
                 const types = []
                 if (!body.Plan) {
-                    throw new CodedError(ErrorCode.DATABASE_ERROR, "fuck")
+                    throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping the plan failed ")
                 }
+
                 for (const machineInPlan of body.Plan.Machines) {
                     machineInPlan.PlanId = planModel.PlanId
+
                     const [mTableName, mProcessedData, mColumnNames] = await this.ProcessInsertData(MachinesInPlan, machineInPlan)
-                    const [machine] = await sql<Model[]>`
+
+                    logger.info(mProcessedData)
+                    const [machineErr, ma] = await safeAwait(sql<Model[]>`
                         insert into ${sql(mTableName)} 
                         ${this.sql(mProcessedData, mColumnNames)}
                         returning *
-                    `
+                    `)
+
+                    if (machineErr !== null) {
+                        logger.error(machineErr)
+                        throw new CodedError(ErrorCode.DATABASE_ERROR, "Could not create machine")
+                    }
+
+                    const [machine] = ma
                     machines.push(new MachinesInPlan(machine))
                 }
 
@@ -111,12 +126,19 @@ export class ReservationDatabase extends Database {
 
                 const typePKey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, ExerciseCategory);
                 for (const exType of body.Plan.ExerciseCategories) {
-                    const [type] = await sql<Model[]>`
+                    const [typeErr, tp] = await safeAwait(sql<Model[]>`
                         insert into ${sql("plan_category")} 
                         (${this.sql(typePKey)}, ${this.sql("plan_id")})
                         values (${exType.CategoryId}, ${planModel.PlanId})
                         returning *
-                    `
+                    `)
+
+                    if (typeErr !== null) {
+                        logger.error(typeErr)
+                        throw new CodedError(ErrorCode.DATABASE_ERROR, "Could not create type")
+                    }
+
+                    const [type] = tp
                     types.push(new ExerciseCategory(type))
                 }
 
@@ -124,18 +146,28 @@ export class ReservationDatabase extends Database {
                 body.Plan = planModel
 
                 const [resTableName, resProcessedData, resColumnNames] = await this.ProcessInsertData(Reservation, body)
-                const [reservation] = await sql<Reservation[]>`
+                const [reservationErr, re] = await safeAwait(sql<Reservation[]>`
                     insert into ${sql(resTableName)} 
                     ${this.sql(resProcessedData, resColumnNames)}
                     returning *
-                `
+                `)
+
+
+                if (reservationErr !== null) {
+                    logger.error(reservationErr)
+                    throw new CodedError(ErrorCode.DATABASE_ERROR, "Could not create reservation")
+                }
+                const [reservation] = re
                 return reservation
             })
             return new DatabaseCreated<Reservation>(res)
         } catch (error) {
             const err = error as Error;
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
+        } finally {
+            this.sql.end()
         }
+
 
     }
 }

@@ -14,5 +14,5 @@ export interface ReservationPost {
     ReservationTime: Date;
     CustomerId: number;
     TrainerId?: number;
-    Plan: PlanPost;
+    Plan: Partial<PlanPost>;
 }

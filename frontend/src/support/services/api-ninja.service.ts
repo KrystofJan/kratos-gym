@@ -7,7 +7,6 @@ export class APINinjasService {
     }
     async GetQuote() {
         try {
-            console.log(API_NINJAS_KEY)
             const res = await fetch(`https://api.api-ninjas.com/v1/quotes?category=fitness`, {
                 method: 'GET',
                 headers: {

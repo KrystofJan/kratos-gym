@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
+import { Time } from "@internationalized/date";
 import {
     MachineService,
     Machine,
     machineErrorHandler,
     MachineQueryParams,
+    MachineUsageQueryParams
 } from '.'
 import { CreatedResponse, FailedResponse, OkResponse } from '../../request-utility';
 import { logger } from '../../utils';
@@ -11,6 +13,7 @@ import { CodedError, ErrorCode } from '../../errors';
 import { safeAwait } from '../../utils/utilities';
 import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response';
 import { ExerciseTypeService } from '../exercise-type';
+import { PlanService } from '../plan';
 
 
 export class MachineController {
@@ -18,6 +21,45 @@ export class MachineController {
     static async FindAll(req: Request, res: Response) {
         const { limit, page } = req.query as MachineQueryParams
         const [err, data] = await safeAwait(MachineService.GetAllMachines(limit, page));
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = machineErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        for (const machine of data) {
+            if (!machine.MachineId) {
+                const error = new CodedError(ErrorCode.MAPPING_ERROR, "machine id is null");
+                logger.error(error)
+                const statusCode = machineErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+
+            const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByMachineId(Number(machine.MachineId)))
+
+            if (typeErr !== null) {
+                logger.error(typeErr)
+                const error = typeErr as CodedError;
+                const statusCode = machineErrorHandler.handleError(error);
+                const response = new FailedResponse(error.message, statusCode, error.code);
+                response.buildResponse(req, res)
+                return;
+            }
+            machine.ExerciseTypes = type
+        }
+
+        const response = new OkResponse("found all data successfully", data);
+        response.buildResponse(req, res)
+    }
+
+    static async RecommendById(req: Request, res: Response) {
+        const id = Number(req.params["id"])
+        const [err, data] = await safeAwait(MachineService.GetRecommendedMachines(id));
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError;
@@ -180,6 +222,50 @@ export class MachineController {
         }
 
         const response = new OkResponse("found all data successfully", data);
+        response.buildResponse(req, res)
+    }
+
+    static async FindUsageForDate(req: Request, res: Response) {
+        const machine_id = Number(req.params["id"])
+        const { desired_date, desired_start_time, desired_end_time, amount_of_people } = req.query as MachineUsageQueryParams
+
+        if (!machine_id || !desired_date || !desired_start_time || !desired_end_time || !amount_of_people) {
+            const error = new CodedError(ErrorCode.ARGUMENT_ERROR, "You need all machine_id, desired_date, desired_start_time and desired_end_time filled in in order to get machine usage data")
+            const statusCode = machineErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        let { can_disturb } = req.query as MachineUsageQueryParams
+        const canDisturb = can_disturb === undefined ? true : can_disturb === 'true';
+
+        const [err, data] = await safeAwait(MachineService.GetMachineUsageByDate(machine_id, desired_date, amount_of_people));
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError;
+            const statusCode = machineErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+
+        const [start_h, start_m] = desired_start_time.split(':').map(Number)
+        const desiredStartTime = new Time(start_h, start_m)
+
+        const [end_h, end_m] = desired_end_time.split(':').map(Number)
+        const desiredEndTime = new Time(end_h, end_m)
+        const [resErr, result] = await safeAwait(MachineService.SuggestTimes(data, { StartTime: desiredStartTime, EndTime: desiredEndTime, isColiding: true }, canDisturb))
+
+        if (resErr !== null) {
+            logger.error(resErr)
+            const error = new CodedError(ErrorCode.MAPPING_ERROR, "TODO")
+            const statusCode = machineErrorHandler.handleError(error);
+            const response = new FailedResponse(error.message, statusCode, error.code);
+            response.buildResponse(req, res)
+            return;
+        }
+        const response = new OkResponse("found all data successfully", result);
         response.buildResponse(req, res)
     }
 }

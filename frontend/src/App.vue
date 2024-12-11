@@ -15,7 +15,6 @@ const { user, isLoaded: isUserLoaded } = useUser();
 
 const loadAccount = async () => {
     if (!currentAccount.value && user.value) {
-        console.log("I'm trying")
         try {
             await fetchAccount(user.value.id);
         } catch (error) {

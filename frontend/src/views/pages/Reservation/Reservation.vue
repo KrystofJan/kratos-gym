@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { Button } from '@/components/shadcn/ui/button'
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { Input } from '@/components/shadcn/ui/input'
 import { toast } from '@/components/shadcn/ui/toast'
-import { toTypedSchema } from '@vee-validate/zod'
-import { useForm } from 'vee-validate'
 import { h } from 'vue'
-import * as z from 'zod'
 import { Machine, MachinesInPlan } from '@/support';
 import { ConfigureMachinesStep, PlanStep, PickMachineStep, TypeStep } from '@/components/Reservation/Steps/'
 import { ReservationPost } from '@/support/types/reservation';
@@ -14,79 +11,55 @@ import { Time } from '@internationalized/date';
 import { SignedOut, SignedIn } from 'vue-clerk'
 import { ReservationService } from '@/support';
 import { currentAccount } from "@/store/accountStore"
+import { PlanService } from "@/support/services"
+import { Plan } from '@/support';
+import { format, parse } from 'date-fns'
+import { Stepper, StepperItem, StepperTrigger, StepperSeparator, StepperTitle, StepperDescription } from '@/components/shadcn/ui/stepper';
+import { ReservationSummary } from '.'
 
-const formSchema = toTypedSchema(z.object({
-    planName: z.string().min(5).max(50),
-    amountOfPeople: z.number().min(1).max(5).default(1),
-    arrivalDate: z.any(),
-    trainer: z.object({
-        AccountId: z.number(),
-        FirstName: z.string(),
-        LastName: z.string(),
-        Email: z.string(),
-        PhoneNumber: z.string(),
-        Login: z.string(),
-        ClerkId: z.string(),
-        ProfilePictureUrl: z.string().optional()
-    }).optional(),
-    machines: z.array(z.object({
-        MachineId: z.number(),
-        MachineName: z.string(),
-        MaxWeight: z.number(),
-        MinWeight: z.number(),
-        MaxPeople: z.number(),
-        AvgTimeTaken: z.number(),
-        PopularityScore: z.number(),
-    })).min(1),
-    machinesInPlan: z.array(z.object({
-        Reps: z.number().default(6),
-        Sets: z.number().default(4),
-        StartTime: z.object({
-            hour: z.number().min(0).max(24).default(0),
-            minute: z.number().min(0).max(59).default(0),
-        }),
-        EndTime: z.object({
-            hour: z.number().min(0).max(24).default(0),
-            minute: z.number().min(0).max(59).default(0),
-        }),
-    })),
-    exerciseCategories: z.array(z.object({
-        CategoryId: z.number(),
-        CategoryName: z.string()
-    }))
-}))
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/shadcn/ui/card'
 
-const Form = useForm({
-    validationSchema: formSchema,
-})
 
-const onSubmit = Form.handleSubmit(async (values) => {
+const reservation = ref<Partial<ReservationPost>>({})
+const stepIndex = ref<number>(1)
+const selectedMachines = ref<Machine[]>([]);
+
+
+// Exercise Category Schema
+const onSubmit = async () => {
 
     // TODO: CREATE A RESERVATION AND ROUTE TO DETAIL
     try {
         const reservationService = new ReservationService();
-        const reservation: ReservationPost = {
-            AmountOfPeople: values.amountOfPeople,
-            ReservationTime: new Date(values.arrivalDate.year, values.arrivalDate.month, values.arrivalDate.day),
+        if (!reservation.value.Plan) {
+            throw new Error("Plan was not set")
+        }
+        const reserv: Partial<ReservationPost> = {
+            ...reservation.value,
             CustomerId: Number(currentAccount.value?.AccountId),
-            TrainerId: values.trainer?.AccountId,
             Plan: {
-                PlanName: values.planName,
+                ...reservation.value.Plan,
                 AccountId: Number(currentAccount.value?.AccountId),
-                Machines: values.machinesInPlan.map((mip, index) => {
+                Machines: reservation.value.Plan.Machines.map((mip, index) => {
                     const StartTime = new Time(mip.StartTime.hour, mip.StartTime.minute)
                     const EndTime = new Time(mip.EndTime.hour, mip.EndTime.minute)
                     return {
                         ...mip,
-                        MachineId: values.machines[index].MachineId,
+                        MachineId: selectedMachines.value[index].MachineId,
                         StartTime: StartTime.toString(),
                         EndTime: EndTime.toString(),
                     }
                 }),
-                ExerciseCategories: values.exerciseCategories
             }
         }
-        const data = await reservationService.CreateFullReservation(reservation);
+        const data = await reservationService.CreateFullReservation(reserv);
         toast({
             title: 'Sucessfully created a reservation',
             description: `Reservation id: ${data.CreatedId}`
@@ -98,33 +71,16 @@ const onSubmit = Form.handleSubmit(async (values) => {
                 h('code', { class: 'text-white' }, err?.toString())),
         })
     }
-})
-
-const StepNumber = ref(1);
-const moveNext = (stepNumber: number) => {
-    if (StepNumber.value == stepNumber) {
-        StepNumber.value++;
-    }
 }
-
-const selectedMachines = ref<Machine[]>([]);
-const machineSelector = ref<InstanceType<typeof PickMachineStep> | null>(null);
-
-watch(Form.errors, (errors) => {
-    console.log(errors);
-}, { deep: true });
-
-watch(() => Form.values.machines, (newMachines) => {
-    if (!newMachines) {
-        selectedMachines.value = [];
-        return;
-    }
-
-    selectedMachines.value = newMachines.map(machine => ({
-        ...machine,
-        ExerciseTypes: []
-    }));
-}, { deep: true });
+watch(() => reservation.value, () => {
+    console.log(reservation.value)
+}, { deep: true })
+const steps = [
+    { step: 1, title: 'Plan Details', description: 'Provide plan details like name and trainer.' },
+    { step: 2, title: 'Pick Machines', description: 'Select the machines for your plan.' },
+    { step: 3, title: 'Configure Machines', description: 'Configure machines with sets, reps, and timings.' },
+    { step: 4, title: 'Add Exercise Types', description: 'Add exercise categories to your plan.' },
+];
 </script>
 
 <template>
@@ -139,15 +95,109 @@ watch(() => Form.values.machines, (newMachines) => {
     </SignedOut>
     <SignedIn>
         <div class="flex justify-center">
-            <form class="w-2/3 space-y-6" @submit="onSubmit">
-                <PlanStep :setFieldValue="Form.setFieldValue" />
-                <PickMachineStep ref="machineSelector" />
-                <ConfigureMachinesStep :selectedMachines="selectedMachines" :setFieldValue="Form.setFieldValue" />
-                <TypeStep :setFieldValue="Form.setFieldValue" />
-                <Button type="submit">
-                    Submit
-                </Button>
-            </form>
+            <Stepper v-model="stepIndex" class="flex flex-col justify-center w-full">
+                <div class="flex w-full flex-start gap-2 justify-center">
+                    <StepperItem v-for="step in steps" :key="step.step" :step="step.step" v-slot="{ state }"
+                        class="relative flex flex-col items-center justify-center">
+                        <StepperSeparator v-if="step.step !== steps.length"
+                            class="absolute left-[calc(50%+20px)] right-[calc(-50%+10px)] top-5 h-0.5 bg-muted group-data-[state=completed]:bg-primary" />
+                        <StepperTrigger as-child>
+                            <Button :variant="state === 'completed' || state === 'active' ? 'default' : 'outline'"
+                                size="icon" :class="[state === 'active' && 'ring-2 ring-ring ring-offset-2']"
+                                :disabled="state === 'inactive'">
+                                <Check v-if="state === 'completed'" class="w-4 h-4" />
+                                <Circle v-if="state === 'active'" class="w-4 h-4" />
+                                <Dot v-if="state === 'inactive'" class="w-4 h-4" />
+                            </Button>
+                        </StepperTrigger>
+                        <div class="mt-5 text-center">
+                            <StepperTitle :class="{ 'text-primary': state === 'active' }" class="text-sm font-semibold">
+                                {{ step.title }}
+                            </StepperTitle>
+                            <StepperDescription :class="{ 'text-primary': state === 'active' }"
+                                class="text-xs text-muted">
+                                {{ step.description }}
+                            </StepperDescription>
+                        </div>
+                    </StepperItem>
+                </div>
+                <form class="w-full space-y-6" @submit.prevent="onSubmit">
+                    <div class="flex flex-col gap-4">
+                        <KeepAlive>
+                            <template v-if="stepIndex === 1">
+                                <PlanStep @submit="value => {
+                                    reservation.AmountOfPeople = value.amountOfPeople
+                                    console.log(value.arrivalDate)
+                                    reservation.ReservationTime = parse(
+                                        value.arrivalDate,
+                                        'yyyy-MM-dd',
+                                        new Date()
+                                    )
+
+                                    reservation.TrainerId = value.trainer?.AccountId
+                                    reservation.Plan = { PlanName: value.planName }
+                                    stepIndex++
+                                }" />
+                            </template>
+
+                        </KeepAlive>
+                        <KeepAlive>
+                            <template v-if="stepIndex === 2">
+                                <PickMachineStep @prev="stepIndex = 1" @submit="value => {
+                                    selectedMachines = [...value.machines.map(machine => {
+                                        return {
+                                            ...machine,
+                                            ExerciseTypes: []
+                                        }
+                                    })]
+
+                                    stepIndex++
+                                }" />
+                            </template>
+                        </KeepAlive>
+                        <KeepAlive>
+                            <template v-if="stepIndex === 3">
+                                <ConfigureMachinesStep :reservation-time="reservation.ReservationTime"
+                                    @prev="stepIndex = 2" :selectedMachines="selectedMachines"
+                                    :amount-of-people="reservation.AmountOfPeople" @submit="value => {
+                                        const plan = reservation.Plan
+                                        reservation.Plan = {
+                                            ...plan,
+                                            Machines: value
+                                        }
+
+                                        stepIndex++
+                                    }" />
+                            </template>
+                        </KeepAlive>
+                        <KeepAlive>
+                            <template v-if="stepIndex === 4">
+                                <TypeStep @prev="stepIndex = 3" @submit="value => {
+                                    const plan = reservation.Plan
+                                    reservation.Plan = {
+                                        ...plan,
+                                        ExerciseCategories: value
+                                    }
+
+                                    stepIndex++
+                                }" />
+                            </template>
+
+                        </KeepAlive>
+                        <template v-if="stepIndex === 5">
+                            <ReservationSummary :reservation="reservation" />
+                            <!-- <pre class="mt-2 w-[340px] rounded-md bg-slate-950 p-4"> -->
+                            <!--     <code class="text-white"> -->
+                            <!--         {{ JSON.stringify(reservation, null, 4) }} -->
+                            <!--     </code> -->
+                            <!-- </pre> -->
+                            <Button type="submit">
+                                Submit
+                            </Button>
+                        </template>
+                    </div>
+                </form>
+            </Stepper>
         </div>
     </SignedIn>
 </template>
