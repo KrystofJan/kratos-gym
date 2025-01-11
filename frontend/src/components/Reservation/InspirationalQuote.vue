@@ -6,7 +6,7 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from '@/components/shadcn/ui/card'
+} from '@/components'
 import { APINinjasService } from '@/support/services/api-ninja.service';
 import { onMounted, ref } from 'vue';
 import type { Ref } from 'vue';

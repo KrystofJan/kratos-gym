@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { Account, UserRole, UserRoleOptions } from '@/support/types'
+import {
+    Account,
+    UserRole,
+    UserRoleOptions,
+    roleDictionary,
+} from '@/support'
+
 import {
     Card,
     CardContent,
@@ -7,15 +13,10 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from '@/components/shadcn/ui/card'
-
-import {
     Avatar,
     AvatarFallback,
     AvatarImage,
-} from '@/components/shadcn/ui/avatar'
-import { roleDictionary } from '@/support/types';
-
+} from '@/components'
 
 interface Props {
     currentAccount: Account,

@@ -8,16 +8,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuShortcut,
     DropdownMenuTrigger,
-} from '../../components/shadcn/ui/dropdown-menu/'
-import { Button } from '../../components/shadcn/ui/button/'
-import {
+    Button,
     Avatar,
     AvatarFallback,
     AvatarImage,
-} from '../../components/shadcn/ui/avatar/'
+} from '@/components'
 
 import { SignedOut, SignInButton, SignUpButton, SignedIn, SignOutButton } from 'vue-clerk'
-import { currentAccount } from "../../store/accountStore"
+import { currentAccount } from "@/store/accountStore"
 import { UserRoleOptions } from '@/support'
 
 </script>

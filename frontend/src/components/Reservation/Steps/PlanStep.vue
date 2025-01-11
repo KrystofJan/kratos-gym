@@ -1,54 +1,59 @@
 <script setup lang="ts">
-import { Account } from '@/support';
-import { ref, computed } from 'vue';
-import { h } from 'vue';
-import Step from '../Step.vue';
-import NumberInput from '@/components/Form/NumberInput/NumberInput.vue';
+import { onMounted, h, ref, computed } from 'vue';
+import { z } from 'zod';
+import { useForm } from 'vee-validate'
+import { toTypedSchema } from '@vee-validate/zod';
+import { parse, format } from 'date-fns';
+import { cn } from '@/lib/utils'
+import { Calendar as CalendarIcon } from 'lucide-vue-next'
 import {
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/shadcn/ui/form'
-import {
-    NumberField,
-    NumberFieldContent,
-    NumberFieldDecrement,
-    NumberFieldIncrement,
-    NumberFieldInput,
-} from '@/components/shadcn/ui/number-field'
-import {
+    NumberInput,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
     Command,
     CommandEmpty,
     CommandGroup,
     CommandInput,
     CommandItem,
     CommandList,
-} from '@/components/shadcn/ui/command'
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/shadcn/ui/popover'
-import { Check, ChevronsUpDown } from 'lucide-vue-next'
-import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date'
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+    NumberField,
+    NumberFieldContent,
+    NumberFieldDecrement,
+    NumberFieldIncrement,
+    NumberFieldInput,
+    Button,
+    Calendar,
+    Input,
+    toast,
+    Step,
+} from '@/components'
 
-import { parse } from 'date-fns';
-import { Button } from '@/components/shadcn/ui/button'
-import { Calendar } from '@/components/shadcn/ui/calendar'
-import { format } from 'date-fns'
-import { cn } from '@/lib/utils'
-import { Calendar as CalendarIcon } from 'lucide-vue-next'
-import { Input } from '@/components/shadcn/ui/input'
-import { AccountService, BuilderText, UserRoleOptions } from '@/support';
-import { onMounted } from 'vue';
-import { z } from 'zod';
-import { toTypedSchema } from '@vee-validate/zod';
-import { useForm } from 'vee-validate'
-import { toast } from '@/components/shadcn/ui/toast';
-import { json } from 'stream/consumers';
+import { 
+    Check,
+    ChevronsUpDown 
+} from 'lucide-vue-next'
+
+import { 
+    CalendarDate, 
+    DateFormatter, 
+    getLocalTimeZone, 
+    parseDate, 
+    today 
+} from '@internationalized/date'
+
+import { 
+    AccountService, 
+    BuilderText, 
+    UserRoleOptions,
+    Account,
+} from '@/support';
 
 const emit = defineEmits(['submit']);
 

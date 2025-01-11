@@ -1,15 +1,16 @@
 import { h, ref } from 'vue'
-import { Button } from '@/components/shadcn/ui/button'
 import type {
     ColumnDef,
 } from '@tanstack/vue-table'
 import { Account } from '@/support'
 
-import { ArrowUpDown, ChevronDown } from 'lucide-vue-next'
-import { Checkbox } from '@/components/shadcn/ui/checkbox'
-import { DataGridActions } from '@/components/DataGrid'
-import { AccountService } from '@/support/services/account.service'
-import { toast } from '@/components/shadcn/ui/toast'
+import { ArrowUpDown } from 'lucide-vue-next'
+import {
+    toast,
+    DataGridActions,
+    Checkbox,
+    Button,
+} from '@/components'
 
 export const values = ref<Account[]>([])
 
