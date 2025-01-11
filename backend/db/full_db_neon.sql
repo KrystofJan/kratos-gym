@@ -19,7 +19,7 @@ SET row_security = off;
 
 --
 -- Name: check_can_fit(integer, date, integer); Type: FUNCTION; Schema: public; Owner: postgres
---
+--80-
 
 CREATE FUNCTION public.check_can_fit(input_machine_id integer, input_reservation_date date, input_amount_of_people integer) RETURNS boolean
     LANGUAGE plpgsql
