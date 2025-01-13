@@ -5,7 +5,7 @@ import {
     FailedResponse,
     OkResponse,
 } from '../../request-utility'
-import { ExerciseCategory } from '.'
+import { ExerciseCategory, CategoryQueryParams } from '.'
 import { logger } from '../../utils'
 import { CodedError, ErrorCode } from '../../errors'
 import { exerciseCategoryErrorHandler } from '.'
