@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { Machine } from '@/support'
 import { onMounted, ref } from 'vue'
 import { columns, values, deleteSelected } from './category-columns'
-import { ExerciseCategoryService } from '@/support/services/exercise-category.service'
-import { DataGrid } from '@/components/DataGrid'
+import { ExerciseCategoryService, Machine} from '@/support'
+import { DataGrid } from '@/components'
 
 async function getData() {
     // Fetch data from your API here.

@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { useUser } from 'vue-clerk'
-import AppHeader from './components/Header/Header.vue';
-import Footer from './components/Footer/Footer.vue';
 import { currentAccount, fetchAccount } from "./store/accountStore";
-import Toaster from '@/components/shadcn/ui/toast/Toaster.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { computed } from 'vue';
+import {
+    Toaster,
+    Footer,
+    Header,
+} from '@/components'
 
 const router = useRouter()
 const route = useRoute()
@@ -46,7 +48,7 @@ const showHeaderAndFooter = computed(() => {
 })
 </script>
 <template>
-    <AppHeader v-if="showHeaderAndFooter" />
+    <Header v-if="showHeaderAndFooter" />
     <router-view v-slot="{ Component }">
         <component :is="Component" />
     </router-view>
@@ -55,5 +57,4 @@ const showHeaderAndFooter = computed(() => {
 </template>
 
 <style scoped lang="scss">
-@import './styles/sass/base/color-define.scss'
 </style>

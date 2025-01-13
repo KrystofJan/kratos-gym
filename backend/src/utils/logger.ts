@@ -4,7 +4,7 @@ export const logger = Pino({
     transport: {
         target: 'pino-pretty',
         options: {
-            colorize: true
-        }
-    }
+            colorize: true,
+        },
+    },
 })

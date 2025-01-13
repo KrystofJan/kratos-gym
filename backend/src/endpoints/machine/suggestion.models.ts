@@ -1,12 +1,10 @@
 import { Plan } from '../plan'
-import { Time } from "@internationalized/date";
-
+import { Time } from '@internationalized/date'
 
 export interface Suggestion {
-    PrevSuggestion: TimeRange,
+    PrevSuggestion: TimeRange
     NextSuggestion: TimeRange
 }
-
 
 export interface PlanShort {
     PlanId: number
@@ -37,12 +35,12 @@ export interface PlanRaw {
 }
 
 export interface TimeRange {
-    StartTime: Time,
-    EndTime: Time,
+    StartTime: Time
+    EndTime: Time
     isColiding: boolean
 }
 
 export interface Suggestion {
-    PrevSuggestion: TimeRange,
+    PrevSuggestion: TimeRange
     NextSuggestion: TimeRange
 }

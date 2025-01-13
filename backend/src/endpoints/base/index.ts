@@ -1,2 +1,2 @@
-export { Model } from "./model";
+export { Model } from './model'
 export { RequestQueryParams } from './params'

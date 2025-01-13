@@ -1,23 +1,28 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, onMounted   } from 'vue';
 import { ConfigureMachinesStepItem } from '.'
-import Step from '../../Step.vue';
-import { Machine, Plan, PlanPost, MachinesInPlan, MachinesInPlanPost } from '@/support';
-import { FormMessage } from '@/components/shadcn/ui/form'
-import { FieldArray, } from 'vee-validate';
-import { z } from 'zod';
+import { Step } from '..';
+import { 
+    Machine,
+    Plan,
+    PlanPost,
+    MachinesInPlan,
+    PlanService, 
+    MachineService,
+    MachinesInPlanPost, 
+    TimeSuggestion,
+} from '@/support';
+import { 
+    FormMessage,
+    Button,
+} from '@/components'
+import { FieldArray } from 'vee-validate';
+import { z }  from 'zod';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
-import { Button } from '@/components/shadcn/ui/button';
-import { PlanService, MachineService } from "@/support/services"
 import { format, max, parse } from 'date-fns'
-import { onMounted } from 'vue';
 import { reservation } from '@/store/ReservationStore';
 import { Time } from "@internationalized/date";
-import { TimeSuggestion } from '@/support';
-import { start } from 'repl';
-import { argv0 } from 'process';
-import { computed } from '@vue/reactivity';
 
 const emit = defineEmits(['submit', 'prev']);
 interface Props {

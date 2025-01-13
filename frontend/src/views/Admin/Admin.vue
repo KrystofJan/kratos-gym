@@ -4,6 +4,7 @@ import { Check, ChevronsUpDown, GalleryVerticalEnd, Search } from 'lucide-vue-ne
 import { Terminal } from 'lucide-vue-next'
 
 // Import components from the custom library
+import {} from '@/components/shadcn/ui/breadcrumb'
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -11,16 +12,12 @@ import {
     BreadcrumbList,
     BreadcrumbPage,
     BreadcrumbSeparator,
-} from '@/components/shadcn/ui/breadcrumb'
-import {
+    Label,
+    Separator,
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from '@/components/shadcn/ui/dropdown-menu'
-import { Label } from '@/components/shadcn/ui/label'
-import { Separator } from '@/components/shadcn/ui/separator'
-import {
     Sidebar,
     SidebarContent,
     SidebarGroup,
@@ -35,7 +32,7 @@ import {
     SidebarProvider,
     SidebarRail,
     SidebarTrigger,
-} from '@/components/shadcn/ui/sidebar'
+} from '@/components'
 
 import { SignedIn, SignedOut, useUser } from 'vue-clerk'
 

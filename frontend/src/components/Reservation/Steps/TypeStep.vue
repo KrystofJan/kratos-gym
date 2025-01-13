@@ -1,21 +1,34 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import Step from '../Step.vue';
+import { Step } from '.';
 import { ExerciseCategory, ExerciseCategoryService } from '@/support';
-import { CommandEmpty, CommandGroup, CommandItem, CommandList } from '@/components/shadcn/ui/command'
-import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/shadcn/ui/tags-input'
-import { ComboboxAnchor, ComboboxContent, ComboboxInput, ComboboxPortal, ComboboxRoot } from 'radix-vue'
+import {
+    ComboboxAnchor, 
+    ComboboxContent,
+    ComboboxInput,
+    ComboboxPortal,
+    ComboboxRoot 
+} from 'radix-vue'
 import {
     FormControl,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
-} from '@/components/shadcn/ui/form'
+    Button,
+    CommandEmpty, 
+    CommandGroup,
+    CommandItem,
+    CommandList,
+    TagsInput,
+    TagsInputInput,
+    TagsInputItem,
+    TagsInputItemDelete,
+    TagsInputItemText,
+} from '@/components'
 import { z } from 'zod';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
-import { Button } from '@/components/shadcn/ui/button'
 
 const emit = defineEmits(['submit', 'prev']);
 const types = ref<ExerciseCategory[]>([])

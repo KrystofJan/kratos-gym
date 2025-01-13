@@ -2,11 +2,15 @@
 import { onMounted, ref, watch, watchEffect } from 'vue';
 import { SignedIn, SignedOut, useUser } from 'vue-clerk'
 import { currentAccount, fetchAccount } from "@/store/accountStore";
-import { Alert, AlertDescription, AlertTitle } from '@/components/shadcn/ui/alert'
-import { Progress } from '@/components/shadcn/ui/progress'
-import UserCard from '@/components/User/UserCard.vue'
-import SessionsGrid from '@/components/User/SessionsGrid.vue'
 import { Terminal } from 'lucide-vue-next'
+import {
+    Alert,
+    AlertDescription,
+    AlertTitle,
+    Progress,
+    UserCard,
+    SessionsGrid,
+} from '@/components'
 
 const isLoading = ref(true);
 const error = ref(false)

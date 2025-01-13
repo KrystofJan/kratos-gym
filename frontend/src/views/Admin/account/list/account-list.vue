@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { Machine } from '@/support'
+import { Machine, AccountService } from '@/support'
 import { onMounted, ref } from 'vue'
 import { columns, values } from './account-columns'
-import { AccountService } from '@/support/services/account.service'
-import { DataGrid } from '@/components/DataGrid'
+import {
+    DataGrid,
+} from '@/components'
 
 async function getData() {
     // Fetch data from your API here.

@@ -1,27 +1,28 @@
 <script setup lang="ts">
-import { Button } from '@/components/shadcn/ui/button'
-import { ref, watch, computed } from 'vue';
-import { Input } from '@/components/shadcn/ui/input'
-import { toast } from '@/components/shadcn/ui/toast'
+import { ref, watch, computed, h } from 'vue';
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
-import { h } from 'vue'
 import * as z from 'zod'
-import { Machine, MachinesInPlan } from '@/support';
-import { ConfigureMachinesStep, PlanStep, PickMachineStep, TypeStep } from '@/components/Reservation/Steps/'
-import { ReservationPost } from '@/support/types/reservation';
 import { Time } from '@internationalized/date';
 import { SignedOut, SignInButton, SignUpButton, SignedIn, SignOutButton } from 'vue-clerk'
-import { ReservationService } from '@/support';
 import { currentAccount } from "@/store/accountStore"
+import { Machine, MachinesInPlan, ReservationPost, ReservationService } from '@/support';
 import {
+    Button,
+    Input,
+    toast,
     Card,
     CardContent,
     CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,
-} from '@/components/shadcn/ui/card'
+    ConfigureMachinesStep,
+    PlanStep,
+    PickMachineStep,
+    TypeStep,
+} from '@/components'
+
 interface Props {
     reservation: Partial<ReservationPost>
 }

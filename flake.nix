@@ -30,10 +30,19 @@
       in {
         default = pkgs.mkShell {
           packages = with pkgs;[
-	    nodejs 
-	    nodePackages.typescript 
-	    nodePackages.typescript-language-server
-	    prettierd
+            nodejs_22
+
+            nodePackages.typescript 
+            nodePackages.typescript-language-server
+
+            python311
+            python311Packages.pip
+            python311Packages.pipx
+            python311Packages.numpy
+            python311Packages.pyarrow
+            python311Packages.pytest
+
+            prettierd
 	  ];
 
           shellHook = ''

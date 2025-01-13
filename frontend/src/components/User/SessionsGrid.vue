@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import type { Ref } from 'vue'
 import {
     Table,
     TableBody,
@@ -9,16 +8,16 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from '@/components/shadcn/ui/table'
-import { ScrollArea } from '@/components/shadcn/ui/scroll-area'
-import {
-    Button
-} from '@/components/shadcn/ui/button'
+    ScrollArea,
+    Button,
+} from '@/components'
 import { currentAccount } from "@/store/accountStore"
-import { Reservation } from '@/support/types';
-import { ReservationService } from '@/support/services';
+import { 
+    Reservation,
+    ReservationService 
+} from '@/support';
 
-const reservations: Ref<Reservation[]> = ref([])
+const reservations = ref<Reservation[]>([])
 
 onMounted(async () => {
     if (currentAccount.value) {

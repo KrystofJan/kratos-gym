@@ -6,17 +6,15 @@ import type {
 } from '@tanstack/vue-table'
 
 import {
-    Button
-} from '@/components/shadcn/ui/button'
-import { Input } from '@/components/shadcn/ui/input'
-import {
+    Button,
+    Input,
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
-} from '@/components/shadcn/ui/table'
+} from '@/components'
 
 import {
     FlexRender,
@@ -26,9 +24,9 @@ import {
     getSortedRowModel,
     useVueTable,
 } from '@tanstack/vue-table'
+
 import { valueUpdater } from '@/lib/utils'
 import { ref, watch, computed } from 'vue'
-import type { Ref } from 'vue'
 import { onMounted } from 'vue'
 import { Trash2 } from 'lucide-vue-next'
 

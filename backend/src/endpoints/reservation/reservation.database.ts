@@ -1,17 +1,22 @@
-import { IDictionary } from '../../utils';
-import { DatabaseDeleted, DatabaseFoundSingle, DatabaseFoundMultiple, DatabaseCreated } from '../../database/database-response';
-import { Model } from '../base';
-import { Reservation } from './reservation.model';
-import { logger } from '../../utils/logger';
-import { DatabaseType, SimpleDatabaseType } from '../../utils/utilities';
-import { CodedError, ErrorCode } from '../../errors/base.error';
-import { Database } from '../../database';
+import { IDictionary } from '../../utils'
+import {
+    DatabaseDeleted,
+    DatabaseFoundSingle,
+    DatabaseFoundMultiple,
+    DatabaseCreated,
+} from '../../database/database-response'
+import { Model } from '../base'
+import { Reservation } from './reservation.model'
+import { logger } from '../../utils/logger'
+import { DatabaseType, SimpleDatabaseType } from '../../utils/utilities'
+import { CodedError, ErrorCode } from '../../errors/base.error'
+import { Database } from '../../database'
 import { DecoratorType } from '../../database/decorators/database-decorators'
-import { Plan } from '../plan';
-import { MachinesInPlan } from '../plan/machines-in-plan.model';
-import { ExerciseType } from '../exercise-type';
-import { ExerciseCategory } from '../exercise-category';
-import { safeAwait } from '../../utils/utilities';
+import { Plan } from '../plan'
+import { MachinesInPlan } from '../plan/machines-in-plan.model'
+import { ExerciseType } from '../exercise-type'
+import { ExerciseCategory } from '../exercise-category'
+import { safeAwait } from '../../utils/utilities'
 
 export class ReservationDatabase extends Database {
     constructor() {
@@ -22,47 +27,69 @@ export class ReservationDatabase extends Database {
         modelType: new (data: IDictionary<DatabaseType>) => T,
         body: T
     ) {
-        const columnMap = Reflect.getMetadata(DecoratorType.COLUMN_MAP, modelType.prototype);
-        const tableName = Reflect.getMetadata(DecoratorType.TABLE_NAME, modelType);
-        const foreignKeyMap = Reflect.getMetadata(DecoratorType.FOREIGN_KEY_MAP, modelType.prototype);
-        const unInsertables = Reflect.getMetadata(DecoratorType.UNINSERTABLE, modelType.prototype);
+        const columnMap = Reflect.getMetadata(
+            DecoratorType.COLUMN_MAP,
+            modelType.prototype
+        )
+        const tableName = Reflect.getMetadata(
+            DecoratorType.TABLE_NAME,
+            modelType
+        )
+        const foreignKeyMap = Reflect.getMetadata(
+            DecoratorType.FOREIGN_KEY_MAP,
+            modelType.prototype
+        )
+        const unInsertables = Reflect.getMetadata(
+            DecoratorType.UNINSERTABLE,
+            modelType.prototype
+        )
 
         // Filter out null or undefined values from the body
-        const filteredBody = Object.fromEntries(Object.entries(body).filter(([, value]) => value != null));
-        const columns: string[] = Object.keys(filteredBody);
+        const filteredBody = Object.fromEntries(
+            Object.entries(body).filter(([, value]) => value != null)
+        )
+        const columns: string[] = Object.keys(filteredBody)
 
-
-        const processedData: IDictionary<SimpleDatabaseType> = {};
+        const processedData: IDictionary<SimpleDatabaseType> = {}
 
         try {
             for (const column of columns) {
                 if (unInsertables?.includes(column)) {
-                    continue;
+                    continue
                 }
-                const columnMapped = columnMap[column];
+                const columnMapped = columnMap[column]
 
                 // Handle foreign key mapping
                 if (foreignKeyMap?.[columnMapped]) {
-                    const [, fkPrototype] = foreignKeyMap[columnMapped];
-                    const foreignKey = Reflect.getMetadata('primaryKey', fkPrototype);
-                    const fieldMap = Reflect.getMetadata('fieldMap', fkPrototype.prototype);
+                    const [, fkPrototype] = foreignKeyMap[columnMapped]
+                    const foreignKey = Reflect.getMetadata(
+                        'primaryKey',
+                        fkPrototype
+                    )
+                    const fieldMap = Reflect.getMetadata(
+                        'fieldMap',
+                        fkPrototype.prototype
+                    )
 
-                    processedData[columnMapped] = filteredBody[column][fieldMap[foreignKey]];
+                    processedData[columnMapped] =
+                        filteredBody[column][fieldMap[foreignKey]]
                 } else {
                     // Handle boolean conversion
-                    processedData[columnMapped] = filteredBody[column];
+                    processedData[columnMapped] = filteredBody[column]
                 }
             }
         } catch (error) {
-            const err = error as Error;
+            const err = error as Error
             logger.error(err)
-            throw new CodedError(ErrorCode.INTERNAL_ERROR, "Error processing body data.");
+            throw new CodedError(
+                ErrorCode.INTERNAL_ERROR,
+                'Error processing body data.'
+            )
         }
 
-        const columnNames = Object.keys(processedData);
+        const columnNames = Object.keys(processedData)
         return [tableName, processedData, columnNames]
     }
-
 
     async InsertFullReservation(body: Reservation) {
         // Flow:
@@ -74,13 +101,15 @@ export class ReservationDatabase extends Database {
         // TODO: Add to docs
 
         if (!body.Plan) {
-            throw new CodedError(ErrorCode.ARGUMENT_ERROR, "Plan has to be in the request body")
+            throw new CodedError(
+                ErrorCode.ARGUMENT_ERROR,
+                'Plan has to be in the request body'
+            )
         }
-        const [planTableName, planProcessedData, planColumnNames] = await this.ProcessInsertData(Plan, body.Plan)
+        const [planTableName, planProcessedData, planColumnNames] =
+            await this.ProcessInsertData(Plan, body.Plan)
         try {
-
-            const res = await this.sql.begin(async sql => {
-
+            const res = await this.sql.begin(async (sql) => {
                 const [planErr, pl] = await safeAwait(sql<Plan[]>`
                     insert into ${sql(planTableName)} 
                     ${this.sql(planProcessedData, planColumnNames)}
@@ -89,7 +118,10 @@ export class ReservationDatabase extends Database {
 
                 if (planErr !== null) {
                     logger.error(planErr)
-                    throw new CodedError(ErrorCode.DATABASE_ERROR, "Could not create plan")
+                    throw new CodedError(
+                        ErrorCode.DATABASE_ERROR,
+                        'Could not create plan'
+                    )
                 }
 
                 const [plan] = pl
@@ -98,13 +130,20 @@ export class ReservationDatabase extends Database {
                 const machines = []
                 const types = []
                 if (!body.Plan) {
-                    throw new CodedError(ErrorCode.MAPPING_ERROR, "Mapping the plan failed ")
+                    throw new CodedError(
+                        ErrorCode.MAPPING_ERROR,
+                        'Mapping the plan failed '
+                    )
                 }
 
                 for (const machineInPlan of body.Plan.Machines) {
                     machineInPlan.PlanId = planModel.PlanId
 
-                    const [mTableName, mProcessedData, mColumnNames] = await this.ProcessInsertData(MachinesInPlan, machineInPlan)
+                    const [mTableName, mProcessedData, mColumnNames] =
+                        await this.ProcessInsertData(
+                            MachinesInPlan,
+                            machineInPlan
+                        )
 
                     logger.info(mProcessedData)
                     const [machineErr, ma] = await safeAwait(sql<Model[]>`
@@ -115,7 +154,10 @@ export class ReservationDatabase extends Database {
 
                     if (machineErr !== null) {
                         logger.error(machineErr)
-                        throw new CodedError(ErrorCode.DATABASE_ERROR, "Could not create machine")
+                        throw new CodedError(
+                            ErrorCode.DATABASE_ERROR,
+                            'Could not create machine'
+                        )
                     }
 
                     const [machine] = ma
@@ -124,18 +166,24 @@ export class ReservationDatabase extends Database {
 
                 planModel.Machines = machines
 
-                const typePKey: string = Reflect.getMetadata(DecoratorType.PRIMARY_KEY, ExerciseCategory);
+                const typePKey: string = Reflect.getMetadata(
+                    DecoratorType.PRIMARY_KEY,
+                    ExerciseCategory
+                )
                 for (const exType of body.Plan.ExerciseCategories) {
                     const [typeErr, tp] = await safeAwait(sql<Model[]>`
-                        insert into ${sql("plan_category")} 
-                        (${this.sql(typePKey)}, ${this.sql("plan_id")})
+                        insert into ${sql('plan_category')} 
+                        (${this.sql(typePKey)}, ${this.sql('plan_id')})
                         values (${exType.CategoryId}, ${planModel.PlanId})
                         returning *
                     `)
 
                     if (typeErr !== null) {
                         logger.error(typeErr)
-                        throw new CodedError(ErrorCode.DATABASE_ERROR, "Could not create type")
+                        throw new CodedError(
+                            ErrorCode.DATABASE_ERROR,
+                            'Could not create type'
+                        )
                     }
 
                     const [type] = tp
@@ -145,29 +193,30 @@ export class ReservationDatabase extends Database {
                 planModel.ExerciseCategories = types
                 body.Plan = planModel
 
-                const [resTableName, resProcessedData, resColumnNames] = await this.ProcessInsertData(Reservation, body)
+                const [resTableName, resProcessedData, resColumnNames] =
+                    await this.ProcessInsertData(Reservation, body)
                 const [reservationErr, re] = await safeAwait(sql<Reservation[]>`
                     insert into ${sql(resTableName)} 
                     ${this.sql(resProcessedData, resColumnNames)}
                     returning *
                 `)
 
-
                 if (reservationErr !== null) {
                     logger.error(reservationErr)
-                    throw new CodedError(ErrorCode.DATABASE_ERROR, "Could not create reservation")
+                    throw new CodedError(
+                        ErrorCode.DATABASE_ERROR,
+                        'Could not create reservation'
+                    )
                 }
                 const [reservation] = re
                 return reservation
             })
             return new DatabaseCreated<Reservation>(res)
         } catch (error) {
-            const err = error as Error;
+            const err = error as Error
             throw new CodedError(ErrorCode.DATABASE_ERROR, err?.message)
         } finally {
             this.sql.end()
         }
-
-
     }
 }

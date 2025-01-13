@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { Machine, Reservation, UserRoleOptions } from '../../support/types';
+
 import {
+    InspirationalQuote,
+    PlanInfo,
+    UserCard,
+    MachinesInPlan,
     Card,
     CardContent,
     CardDescription,
@@ -10,13 +15,6 @@ import {
     Avatar,
     AvatarFallback,
     AvatarImage,
-} from '@/components/shadcn'
-
-import {
-    InspirationalQuote,
-    PlanInfo,
-    UserCard,
-    MachinesInPlan,
 } from '@/components'
 
 

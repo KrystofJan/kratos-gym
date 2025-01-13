@@ -1,22 +1,25 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch, h } from 'vue';
-import Step from '../Step.vue';
-import { Machine, ExerciseType } from '@/support';
-import { MachineService } from '@/support/services/machine.service';
+import { 
+    Machine,
+    ExerciseType,
+    MachineService,  
+} from '@/support';
 import {
     FormControl,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
-} from '@/components/shadcn/ui/form'
-import { Checkbox } from '@/components/shadcn/ui/checkbox'
+    Checkbox,
+    Button,
+    toast,
+    Step,
+} from '@/components'
 import { toTypedSchema } from '@vee-validate/zod';
 import { useField } from 'vee-validate';
 import { z } from 'zod';
 import { useForm } from 'vee-validate'
-import { toast } from '@/components/shadcn/ui/toast';
-import { Button } from '@/components/shadcn/ui/button';
 
 
 const emit = defineEmits(['submit', 'prev']);

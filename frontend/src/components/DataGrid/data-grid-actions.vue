@@ -1,6 +1,14 @@
 <script setup lang="ts">
-import { Button } from '@/components/shadcn/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/shadcn/ui/dropdown-menu'
+import { 
+    Button,
+    DropdownMenu,
+    DropdownMenuContent, 
+    DropdownMenuItem, 
+    DropdownMenuLabel, 
+    DropdownMenuSeparator, 
+    DropdownMenuTrigger 
+} from '@/components'
+
 import { MoreHorizontal } from 'lucide-vue-next'
 const props = defineProps<{
     id: number,

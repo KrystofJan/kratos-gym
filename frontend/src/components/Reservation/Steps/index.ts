@@ -1,4 +1,5 @@
 export { default as PickMachineStep } from './PickMachineStep.vue'
 export { default as PlanStep } from './PlanStep.vue'
 export { default as TypeStep } from './TypeStep.vue'
+export { default as Step } from './Step.vue'
 export * from './ConfigureMachinesStep'

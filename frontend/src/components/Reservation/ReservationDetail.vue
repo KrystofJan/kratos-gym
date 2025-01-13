@@ -2,11 +2,15 @@
 import { watch, ref } from 'vue'
 import type { Ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { Machine, Reservation, UserRoleOptions } from '../../support/types';
-import { ReservationService, PlanService } from '@/support/services';
+import {} from '../../support/types';
 import { Detail } from '.'
 import { onMounted } from 'vue';
+
 import {
+    InspirationalQuote,
+    PlanInfo,
+    UserCard,
+    MachinesInPlan,
     Card,
     CardContent,
     CardDescription,
@@ -16,14 +20,15 @@ import {
     Avatar,
     AvatarFallback,
     AvatarImage,
-} from '@/components/shadcn'
-
-import {
-    InspirationalQuote,
-    PlanInfo,
-    UserCard,
-    MachinesInPlan,
 } from '@/components'
+
+import { 
+    ReservationService, 
+    PlanService ,
+    Machine,
+    Reservation,
+    UserRoleOptions,
+} from '@/support';
 
 const route = useRoute()
 const reservation: Ref<Reservation | undefined> = ref()

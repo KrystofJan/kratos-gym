@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Machine } from '@/support';
 import { TypedSchema } from 'vee-validate';
 
 import {
@@ -10,25 +9,22 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from '@/components/shadcn/'
-import {
     FormControl,
     FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
-} from '@/components/shadcn/ui/form'
-
-import { Checkbox } from '@/components/shadcn/ui/checkbox'
-import {
+    Checkbox,
     NumberField,
     NumberFieldContent,
     NumberFieldDecrement,
     NumberFieldIncrement,
     NumberFieldInput,
-} from '@/components/shadcn/ui/number-field'
-import { TimeSuggestion } from '@/support';
+} from '@/components'
+
+import { Machine, TimeSuggestion } from '@/support';
+
 import { computed } from 'vue';
 
 interface Props {

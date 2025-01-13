@@ -1,31 +1,41 @@
 <script setup lang="ts">
-import { Button } from '@/components/shadcn/ui/button'
-import { ref, watch, computed } from 'vue';
-import { Input } from '@/components/shadcn/ui/input'
-import { toast } from '@/components/shadcn/ui/toast'
-import { h } from 'vue'
-import { Machine, MachinesInPlan } from '@/support';
-import { ConfigureMachinesStep, PlanStep, PickMachineStep, TypeStep } from '@/components/Reservation/Steps/'
-import { ReservationPost } from '@/support/types/reservation';
+import { ref, watch, computed, h } from 'vue';
 import { Time } from '@internationalized/date';
 import { SignedOut, SignedIn } from 'vue-clerk'
-import { ReservationService } from '@/support';
 import { currentAccount } from "@/store/accountStore"
-import { PlanService } from "@/support/services"
-import { Plan } from '@/support';
 import { format, parse } from 'date-fns'
-import { Stepper, StepperItem, StepperTrigger, StepperSeparator, StepperTitle, StepperDescription } from '@/components/shadcn/ui/stepper';
 import { ReservationSummary } from '.'
 
 import {
+    toast,
+    Button,
+    Input, 
     Card,
     CardContent,
     CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,
-} from '@/components/shadcn/ui/card'
+    Stepper,
+    StepperItem,
+    StepperTrigger,
+    StepperSeparator,
+    StepperTitle,
+    StepperDescription,
+    ConfigureMachinesStep,
+    PickMachineStep,
+    PlanStep,
+    TypeStep,
+} from '@/components'
 
+import { 
+    Machine, 
+    MachinesInPlan,
+    ReservationPost, 
+    ReservationService,
+    PlanService, 
+    Plan,
+} from '@/support';
 
 const reservation = ref<Partial<ReservationPost>>({})
 const stepIndex = ref<number>(1)

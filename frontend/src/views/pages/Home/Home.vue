@@ -2,8 +2,10 @@
 import { onMounted, ref, watch } from 'vue';
 import { currentAccount, fetchAccount } from "../../../store/accountStore";
 import { useUser } from 'vue-clerk'
-import HeroBanner from '@/components/HeroBanner/HeroBanner.vue';
-import StickyTextComposite from '@/components/StikyTextComposite/StickyTextComposite.vue'
+import {
+    HeroBanner,
+    StickyTextComposite,
+} from '@/components'
 
 const { user, isLoaded: isUserLoaded } = useUser();
 

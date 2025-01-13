@@ -6,7 +6,7 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from '@/components/shadcn/'
+} from '@/components'
 import { Reservation } from '@/support';
 
 interface Props {
