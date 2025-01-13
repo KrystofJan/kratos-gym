@@ -1,32 +1,34 @@
-import { Model } from "../endpoints/base";
+import { Model } from '../endpoints/base'
 
 export interface DatabaseResponse<T> {
-    Body: T;
+    Body: T
 }
 
-export class DatabaseFoundSingle<T extends Model> implements DatabaseResponse<T> {
+export class DatabaseFoundSingle<T extends Model>
+    implements DatabaseResponse<T>
+{
     public Body: T
     constructor(body: T) {
-        this.Body = body;
+        this.Body = body
     }
 }
 
-export class DatabaseFoundMultiple<T extends Model> implements DatabaseResponse<Array<T>> {
+export class DatabaseFoundMultiple<T extends Model>
+    implements DatabaseResponse<Array<T>>
+{
     public Body: Array<T>
     constructor(body: Array<T>) {
-        this.Body = body;
+        this.Body = body
     }
 }
-
 
 export class DatabaseCreated<T> implements DatabaseResponse<T> {
     public Body: T
 
     constructor(body: T) {
-        this.Body = body;
+        this.Body = body
     }
 }
-
 
 export class DatabaseDeleted implements DatabaseResponse<number> {
     public Body: number
@@ -34,4 +36,3 @@ export class DatabaseDeleted implements DatabaseResponse<number> {
         this.Body = deletedId
     }
 }
-

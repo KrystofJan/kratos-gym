@@ -1,7 +1,6 @@
-import { ErrorHandler } from "../../errors";
+import { ErrorHandler } from '../../errors'
 
 class PlanErrorHandler extends ErrorHandler {
-
     constructor() {
         super()
     }

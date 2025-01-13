@@ -1,9 +1,9 @@
-import express from "express"
-import * as dotevnv from "dotenv"
-import cors from "cors"
-import helmet from "helmet"
-import { setRoutes } from "./router/router"
-import { logger } from "./utils"
+import express from 'express'
+import * as dotevnv from 'dotenv'
+import cors from 'cors'
+import helmet from 'helmet'
+import { setRoutes } from './router/router'
+import { logger } from './utils'
 
 dotevnv.config()
 
@@ -25,4 +25,3 @@ setRoutes(app)
 app.listen(PORT, () => {
     logger.info(`Server asdasd is listening on http://localhost:${PORT}`)
 })
-

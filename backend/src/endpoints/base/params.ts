@@ -1,5 +1,4 @@
-
 export interface RequestQueryParams {
-    page?: number,
-    limit?: number,
+    page?: number
+    limit?: number
 }

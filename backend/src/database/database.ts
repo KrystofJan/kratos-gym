@@ -1,7 +1,8 @@
-import postgres, { Sql } from 'postgres';
-import "dotenv/config";
+import postgres, { Sql } from 'postgres'
+import 'dotenv/config'
 
-const { MODE, PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+const { MODE, PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } =
+    process.env
 
 export class Database {
     public readonly sql: Sql
@@ -18,7 +19,7 @@ export class Database {
                 connection: {
                     options: `project=${ENDPOINT_ID}`,
                 },
-            });
+            })
         } else {
             this.sql = postgres({
                 host: PGHOST,
@@ -26,7 +27,7 @@ export class Database {
                 username: PGUSER,
                 password: PGPASSWORD,
                 port: 5432,
-            });
+            })
         }
     }
 }

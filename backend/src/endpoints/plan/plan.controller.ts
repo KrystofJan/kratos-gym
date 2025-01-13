@@ -1,439 +1,616 @@
-import { Request, Response } from 'express';
-import { PlanService, Plan, planErrorHandler } from '.';
+import { Request, Response } from 'express'
+import { PlanService, Plan, planErrorHandler } from '.'
 
-import { ExerciseTypeService } from '../exercise-type';
-import { CreatedResponse, FailedResponse, OkResponse } from '../../request-utility';
-import { logger } from '../../utils';
-import { CodedError, ErrorCode } from '../../errors';
-import { safeAwait } from '../../utils/utilities';
-import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response';
-import { AccountService } from '../account/account.service';
-import { MachinesInPlan } from './machines-in-plan.model';
-import { ExerciseCategory, ExerciseCategoryService } from '../exercise-category';
-import { PlanQueryParams } from './plan.params';
+import { ExerciseTypeService } from '../exercise-type'
+import {
+    CreatedResponse,
+    FailedResponse,
+    OkResponse,
+} from '../../request-utility'
+import { logger } from '../../utils'
+import { CodedError, ErrorCode } from '../../errors'
+import { safeAwait } from '../../utils/utilities'
+import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response'
+import { AccountService } from '../account/account.service'
+import { MachinesInPlan } from './machines-in-plan.model'
+import { ExerciseCategory, ExerciseCategoryService } from '../exercise-category'
+import { PlanQueryParams } from './plan.params'
 
 export class PlanController {
-
     static async FindAll(req: Request, res: Response) {
         if (req.query) {
             await this.FindPlansOnDate(req, res)
             return
         }
 
-        const [err, data] = await safeAwait(PlanService.GetAllPlanes());
+        const [err, data] = await safeAwait(PlanService.GetAllPlanes())
         if (err !== null) {
             logger.error(err)
-            const error = err as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = err as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
         for (const plan of data) {
             if (!plan.User) {
-                const error = new CodedError(ErrorCode.MAPPING_ERROR, "Account was not found for " + plan.PlanId + " plan");
+                const error = new CodedError(
+                    ErrorCode.MAPPING_ERROR,
+                    'Account was not found for ' + plan.PlanId + ' plan'
+                )
                 logger.error(error)
-                const statusCode = planErrorHandler.handleError(error);
-                const response = new FailedResponse(error.message, statusCode, error.code);
+                const statusCode = planErrorHandler.handleError(error)
+                const response = new FailedResponse(
+                    error.message,
+                    statusCode,
+                    error.code
+                )
                 response.buildResponse(req, res)
-                return;
+                return
             }
-            const [err, account] = await safeAwait(AccountService.GetAccountById(plan.User.AccountId));
+            const [err, account] = await safeAwait(
+                AccountService.GetAccountById(plan.User.AccountId)
+            )
             if (err !== null) {
                 logger.error(err)
-                const error = err as CodedError;
-                const statusCode = planErrorHandler.handleError(error);
-                const response = new FailedResponse(error.message, statusCode, error.code);
+                const error = err as CodedError
+                const statusCode = planErrorHandler.handleError(error)
+                const response = new FailedResponse(
+                    error.message,
+                    statusCode,
+                    error.code
+                )
                 response.buildResponse(req, res)
-                return;
+                return
             }
-            plan.User = account;
-            plan.User.Address = undefined;
-            plan.User.ClerkId = undefined;
+            plan.User = account
+            plan.User.Address = undefined
+            plan.User.ClerkId = undefined
 
-            const [errMachines, machines] = await safeAwait(PlanService.GetMachinesInPlan(plan.PlanId));
+            const [errMachines, machines] = await safeAwait(
+                PlanService.GetMachinesInPlan(plan.PlanId)
+            )
             if (errMachines !== null) {
                 logger.error(errMachines)
-                const error = errMachines as CodedError;
-                const statusCode = planErrorHandler.handleError(error);
-                const response = new FailedResponse(error.message, statusCode, error.code);
+                const error = errMachines as CodedError
+                const statusCode = planErrorHandler.handleError(error)
+                const response = new FailedResponse(
+                    error.message,
+                    statusCode,
+                    error.code
+                )
                 response.buildResponse(req, res)
-                return;
+                return
             }
 
             plan.Machines = machines
 
-            const [typeErr, type] = await safeAwait(ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId))
+            const [typeErr, type] = await safeAwait(
+                ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId)
+            )
 
             if (typeErr !== null) {
                 logger.error(typeErr)
-                const error = typeErr as CodedError;
-                const statusCode = planErrorHandler.handleError(error);
-                const response = new FailedResponse(error.message, statusCode, error.code);
+                const error = typeErr as CodedError
+                const statusCode = planErrorHandler.handleError(error)
+                const response = new FailedResponse(
+                    error.message,
+                    statusCode,
+                    error.code
+                )
                 response.buildResponse(req, res)
-                return;
+                return
             }
             plan.ExerciseCategories = type
         }
-        const response = new OkResponse("found all data successfully", data);
+        const response = new OkResponse('found all data successfully', data)
         response.buildResponse(req, res)
     }
 
     static async FindById(req: Request, res: Response) {
-        const id = Number(req.params["id"])
-        const [err, plan] = await safeAwait(PlanService.GetPlanById(id));
+        const id = Number(req.params['id'])
+        const [err, plan] = await safeAwait(PlanService.GetPlanById(id))
         if (err !== null) {
             logger.error(err)
-            const error = err as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = err as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
         if (!plan.User) {
-            const error = new CodedError(ErrorCode.MAPPING_ERROR, "Account was not found for " + plan.PlanId + " plan");
+            const error = new CodedError(
+                ErrorCode.MAPPING_ERROR,
+                'Account was not found for ' + plan.PlanId + ' plan'
+            )
             logger.error(error)
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
-        const [errAccount, account] = await safeAwait(AccountService.GetAccountById(plan.User.AccountId));
+        const [errAccount, account] = await safeAwait(
+            AccountService.GetAccountById(plan.User.AccountId)
+        )
         if (errAccount !== null) {
             logger.error(errAccount)
-            const error = errAccount as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = errAccount as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
-        plan.User = account;
-        plan.User.Address = undefined;
+        plan.User = account
+        plan.User.Address = undefined
         plan.User.ClerkId = undefined
 
-        const [errMachines, machines] = await safeAwait(PlanService.GetMachinesInPlan(plan.PlanId));
+        const [errMachines, machines] = await safeAwait(
+            PlanService.GetMachinesInPlan(plan.PlanId)
+        )
         if (errMachines !== null) {
             logger.error(errMachines)
-            const error = errMachines as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = errMachines as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
         plan.Machines = machines
 
-        const [typeErr, category] = await safeAwait(ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId))
+        const [typeErr, category] = await safeAwait(
+            ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId)
+        )
 
         if (typeErr !== null) {
             logger.error(typeErr)
-            const error = typeErr as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = typeErr as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
         plan.ExerciseCategories = category
 
-        const response = new OkResponse("found all data successfully", plan);
+        const response = new OkResponse('found all data successfully', plan)
         response.buildResponse(req, res)
     }
 
-
     static async UpdateById(req: Request, res: Response) {
-        const id = Number(req.params["id"])
-        const body = req.body;
-        const model: Partial<Plan> = new Plan(body);
+        const id = Number(req.params['id'])
+        const body = req.body
+        const model: Partial<Plan> = new Plan(body)
 
-        const [err, data] = await safeAwait(PlanService.UpdatePlanById(id, model))
+        const [err, data] = await safeAwait(
+            PlanService.UpdatePlanById(id, model)
+        )
 
         if (err !== null) {
             logger.error(err)
-            const error = err as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = err as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
-        const response = new OkResponse("found all data successfully", data);
+        const response = new OkResponse('found all data successfully', data)
         response.buildResponse(req, res)
     }
 
-
     static async UpdateMachineByBothIds(req: Request, res: Response) {
-        const machineId = Number(req.params["machineId"])
-        const planId = Number(req.params["planId"])
-        const body = req.body;
-        const model: Partial<MachinesInPlan> = new MachinesInPlan(body);
+        const machineId = Number(req.params['machineId'])
+        const planId = Number(req.params['planId'])
+        const body = req.body
+        const model: Partial<MachinesInPlan> = new MachinesInPlan(body)
         model.MachineId = machineId
         model.PlanId = planId
 
-        const [err, data] = await safeAwait(PlanService.UpdateMachineInPlan(planId, machineId, model))
+        const [err, data] = await safeAwait(
+            PlanService.UpdateMachineInPlan(planId, machineId, model)
+        )
 
         if (err !== null) {
             logger.error(err)
-            const error = err as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = err as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
-        const response = new OkResponse("found all data successfully", data);
+        const response = new OkResponse('found all data successfully', data)
         response.buildResponse(req, res)
     }
 
     static async DeleteById(req: Request, res: Response) {
-        const id = Number(req.params["id"])
-        const [err, data] = await safeAwait(PlanService.DeletePlanById(id));
+        const id = Number(req.params['id'])
+        const [err, data] = await safeAwait(PlanService.DeletePlanById(id))
         if (err !== null) {
             logger.error(err)
-            const error = err as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = err as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
-        const response = new DeletedResponse("Successfully deleted Plan", data);
+        const response = new DeletedResponse('Successfully deleted Plan', data)
         response.buildResponse(req, res)
     }
 
     static async Create(req: Request, res: Response) {
-        const body = req.body;
-        const model = new Plan(body);
+        const body = req.body
+        const model = new Plan(body)
 
         if (!model.checkForUnneededData(body)) {
-            const error = new CodedError(ErrorCode.MAPPING_ERROR, "TODO: Change the message");
+            const error = new CodedError(
+                ErrorCode.MAPPING_ERROR,
+                'TODO: Change the message'
+            )
             logger.error(error)
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
         if (!model.validateAttrs()) {
-            const error = new CodedError(ErrorCode.VALIDATION_ERROR, "Validation failed");
+            const error = new CodedError(
+                ErrorCode.VALIDATION_ERROR,
+                'Validation failed'
+            )
             logger.error(error)
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
-        const [err, id] = await safeAwait(PlanService.CreatePlan(model));
+        const [err, id] = await safeAwait(PlanService.CreatePlan(model))
         if (err !== null) {
-
             logger.error(err)
-            const error = err as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
+            const error = err as CodedError
+            const statusCode = planErrorHandler.handleError(error)
             logger.info(statusCode)
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
-        const response = new CreatedResponse("created successfully", id);
+        const response = new CreatedResponse('created successfully', id)
         response.buildResponse(req, res)
     }
 
     static async FindPlanMachines(req: Request, res: Response) {
-        const id = Number(req.params["id"])
+        const id = Number(req.params['id'])
 
-        const [errMachines, machines] = await safeAwait(PlanService.GetMachinesByPlanId(id));
+        const [errMachines, machines] = await safeAwait(
+            PlanService.GetMachinesByPlanId(id)
+        )
         if (errMachines !== null) {
             logger.error(errMachines)
-            const error = errMachines as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = errMachines as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
-        const response = new OkResponse("found all data successfully", machines);
+        const response = new OkResponse('found all data successfully', machines)
         response.buildResponse(req, res)
     }
 
-
     static async AddMachine(req: Request, res: Response) {
         const body = req.body
-        const machineId = Number(req.params["machineId"])
-        const planId = Number(req.params["planId"])
-        const model = new MachinesInPlan(body);
+        const machineId = Number(req.params['machineId'])
+        const planId = Number(req.params['planId'])
+        const model = new MachinesInPlan(body)
         model.PlanId = planId
         model.MachineId = machineId
 
         if (!model.checkForUnneededData(body)) {
-            const error = new CodedError(ErrorCode.MAPPING_ERROR, "TODO: Change the message");
+            const error = new CodedError(
+                ErrorCode.MAPPING_ERROR,
+                'TODO: Change the message'
+            )
             logger.error(error)
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
         if (!model.validateAttrs()) {
-            const error = new CodedError(ErrorCode.VALIDATION_ERROR, "Validation failed");
+            const error = new CodedError(
+                ErrorCode.VALIDATION_ERROR,
+                'Validation failed'
+            )
             logger.error(error)
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
-        const [err, data] = await safeAwait(PlanService.AddMachine(model));
+        const [err, data] = await safeAwait(PlanService.AddMachine(model))
         if (err !== null) {
             logger.error(err)
-            const error = err as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = err as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
-        const response = new OkResponse("found all data successfully", data);
+        const response = new OkResponse('found all data successfully', data)
         response.buildResponse(req, res)
     }
 
     static async RemoveMachineFromPlan(req: Request, res: Response) {
-        const machineId = Number(req.params["machineId"])
-        const planId = Number(req.params["planId"])
+        const machineId = Number(req.params['machineId'])
+        const planId = Number(req.params['planId'])
 
-        const [err, data] = await safeAwait(PlanService.DeleteMachineRecordFromPlan(machineId, planId));
+        const [err, data] = await safeAwait(
+            PlanService.DeleteMachineRecordFromPlan(machineId, planId)
+        )
         if (err !== null) {
             logger.error(err)
-            const error = err as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = err as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
-        const response = new DeletedResponse("Successfully deleted Machine", data);
+        const response = new DeletedResponse(
+            'Successfully deleted Machine',
+            data
+        )
         response.buildResponse(req, res)
     }
 
     static async RemoveTypeFromPlan(req: Request, res: Response) {
-        const typeId = Number(req.params["typeId"])
-        const planId = Number(req.params["planId"])
+        const typeId = Number(req.params['typeId'])
+        const planId = Number(req.params['planId'])
 
-        const [err, data] = await safeAwait(PlanService.DeleteTypeRecordFromPlan(typeId, planId));
+        const [err, data] = await safeAwait(
+            PlanService.DeleteTypeRecordFromPlan(typeId, planId)
+        )
         if (err !== null) {
             logger.error(err)
-            const error = err as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = err as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
-        const response = new DeletedResponse("Successfully deleted Type", data);
+        const response = new DeletedResponse('Successfully deleted Type', data)
         response.buildResponse(req, res)
     }
-
 
     static async AddType(req: Request, res: Response) {
-        const planId = Number(req.params["planId"])
-        const typeId = Number(req.params["typeId"])
+        const planId = Number(req.params['planId'])
+        const typeId = Number(req.params['typeId'])
 
-        const [err, data] = await safeAwait(PlanService.AddExerciseType(planId, typeId));
+        const [err, data] = await safeAwait(
+            PlanService.AddExerciseType(planId, typeId)
+        )
         if (err !== null) {
             logger.error(err)
-            const error = err as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = err as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
-        const response = new OkResponse("found all data successfully", data);
+        const response = new OkResponse('found all data successfully', data)
         response.buildResponse(req, res)
     }
 
-
     static async FindTypes(req: Request, res: Response) {
-        const id = Number(req.params["id"])
-        const [typeErr, type] = await safeAwait(ExerciseTypeService.GetTypesByMachineId(id))
+        const id = Number(req.params['id'])
+        const [typeErr, type] = await safeAwait(
+            ExerciseTypeService.GetTypesByMachineId(id)
+        )
 
         if (typeErr !== null) {
             logger.error(typeErr)
-            const error = typeErr as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = typeErr as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
-        const response = new OkResponse("found all data successfully", type);
+        const response = new OkResponse('found all data successfully', type)
         response.buildResponse(req, res)
     }
 
     static async FindPlansOnDate(req: Request, res: Response) {
         const { date, machine_id } = req.query as PlanQueryParams
         if (!date || !machine_id) {
-            const err = new CodedError(ErrorCode.ARGUMENT_ERROR, "Need both date and machine id query parameter")
+            const err = new CodedError(
+                ErrorCode.ARGUMENT_ERROR,
+                'Need both date and machine id query parameter'
+            )
             logger.error(err)
-            const statusCode = planErrorHandler.handleError(err);
-            const response = new FailedResponse(err.message, statusCode, err.code);
+            const statusCode = planErrorHandler.handleError(err)
+            const response = new FailedResponse(
+                err.message,
+                statusCode,
+                err.code
+            )
             response.buildResponse(req, res)
-            return;
-
+            return
         }
-        const [err, data] = await safeAwait(PlanService.GetPlansOnDate(machine_id, new Date(date)));
+        const [err, data] = await safeAwait(
+            PlanService.GetPlansOnDate(machine_id, new Date(date))
+        )
         if (err !== null) {
             logger.error(err)
-            const error = err as CodedError;
-            const statusCode = planErrorHandler.handleError(error);
-            const response = new FailedResponse(error.message, statusCode, error.code);
+            const error = err as CodedError
+            const statusCode = planErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
             response.buildResponse(req, res)
-            return;
+            return
         }
 
         for (const plan of data) {
             if (!plan.User) {
-                const error = new CodedError(ErrorCode.MAPPING_ERROR, "Account was not found for " + plan.PlanId + " plan");
+                const error = new CodedError(
+                    ErrorCode.MAPPING_ERROR,
+                    'Account was not found for ' + plan.PlanId + ' plan'
+                )
                 logger.error(error)
-                const statusCode = planErrorHandler.handleError(error);
-                const response = new FailedResponse(error.message, statusCode, error.code);
+                const statusCode = planErrorHandler.handleError(error)
+                const response = new FailedResponse(
+                    error.message,
+                    statusCode,
+                    error.code
+                )
                 response.buildResponse(req, res)
-                return;
+                return
             }
-            const [err, account] = await safeAwait(AccountService.GetAccountById(plan.User.AccountId));
+            const [err, account] = await safeAwait(
+                AccountService.GetAccountById(plan.User.AccountId)
+            )
             if (err !== null) {
                 logger.error(err)
-                const error = err as CodedError;
-                const statusCode = planErrorHandler.handleError(error);
-                const response = new FailedResponse(error.message, statusCode, error.code);
+                const error = err as CodedError
+                const statusCode = planErrorHandler.handleError(error)
+                const response = new FailedResponse(
+                    error.message,
+                    statusCode,
+                    error.code
+                )
                 response.buildResponse(req, res)
-                return;
+                return
             }
-            plan.User = account;
-            plan.User.Address = undefined;
-            plan.User.ClerkId = undefined;
+            plan.User = account
+            plan.User.Address = undefined
+            plan.User.ClerkId = undefined
 
-            const [errMachines, machines] = await safeAwait(PlanService.GetMachinesInPlan(plan.PlanId));
+            const [errMachines, machines] = await safeAwait(
+                PlanService.GetMachinesInPlan(plan.PlanId)
+            )
             if (errMachines !== null) {
                 logger.error(errMachines)
-                const error = errMachines as CodedError;
-                const statusCode = planErrorHandler.handleError(error);
-                const response = new FailedResponse(error.message, statusCode, error.code);
+                const error = errMachines as CodedError
+                const statusCode = planErrorHandler.handleError(error)
+                const response = new FailedResponse(
+                    error.message,
+                    statusCode,
+                    error.code
+                )
                 response.buildResponse(req, res)
-                return;
+                return
             }
 
             plan.Machines = machines
 
-            const [typeErr, type] = await safeAwait(ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId))
+            const [typeErr, type] = await safeAwait(
+                ExerciseCategoryService.GetCategoriesByPlanId(plan.PlanId)
+            )
 
             if (typeErr !== null) {
                 logger.error(typeErr)
-                const error = typeErr as CodedError;
-                const statusCode = planErrorHandler.handleError(error);
-                const response = new FailedResponse(error.message, statusCode, error.code);
+                const error = typeErr as CodedError
+                const statusCode = planErrorHandler.handleError(error)
+                const response = new FailedResponse(
+                    error.message,
+                    statusCode,
+                    error.code
+                )
                 response.buildResponse(req, res)
-                return;
+                return
             }
             plan.ExerciseCategories = type
         }
-        const response = new OkResponse("found all data successfully", data);
+        const response = new OkResponse('found all data successfully', data)
         response.buildResponse(req, res)
     }
 }

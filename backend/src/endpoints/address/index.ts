@@ -1,3 +1,2 @@
-export { AddressService } from "./address.service";
-export { Address } from "./address.model";
-
+export { AddressService } from './address.service'
+export { Address } from './address.model'
