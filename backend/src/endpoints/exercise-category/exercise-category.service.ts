@@ -5,11 +5,14 @@ import { CodedError, ErrorCode } from '../../errors/base.error'
 import { safeAwait } from '../../utils/utilities'
 
 export class ExerciseCategoryService {
-    static async GetAllExerciseCategories(): Promise<Array<ExerciseCategory>> {
+    static async GetAllExerciseCategories(
+        limit?: number,
+        page?: number
+    ): Promise<Array<ExerciseCategory>> {
         const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(
-            db.SelectAll(ExerciseCategory)
+            db.SelectAll(ExerciseCategory, limit, page)
         )
         if (databaseErr !== null) {
             throw databaseErr

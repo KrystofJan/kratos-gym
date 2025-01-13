@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { columns, values, deleteSelected } from './reservation-columns'
-
 import { DataGrid } from '@/components'
 import { ReservationService, Machine} from '@/support'
 
