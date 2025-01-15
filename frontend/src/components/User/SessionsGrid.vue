@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+
+import { currentAccount } from "@/store/accountStore"
+import { 
+    Reservation,
+    ReservationService 
+} from '@/support';
 import {
     Table,
     TableBody,
@@ -11,11 +17,6 @@ import {
     ScrollArea,
     Button,
 } from '@/components'
-import { currentAccount } from "@/store/accountStore"
-import { 
-    Reservation,
-    ReservationService 
-} from '@/support';
 
 const reservations = ref<Reservation[]>([])
 

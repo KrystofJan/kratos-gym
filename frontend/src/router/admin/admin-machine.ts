@@ -13,6 +13,11 @@ export const machineRoutes = {
             path: '/admin/machines/create',
             name: '',
             component: () => import('@/views/Admin/machines/machine-form.vue'),
+        },
+        {
+            path: '/admin/machines/update/:id',
+            name: '',
+            component: () => import('@/views/Admin/machines/machine-form.vue'),
         }
     ]
 }

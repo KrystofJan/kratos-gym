@@ -11,3 +11,10 @@ export interface Machine {
     ExerciseTypes: ExerciseType[]
 }
 
+export interface MachinePost {
+    MachineName: string;
+    MaxWeight: number;
+    MinWeight: number;
+    MaxPeople: number;
+    AvgTimeTaken: number;
+}
