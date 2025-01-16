@@ -6,11 +6,11 @@ import { CodedError, ErrorCode } from '../../errors/base.error'
 import { ReservationDatabase } from './reservation.database'
 
 export class ReservationService {
-    static async GetAllReservationes(): Promise<Array<Reservation>> {
+    static async GetAllReservationes(limit?: number, page?: number): Promise<Array<Reservation>> {
         const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(
-            db.SelectAll(Reservation)
+            db.SelectAll(Reservation, limit, page)
         )
         if (databaseErr !== null) {
             throw databaseErr

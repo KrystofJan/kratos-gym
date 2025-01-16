@@ -8,7 +8,7 @@ import { DataGrid } from '@/components'
 async function getData() {
     // Fetch data from your API here.
     try {
-        const data = await new PlanService().FetchPlans()
+        const data = await new PlanService().FetchAll({limit: 100})
         values.value = data;
     } catch (error) {
         console.error('Error fetching data:', error);

@@ -23,7 +23,7 @@ const reservations = ref<Reservation[]>([])
 onMounted(async () => {
     if (currentAccount.value) {
         try {
-            const data = await new ReservationService().FetchReservationsByAddressId(currentAccount.value?.AccountId);
+            const data = await new ReservationService().FetchReservationsByAccountId(currentAccount.value?.AccountId);
             reservations.value = data
         } catch (error) {
             console.error('Error fetching account:', error);

@@ -7,10 +7,10 @@ import {
 } from '../../request-utility'
 import { logger } from '../../utils'
 import { CodedError, ErrorCode } from '../../errors'
-import {} from './reservation.error-handler'
+import { } from './reservation.error-handler'
 import { safeAwait } from '../../utils/utilities'
 import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response'
-import { ReservationService, reservationErrorHandler, Reservation } from '.'
+import { ReservationService, reservationErrorHandler, Reservation, ReservationQueryParams } from '.'
 import { AccountService } from '../account'
 import { PlanService } from '../plan'
 import { ExerciseTypeService } from '../exercise-type'
@@ -18,8 +18,10 @@ import { ExerciseCategoryService } from '../exercise-category'
 
 export class ReservationController {
     static async FindAll(req: Request, res: Response) {
+
+        const { limit, page } = req.query as ReservationQueryParams
         const [err, data] = await safeAwait(
-            ReservationService.GetAllReservationes()
+            ReservationService.GetAllReservationes(limit, page)
         )
         if (err !== null) {
             logger.error(err)
@@ -39,8 +41,8 @@ export class ReservationController {
                 const error = new CodedError(
                     ErrorCode.MAPPING_ERROR,
                     'Customer was not found for ' +
-                        reservation.ReservationId +
-                        ' reservation'
+                    reservation.ReservationId +
+                    ' reservation'
                 )
                 logger.error(error)
                 const statusCode = reservationErrorHandler.handleError(error)
@@ -76,8 +78,8 @@ export class ReservationController {
                 const error = new CodedError(
                     ErrorCode.MAPPING_ERROR,
                     'Customer was not found for ' +
-                        reservation.ReservationId +
-                        ' reservation'
+                    reservation.ReservationId +
+                    ' reservation'
                 )
                 logger.error(error)
                 const statusCode = reservationErrorHandler.handleError(error)
@@ -197,8 +199,8 @@ export class ReservationController {
             const error = new CodedError(
                 ErrorCode.MAPPING_ERROR,
                 'Customer was not found for ' +
-                    reservation.ReservationId +
-                    ' reservation'
+                reservation.ReservationId +
+                ' reservation'
             )
             logger.error(error)
             const statusCode = reservationErrorHandler.handleError(error)
@@ -234,8 +236,8 @@ export class ReservationController {
             const error = new CodedError(
                 ErrorCode.MAPPING_ERROR,
                 'Customer was not found for ' +
-                    reservation.ReservationId +
-                    ' reservation'
+                reservation.ReservationId +
+                ' reservation'
             )
             logger.error(error)
             const statusCode = reservationErrorHandler.handleError(error)

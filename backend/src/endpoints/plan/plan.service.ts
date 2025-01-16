@@ -9,11 +9,11 @@ import { MachinesInPlan } from './machines-in-plan.model'
 import { PlanDatabase } from './plan.database'
 
 export class PlanService {
-    static async GetAllPlanes(): Promise<Array<Plan>> {
+    static async GetAllPlanes(limit?: number, page?: number): Promise<Array<Plan>> {
         const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(
-            db.SelectAll(Plan)
+            db.SelectAll(Plan, limit, page)
         )
         if (databaseErr !== null) {
             throw databaseErr
