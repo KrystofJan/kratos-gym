@@ -15,7 +15,6 @@ import { ExerciseCategoryService } from '../exercise-category'
 
 export class ExerciseTypeController {
     static async FindAll(req: Request, res: Response) {
-
         const { limit, page } = req.query as ExerciseTypeQueryParams
         const [err, data] = await safeAwait(
             ExerciseTypeService.GetAllExerciseTypes(limit, page)

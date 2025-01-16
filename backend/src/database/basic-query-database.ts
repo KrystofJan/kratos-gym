@@ -268,7 +268,6 @@ export class BasicQueryDatabase extends Database {
         otherIdKey?: string,
         otherIdValue?: number
     ): Promise<DatabaseCreated<T>> {
-
         const pkey: string = Reflect.getMetadata(
             DecoratorType.PRIMARY_KEY,
             modelType
@@ -306,7 +305,10 @@ export class BasicQueryDatabase extends Database {
 
         try {
             for (const column of columns) {
-                if (unUpdatables?.includes(column) || unInsertables?.includes(column)) {
+                if (
+                    unUpdatables?.includes(column) ||
+                    unInsertables?.includes(column)
+                ) {
                     continue
                 }
                 const columnMapped = columnMap[column]
@@ -342,10 +344,7 @@ export class BasicQueryDatabase extends Database {
             )
         }
 
-
-        logger.warn(
-            JSON.stringify(processedData, null, 2)
-        )
+        logger.warn(JSON.stringify(processedData, null, 2))
         try {
             const [result] = await this.sql<T[]>`
                 UPDATE ${this.sql(tableName)}

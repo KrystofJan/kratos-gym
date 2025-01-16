@@ -1,5 +1,3 @@
 import { RequestQueryParams } from '../base'
 
-export interface ExerciseTypeQueryParams extends RequestQueryParams { }
-
-
+export interface ExerciseTypeQueryParams extends RequestQueryParams {}

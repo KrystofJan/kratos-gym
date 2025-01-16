@@ -1,2 +1,2 @@
 import { RequestQueryParams } from '../base'
-export interface ReservationQueryParams extends RequestQueryParams { }
+export interface ReservationQueryParams extends RequestQueryParams {}

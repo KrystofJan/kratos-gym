@@ -5,7 +5,10 @@ import { CodedError, ErrorCode } from '../../errors/base.error'
 import { safeAwait } from '../../utils/utilities'
 
 export class ExerciseTypeService {
-    static async GetAllExerciseTypes(limit?: number, page?: number): Promise<Array<ExerciseType>> {
+    static async GetAllExerciseTypes(
+        limit?: number,
+        page?: number
+    ): Promise<Array<ExerciseType>> {
         const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(

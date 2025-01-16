@@ -24,7 +24,9 @@ export class PlanController {
             return
         }
 
-        const [err, data] = await safeAwait(PlanService.GetAllPlanes(limit, page))
+        const [err, data] = await safeAwait(
+            PlanService.GetAllPlanes(limit, page)
+        )
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError

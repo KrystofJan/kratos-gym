@@ -6,7 +6,10 @@ import { CodedError, ErrorCode } from '../../errors/base.error'
 import { ReservationDatabase } from './reservation.database'
 
 export class ReservationService {
-    static async GetAllReservationes(limit?: number, page?: number): Promise<Array<Reservation>> {
+    static async GetAllReservationes(
+        limit?: number,
+        page?: number
+    ): Promise<Array<Reservation>> {
         const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(
