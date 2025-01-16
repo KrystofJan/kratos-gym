@@ -63,7 +63,7 @@ const data = ref<MainNav>({
         },
         {
             title: 'Machines',
-            url: '/admin/machines',
+            url: '/admin/machine',
             items: [
                 { title: 'Machine list', url: '/list', isActive: false, items: [] },
                 { title: 'Add a new machine', url: '/create', isActive: false, items: [] },
@@ -86,7 +86,7 @@ const data = ref<MainNav>({
         },
         {
             title: 'Exercise types',
-            url: '/admin/types',
+            url: '/admin/type',
             items: [
                 { title: 'Exercise type list', url: '/list', isActive: false, items: [] },
                 { title: 'Create an exercise type', url: '/create', isActive: false, items: [] },
@@ -94,7 +94,7 @@ const data = ref<MainNav>({
         },
         {
             title: 'Plans',
-            url: '/admin/plans',
+            url: '/admin/plan',
             items: [
                 { title: 'Plan list', url: '/list', isActive: false, items: [] },
                 { title: 'Plan presets', url: '#', isActive: false, items: [] },
@@ -102,7 +102,7 @@ const data = ref<MainNav>({
         },
         {
             title: 'Reservations',
-            url: '/admin/reservations',
+            url: '/admin/reservation',
             items: [
                 { title: 'Reservation list', url: '/list', isActive: false, items: [] },
             ],

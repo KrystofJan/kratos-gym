@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { ExerciseTypeService } from '.'
+import { ExerciseTypeQueryParams, ExerciseTypeService } from '.'
 import {
     CreatedResponse,
     FailedResponse,
@@ -15,8 +15,10 @@ import { ExerciseCategoryService } from '../exercise-category'
 
 export class ExerciseTypeController {
     static async FindAll(req: Request, res: Response) {
+
+        const { limit, page } = req.query as ExerciseTypeQueryParams
         const [err, data] = await safeAwait(
-            ExerciseTypeService.GetAllExerciseTypes()
+            ExerciseTypeService.GetAllExerciseTypes(limit, page)
         )
         if (err !== null) {
             logger.error(err)
@@ -187,6 +189,7 @@ export class ExerciseTypeController {
         const body = req.body
         const model: Partial<ExerciseType> = new ExerciseType(body)
 
+        logger.info(model)
         const [err, data] = await safeAwait(
             ExerciseTypeService.UpdateExerciseTypeById(id, model)
         )
@@ -235,7 +238,6 @@ export class ExerciseTypeController {
         const body = req.body
         const model = new ExerciseType(body)
 
-        logger.info(model)
         if (!model.checkForUnneededData(body)) {
             const error = new CodedError(
                 ErrorCode.MAPPING_ERROR,

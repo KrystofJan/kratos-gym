@@ -74,7 +74,7 @@ export const columns: ColumnDef<Account>[] = [
             )
         },
         cell: ({ row }) => {
-            return h('div', { class: 'text-right font-medium' }, row.getValue('FistName'))
+            return h('div', { class: 'text-right font-medium' }, row.getValue('FirstName'))
         }
     },
     {

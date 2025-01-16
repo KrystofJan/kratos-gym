@@ -149,8 +149,6 @@ export class MachineService {
         }
     }
 
-
-
     async UpdateMachine(machine: Partial<Machine>, machineId: number) {
         if (!machine) {
             throw new Error("Cannot update account because the request body is not working")
@@ -179,6 +177,5 @@ export class MachineService {
             throw error
         }
     }
-
 }
 

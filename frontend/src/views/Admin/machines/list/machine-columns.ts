@@ -221,7 +221,7 @@ export const columns: ColumnDef<Machine>[] = [
 
             return h('div', { class: 'relative' }, h(DataGridActions, {
                 id: prop.MachineId,
-                editTableUrl: '/admin/machines/update/' + prop.MachineId,
+                editTableUrl: '/admin/machine/update/' + prop.MachineId,
                 deleteFunc,
             }
             ))

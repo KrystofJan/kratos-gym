@@ -5,13 +5,9 @@ import { toTypedSchema } from "@vee-validate/zod"
 import { useForm } from "vee-validate"
 import * as z from "zod"
 import { AutoForm, Button } from '@/components'
-import { MachineService, Machine, MachinePost } from '@/support'
+import { MachineService, Machine, MachinePost, FormType } from '@/support'
 
 const route = useRoute()
-enum FormType {
-    Update,
-    Create
-}
 
 
 const machineSchema = z.object({

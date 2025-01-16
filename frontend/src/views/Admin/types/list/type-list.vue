@@ -8,7 +8,7 @@ import { ExerciseTypeService } from '@/support'
 async function getData() {
     // Fetch data from your API here.
     try {
-        const data = await new ExerciseTypeService().FetchExerciseTypes()
+        const data = await new ExerciseTypeService().FetchAll({ limit: 1000 })
         values.value = data;
     } catch (error) {
         console.error('Error fetching data:', error);

@@ -1,6 +1,6 @@
 import { IDictionary } from '../../utils'
 import { Model } from '../base'
-import { Column, PrimaryKey, Table, ForeignKey } from '../../database'
+import { Column, PrimaryKey, Table, ForeignKey, DifferentlyNamedForeignKey } from '../../database'
 import { ExerciseCategory } from '../exercise-category/exercise-category.model'
 
 @Table('exercise_type')
@@ -13,6 +13,7 @@ export class ExerciseType extends Model {
     public TypeName: string
 
     @ForeignKey(ExerciseCategory)
+    @DifferentlyNamedForeignKey('CategoryId')
     @Column('category_id')
     public Category?: ExerciseCategory
 

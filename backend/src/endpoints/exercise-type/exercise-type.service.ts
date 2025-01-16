@@ -5,11 +5,11 @@ import { CodedError, ErrorCode } from '../../errors/base.error'
 import { safeAwait } from '../../utils/utilities'
 
 export class ExerciseTypeService {
-    static async GetAllExerciseTypes(): Promise<Array<ExerciseType>> {
+    static async GetAllExerciseTypes(limit?: number, page?: number): Promise<Array<ExerciseType>> {
         const db = new BasicQueryDatabase()
 
         const [databaseErr, databaseResponse] = await safeAwait(
-            db.SelectAll(ExerciseType)
+            db.SelectAll(ExerciseType, limit, page)
         )
         if (databaseErr !== null) {
             throw databaseErr

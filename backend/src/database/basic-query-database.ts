@@ -268,6 +268,17 @@ export class BasicQueryDatabase extends Database {
         otherIdKey?: string,
         otherIdValue?: number
     ): Promise<DatabaseCreated<T>> {
+
+        const pkey: string = Reflect.getMetadata(
+            DecoratorType.PRIMARY_KEY,
+            modelType
+        )
+
+        const unUpdatables = Reflect.getMetadata(
+            DecoratorType.UNUPDATABLE,
+            modelType.prototype
+        )
+
         const columnMap = Reflect.getMetadata(
             DecoratorType.COLUMN_MAP,
             modelType.prototype
@@ -276,44 +287,51 @@ export class BasicQueryDatabase extends Database {
             DecoratorType.TABLE_NAME,
             modelType
         )
-        const pkey: string = Reflect.getMetadata(
-            DecoratorType.PRIMARY_KEY,
-            modelType
-        )
-        const fkToPkMap = Reflect.getMetadata(
-            DecoratorType.FOREIGN_PRIMARY_KEY_MAP,
+        const foreignKeyMap = Reflect.getMetadata(
+            DecoratorType.FOREIGN_KEY_MAP,
             modelType.prototype
         )
         const unInsertables = Reflect.getMetadata(
             DecoratorType.UNINSERTABLE,
             modelType.prototype
         )
-        const unUpdatables = Reflect.getMetadata(
-            DecoratorType.UNUPDATABLE,
-            modelType.prototype
-        )
 
+        // Filter out null or undefined values from the body
         const filteredBody = Object.fromEntries(
             Object.entries(body).filter(([, value]) => value != null)
         )
+        const columns: string[] = Object.keys(filteredBody)
 
         const processedData: IDictionary<SimpleDatabaseType> = {}
 
         try {
-            for (const [key, value] of Object.entries(filteredBody)) {
-                if (
-                    unInsertables?.includes(key) ||
-                    unUpdatables?.includes(key)
-                ) {
+            for (const column of columns) {
+                if (unUpdatables?.includes(column) || unInsertables?.includes(column)) {
                     continue
                 }
-                let k = columnMap[key]
-                if (fkToPkMap && Object.keys(fkToPkMap).includes(key)) {
-                    k = fkToPkMap[key]
-                    processedData[k] = value
+                const columnMapped = columnMap[column]
+
+                // Handle foreign key mapping
+                if (foreignKeyMap?.[columnMapped]) {
+                    const [, fkPrototype] = foreignKeyMap[columnMapped]
+                    const foreignKey = Reflect.getMetadata(
+                        'primaryKey',
+                        fkPrototype
+                    )
+                    const fieldMap = Reflect.getMetadata(
+                        'fieldMap',
+                        fkPrototype.prototype
+                    )
+
+                    processedData[columnMapped] =
+                        filteredBody[column][fieldMap[foreignKey]]
+                } else {
+                    // Handle boolean conversion
+                    processedData[columnMapped] =
+                        typeof filteredBody[column] === 'boolean'
+                            ? Number(filteredBody[column]).toString()
+                            : filteredBody[column]
                 }
-                const columnMapped = k
-                processedData[columnMapped] = value
             }
         } catch (error) {
             const err = error as Error
@@ -324,6 +342,10 @@ export class BasicQueryDatabase extends Database {
             )
         }
 
+
+        logger.warn(
+            JSON.stringify(processedData, null, 2)
+        )
         try {
             const [result] = await this.sql<T[]>`
                 UPDATE ${this.sql(tableName)}

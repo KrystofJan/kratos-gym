@@ -3,7 +3,7 @@ import type {
     ColumnDef,
 } from '@tanstack/vue-table'
 import { ArrowUpDown } from 'lucide-vue-next'
-import { Account } from '@/support'
+import { Account, ExerciseCategory, ExerciseCategoryService } from '@/support'
 import {
     toast,
     Button,
@@ -11,9 +11,9 @@ import {
     DataGridActions,
 } from '@/components'
 
-export const values = ref<Account[]>([])
+export const values = ref<ExerciseCategory[]>([])
 
-export const columns: ColumnDef<Account>[] = [
+export const columns: ColumnDef<ExerciseCategory>[] = [
     {
         id: 'select',
         header: ({ table }) => h(Checkbox, {
@@ -79,17 +79,28 @@ export const columns: ColumnDef<Account>[] = [
         id: 'actions',
         enableHiding: false,
         cell: ({ row }) => {
-            const prop: Account = row.original
+            const prop: ExerciseCategory = row.original
             const deleteFunc = async (id: number) => {
-                toast({
-                    title: 'Cannot delete accounts'
-                })
-                return -1
+                try {
+                    const data = await new ExerciseCategoryService().Delete(id)
+                    toast({
+                        title: 'Successfully deleted machine',
+                        description: `Reservation id: ${data.DeletedId}`
+                    })
+                    values.value = values.value.filter(x => x.CategoryId !== data.DeletedId)
+                    return row.index
+                } catch (err) {
+                    toast({
+                        title: 'Error while deleting data',
+                        description: h(`${err}`, { class: "text-red" })
+                    })
+                    return -1
+                }
             }
 
             return h('div', { class: 'relative flex justify-end' }, h(DataGridActions, {
-                id: prop.AccountId,
-                editTableUrl: '/admin/category/edit',
+                id: prop.CategoryId,
+                editTableUrl: '/admin/category/update/' + prop.CategoryId,
                 deleteFunc,
             }))
         },
@@ -97,8 +108,20 @@ export const columns: ColumnDef<Account>[] = [
 ]
 
 export async function deleteSelected(ids: number[]) {
+    for (const id of ids) {
+        try {
+            const responseData = await new ExerciseCategoryService().Delete(id)
+            values.value = values.value.filter(x => x.CategoryId !== responseData.DeletedId)
+        } catch (err) {
+            toast({
+                title: 'Error while deleting data',
+                description: h(`ADD ERROR`, { class: "text-red" })
+            })
+        }
+    }
     toast({
-        title: 'Cannot delete accounts'
+        title: 'Deleted all seleceted rows',
+        description: h('deleted rows: ${ids.join(", ").toString()}', { class: "" })
     })
 }
 
