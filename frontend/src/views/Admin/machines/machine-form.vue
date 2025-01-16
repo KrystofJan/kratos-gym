@@ -37,7 +37,7 @@ const createMachine = async (values: Record<string, any>) => {
 
 const updateMachine = async (values: Record<string, any>) => {
     try{ 
-        await new MachineService().CreateMachine(values)
+        await new MachineService().UpdateMachine(values, machine.value.MachineId)
     } catch (err) {
         throw err
     }
@@ -49,6 +49,7 @@ const formType = ref<FormType>(FormType.Create)
 
 const handleSubmit = async (values: Record<string, any>) => {
     if (formType.value === FormType.Update) {
+        console.log("updating")
         await updateMachine(values)
     } else {
         await createMachine(values)
@@ -72,32 +73,26 @@ watch(
     }
 )
 
-watch(
-    () => route.fullPath,
-    async (newPath, oldPath) => {
-        if (newPath.split('/').includes("update")) {
-            console.log("asdasd")
-            formType.value = FormType.Update 
-        } else {
-            formType.value = FormType.Create
-        }
-    }
-)
-
 onMounted(async () => {
     await fetchMachine(Number(route.params.id))
+
+
     if (machine.value) {
         form.setFieldValue('MachineName', machine.value.MachineName)
         form.setFieldValue('MaxWeight', machine.value.MaxWeight)
         form.setFieldValue('MinWeight', machine.value.MinWeight)
         form.setFieldValue('MaxPeople', machine.value.MaxPeople)
         form.setFieldValue('AvgTimeTaken', machine.value.AvgTimeTaken)
+        formType.value = FormType.Update 
+    } else {
+        formType.value = FormType.Create
     }
 });
 </script>
 
 <template>
-        <AutoForm class="w-2/3 space-y-6" :form="form" :schema="machineSchema" @submit="createMachine">
+    {{formType}}
+        <AutoForm class="w-2/3 space-y-6" :form="form" :schema="machineSchema" @submit="handleSubmit">
             <Button type="submit">
                 Submit
             </Button>
