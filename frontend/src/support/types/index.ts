@@ -1,7 +1,7 @@
 export { UserRoleOptions } from './account';
 export type { UserRole, Account } from './account';
 export type { Address } from './address';
-export { roleDictionary, roleMap } from './account';
+export { roleDictionary, roleMap, roleCharMap } from './account';
 export type { AccountCreate } from './account-create';
 export type { Plan, PlanPost } from './plan'
 export type { Reservation, ReservationPost } from './reservation'

@@ -2,7 +2,7 @@ import { h, ref } from 'vue'
 import type {
     ColumnDef,
 } from '@tanstack/vue-table'
-import { Account } from '@/support'
+import { Account, AccountService, Address } from '@/support'
 
 import { ArrowUpDown } from 'lucide-vue-next'
 import {
@@ -122,7 +122,7 @@ export const columns: ColumnDef<Account>[] = [
         }
     },
     {
-        accessorKey: 'AvgTimeTaken',
+        accessorKey: 'Address',
         header: ({ column }) => {
             return h(
 
@@ -136,12 +136,14 @@ export const columns: ColumnDef<Account>[] = [
                 },
                 () => [
                     h(ArrowUpDown, { class: 'opacity-0 group-hover:opacity-100 mr-2 h-4 w-4' }),
-                    h('span', { class: 'group' }, 'Average time'),
+                    h('span', { class: 'group' }, 'Address'),
                 ]
             )
         },
         cell: ({ row }) => {
-            return h('div', { class: 'text-right font-medium' }, row.getValue('AvgTimeTaken'))
+
+            const address: Address = row.getValue('Address')
+            return h('div', { class: 'text-right font-medium' }, `${address.Street}-${address.City}`)
         }
     },
     {
@@ -219,15 +221,26 @@ export const columns: ColumnDef<Account>[] = [
         cell: ({ row }) => {
             const prop: Account = row.original
             const deleteFunc = async (id: number) => {
-                toast({
-                    title: 'Cannot delete accounts'
-                })
-                return -1
+                try {
+                    const data = await new AccountService().Delete(id)
+                    toast({
+                        title: 'Successfully deleted machine',
+                        description: `Reservation id: ${data.DeletedId}`
+                    })
+                    values.value = values.value.filter(x => x.AccountId !== data.DeletedId)
+                    return row.index
+                } catch (err) {
+                    toast({
+                        title: 'Error while deleting data',
+                        description: h(`${err}`, { class: "text-red" })
+                    })
+                    return -1
+                }
             }
 
             return h('div', { class: 'relative' }, h(DataGridActions, {
                 id: prop.AccountId,
-                editTableUrl: '/admin/account/edit',
+                editTableUrl: '/admin/account/update/' + prop.AccountId,
                 deleteFunc,
             }))
         },
@@ -235,8 +248,20 @@ export const columns: ColumnDef<Account>[] = [
 ]
 
 export async function deleteSelected(ids: number[]) {
+    for (const id of ids) {
+        try {
+            const responseData = await new AccountService().Delete(id)
+            values.value = values.value.filter(x => x.AccountId !== responseData.AccountId)
+        } catch (err) {
+            toast({
+                title: 'Error while deleting data',
+                description: h(`ADD ERROR`, { class: "text-red" })
+            })
+        }
+    }
     toast({
-        title: 'Cannot delete accounts'
+        title: 'Deleted all seleceted rows',
+        description: h('deleted rows: ${ids.join(", ").toString()}', { class: "" })
     })
 }
 
