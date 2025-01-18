@@ -10,7 +10,6 @@ import { Account, UserRole } from './account.model'
 import { ReservationService } from '../reservation'
 
 export class AccountController {
-
     static async FindAll(req: Request, res: Response) {
         const { role } = req.query
         let result: [Error, null] | [null, Account[]]
@@ -256,11 +255,10 @@ export class AccountController {
         response.buildResponse(req, res)
     }
 
-
     // NOTE: Delete just toggles isActive to false
     static async DeleteAccount(req: Request, res: Response) {
         const id = Number(req.params['id'])
-        const model: Partial<Account> = new Account({ "is_active": false })
+        const model: Partial<Account> = new Account({ is_active: false })
         const [err, data] = await safeAwait(
             AccountService.UpdateAccount(id, model)
         )
