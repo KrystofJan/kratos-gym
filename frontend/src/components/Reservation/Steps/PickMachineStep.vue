@@ -141,9 +141,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    asasd
     <Step :builderText="builderText">
-    asdasd
         <form class="w-full flex flex-col gap-4" @submit="onSubmit">
             <FormField name="machines">
                 <div class="grid fieldGrid">
