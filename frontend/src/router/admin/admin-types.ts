@@ -1,19 +1,5 @@
 
-export const typesRoutes = {
-    path: '/admin/types',
-    name: '',
-    component: () => import('@/views/Admin/types/types.vue'),
-    children: [
-        {
-            path: '/admin/types/list',
-            name: '',
-            component: () => import('@/views/Admin/types/list/type-list.vue'),
-        },
-        {
-            path: '/admin/types/create',
-            name: '',
-            component: () => import('@/views/Admin/types/types-form.vue'),
-        }
-    ]
-}
+import { setRoutes } from './utils'
+
+export const typesRoutes = setRoutes('type', 'types')
 

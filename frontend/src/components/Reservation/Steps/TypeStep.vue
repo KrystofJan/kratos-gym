@@ -35,7 +35,7 @@ const types = ref<ExerciseCategory[]>([])
 
 const fetchData = async () => {
     try {
-        const data = await new ExerciseCategoryService().FetchExerciseCategory({ limit: 100 })
+        const data = await new ExerciseCategoryService().FetchAll({ limit: 100 })
         types.value = data
     } catch (error) {
         console.error('Error fetching data:', error);

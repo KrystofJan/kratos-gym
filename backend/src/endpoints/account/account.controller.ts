@@ -255,8 +255,34 @@ export class AccountController {
         response.buildResponse(req, res)
     }
 
+    // NOTE: Delete just toggles isActive to false
+    static async DeleteAccount(req: Request, res: Response) {
+        const id = Number(req.params['id'])
+        const model: Partial<Account> = new Account({ is_active: false })
+        const [err, data] = await safeAwait(
+            AccountService.UpdateAccount(id, model)
+        )
+
+        if (err !== null) {
+            logger.error(err)
+            const error = err as CodedError
+            const statusCode = accountErrorHandler.handleError(error)
+            const response = new FailedResponse(
+                error.message,
+                statusCode,
+                error.code
+            )
+            response.buildResponse(req, res)
+            return
+        }
+
+        const response = new OkResponse('changed data successfully', data)
+        response.buildResponse(req, res)
+    }
+
     static async EditAccount(req: Request, res: Response) {
         const id = Number(req.params['id'])
+        logger.warn(id)
         const body = req.body
         const model: Partial<Account> = new Account(body)
         const [err, data] = await safeAwait(

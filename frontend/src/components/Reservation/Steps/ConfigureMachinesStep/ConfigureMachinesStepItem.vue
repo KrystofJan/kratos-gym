@@ -279,7 +279,7 @@ function formatPrevTime(time: TimeSuggestion | undefined): string {
         <CardFooter>
             <div :class="{ 'opacity-0': timeRecs.get(machine.MachineId) === undefined }">
                 <template v-if="!collision">
-                    <p>Machine is occupid at this time, here are the free closest times</p>
+                    <p>Machine is occupied at this time, here are the free closest times</p>
                     <a class="mr-4 time-link" @click.prevent="setPrevTime(timeRecs.get(machine.MachineId))" href="#">
                         {{ formatPrevTime(timeRecs.get(machine.MachineId)) }}
                     </a>

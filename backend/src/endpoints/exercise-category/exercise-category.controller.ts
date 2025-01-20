@@ -5,7 +5,7 @@ import {
     FailedResponse,
     OkResponse,
 } from '../../request-utility'
-import { ExerciseCategory } from '.'
+import { ExerciseCategory, CategoryQueryParams } from '.'
 import { logger } from '../../utils'
 import { CodedError, ErrorCode } from '../../errors'
 import { exerciseCategoryErrorHandler } from '.'
@@ -14,8 +14,9 @@ import { DeletedResponse } from '../../request-utility/custom-responces/deleted-
 
 export class ExerciseCategoryController {
     static async FindAll(req: Request, res: Response) {
+        const { limit, page } = req.query as CategoryQueryParams
         const [err, data] = await safeAwait(
-            ExerciseCategoryService.GetAllExerciseCategories()
+            ExerciseCategoryService.GetAllExerciseCategories(limit, page)
         )
         if (err !== null) {
             logger.error(err)

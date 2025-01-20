@@ -23,7 +23,6 @@ interface Props {
     role?: UserRole
 }
 
-
 const props = defineProps<Props>()
 
 const handleRole = () => {

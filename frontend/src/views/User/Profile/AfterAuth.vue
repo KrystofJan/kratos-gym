@@ -80,7 +80,7 @@ const createAddress = async (values: Record<string, any>) => {
         }
         phoneNumber.value = values["PhoneNumber"]
 
-        data = await addressService.CreateAddress(addressBody);
+        data = await addressService.Create(addressBody);
         const model: Address = {
             ...addressBody,
             AddressId: data.CreatedId,

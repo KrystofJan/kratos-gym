@@ -34,9 +34,18 @@ export const roleDictionary = new Map([
     ["a", "Author"]
 ]);
 
+
 export const roleMap = new Map([
     [UserRoleOptions.CUSTOMER, "Customer"],
     [UserRoleOptions.TRAINER, "Trainer"],
     [UserRoleOptions.EMPLOYEE, "Employee"],
     [UserRoleOptions.AUTHOR, "Author"]
+]);
+
+export const roleCharMap = new Map([
+    ["c", "CUSTOMER"],
+    ["t", "TRAINER"],
+    ["e", "EMPLOYEE"],
+    ["a", "AUTHOR"],
+    ["/", "NOTKNOWN"],
 ]);

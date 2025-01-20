@@ -44,3 +44,7 @@ AccountRouter.patch('/:id/address/set', async (req: Request, res: Response) => {
 AccountRouter.patch('/:id', async (req: Request, res: Response) => {
     await AccountController.EditAccount(req, res)
 })
+
+AccountRouter.delete('/:id', async (req: Request, res: Response) => {
+    await AccountController.DeleteAccount(req, res)
+})

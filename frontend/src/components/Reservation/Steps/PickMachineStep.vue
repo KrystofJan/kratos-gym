@@ -135,12 +135,15 @@ const prev = () => {
 }
 
 onMounted(async () => {
+    console.log("hi")
     await fetchData();
 });
 </script>
 
 <template>
+    asasd
     <Step :builderText="builderText">
+    asdasd
         <form class="w-full flex flex-col gap-4" @submit="onSubmit">
             <FormField name="machines">
                 <div class="grid fieldGrid">

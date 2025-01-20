@@ -18,12 +18,15 @@ import { PlanQueryParams } from './plan.params'
 
 export class PlanController {
     static async FindAll(req: Request, res: Response) {
-        if (req.query) {
+        const { date, machine_id, limit, page } = req.query as PlanQueryParams
+        if (date || machine_id) {
             await this.FindPlansOnDate(req, res)
             return
         }
 
-        const [err, data] = await safeAwait(PlanService.GetAllPlanes())
+        const [err, data] = await safeAwait(
+            PlanService.GetAllPlanes(limit, page)
+        )
         if (err !== null) {
             logger.error(err)
             const error = err as CodedError

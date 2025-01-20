@@ -1,13 +1,15 @@
 import { Reservation, ReservationPost } from '..';
+import BaseService from './base-service';
 
 const KRATOS_API_URL = import.meta.env.VITE_KRATOS_API_URL
 
-export class ReservationService {
+export class ReservationService extends BaseService<Reservation, ReservationPost> {
 
     constructor() {
+        super("reservation")
     }
 
-    async FetchReservationsByAddressId(accountId: number): Promise<Reservation[]> {
+    async FetchReservationsByAccountId(accountId: number): Promise<Reservation[]> {
         try {
             const res = await fetch(`${KRATOS_API_URL}/api/account/${accountId}/reservations`);
             if (!res.ok) {
@@ -20,35 +22,6 @@ export class ReservationService {
             throw error;
         }
     }
-
-    async FetchReservation(reservationId: number): Promise<Reservation> {
-        try {
-            const res = await fetch(`${KRATOS_API_URL}/api/reservation/${reservationId}`);
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            const data = await res.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching account:', error);
-            throw error;
-        }
-    }
-
-    async FetchReservations(): Promise<Reservation[]> {
-        try {
-            const res = await fetch(`${KRATOS_API_URL}/api/reservation`);
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            const data = await res.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching account:', error);
-            throw error;
-        }
-    }
-
 
     async CreateFullReservation(reservation: Partial<ReservationPost>) {
         try {
@@ -71,5 +44,4 @@ export class ReservationService {
             throw error;
         }
     }
-
 }

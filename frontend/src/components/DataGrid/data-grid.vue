@@ -59,7 +59,8 @@ const table = useVueTable({
     },
 })
 
-
+const alertMessage = ref<string>("")
+const isAlertVisible = ref<boolean>(false)
 
 async function deleteSelectedRows() {
     await props.deleteSelected(selectedIds.value)

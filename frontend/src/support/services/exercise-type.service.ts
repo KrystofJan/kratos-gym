@@ -1,29 +1,12 @@
-import type { ExerciseType } from '../types';
+import type { ExerciseCategoryPost, ExerciseType, ExerciseTypePost } from '../types';
 import { fillParamValues } from '../request-utils';
+import BaseService from './base-service';
 
 const KRATOS_API_URL = import.meta.env.VITE_KRATOS_API_URL
 
-export class ExerciseTypeService {
+export class ExerciseTypeService extends BaseService<ExerciseType, ExerciseTypePost> {
 
     constructor() {
+        super("exercise-type")
     }
-
-    async FetchExerciseTypes(options?: { page?: number, limit?: number }): Promise<ExerciseType[]> {
-        try {
-            let params = ""
-            if (options) {
-                params = fillParamValues(options)
-            }
-            const res = await fetch(`${KRATOS_API_URL}/api/exercise-type${params}`);
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            const data = await res.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching account:', error);
-            throw error;
-        }
-    }
-
 }

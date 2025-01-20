@@ -7,7 +7,7 @@ export const currentAccount: Ref<Account | null> = ref(null);
 
 export async function fetchAccount(clerkId: string): Promise<void> {
     try {
-        const data = await new AccountService().fetchAccount(clerkId);
+        const data = await new AccountService().FetchByClerkId(clerkId);
         currentAccount.value = data;
     } catch (error) {
         console.error('Error fetching account:', error);

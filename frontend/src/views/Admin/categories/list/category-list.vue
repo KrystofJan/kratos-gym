@@ -7,7 +7,7 @@ import { DataGrid } from '@/components'
 async function getData() {
     // Fetch data from your API here.
     try {
-        const data = await new ExerciseCategoryService().FetchExerciseCategory({ limit: 100 })
+        const data = await new ExerciseCategoryService().FetchAll({ limit: 100 })
         values.value = data;
     } catch (error) {
         console.error('Error fetching data:', error);

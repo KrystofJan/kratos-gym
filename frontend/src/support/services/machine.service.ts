@@ -1,12 +1,11 @@
-
-import type { Machine, TimeSuggestion } from '../types';
+import type { Machine, TimeSuggestion, MachinePost } from '@/support';
 import { fillParamValues } from '../request-utils';
 import { Time } from "@internationalized/date";
 import { format } from 'date-fns';
-import { AlarmClockPlus } from 'lucide-vue-next';
 
 const KRATOS_API_URL = import.meta.env.VITE_KRATOS_API_URL
 
+// TODO: UPDATE AND CALL IT IN THE ADMIN FORM COMPONENT
 export class MachineService {
 
     constructor() {
@@ -128,6 +127,55 @@ export class MachineService {
 
     }
 
+    async CreateMachine(machine: MachinePost) {
+        try {
+            const res = await fetch(`${KRATOS_API_URL}/api/machine`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify(machine)
+            });
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const data = await res.json();
+            return data;
+        } catch (error) {
+            console.error('Error creating address:', error);
+            throw error;
+        }
+    }
 
+    async UpdateMachine(machine: Partial<Machine>, machineId: number) {
+        if (!machine) {
+            throw new Error("Cannot update account because the request body is not working")
+        }
+
+        try {
+            const res = await fetch(
+                `${KRATOS_API_URL}/api/machine/${machineId}/`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    body: JSON.stringify(machine)
+                }
+            );
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const data = await res.json();
+            return data;
+        } catch (error) {
+            console.error(error)
+            throw error
+        }
+    }
 }
 

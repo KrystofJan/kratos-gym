@@ -1,14 +1,3 @@
+import { setRoutes } from './utils'
 
-export const accountRoutes = {
-    path: '/admin/account',
-    name: '',
-    component: () => import('@/views/Admin/account/account.vue'),
-    children: [
-        {
-            path: '/admin/account/list',
-            name: '',
-            component: () => import('@/views/Admin/account/list/account-list.vue'),
-        },
-    ]
-}
-
+export const accountRoutes = setRoutes('account', 'accounts')

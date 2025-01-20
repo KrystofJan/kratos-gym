@@ -1,16 +1,42 @@
 import type { Account, AccountCreate, Address, UserRole } from '../types';
 import { roleDictionary } from '../types';
+import BaseService from './base-service';
 
 const KRATOS_API_URL = import.meta.env.VITE_KRATOS_API_URL
 
 export class AccountService {
-
+    baseService: BaseService<Account, Account>;
     constructor() {
+        this.baseService = new BaseService("account")
     }
 
-    async fetchAccount(clerkId: string): Promise<Account> {
+    async FetchByClerkId(clerkId: string): Promise<Account> {
         try {
             const res = await fetch(`${KRATOS_API_URL}/api/account/clerk/${clerkId}`);
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            const data = await res.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching account:', error);
+            throw error;
+        }
+    }
+
+
+    async Delete(id: number) {
+        try {
+
+            return this.baseService.Delete(id)
+        } catch (err) {
+            throw err
+        }
+    }
+
+    async FetchOne(id: number): Promise<Account> {
+        try {
+            const res = await fetch(`${KRATOS_API_URL}/api/account/${id}`);
             if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}`);
             }

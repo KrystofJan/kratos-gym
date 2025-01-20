@@ -7,6 +7,12 @@ export interface ExerciseType {
     BodyPart: string;
 }
 
+export interface ExerciseTypePost {
+    TypeName: string;
+    CategoryId: number;
+    BodyPart: string;
+}
+
 export const exerciseTypeCategoryPictureMap = new Map<string, string>([
     ["Lower body", "asd"]
 ])

@@ -10,7 +10,7 @@ import {
     DataGridActions
 } from '@/components'
 
-import { ExerciseCategory, ExerciseType } from '@/support'
+import { ExerciseCategory, ExerciseType, ExerciseTypeService } from '@/support'
 
 export const values = ref<ExerciseType[]>([])
 
@@ -56,7 +56,7 @@ export const columns: ColumnDef<ExerciseType>[] = [
         }
     },
     {
-        accessorKey: 'ExerciseTypeName',
+        accessorKey: 'TypeName',
         header: ({ column }) => {
             return h(
                 Button,
@@ -128,15 +128,26 @@ export const columns: ColumnDef<ExerciseType>[] = [
         cell: ({ row }) => {
             const prop: ExerciseType = row.original
             const deleteFunc = async (id: number) => {
-                toast({
-                    title: 'Cannot delete accounts'
-                })
-                return -1
+                try {
+                    const data = await new ExerciseTypeService().Delete(id)
+                    toast({
+                        title: 'Successfully deleted machine',
+                        description: `Reservation id: ${data.DeletedId}`
+                    })
+                    values.value = values.value.filter(x => x.ExerciseTypeId !== data.DeletedId)
+                    return row.index
+                } catch (err) {
+                    toast({
+                        title: 'Error while deleting data',
+                        description: h(`${err}`, { class: "text-red" })
+                    })
+                    return -1
+                }
             }
 
             return h('div', { class: 'relative flex justify-end' }, h(DataGridActions, {
                 id: prop.ExerciseTypeId,
-                editTableUrl: '/admin/category/edit',
+                editTableUrl: '/admin/type/update/' + prop.ExerciseTypeId,
                 deleteFunc,
             }))
         },
