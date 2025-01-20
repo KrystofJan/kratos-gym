@@ -24,6 +24,7 @@ import {
     StepperDescription,
     ConfigureMachinesStep,
     PickMachineStep,
+    PickMachineOrderStep,
     PlanStep,
     TypeStep,
 } from '@/components'
@@ -88,8 +89,9 @@ watch(() => reservation.value, () => {
 const steps = [
     { step: 1, title: 'Plan Details', description: 'Provide plan details like name and trainer.' },
     { step: 2, title: 'Pick Machines', description: 'Select the machines for your plan.' },
-    { step: 3, title: 'Configure Machines', description: 'Configure machines with sets, reps, and timings.' },
-    { step: 4, title: 'Add Exercise Types', description: 'Add exercise categories to your plan.' },
+    { step: 3, title: 'Pick Machine order', description: 'Choose machine order' },
+    { step: 4, title: 'Configure Machines', description: 'Configure machines with sets, reps, and timings.' },
+    { step: 5, title: 'Add Exercise Types', description: 'Add exercise categories to your plan.' },
 ];
 </script>
 
@@ -165,10 +167,20 @@ const steps = [
                                 }" />
                             </template>
                         </KeepAlive>
+
+                        <template v-if="stepIndex === 3">
+                            <PickMachineOrderStep
+                                @prev="stepIndex = 2" :selectedMachines="selectedMachines"
+                                @submit="value => {
+                                    console.log(value)
+                                    stepIndex++
+                                    selectedMachines = value
+                                }" />
+                        </template>
                         <KeepAlive>
-                            <template v-if="stepIndex === 3">
+                            <template v-if="stepIndex === 4">
                                 <ConfigureMachinesStep :reservation-time="reservation.ReservationTime"
-                                    @prev="stepIndex = 2" :selectedMachines="selectedMachines"
+                                    @prev="stepIndex = 3" :selectedMachines="selectedMachines"
                                     :amount-of-people="reservation.AmountOfPeople" @submit="value => {
                                         const plan = reservation.Plan
                                         reservation.Plan = {
@@ -181,8 +193,8 @@ const steps = [
                             </template>
                         </KeepAlive>
                         <KeepAlive>
-                            <template v-if="stepIndex === 4">
-                                <TypeStep @prev="stepIndex = 3" @submit="value => {
+                            <template v-if="stepIndex === 5">
+                                <TypeStep @prev="stepIndex = 4" @submit="value => {
                                     const plan = reservation.Plan
                                     reservation.Plan = {
                                         ...plan,
@@ -194,7 +206,7 @@ const steps = [
                             </template>
 
                         </KeepAlive>
-                        <template v-if="stepIndex === 5">
+                        <template v-if="stepIndex === 6">
                             <ReservationSummary :reservation="reservation" />
                             <!-- <pre class="mt-2 w-[340px] rounded-md bg-slate-950 p-4"> -->
                             <!--     <code class="text-white"> -->

@@ -92,7 +92,6 @@ function formatPrevTime(time: TimeSuggestion | undefined): string {
     <Card>
         <CardHeader>
             <CardTitle class="text-center md:text-left">{{ machine.MachineName }}</CardTitle>
-            {{ collision }}
             <CardDescription class="text-center md:text-left">
             </CardDescription>
         </CardHeader>
@@ -124,7 +123,6 @@ function formatPrevTime(time: TimeSuggestion | undefined): string {
                             <FormMessage />
                         </FormItem>
                     </FormField>
-
                     <FormField v-slot="{ value }" :name="`machinesInPlan[${index}].Sets`">
                         <FormItem>
                             <FormLabel>Sets</FormLabel>
