@@ -35,6 +35,9 @@
             nodePackages.typescript 
             nodePackages.typescript-language-server
 
+            nodePackages_latest.ts-node
+            nodePackages_latest.nodemon    
+
             python311
             python311Packages.pip
             python311Packages.pipx

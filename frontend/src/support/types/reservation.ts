@@ -1,5 +1,6 @@
 import { Account } from "./account";
 import { Plan, PlanPost } from "./plan"
+
 export interface Reservation {
     ReservationId: number;
     AmountOfPeople: number;

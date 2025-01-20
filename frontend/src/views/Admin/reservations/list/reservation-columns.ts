@@ -2,7 +2,7 @@ import { h, ref } from 'vue'
 import type {
     ColumnDef,
 } from '@tanstack/vue-table'
-import { ArrowUpDown, ChevronDown } from 'lucide-vue-next'
+import { ArrowUpDown } from 'lucide-vue-next'
 
 import {
     toast,
@@ -12,6 +12,7 @@ import {
 } from '@/components'
 
 import { Account, Plan, Reservation } from '@/support'
+import { format } from 'date-fns'
 
 export const values = ref<Reservation[]>([])
 
@@ -95,9 +96,8 @@ export const columns: ColumnDef<Reservation>[] = [
                 ])
         },
         cell: ({ row }) => {
-            const category: Date = row.getValue('ReservationTime')
-
-            return h('div', { class: 'text-right font-medium' }, category)
+            const time: Date = row.getValue('ReservationTime')
+            return h('div', { class: 'text-right font-medium' }, format(time, "yyyy/MM/dd"))
         }
     },
     {
@@ -114,7 +114,7 @@ export const columns: ColumnDef<Reservation>[] = [
                 },
                 () => [
                     h(ArrowUpDown, { class: 'opacity-0 group-hover:opacity-100 mr-2 h-4 w-4' }),
-                    h('span', { class: 'group' }, 'ReservationTime'),
+                    h('span', { class: 'group' }, 'Customer'),
                 ])
         },
         cell: ({ row }) => {
@@ -137,13 +137,13 @@ export const columns: ColumnDef<Reservation>[] = [
                 },
                 () => [
                     h(ArrowUpDown, { class: 'opacity-0 group-hover:opacity-100 mr-2 h-4 w-4' }),
-                    h('span', { class: 'group' }, 'ReservationTime'),
+                    h('span', { class: 'group' }, 'Trainer'),
                 ])
         },
         cell: ({ row }) => {
             const category: Account = row.getValue('Trainer')
 
-            let result = "NA"
+            let result = "-"
             if (category) {
                 result = category.LastName
             }
@@ -164,7 +164,7 @@ export const columns: ColumnDef<Reservation>[] = [
                 },
                 () => [
                     h(ArrowUpDown, { class: 'opacity-0 group-hover:opacity-100 mr-2 h-4 w-4' }),
-                    h('span', { class: 'group' }, 'ReservationTime'),
+                    h('span', { class: 'group' }, 'Plan name'),
                 ])
         },
         cell: ({ row }) => {
@@ -180,14 +180,14 @@ export const columns: ColumnDef<Reservation>[] = [
             const prop: Reservation = row.original
             const deleteFunc = async (id: number) => {
                 toast({
-                    title: 'Cannot delete accounts'
+                    title: 'Cannot delete accounts' + id
                 })
                 return -1
             }
 
             return h('div', { class: 'relative flex justify-end' }, h(DataGridActions, {
                 id: prop.ReservationId,
-                editTableUrl: '/admin/category/edit',
+                editTableUrl: '/admin/reservation/update/' + prop.ReservationId,
                 deleteFunc,
             }))
         },
@@ -196,7 +196,7 @@ export const columns: ColumnDef<Reservation>[] = [
 
 export async function deleteSelected(ids: number[]) {
     toast({
-        title: 'Cannot delete accounts'
+        title: 'Cannot delete accounts' + ids.join(", ")
     })
 }
 
