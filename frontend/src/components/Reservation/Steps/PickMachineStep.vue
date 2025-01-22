@@ -188,7 +188,7 @@ onMounted(async () => {
                 </div>
                 <FormMessage />
             </FormField>
-            <div>
+            <div class="ml-auto flex flex-row gap-2">
                 <Button @click="prev">
                     Prev
                 </Button>
