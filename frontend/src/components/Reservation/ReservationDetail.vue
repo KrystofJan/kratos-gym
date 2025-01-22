@@ -36,7 +36,7 @@ const machines: Ref<Machine[]> = ref([])
 
 const fetchReservation = async (id: number) => {
     try {
-        const data = await new ReservationService().FetchReservation(id)
+        const data = await new ReservationService().FetchOne(id)
         reservation.value = data
     } catch (err) {
         console.error(err)

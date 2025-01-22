@@ -7,7 +7,8 @@ export class APINinjasService {
     }
     async GetQuote() {
         try {
-            const res = await fetch(`https://api.api-ninjas.com/v1/quotes?category=fitness`, {
+            // NOTE: Not sure why, but api-ninjas made quotes?categories=something a premium feature :/
+            const res = await fetch(`https://api.api-ninjas.com/v1/quotes`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

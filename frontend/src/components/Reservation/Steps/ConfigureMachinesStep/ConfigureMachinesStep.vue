@@ -181,7 +181,7 @@ onMounted(async () => {
                 </FieldArray>
             </div>
 
-            <div>
+            <div class="ml-auto flex flex-row gap-2">
                 <Button @click="prev">
                     Prev
                 </Button>

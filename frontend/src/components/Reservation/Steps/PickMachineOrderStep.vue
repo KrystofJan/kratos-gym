@@ -22,9 +22,9 @@ import { useForm } from 'vee-validate'
 import draggable from 'vuedraggable'
 
 const formSchema = toTypedSchema(z.object({
-  generate: z.boolean(),
-  canDisturb: z.boolean(),
-  continuous: z.boolean()
+  generate: z.boolean().default(false),
+  canDisturb: z.boolean().default(false),
+  continuous: z.boolean().default(false),
 }))
 
 const { handleSubmit } = useForm({
@@ -64,7 +64,7 @@ onMounted(() => {
 <template>
     <Step :builderText="builderText">
         <form class="w-full flex flex-col gap-4" @submit.prevent="onSubmit">
-            <div class="flex flex-row justify-between w-full">
+            <div class="flex flex-row justify-center gap-16 w-full">
                 <draggable 
                   v-model="newSelectedMachines" 
                   group="people" 
@@ -83,7 +83,7 @@ onMounted(() => {
                    </template>
                 </draggable>
                 <KeepAlive>
-                <div class="w-1/3 pl-4 flex flex-col gap-4">
+                <div class="w-1/3 flex flex-col gap-4">
                     <FormField v-slot="{ value, handleChange }" type="checkbox" name="generate">
                       <FormItem v-auto-animate class="grid grid-cols-2 -order-1 w-full items-center gap-2 space-y-0">
                         <FormLabel>Should we generate times for you?</FormLabel>
@@ -116,7 +116,7 @@ onMounted(() => {
                 </div>
                 </KeepAlive>
             </div>
-            <div>
+            <div class="ml-auto flex flex-row gap-2">
                 <Button @click="prev">
                     Prev
                 </Button>

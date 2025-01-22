@@ -5,7 +5,7 @@ import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod';
 import { parse, format } from 'date-fns';
 import { cn } from '@/lib/utils'
-import { Calendar as CalendarIcon } from 'lucide-vue-next'
+import { Calendar as CalendarIcon, CircleX } from 'lucide-vue-next'
 import {
     NumberInput,
     Popover,
@@ -109,6 +109,11 @@ const selectedTrainer = ref<Account | null>(null);
 const selectTrainer = (trainer: Account) => {
     selectedTrainer.value = trainer;
     setFieldValue('trainer', trainer);
+};
+
+const removeTrainer = (trainer: Account) => {
+    selectedTrainer.value = null
+    setFieldValue('trainer', undefined);
 };
 
 const getFullName = (trainer: Account | null) => {
@@ -216,6 +221,10 @@ const placeholder = ref()
                                         'Select trainer...' }}
                                     <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                 </Button>
+                                <span  @click="removeTrainer" class="inline-block  hover:text-muted-foreground transition h-4 pl-1" :class="cn('justify-between', !selectedTrainer ? 'text-muted-foreground cursor-not-allowed' : 'cursor-pointer')">
+                                    <CircleX />
+                                </span>
+
                             </FormControl>
                         </PopoverTrigger>
                         <PopoverContent class="w-[200px] p-0">
