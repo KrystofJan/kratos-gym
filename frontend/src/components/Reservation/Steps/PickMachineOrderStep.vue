@@ -22,9 +22,9 @@ import { useForm } from 'vee-validate'
 import draggable from 'vuedraggable'
 
 const formSchema = toTypedSchema(z.object({
-  generate: z.boolean(),
-  canDisturb: z.boolean(),
-  continuous: z.boolean()
+  generate: z.boolean().default(false),
+  canDisturb: z.boolean().default(false),
+  continuous: z.boolean().default(false),
 }))
 
 const { handleSubmit } = useForm({
