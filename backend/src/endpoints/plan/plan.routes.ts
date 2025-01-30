@@ -298,9 +298,9 @@ PlanRouter.post(
             static numberOfNodes: number = 0
             neighbors: GraphNode[]
 
-            constructor(value: Data, neighbors: GraphNode[]) {
+            constructor(value: Data, neighbors: GraphNode[], node_id?: number) {
                 this.value = value
-                this.node_id = ++GraphNode.numberOfNodes
+                this.node_id = node_id || ++GraphNode.numberOfNodes
                 this.neighbors = neighbors
                 this.neighbors.sort(compareNodesTime)
             }
@@ -356,8 +356,19 @@ PlanRouter.post(
                             neighbor.value.end_time
                         ], newTime)
                     ) {
+
+                        result.addNode(
+                            new GraphNode({
+                                start_time: this.currentTime,
+                                end_time: newTime,
+                                machine: neighbor.value.machine,
+                                reservation: neighbor.value.reservation,
+                            },
+                                neighbors,
+                                neighbor.node_id,
+                            )
+                        )
                         this.currentTime = newTime
-                        result.addNode(neighbor)
                         if (result.isFound()) {
                             break
                         }
@@ -370,9 +381,24 @@ PlanRouter.post(
             findAllPaths() {
                 const paths: Path[] = []
                 for (const node of this.nodes) {
+                    this.currentTime = startTime
                     const result = new Path()
-                    result.addNode(node)
-                    const path = this.walk(node, [node], result)
+                    const newTime = addTime(this.currentTime, node.value.machine.avg_time_taken)
+                    const nd =
+                        new GraphNode({
+                            start_time: this.currentTime,
+                            end_time: newTime,
+                            machine: node.value.machine,
+                            reservation: node.value.reservation,
+                        },
+                            node.neighbors,
+                            node.node_id,
+                        )
+                    result.addNode(
+                        nd
+                    )
+                    this.currentTime = newTime
+                    const path = this.walk(nd, [nd], result)
                     paths.push(path)
                 }
                 return paths
@@ -395,8 +421,8 @@ PlanRouter.post(
 
             isFound() {
                 let isFull = true
-                const foundMachines = this.nodes.map(node => node.value.machine)
-                for (const node of desired_machines) {
+                const foundMachines = this.nodes.map(node => node.value.machine.machine_id)
+                for (const node of desired_machines.map(machine => machine.machine_id)) {
                     if (!foundMachines.includes(node)) {
                         isFull = false
                         break
@@ -442,7 +468,7 @@ PlanRouter.post(
         const paths = graph.findAllPaths()
         for (let i = 0; i < paths.length; ++i) {
             console.log(i)
-            console.log(paths[i].nodes.map(node => { return { nodeId: node.node_id, machine: node.value.machine } }))
+            console.log(paths[i].nodes.map(node => { return { nodeId: node.node_id, machine: node.value.machine.machine_id, st: node.value.start_time, et: node.value.end_time } }))
         }
         // res.status(StatusCodes.OK).json(graph)
 
