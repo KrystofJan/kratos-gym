@@ -7,6 +7,7 @@ import { ExerciseCategoryRouter } from '../endpoints/exercise-category'
 import { MachineRouter } from '../endpoints/machine'
 import { PlanRouter } from '../endpoints/plan'
 import { ReservationRouter } from '../endpoints/reservation'
+import { generatorRouter } from '../endpoints/plan-generator'
 
 export const setRoutes = (app: Express) => {
     app.use('/api/address', AddressRouter)
@@ -16,5 +17,6 @@ export const setRoutes = (app: Express) => {
     app.use('/api/auth', AuthRouter)
     app.use('/api/account', AccountRouter)
     app.use('/api/plan', PlanRouter)
+    app.use('/api/plan-generator', generatorRouter)
     app.use('/api/exercise-category', ExerciseCategoryRouter)
 }

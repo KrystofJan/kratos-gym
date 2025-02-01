@@ -1,6 +1,4 @@
-import {
-    DatabaseFoundMultiple,
-} from '../../database/database-response'
+import { DatabaseFoundMultiple } from '../../database/database-response'
 import { logger } from '../../utils/logger'
 import { CodedError, ErrorCode } from '../../errors/base.error'
 import { Database } from '../../database'
@@ -28,11 +26,11 @@ export class PlanGeneratorDatabase extends Database {
                         on ${this.sql('plan_machine')}.${this.sql('machine_id')} = ${this.sql('machine')}.${this.sql('machine_id')}
                     inner join ${this.sql('reservation')} 
                         on ${this.sql('plan')}.${this.sql('plan_id')} = ${this.sql('reservation')}.${this.sql('plan_id')}
-                WHERE reservation_time::date = ${format(reservation_date, "yyyy-MM-dd")}::date
+                WHERE reservation_time::date = ${format(reservation_date, 'yyyy-MM-dd')}::date
                 AND start_time > '${start_time.hour}:${start_time.minute}'::time
                 AND machine.max_people >= reservation.amount_of_people + ${amount_of_people}
                 AND (end_time - start_time) > (machine.avg_time_taken || ' seconds')::INTERVAL
-                And machine.machine_id in (${machine_ids.join(", ")})
+                And machine.machine_id in (${machine_ids.join(', ')})
                 ORDER BY start_time, end_time;
 `
             logger.info(

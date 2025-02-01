@@ -68,4 +68,3 @@ PlanRouter.delete(
         await PlanController.RemoveTypeFromPlan(req, res)
     }
 )
-
