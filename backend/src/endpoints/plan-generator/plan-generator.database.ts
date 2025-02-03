@@ -12,7 +12,6 @@ export class PlanGeneratorDatabase extends Database {
     }
 
     async Select(
-        id: number,
         reservation_date: Date,
         start_time: Time,
         amount_of_people: number,

@@ -1,48 +1,40 @@
 import express, { Request, Response, Router } from 'express'
 import { StatusCodes } from 'http-status-codes'
+import { Machine } from '../machine'
+import {
+    GraphNode,
+    Graph,
+    NodeValue,
+    compareTime,
+    canFitInTime,
+} from './graph.model'
+import { Time } from '@internationalized/date'
+import { Reservation } from '../reservation'
 
 export const generatorRouter: Router = express.Router()
 
 generatorRouter.post('/', async (req: Request, res: Response) => {
     const { colliding } = req.query
-    interface Time {
-        hour: number
-        minute: number
-    }
-
-    interface Machine {
-        machine_id: number
-        avg_time_taken: number
-    }
-
-    interface Reservation {
-        reservation_id: number
-        can_collide: boolean
-    }
-
-    interface Data {
-        machine: Machine
-        start_time: Time
-        end_time: Time
-        reservation?: Reservation
-    }
 
     const desired_machines: Machine[] = [
-        {
-            machine_id: 1,
-            avg_time_taken: 375,
-        },
-        {
-            machine_id: 2,
-            avg_time_taken: 300,
-        },
-        {
-            machine_id: 3,
-            avg_time_taken: 275,
-        },
+        new Machine({
+            MachineId: 1,
+            MachineName: 'ASdasdasd',
+            AvgTimeTaken: 375,
+        }),
+        new Machine({
+            MachineId: 2,
+            MachineName: 'ASdasdasd',
+            AvgTimeTaken: 300,
+        }),
+        new Machine({
+            MachineId: 3,
+            MachineName: 'ASdasdasd',
+            AvgTimeTaken: 275,
+        }),
     ]
 
-    const startTime: Time = { hour: 9, minute: 15 }
+    const startTime: Time = new Time(9, 15)
 
     const subtractTime = (start: Time, end: Time) => {
         const date1 = new Date()
@@ -55,99 +47,110 @@ generatorRouter.post('/', async (req: Request, res: Response) => {
         return (date2.getTime() - date1.getTime()) / 60 / 1000
     }
 
-    const occupiedData: Data[] = [
+    const occupiedData: NodeValue[] = [
         {
             machine: desired_machines[0],
-            start_time: { hour: 9, minute: 0 },
-            end_time: { hour: 9, minute: 10 },
-            reservation: { reservation_id: 1, can_collide: true },
+            start_time: new Time(9, 0),
+            end_time: new Time(9, 10),
+            reservation: new Reservation({
+                reservation_id: 1,
+                can_collide: true,
+            }),
         },
         {
             machine: desired_machines[0],
-            start_time: { hour: 9, minute: 35 },
-            end_time: { hour: 9, minute: 40 },
-            reservation: { reservation_id: 1, can_collide: true },
+            start_time: new Time(9, 35),
+            end_time: new Time(9, 40),
+            reservation: new Reservation({
+                reservation_id: 1,
+                can_collide: true,
+            }),
         },
         {
             machine: desired_machines[0],
-            start_time: { hour: 10, minute: 0 },
-            end_time: { hour: 10, minute: 10 },
-            reservation: { reservation_id: 1, can_collide: true },
+            start_time: new Time(10, 0),
+            end_time: new Time(10, 10),
+            reservation: new Reservation({
+                reservation_id: 1,
+                can_collide: true,
+            }),
         },
         {
             machine: desired_machines[0],
-            start_time: { hour: 10, minute: 10 },
-            end_time: { hour: 10, minute: 30 },
-            reservation: { reservation_id: 1, can_collide: false },
+            start_time: new Time(10, 10),
+            end_time: new Time(10, 30),
+            reservation: new Reservation({
+                reservation_id: 1,
+                can_collide: false,
+            }),
         },
         {
             machine: desired_machines[1],
-            start_time: { hour: 9, minute: 0 },
-            end_time: { hour: 9, minute: 15 },
-            reservation: { reservation_id: 1, can_collide: true },
+            start_time: new Time(9, 0),
+            end_time: new Time(9, 15),
+            reservation: new Reservation({
+                reservation_id: 1,
+                can_collide: true,
+            }),
         },
         {
             machine: desired_machines[1],
-            start_time: { hour: 9, minute: 15 },
-            end_time: { hour: 9, minute: 30 },
-            reservation: { reservation_id: 1, can_collide: true },
+            start_time: new Time(9, 15),
+            end_time: new Time(9, 30),
+            reservation: new Reservation({
+                reservation_id: 1,
+                can_collide: true,
+            }),
         },
         {
             machine: desired_machines[1],
-            start_time: { hour: 9, minute: 35 },
-            end_time: { hour: 9, minute: 45 },
-            reservation: { reservation_id: 1, can_collide: true },
+            start_time: new Time(9, 35),
+            end_time: new Time(9, 45),
+            reservation: new Reservation({
+                reservation_id: 1,
+                can_collide: true,
+            }),
         },
         {
             machine: desired_machines[2],
-            start_time: { hour: 9, minute: 20 },
-            end_time: { hour: 9, minute: 25 },
-            reservation: { reservation_id: 1, can_collide: true },
+            start_time: new Time(9, 20),
+            end_time: new Time(9, 25),
+            reservation: new Reservation({
+                reservation_id: 1,
+                can_collide: true,
+            }),
         },
         {
             machine: desired_machines[2],
-            start_time: { hour: 9, minute: 25 },
-            end_time: { hour: 9, minute: 35 },
-            reservation: { reservation_id: 1, can_collide: false },
+            start_time: new Time(9, 25),
+            end_time: new Time(9, 35),
+            reservation: new Reservation({
+                reservation_id: 1,
+                can_collide: false,
+            }),
         },
         {
             machine: desired_machines[2],
-            start_time: { hour: 9, minute: 35 },
-            end_time: { hour: 9, minute: 45 },
-            reservation: { reservation_id: 1, can_collide: true },
+            start_time: new Time(9, 35),
+            end_time: new Time(9, 45),
+            reservation: new Reservation({
+                reservation_id: 1,
+                can_collide: true,
+            }),
         },
     ]
 
-    const first = [...new Set(occupiedData.map((x) => x.machine.machine_id))]
-    const upravene: Data[][] = []
+    const first = [...new Set(occupiedData.map((x) => x.machine.MachineId))]
+    const upravene: NodeValue[][] = []
     for (const f of first) {
-        upravene.push(occupiedData.filter((x) => x.machine.machine_id === f))
+        upravene.push(occupiedData.filter((x) => x.machine.MachineId === f))
     }
 
-    function compareTime(time1: Time, time2: Time, operator: string) {
-        const t1Value = time1.hour * 60 + time1.minute
-        const t2Value = time2.hour * 60 + time2.minute
-        switch (operator) {
-            case '>':
-                return t1Value > t2Value
-            case '>=':
-                return t1Value >= t2Value
-            case '<':
-                return t1Value < t2Value
-            case '<=':
-                return t1Value <= t2Value
-            case '===':
-                return t1Value === t2Value
-            default:
-                throw new Error('operator ' + operator + 'is undefined')
-        }
-    }
-
-    const data: Data[][] = []
+    const data: NodeValue[][] = []
     // create gaps
     for (let i = 0; i < upravene.length; ++i) {
         let lastJ = 0
-        const dat: Data[] = []
+        const dat: NodeValue[] = []
 
         for (let j = 0; j < upravene[i].length; ++j) {
             if (
@@ -184,7 +187,7 @@ generatorRouter.post('/', async (req: Request, res: Response) => {
             dat.push({
                 machine: upravene[i][lastJ].machine,
                 start_time: upravene[i][lastJ].end_time,
-                end_time: { hour: 23, minute: 59 },
+                end_time: new Time(23, 59),
             })
         }
         data.push(dat)
@@ -197,16 +200,18 @@ generatorRouter.post('/', async (req: Request, res: Response) => {
     // res.status(StatusCodes.OK).json(no_collisions_data)
     // return
 
-    const collisions_data: Data[][] = []
+    const collisions_data: NodeValue[][] = []
     const collisions_dataset = []
     for (const col of data) {
         collisions_dataset.push(
-            col.filter((x) => !x.reservation || x.reservation.can_collide)
+            // TODO: Figure out can_collide stuff
+            // col.filter((x) => !x.reservation || x.reservation.can_collide)
+            col.filter((x) => !x.reservation)
         )
     }
 
     for (let i = 0; i < collisions_dataset.length; ++i) {
-        const esketit: Data[] = []
+        const esketit: NodeValue[] = []
         let j = 0
 
         while (j < collisions_dataset[i].length) {
@@ -226,7 +231,7 @@ generatorRouter.post('/', async (req: Request, res: Response) => {
     }
 
     function findEndingGap(
-        data_tmp: Data[],
+        data_tmp: NodeValue[],
         index: number
     ): { index: number; start_time: Time; end_time: Time } {
         const start_time = data_tmp[index].start_time
@@ -246,170 +251,6 @@ generatorRouter.post('/', async (req: Request, res: Response) => {
             start_time,
             end_time,
         }
-    }
-
-    class GraphNode {
-        value: Data
-        node_id: number
-        static numberOfNodes: number = 0
-        neighbors: GraphNode[]
-
-        constructor(value: Data, neighbors: GraphNode[], node_id?: number) {
-            this.value = value
-            this.node_id = node_id || ++GraphNode.numberOfNodes
-            this.neighbors = neighbors
-            this.neighbors.sort(compareNodesTime)
-        }
-
-        addNeighbor(node: GraphNode) {
-            this.neighbors.push(node)
-            this.neighbors.sort(compareNodesTime)
-        }
-
-        addNeighbors(nodes: GraphNode[]) {
-            this.neighbors.push(...nodes)
-            this.neighbors.sort(compareNodesTime)
-        }
-    }
-    function compareNodesTime(a: GraphNode, b: GraphNode) {
-        const t1Value = a.value.end_time.hour * 60 + a.value.end_time.minute
-        const t2Value = b.value.end_time.hour * 60 + b.value.end_time.minute
-        return t1Value - t2Value
-    }
-
-    class Graph {
-        nodes: GraphNode[]
-        currentTime: Time
-
-        constructor(nodes: GraphNode[] = []) {
-            this.nodes = nodes
-            this.currentTime = startTime
-        }
-
-        addNode(node: GraphNode) {
-            this.nodes.push(node)
-        }
-
-        walk(
-            currentNode: GraphNode,
-            visited: number[] = [],
-            result: Path = new Path()
-        ): Path {
-            visited.push(currentNode.node_id)
-            const neighbors = currentNode.neighbors.filter(
-                (node) => !visited.includes(node.node_id)
-            )
-
-            const visitedMachines = result.nodes.map(
-                (x) => x.value.machine.machine_id
-            )
-            for (const neighbor of neighbors) {
-                if (visited.includes(neighbor.node_id)) {
-                    continue
-                }
-                const newTime = addTime(
-                    this.currentTime,
-                    neighbor.value.machine.avg_time_taken
-                )
-                if (
-                    canFitInTime(
-                        [neighbor.value.start_time, neighbor.value.end_time],
-                        newTime
-                    ) &&
-                    !visitedMachines.includes(neighbor.value.machine.machine_id)
-                ) {
-                    result.addNode(
-                        new GraphNode(
-                            {
-                                start_time: this.currentTime,
-                                end_time: newTime,
-                                machine: neighbor.value.machine,
-                                reservation: neighbor.value.reservation,
-                            },
-                            neighbors,
-                            neighbor.node_id
-                        )
-                    )
-                    this.currentTime = newTime
-                    if (result.isFound()) {
-                        break
-                    }
-                    return this.walk(neighbor, visited, result)
-                }
-            }
-            return result
-        }
-
-        findAllPaths() {
-            const paths: Path[] = []
-            for (const node of this.nodes) {
-                this.currentTime = node.value.start_time
-                const result = new Path()
-                const newTime = addTime(
-                    this.currentTime,
-                    node.value.machine.avg_time_taken
-                )
-                const nd = new GraphNode(
-                    {
-                        start_time: this.currentTime,
-                        end_time: newTime,
-                        machine: node.value.machine,
-                        reservation: node.value.reservation,
-                    },
-                    node.neighbors,
-                    node.node_id
-                )
-                result.addNode(nd)
-                this.currentTime = newTime
-                const path = this.walk(nd, [nd.node_id], result)
-                paths.push(path)
-            }
-            return paths
-        }
-    }
-
-    class Path {
-        nodes: GraphNode[]
-        desired_node_values: Machine[]
-
-        constructor() {
-            this.nodes = []
-            this.desired_node_values = desired_machines
-        }
-
-        addNode(node: GraphNode) {
-            this.nodes.push(node)
-        }
-
-        isFound() {
-            let isFull = true
-            const foundMachines = this.nodes.map(
-                (node) => node.value.machine.machine_id
-            )
-            for (const node of desired_machines.map(
-                (machine) => machine.machine_id
-            )) {
-                if (!foundMachines.includes(node)) {
-                    isFull = false
-                    break
-                }
-            }
-            return isFull
-        }
-    }
-
-    function canFitInTime(timerange: [Time, Time], time: Time) {
-        const [start, end] = timerange
-        return compareTime(start, time, '<=') && compareTime(end, time, '>')
-    }
-
-    function addTime(time: Time, seconds: number): Time {
-        let totalSeconds = time.hour * 3600 + time.minute * 60 + seconds
-
-        let newHour = Math.floor((totalSeconds % 86400) / 3600) // Mod 86400 to stay within a day
-        let newMinute = Math.floor((totalSeconds % 3600) / 60)
-
-        return { hour: newHour, minute: newMinute }
     }
 
     const dataset = collisions_data
@@ -432,32 +273,29 @@ generatorRouter.post('/', async (req: Request, res: Response) => {
                         '>'
                     ) &&
                     currentNode.node_id !== node.node_id &&
-                    currentNode.value.machine.machine_id !==
-                        node.value.machine.machine_id
+                    currentNode.value.machine.MachineId !==
+                        node.value.machine.MachineId
             )
         )
     }
 
-    const graph = new Graph(nodes)
+    const graph = new Graph(nodes, startTime, desired_machines)
     const paths = graph.findAllPaths()
+    const result = []
     for (let i = 0; i < paths.length; ++i) {
         console.log('\n')
         console.log(i)
-        console.log(
-            JSON.stringify(
-                paths[i].nodes.map((node) => {
-                    return {
-                        nodeId: node.node_id,
-                        machine: node.value.machine.machine_id,
-                        st: node.value.start_time,
-                        et: node.value.end_time,
-                        // originalNode: graph.nodes.filter(x => x.node_id === node.node_id).map(x => x.value)[0]
-                    }
-                }),
-                null,
-                4
-            )
-        )
+        const d = paths[i].nodes.map((node) => {
+            return {
+                nodeId: node.node_id,
+                machine: node.value.machine.MachineId,
+                st: node.value.start_time,
+                et: node.value.end_time,
+                // originalNode: graph.nodes.filter(x => x.node_id === node.node_id).map(x => x.value)[0]
+            }
+        })
+        result.push(d)
+        console.log(JSON.stringify(d, null, 4))
     }
-    res.status(StatusCodes.OK).json(paths)
+    res.status(StatusCodes.OK).json(result)
 })

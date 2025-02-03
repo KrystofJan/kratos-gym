@@ -1,9 +1,9 @@
 import { ErrorHandler } from '../../errors'
 
-class PlanErrorHandler extends ErrorHandler {
+class PlanGeneratorErrorHandler extends ErrorHandler {
     constructor() {
         super()
     }
 }
 
-export const planErrorHandler = new PlanErrorHandler()
+export const planGeneratorErrorHandler = new PlanGeneratorErrorHandler()
