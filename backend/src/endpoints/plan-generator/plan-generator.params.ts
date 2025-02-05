@@ -1,5 +1,5 @@
 import { RequestQueryParams } from '../base'
 
-export interface PlanQueryParams extends RequestQueryParams {
-    collisions: boolean
+export interface PlanGeneratorQueryParams extends RequestQueryParams {
+    collisions?: boolean
 }

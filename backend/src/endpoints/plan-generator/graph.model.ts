@@ -1,14 +1,12 @@
 import { Time } from '@internationalized/date'
 import { Machine } from '../machine'
-import { Reservation } from '../reservation'
+import { NodeValue } from './node-value.mode'
 
 // TODO: SPLIT everything
 
-export interface NodeValue {
-    machine: Machine
-    start_time: Time
-    end_time: Time
-    reservation?: Reservation
+export enum DataSetType {
+    COLLIDING,
+    NON_COLLIDING,
 }
 
 // TODO: Use @internationalized/date functions
@@ -81,12 +79,12 @@ export class GraphNode {
 export class Graph {
     nodes: GraphNode[]
     currentTime: Time
-    desiredMachines: Machine[]
+    desiredMachines: number[]
 
     constructor(
         nodes: GraphNode[] = [],
         startTime: Time,
-        desiredMachines: Machine[]
+        desiredMachines: number[]
     ) {
         this.nodes = nodes
         this.currentTime = startTime
@@ -127,12 +125,12 @@ export class Graph {
             ) {
                 result.addNode(
                     new GraphNode(
-                        {
+                        new NodeValue({
                             start_time: this.currentTime,
                             end_time: newTime,
                             machine: neighbor.value.machine,
                             reservation: neighbor.value.reservation,
-                        },
+                        }),
                         neighbors,
                         neighbor.node_id
                     )
@@ -157,12 +155,12 @@ export class Graph {
                 node.value.machine.AvgTimeTaken
             )
             const nd = new GraphNode(
-                {
+                new NodeValue({
                     start_time: this.currentTime,
                     end_time: newTime,
                     machine: node.value.machine,
                     reservation: node.value.reservation,
-                },
+                }),
                 node.neighbors,
                 node.node_id
             )
@@ -177,11 +175,11 @@ export class Graph {
 
 export class Path {
     nodes: GraphNode[]
-    desired_node_values: Machine[]
+    desired_machine_ids: number[]
 
-    constructor(desired_machines: Machine[]) {
+    constructor(desired_machines: number[]) {
         this.nodes = []
-        this.desired_node_values = desired_machines
+        this.desired_machine_ids = desired_machines
     }
 
     addNode(node: GraphNode) {
@@ -193,9 +191,7 @@ export class Path {
         const foundMachines = this.nodes.map(
             (node) => node.value.machine.MachineId
         )
-        for (const node of this.desired_node_values.map(
-            (machine) => machine.MachineId
-        )) {
+        for (const node of this.desired_machine_ids) {
             if (!foundMachines.includes(node)) {
                 isFull = false
                 break
