@@ -15,7 +15,6 @@ export class PlanGeneratorDatabase extends Database {
     async Select(ops: GeneratorPost) {
         const { reservation_date, start_time, amount_of_people, machine_ids } =
             ops
-        console.log(ops)
         try {
             const formattedStartTime = `${String(start_time.hour).padStart(2, '0')}:${String(start_time.minute).padStart(2, '0')}:00`
             const result = await this.sql<Model[]>`
@@ -32,7 +31,6 @@ export class PlanGeneratorDatabase extends Database {
                 And machine.machine_id = ANY(${machine_ids})
                 ORDER BY start_time, end_time;
 `
-            console.log('Represent')
             logger.info(
                 `Recommend machine reuqest was successful\n${JSON.stringify(result, null, 4)}`
             )

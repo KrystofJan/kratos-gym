@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { safeAwait } from '../../utils/utilities'
-import { OkResponse } from '../../request-utility'
+import { Time } from '@internationalized/date'
 import { CodedError, ErrorCode } from '../../errors'
 import { StatusCodes } from 'http-status-codes'
 import { FailedResponse } from '../../request-utility'
@@ -14,6 +14,11 @@ import { logger } from '../../utils'
 import { GeneratorPost } from './graph-request.model'
 import { DataSetType } from './graph.model'
 import { NodeValue } from './node-value.mode'
+import {
+    MachineController,
+    machineErrorHandler,
+    MachineService,
+} from '../machine'
 
 export class PlanGeneratorController {
     static async FindAll(req: Request, res: Response) {
@@ -40,22 +45,58 @@ export class PlanGeneratorController {
         if (collisions === false) {
             datasetType = DataSetType.NON_COLLIDING
         }
+
+        const start_time = new Time(
+            postData.start_time.hour,
+            postData.start_time.minute
+        )
+
+        for (const mid of postData.machine_ids) {
+            const [err, machine] = await safeAwait(
+                MachineService.GetMachineById(mid)
+            )
+
+            if (err !== null) {
+                logger.error(err)
+                const error = err as CodedError
+                const statusCode = machineErrorHandler.handleError(error)
+                const response = new FailedResponse(
+                    error.message,
+                    statusCode,
+                    error.code
+                )
+                response.buildResponse(req, res)
+                return
+            }
+            if (data.map((x) => x.machine.MachineId).includes(mid)) {
+                continue
+            }
+
+            const d = new NodeValue({
+                start_time,
+                end_time: new Time(23, 59),
+                can_disturb: true,
+                machine,
+            })
+            data.push(d)
+        }
+
         const [nodeError, nodes] = await safeAwait(
             new PlanGeneratorService().CreateDataset(
                 data,
-                postData.start_time,
+                start_time,
                 datasetType
             )
         )
 
         if (nodeError !== null) {
             logger.error(err)
-            const error = nodeError as CodedError
-            const statusCode = planGeneratorErrorHandler.handleError(error)
+            const error = nodeError
+            const statusCode = StatusCodes.INTERNAL_SERVER_ERROR
             const response = new FailedResponse(
-                error.message,
+                error.toString(),
                 statusCode,
-                error.code
+                ErrorCode.MAPPING_ERROR
             )
             response.buildResponse(req, res)
             return
@@ -80,8 +121,8 @@ export class PlanGeneratorController {
                 }
             })
             result.push(d)
-            console.log(JSON.stringify(d, null, 4))
         }
+
         /**
 	     TODO: For some reason this is the result, fix it, 
 	     probably something to do with the changed time implementation

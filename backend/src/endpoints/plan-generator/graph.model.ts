@@ -1,22 +1,17 @@
 import { Time } from '@internationalized/date'
-import { Machine } from '../machine'
 import { NodeValue } from './node-value.mode'
-
-// TODO: SPLIT everything
 
 export enum DataSetType {
     COLLIDING,
     NON_COLLIDING,
 }
 
-// TODO: Use @internationalized/date functions
 export function compareNodesTime(a: GraphNode, b: GraphNode) {
     const t1Value = a.value.end_time.hour * 60 + a.value.end_time.minute
     const t2Value = b.value.end_time.hour * 60 + b.value.end_time.minute
     return t1Value - t2Value
 }
 
-// TODO: Use @internationalized/date functions
 export function compareTime(time1: Time, time2: Time, operator: string) {
     const t1Value = time1.hour * 60 + time1.minute
     const t2Value = time2.hour * 60 + time2.minute
@@ -38,18 +33,17 @@ export function compareTime(time1: Time, time2: Time, operator: string) {
 
 export function canFitInTime(timerange: [Time, Time], time: Time) {
     const [start, end] = timerange
-    // TODO: Use @internationalized/date functions
     return compareTime(start, time, '<=') && compareTime(end, time, '>')
 }
 
 // TODO: Use @internationalized/date functions
 export function addTime(time: Time, seconds: number): Time {
-    let totalSeconds = time.hour * 3600 + time.minute * 60 + seconds
+    const totalSeconds =
+        time.hour * 3600 + time.minute * 60 + time.second + seconds
+    const newHours = Math.floor(totalSeconds / 3600) % 24
+    const newMinutes = Math.floor((totalSeconds % 3600) / 60)
 
-    let newHour = Math.floor((totalSeconds % 86400) / 3600) // Mod 86400 to stay within a day
-    let newMinute = Math.floor((totalSeconds % 3600) / 60)
-
-    return new Time(newHour, newMinute)
+    return new Time(newHours, newMinutes)
 }
 
 export class GraphNode {
@@ -116,6 +110,8 @@ export class Graph {
                 this.currentTime,
                 neighbor.value.machine.AvgTimeTaken
             )
+            console.log(newTime, neighbor.value.machine)
+
             if (
                 canFitInTime(
                     [neighbor.value.start_time, neighbor.value.end_time],
@@ -166,6 +162,7 @@ export class Graph {
             )
             result.addNode(nd)
             this.currentTime = newTime
+
             const path = this.walk(nd, [nd.node_id], result)
             paths.push(path)
         }

@@ -44,6 +44,7 @@
             python311Packages.numpy
             python311Packages.pyarrow
             python311Packages.pytest
+	    harlequin
 
             prettierd
 	  ];

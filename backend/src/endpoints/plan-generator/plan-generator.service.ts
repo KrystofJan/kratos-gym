@@ -81,10 +81,11 @@ export class PlanGeneratorService {
                 }
                 lastJ = j
             }
-            if (
-                upravene[i][lastJ].end_time.hour <= 23 &&
-                upravene[i][lastJ].end_time.minute <= 59
-            ) {
+            const lastTime = 23 * 60 + 59
+            const currentTime =
+                upravene[i][lastJ].end_time.hour * 60 +
+                upravene[i][lastJ].end_time.minute
+            if (currentTime < lastTime) {
                 dat.push(
                     new NodeValue({
                         machine: upravene[i][lastJ].machine,
@@ -103,13 +104,11 @@ export class PlanGeneratorService {
         const collisions_data: NodeValue[][] = []
         const collisions_dataset = []
         for (const col of input) {
-            collisions_dataset.push(
-                col.filter((x) => !x.reservation || x.can_collide)
-            )
+            collisions_dataset.push(col.filter((x) => x.can_collide))
         }
 
         for (let i = 0; i < collisions_dataset.length; ++i) {
-            const esketit: NodeValue[] = []
+            const gapable_area: NodeValue[] = []
             let j = 0
 
             while (j < collisions_dataset[i].length) {
@@ -117,35 +116,36 @@ export class PlanGeneratorService {
                     collisions_dataset[i],
                     j
                 )
-                esketit.push(
+
+                gapable_area.push(
                     new NodeValue({
                         machine: collisions_dataset[i][j].machine,
                         start_time,
                         end_time,
                     })
                 )
+
                 j = index + 1
             }
 
-            collisions_data.push(esketit)
+            collisions_data.push(gapable_area)
         }
         return collisions_data
     }
 
     private findEndingGap(
-        data_tmp: NodeValue[],
+        data: NodeValue[],
         index: number
     ): { index: number; start_time: Time; end_time: Time } {
-        const start_time = data_tmp[index].start_time
-        let end_time = data_tmp[index].end_time
+        const start_time = data[index].start_time
+        let end_time = data[index].end_time
 
-        // Continue merging only if end_time === start_time of the next block
         while (
-            index + 1 < data_tmp.length &&
-            compareTime(end_time, data_tmp[index + 1].start_time, '===')
+            index + 1 < data.length &&
+            compareTime(end_time, data[index + 1].start_time, '===')
         ) {
             index++
-            end_time = data_tmp[index].end_time // Extend the end_time to the next block's end_time
+            end_time = data[index].end_time // Extend the end_time to the next block's end_time
         }
 
         return {
@@ -165,13 +165,14 @@ export class PlanGeneratorService {
     ) {
         try {
             const data = this.prepareDataset(input, start_time)
+            const col = this.getCollidingDataSet(data)
 
             if (datasetType === DataSetType.COLLIDING) {
-                return GraphService.CreateGraphNodes(
-                    this.getCollidingDataSet(data)
-                )
+                return await GraphService.CreateGraphNodes(col)
             }
-            return GraphService.CreateGraphNodes(this.getCollidingDataSet(data))
+            return await GraphService.CreateGraphNodes(
+                this.getCollidingDataSet(data)
+            )
         } catch (err) {
             throw err
         }
