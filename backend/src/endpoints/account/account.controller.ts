@@ -8,10 +8,11 @@ import { accountErrorHandler } from './account.error-handler'
 import { safeAwait } from '../../utils/utilities'
 import { Account, UserRole } from './account.model'
 import { ReservationService } from '../reservation'
+import { AccountQueryParams } from './account.params'
 
 export class AccountController {
     static async FindAll(req: Request, res: Response) {
-        const { role } = req.query
+        const { role } = req.query as AccountQueryParams
         let result: [Error, null] | [null, Account[]]
         if (role !== undefined) {
             let roleAttr: UserRole = AccountController.AssignRole(role)
