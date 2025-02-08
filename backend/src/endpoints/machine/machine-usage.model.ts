@@ -56,6 +56,7 @@ export class MachineUsage extends Model {
     @Column('can_fit')
     public CanFit: boolean
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(jsonData: IDictionary<any>) {
         super()
 

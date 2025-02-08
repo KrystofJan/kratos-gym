@@ -26,6 +26,7 @@ export class ExerciseType extends Model {
     @Column('body_part')
     public BodyPart: string
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(jsonData: IDictionary<any>) {
         super()
 

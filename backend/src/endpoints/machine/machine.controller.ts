@@ -378,7 +378,6 @@ export class MachineController {
 
         const [start_h, start_m] = desired_start_time.split(':').map(Number)
         const desiredStartTime = new Time(start_h, start_m)
-
         const [end_h, end_m] = desired_end_time.split(':').map(Number)
         const desiredEndTime = new Time(end_h, end_m)
         const [resErr, result] = await safeAwait(

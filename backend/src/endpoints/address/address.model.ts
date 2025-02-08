@@ -26,6 +26,7 @@ export class Address extends Model {
     @Column('apartment_number')
     public ApartmentNumber: string
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(jsonData: IDictionary<any>) {
         super()
         const addrId = jsonData['address_id'] ?? jsonData['AddressId']

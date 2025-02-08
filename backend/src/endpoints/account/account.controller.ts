@@ -306,10 +306,8 @@ export class AccountController {
         response.buildResponse(req, res)
     }
 
-    private static AssignRole(role?: any): UserRole {
-        console.log(role)
-        console.log(role.toString().toLowerCase())
-        if (role === undefined) {
+    private static AssignRole(role?: string): UserRole {
+        if (!role) {
             return UserRole.NOTKNOWN
         }
         switch (role.toString().toLowerCase()) {

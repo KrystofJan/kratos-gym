@@ -62,6 +62,7 @@ export class Account extends Model {
     @Column('profile_picture_url')
     public ProfilePictureUrl?: string
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(jsonData: IDictionary<any>) {
         super()
 

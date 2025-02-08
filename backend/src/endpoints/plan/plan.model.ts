@@ -33,6 +33,7 @@ export class Plan extends Model {
     @ManyToMany(ExerciseCategory, 'plan_category')
     public ExerciseCategories: ExerciseCategory[]
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(jsonData: IDictionary<any>) {
         super()
         this.PlanId = jsonData['plan_id'] ?? jsonData['PlanId']

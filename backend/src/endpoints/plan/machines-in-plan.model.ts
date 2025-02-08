@@ -28,6 +28,7 @@ export class MachinesInPlan extends Model {
     @Column('can_disturb')
     public CanDisturb: boolean
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(jsonData: IDictionary<any>) {
         super()
         this.PlanId = jsonData['PlanId'] ?? jsonData['plan_id']

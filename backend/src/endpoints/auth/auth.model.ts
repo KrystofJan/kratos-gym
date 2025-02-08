@@ -23,6 +23,7 @@ export class Auth extends Model {
     @Column('profile_picture_url')
     public ProfilePictureUrl?: string
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(data: IDictionary<any>) {
         super()
         this.ClerkId = data['ClerkId']

@@ -1,0 +1,7 @@
+default_profile = "kratos"
+[profiles.kratos]
+adapter = "postgres"
+theme = "harlequin"
+limit = 100000
+keymap_name = ["vscode"]
+conn_str = ["postgres://postgres:postgres@localhost:5432/kratos-dev"]

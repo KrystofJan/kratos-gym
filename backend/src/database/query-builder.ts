@@ -3,6 +3,11 @@ import { DatabaseType, IDictionary } from '../utils/utilities'
 import { DecoratorType } from './decorators/database-decorators'
 import 'reflect-metadata' // Assuming Reflect metadata is used for decorators
 
+/**
+ * This has not been implemented
+ *
+ * @experimental
+ */
 export class SelectQuery<T extends Model> {
     protected selectedParams: string[] = []
     protected fromTable: string = ''
@@ -28,6 +33,7 @@ export class SelectQuery<T extends Model> {
         return this
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Where(condition: { [K in keyof T]?: [string, any] }): this {
         const colMap = Reflect.getMetadata(
             DecoratorType.COLUMN_MAP,

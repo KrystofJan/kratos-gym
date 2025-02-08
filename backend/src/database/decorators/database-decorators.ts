@@ -52,6 +52,7 @@ export function Column(name: string) {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function ForeignKey(type: any) {
     return function (target: Model, propertyKey: string) {
         const fkMap =
@@ -60,16 +61,13 @@ export function ForeignKey(type: any) {
             Reflect.getMetadata(DecoratorType.COLUMN_MAP, target) || []
         fkMap[columnMap[propertyKey]] = [propertyKey, type]
         Reflect.defineMetadata(DecoratorType.FOREIGN_KEY_MAP, fkMap, target)
-        //
+
         // collection of foreign keys
         const columns =
             Reflect.getMetadata(DecoratorType.FOREIGN_KEYS, target) || []
         columns.push(propertyKey)
         Reflect.defineMetadata(DecoratorType.FOREIGN_KEYS, columns, target)
 
-        // {"AddressId" : "address_id"}
-
-        console.log(type, propertyKey)
         const fieldMap =
             Reflect.getMetadata(DecoratorType.FIELD_MAP, type.prototype) || {}
         const foreignKey = Reflect.getMetadata('primaryKey', type)
