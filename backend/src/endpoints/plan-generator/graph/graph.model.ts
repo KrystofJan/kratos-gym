@@ -1,49 +1,10 @@
 import { Time } from '@internationalized/date'
-import { NodeValue } from './node-value.mode'
+import { NodeValue } from '.'
+import { TimeUtils } from '../../../utils'
 
 export enum DataSetType {
     COLLIDING,
     NON_COLLIDING,
-}
-
-export function compareNodesTime(a: GraphNode, b: GraphNode) {
-    const t1Value = a.value.end_time.hour * 60 + a.value.end_time.minute
-    const t2Value = b.value.end_time.hour * 60 + b.value.end_time.minute
-    return t1Value - t2Value
-}
-
-export function compareTime(time1: Time, time2: Time, operator: string) {
-    const t1Value = time1.hour * 60 + time1.minute
-    const t2Value = time2.hour * 60 + time2.minute
-    switch (operator) {
-        case '>':
-            return t1Value > t2Value
-        case '>=':
-            return t1Value >= t2Value
-        case '<':
-            return t1Value < t2Value
-        case '<=':
-            return t1Value <= t2Value
-        case '===':
-            return t1Value === t2Value
-        default:
-            throw new Error('operator ' + operator + 'is undefined')
-    }
-}
-
-export function canFitInTime(timerange: [Time, Time], time: Time) {
-    const [start, end] = timerange
-    return compareTime(start, time, '<=') && compareTime(end, time, '>')
-}
-
-// TODO: Use @internationalized/date functions
-export function addTime(time: Time, seconds: number): Time {
-    const totalSeconds =
-        time.hour * 3600 + time.minute * 60 + time.second + seconds
-    const newHours = Math.floor(totalSeconds / 3600) % 24
-    const newMinutes = Math.floor((totalSeconds % 3600) / 60)
-
-    return new Time(newHours, newMinutes)
 }
 
 export class GraphNode {
@@ -56,17 +17,17 @@ export class GraphNode {
         this.value = value
         this.node_id = node_id || ++GraphNode.numberOfNodes
         this.neighbors = neighbors
-        this.neighbors.sort(compareNodesTime)
+        this.neighbors.sort(TimeUtils.compareNodesTime)
     }
 
     addNeighbor(node: GraphNode) {
         this.neighbors.push(node)
-        this.neighbors.sort(compareNodesTime)
+        this.neighbors.sort(TimeUtils.compareNodesTime)
     }
 
     addNeighbors(nodes: GraphNode[]) {
         this.neighbors.push(...nodes)
-        this.neighbors.sort(compareNodesTime)
+        this.neighbors.sort(TimeUtils.compareNodesTime)
     }
 }
 
@@ -106,14 +67,13 @@ export class Graph {
             if (visited.includes(neighbor.node_id)) {
                 continue
             }
-            const newTime = addTime(
+            const newTime = TimeUtils.addTime(
                 this.currentTime,
                 neighbor.value.machine.AvgTimeTaken
             )
-            console.log(newTime, neighbor.value.machine)
 
             if (
-                canFitInTime(
+                TimeUtils.canFitInTime(
                     [neighbor.value.start_time, neighbor.value.end_time],
                     newTime
                 ) &&
@@ -146,7 +106,7 @@ export class Graph {
         for (const node of this.nodes) {
             this.currentTime = node.value.start_time
             const result = new Path(this.desiredMachines)
-            const newTime = addTime(
+            const newTime = TimeUtils.addTime(
                 this.currentTime,
                 node.value.machine.AvgTimeTaken
             )

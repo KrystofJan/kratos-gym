@@ -3,7 +3,7 @@ import { logger } from '../../utils/logger'
 import { CodedError, ErrorCode } from '../../errors/base.error'
 import { Database } from '../../database'
 import { format } from 'date-fns'
-import { GeneratorPost } from './graph-request.model'
+import { GeneratorPost } from './plan-generator-request.model'
 import { Model } from '../base'
 import { Time } from '@internationalized/date'
 

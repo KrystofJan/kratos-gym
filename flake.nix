@@ -34,6 +34,7 @@
 
             nodePackages.typescript 
             nodePackages.typescript-language-server
+            prettierd
 
             nodePackages_latest.ts-node
             nodePackages_latest.nodemon    
@@ -46,7 +47,6 @@
             python311Packages.pytest
 	    harlequin
 
-            prettierd
 	  ];
 
           shellHook = ''

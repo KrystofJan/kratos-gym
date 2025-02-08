@@ -9,19 +9,14 @@ import {
     PlanGeneratorQueryParams,
     PlanGeneratorService,
 } from '.'
-import { Graph } from './graph.model'
+import { Graph, DataSetType } from './graph'
 import { logger } from '../../utils'
-import { GeneratorPost } from './graph-request.model'
-import { DataSetType } from './graph.model'
-import { NodeValue } from './node-value.mode'
-import {
-    MachineController,
-    machineErrorHandler,
-    MachineService,
-} from '../machine'
+import { GeneratorPost } from './plan-generator-request.model'
+import { NodeValue } from './graph/node-value.model'
+import { machineErrorHandler, MachineService } from '../machine'
 
 export class PlanGeneratorController {
-    static async FindAll(req: Request, res: Response) {
+    static async Generate(req: Request, res: Response) {
         const { collisions } = req.query as PlanGeneratorQueryParams
         const postData = req.body as GeneratorPost
 
@@ -113,34 +108,14 @@ export class PlanGeneratorController {
         for (let i = 0; i < paths.length; ++i) {
             const d = paths[i].nodes.map((node) => {
                 return {
-                    nodeId: node.node_id,
-                    machine: node.value.machine.MachineId,
-                    st: node.value.start_time,
-                    et: node.value.end_time,
-                    // originalNode: graph.nodes.filter(x => x.node_id === node.node_id).map(x => x.value)[0]
+                    NodeId: node.node_id,
+                    MachineId: node.value.machine.MachineId,
+                    StartTime: node.value.start_time,
+                    EndTime: node.value.end_time,
                 }
             })
             result.push(d)
         }
-
-        /**
-	     TODO: For some reason this is the result, fix it, 
-	     probably something to do with the changed time implementation
-	      [
-		    [
-			{
-			    "nodeId": 1,
-			    "st": "03:00:00",
-			    "et": {
-				"hour": null,
-				"minute": null,
-				"second": 0,
-				"millisecond": 0
-			    }
-			}
-		    ]
-		]
-	*/
         res.status(StatusCodes.OK).json(result)
     }
 }

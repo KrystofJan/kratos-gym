@@ -1,5 +1,5 @@
-import { NodeValue } from './node-value.mode'
-import { compareTime, GraphNode } from './graph.model'
+import { NodeValue, GraphNode } from '.'
+import { TimeUtils } from '../../../utils'
 
 export class GraphService {
     static async CreateGraphNodes(dataset: NodeValue[][]) {
@@ -16,7 +16,7 @@ export class GraphService {
                 currentNode.addNeighbors(
                     nodes.filter(
                         (node: GraphNode) =>
-                            compareTime(
+                            TimeUtils.compareTime(
                                 node.value.end_time,
                                 currentNode.value.start_time,
                                 '>'

@@ -34,7 +34,6 @@ export class AccountService {
     static async GetAllAccountsByRole(role: UserRole): Promise<Array<Account>> {
         const db = new BasicQueryDatabase()
 
-        console.log(role)
         const [databaseErr, databaseResponse] = await safeAwait(
             db.SelectAttrIs(Account, role.toString().toLowerCase(), 'role')
         )

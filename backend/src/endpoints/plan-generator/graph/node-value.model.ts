@@ -1,7 +1,7 @@
-import { IDictionary } from '../../utils'
-import { Model } from '../base'
-import { Machine } from '../machine'
-import { Reservation } from '../reservation'
+import { IDictionary } from '../../../utils'
+import { Model } from '../../base'
+import { Machine } from '../../machine'
+import { Reservation } from '../../reservation'
 import { Time } from '@internationalized/date'
 
 export class NodeValue extends Model {

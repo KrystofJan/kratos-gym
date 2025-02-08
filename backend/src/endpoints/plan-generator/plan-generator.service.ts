@@ -1,17 +1,11 @@
 import { Time } from '@internationalized/date'
 import { PlanGeneratorDatabase } from './plan-generator.database'
-import { NodeValue } from './node-value.mode'
+import { NodeValue } from './graph/node-value.model'
 import { CodedError, ErrorCode } from '../../errors'
-import { GeneratorPost } from './graph-request.model'
-import { compareTime, DataSetType, GraphNode } from './graph.model'
+import { GeneratorPost } from './plan-generator-request.model'
 import { logger } from '../../utils'
-import { GraphService } from './graph.service'
-import { Machine } from '../machine'
-import { Reservation } from '../reservation'
-// NOTE: This will contain 3 funcs
-// 1. will fetch the data using the PlanGEneratorDatabase
-// 2. Will get manipulate data that will be used for the collisions true
-// 3. Will get manipulate data that will be used for the collisions false
+import { GraphService, DataSetType } from './graph'
+import { TimeUtils } from '../../utils'
 
 export class PlanGeneratorService {
     // TODO
@@ -52,7 +46,11 @@ export class PlanGeneratorService {
             for (let j = 0; j < upravene[i].length; ++j) {
                 if (
                     j === 0 &&
-                    compareTime(upravene[i][j].start_time, startTime, '>')
+                    TimeUtils.compareTime(
+                        upravene[i][j].start_time,
+                        startTime,
+                        '>'
+                    )
                 ) {
                     dat.push(
                         new NodeValue({
@@ -65,7 +63,7 @@ export class PlanGeneratorService {
                 dat.push(upravene[i][j])
                 if (
                     j + 1 < upravene[i].length &&
-                    compareTime(
+                    TimeUtils.compareTime(
                         upravene[i][j].end_time,
                         upravene[i][j + 1].start_time,
                         '<'
@@ -142,7 +140,7 @@ export class PlanGeneratorService {
 
         while (
             index + 1 < data.length &&
-            compareTime(end_time, data[index + 1].start_time, '===')
+            TimeUtils.compareTime(end_time, data[index + 1].start_time, '===')
         ) {
             index++
             end_time = data[index].end_time // Extend the end_time to the next block's end_time
@@ -171,7 +169,7 @@ export class PlanGeneratorService {
                 return await GraphService.CreateGraphNodes(col)
             }
             return await GraphService.CreateGraphNodes(
-                this.getCollidingDataSet(data)
+                this.getNonCollidingDataSet(data)
             )
         } catch (err) {
             throw err
