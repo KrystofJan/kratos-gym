@@ -1,9 +1,7 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
-    <h2>Dashboard</h2>
+  <h2>Dashboard</h2>
 </template>
-
 
 <style></style>

@@ -1,2 +1,1 @@
-export { default as AlerbaAlertableButton } from './AlertableButton.vue
-
+export { default as AlerbaAlertableButton } from './AlertableButton.vue'

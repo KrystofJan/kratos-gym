@@ -1,64 +1,61 @@
 [
-    {
-        "footerColHeading": "Menu", 
-        "footerColLinks": 
-        [
-            {
-                "text": "Home",
-                "link": "/"
-            },
-            {
-                "text": "Reservations",
-                "link": "/reservations"
-            },
-            {
-                "text": "About us",
-                "link": "/about-us"
-            },
-            {
-                "text": "Contacts",
-                "link": "/contacts"
-            },
-            {
-                "text": "icon",
-                "link": "/"
-            },
-            {
-                "text": "icon",
-                "link": "/"
-            },
-            {
-                "text": "icon",
-                "link": "/"
-            }
-        ]
-    },
-    {
-        "footerColHeading": "Contacts", 
-        "footerColLinks": 
-        [
-            {
-                "text": "Email: info@kratos.com",
-                "link": "/"
-            },
-            {
-                "text": "Phone: +420 777 888 999",
-                "link": "/"
-            }
-        ]
-    },
-    {
-        "footerColHeading": "Client section", 
-        "footerColLinks": 
-        [
-            {
-                "text": "GDPR",
-                "link": "/"
-            },
-            {
-                "text": "Cookies",
-                "link": "/"
-            }
-        ]
-    }
+  {
+    "footerColHeading": "Menu",
+    "footerColLinks": [
+      {
+        "text": "Home",
+        "link": "/"
+      },
+      {
+        "text": "Reservations",
+        "link": "/reservations"
+      },
+      {
+        "text": "About us",
+        "link": "/about-us"
+      },
+      {
+        "text": "Contacts",
+        "link": "/contacts"
+      },
+      {
+        "text": "icon",
+        "link": "/"
+      },
+      {
+        "text": "icon",
+        "link": "/"
+      },
+      {
+        "text": "icon",
+        "link": "/"
+      }
+    ]
+  },
+  {
+    "footerColHeading": "Contacts",
+    "footerColLinks": [
+      {
+        "text": "Email: info@kratos.com",
+        "link": "/"
+      },
+      {
+        "text": "Phone: +420 777 888 999",
+        "link": "/"
+      }
+    ]
+  },
+  {
+    "footerColHeading": "Client section",
+    "footerColLinks": [
+      {
+        "text": "GDPR",
+        "link": "/"
+      },
+      {
+        "text": "Cookies",
+        "link": "/"
+      }
+    ]
+  }
 ]

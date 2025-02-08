@@ -5,7 +5,9 @@ import { StepperIndicator, useForwardProps } from 'radix-vue'
 
 import { computed, type HTMLAttributes } from 'vue'
 
-const props = defineProps<StepperIndicatorProps & { class?: HTMLAttributes['class'] }>()
+const props = defineProps<
+  StepperIndicatorProps & { class?: HTMLAttributes['class'] }
+>()
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props
@@ -19,16 +21,18 @@ const forwarded = useForwardProps(delegatedProps)
 <template>
   <StepperIndicator
     v-bind="forwarded"
-    :class="cn(
-      'inline-flex items-center justify-center rounded-full text-muted-foreground/50 w-10 h-10',
-      // Disabled
-      'group-data-[disabled]:text-muted-foreground group-data-[disabled]:opacity-50',
-      // Active
-      'group-data-[state=active]:bg-primary group-data-[state=active]:text-primary-foreground',
-      // Completed
-      'group-data-[state=completed]:bg-accent group-data-[state=completed]:text-accent-foreground',
-      props.class,
-    )"
+    :class="
+      cn(
+        'inline-flex items-center justify-center rounded-full text-muted-foreground/50 w-10 h-10',
+        // Disabled
+        'group-data-[disabled]:text-muted-foreground group-data-[disabled]:opacity-50',
+        // Active
+        'group-data-[state=active]:bg-primary group-data-[state=active]:text-primary-foreground',
+        // Completed
+        'group-data-[state=completed]:bg-accent group-data-[state=completed]:text-accent-foreground',
+        props.class
+      )
+    "
   >
     <slot />
   </StepperIndicator>

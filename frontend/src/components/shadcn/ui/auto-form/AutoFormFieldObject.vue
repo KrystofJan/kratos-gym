@@ -4,9 +4,19 @@ import { computed, provide } from 'vue'
 import { FieldContextKey, useField } from 'vee-validate'
 import AutoFormField from './AutoFormField.vue'
 import type { Config, ConfigItem, Shape } from './interface'
-import { beautifyObjectName, getBaseSchema, getBaseType, getDefaultValueInZodStack } from './utils'
+import {
+  beautifyObjectName,
+  getBaseSchema,
+  getBaseType,
+  getDefaultValueInZodStack,
+} from './utils'
 import AutoFormLabel from './AutoFormLabel.vue'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/ui/accordion'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/shadcn/ui/accordion'
 import { FormItem } from '@/components/shadcn/ui/form'
 
 const props = defineProps<{
@@ -21,15 +31,16 @@ const shapes = computed(() => {
   // @ts-expect-error ignore {} not assignable to object
   const val: { [key in keyof T]: Shape } = {}
 
-  if (!props.schema)
-    return
+  if (!props.schema) return
   const shape = getBaseSchema(props.schema)?.shape
-  if (!shape)
-    return
+  if (!shape) return
   Object.keys(shape).forEach((name) => {
     const item = shape[name] as ZodAny
     const baseItem = getBaseSchema(item) as ZodAny
-    let options = (baseItem && 'values' in baseItem._def) ? baseItem._def.values as string[] : undefined
+    let options =
+      baseItem && 'values' in baseItem._def
+        ? (baseItem._def.values as string[])
+        : undefined
     if (!Array.isArray(options) && typeof options === 'object')
       options = Object.values(options)
 
@@ -52,7 +63,13 @@ provide(FieldContextKey, fieldContext)
 <template>
   <section>
     <slot v-bind="props">
-      <Accordion type="single" as-child class="w-full" collapsible :disabled="disabled">
+      <Accordion
+        type="single"
+        as-child
+        class="w-full"
+        collapsible
+        :disabled="disabled"
+      >
         <FormItem>
           <AccordionItem :value="fieldName" class="border-none">
             <AccordionTrigger>

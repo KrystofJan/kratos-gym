@@ -6,22 +6,26 @@ import { columns, values, deleteSelected } from './machine-columns'
 import { DataGrid } from '@/components'
 
 async function getData() {
-    // Fetch data from your API here.
-    try {
-        const data = await new MachineService().FetchMachines({ limit: 100 });
-        values.value = data;
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
+  // Fetch data from your API here.
+  try {
+    const data = await new MachineService().FetchMachines({ limit: 100 })
+    values.value = data
+  } catch (error) {
+    console.error('Error fetching data:', error)
+  }
 }
 
 onMounted(async () => {
-    await getData()
+  await getData()
 })
 </script>
 
 <template>
-    <div class="container py-10 mx-auto">
-        <DataGrid :columns="columns" :data="values" :delete-selected="deleteSelected" />
-    </div>
+  <div class="container py-10 mx-auto">
+    <DataGrid
+      :columns="columns"
+      :data="values"
+      :delete-selected="deleteSelected"
+    />
+  </div>
 </template>
