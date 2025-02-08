@@ -11,6 +11,7 @@ export class ExerciseCategory extends Model {
     @Column('category_name')
     public CategoryName: string
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(jsonData: IDictionary<any>) {
         super()
         this.CategoryId = jsonData['CategoryId'] ?? jsonData['category_id']

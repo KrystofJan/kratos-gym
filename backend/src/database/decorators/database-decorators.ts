@@ -61,7 +61,7 @@ export function ForeignKey(type: any) {
             Reflect.getMetadata(DecoratorType.COLUMN_MAP, target) || []
         fkMap[columnMap[propertyKey]] = [propertyKey, type]
         Reflect.defineMetadata(DecoratorType.FOREIGN_KEY_MAP, fkMap, target)
-        //
+
         // collection of foreign keys
         const columns =
             Reflect.getMetadata(DecoratorType.FOREIGN_KEYS, target) || []

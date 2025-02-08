@@ -36,6 +36,7 @@ export class Reservation extends Model {
     @Column('plan_id')
     public Plan: Plan | undefined
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(jsonData: IDictionary<any>) {
         super()
 

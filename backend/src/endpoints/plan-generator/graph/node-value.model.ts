@@ -11,6 +11,7 @@ export class NodeValue extends Model {
     reservation?: Reservation
     can_collide: boolean
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(jsonData: IDictionary<any>) {
         super()
         if (jsonData['machine']) {

@@ -37,6 +37,7 @@ export class Machine extends Model {
     @ManyToMany(ExerciseType, 'machine_exercise_type')
     public ExerciseTypes: ExerciseType[]
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(jsonData: IDictionary<any>) {
         super()
 
