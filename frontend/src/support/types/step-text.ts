@@ -1,4 +1,4 @@
 export interface BuilderText {
-    heading: string,
-    text: string
+  heading: string
+  text: string
 }

@@ -7,28 +7,28 @@ import autoprefixer from 'autoprefixer'
 //
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [vue()],
-    resolve: {
-        alias: {
-            '@': path.resolve(__dirname, 'src'),
-        },
+  plugins: [vue()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
     },
-    css: {
-        postcss: {
-            plugins: [tailwind(), autoprefixer()],
-        },
-        preprocessorOptions: {
-            scss: {
-                api: 'modern-compiler' // or "modern"
-            }
-        }
+  },
+  css: {
+    postcss: {
+      plugins: [tailwind(), autoprefixer()],
     },
-    server: {
-        proxy: {
-            '/api': {
-                target: 'http://localhost:7000',
-                changeOrigin: true,
-            },
-        },
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler', // or "modern"
+      },
     },
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:7000',
+        changeOrigin: true,
+      },
+    },
+  },
 })

@@ -11,28 +11,27 @@ import {
   AlertDialogTrigger,
 } from '@/components'
 interface Props {
-    alertTitle: string
-    alertText: string
-    alertTriggerText: string
-    alertButton: string
+  alertTitle: string
+  alertText: string
+  alertTriggerText: string
+  alertButton: string
 }
 
 const props = defineProps<Props>()
-
 </script>
 
 <template>
   <AlertDialog>
     <AlertDialogContent>
       <AlertDialogHeader>
-      <AlertDialogTitle>{{alertTitle}}</AlertDialogTitle>
+        <AlertDialogTitle>{{ alertTitle }}</AlertDialogTitle>
         <AlertDialogDescription>
-            {{alertText}}
+          {{ alertText }}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogAction>
-            {{ alertButton }}
+          {{ alertButton }}
         </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>

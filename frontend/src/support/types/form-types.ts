@@ -1,5 +1,4 @@
-
 export enum FormType {
-    Update,
-    Create
+  Update,
+  Create,
 }

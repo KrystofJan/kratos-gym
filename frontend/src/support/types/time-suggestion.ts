@@ -1,11 +1,11 @@
-import { Time } from "@internationalized/date";
+import { Time } from '@internationalized/date'
 
 export interface TimeSuggestion {
-    Previous: TimeRange
-    Next: TimeRange
+  Previous: TimeRange
+  Next: TimeRange
 }
 
 export interface TimeRange {
-    time: [Time, Time],
-    isColiding: boolean
+  time: [Time, Time]
+  isColiding: boolean
 }

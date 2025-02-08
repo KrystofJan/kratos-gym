@@ -7,7 +7,12 @@ import type { Config, ConfigItem } from './interface'
 import { beautifyObjectName, getBaseType } from './utils'
 import AutoFormField from './AutoFormField.vue'
 import AutoFormLabel from './AutoFormLabel.vue'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/shadcn/ui/accordion'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/shadcn/ui/accordion'
 import { Button } from '@/components/shadcn/ui/button'
 import { Separator } from '@/components/shadcn/ui/separator'
 import { FormItem, FormMessage } from '@/components/shadcn/ui/form'
@@ -21,26 +26,25 @@ const props = defineProps<{
 }>()
 
 function isZodArray(
-  item: z.ZodArray<any> | z.ZodDefault<any>,
+  item: z.ZodArray<any> | z.ZodDefault<any>
 ): item is z.ZodArray<any> {
   return item instanceof z.ZodArray
 }
 
 function isZodDefault(
-  item: z.ZodArray<any> | z.ZodDefault<any>,
+  item: z.ZodArray<any> | z.ZodDefault<any>
 ): item is z.ZodDefault<any> {
   return item instanceof z.ZodDefault
 }
 
 const itemShape = computed(() => {
-  if (!props.schema)
-    return
+  if (!props.schema) return
 
   const schema: z.ZodAny = isZodArray(props.schema)
     ? props.schema._def.type
     : isZodDefault(props.schema)
-    // @ts-expect-error missing schema
-      ? props.schema._def.innerType._def.type
+      ? // @ts-expect-error missing schema
+        props.schema._def.innerType._def.type
       : null
 
   return {
@@ -57,7 +61,13 @@ provide(FieldContextKey, fieldContext)
 <template>
   <FieldArray v-slot="{ fields, remove, push }" as="section" :name="fieldName">
     <slot v-bind="props">
-      <Accordion type="multiple" class="w-full" collapsible :disabled="disabled" as-child>
+      <Accordion
+        type="multiple"
+        class="w-full"
+        collapsible
+        :disabled="disabled"
+        as-child
+      >
         <FormItem>
           <AccordionItem :value="fieldName" class="border-none">
             <AccordionTrigger>

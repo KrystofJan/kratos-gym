@@ -1,9 +1,8 @@
 export interface ExerciseCategory {
-    CategoryId: number;
-    CategoryName: string;
+  CategoryId: number
+  CategoryName: string
 }
 
 export interface ExerciseCategoryPost {
-    CategoryName: string;
+  CategoryName: string
 }
-
