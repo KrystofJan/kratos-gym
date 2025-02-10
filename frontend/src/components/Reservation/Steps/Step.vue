@@ -5,7 +5,7 @@ interface Props {
   builderItemClasses?: string
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>
 
 <template>
@@ -17,9 +17,8 @@ const props = defineProps<Props>()
       <div class="BaseText" v-html="builderText.text" />
     </div>
     <div
-      :class="builderItemClasses"
       class="w-full flex justify-center items-center"
-      data-plan-name
+      :class="builderItemClasses"
     >
       <slot></slot>
     </div>

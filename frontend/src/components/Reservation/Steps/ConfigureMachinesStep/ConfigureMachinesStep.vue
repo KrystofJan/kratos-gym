@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { ConfigureMachinesStepItem } from '.'
+import { RefreshCw } from 'lucide-vue-next'
 import { Step } from '..'
 import {
   Machine,
@@ -26,12 +27,31 @@ interface Props {
   reservationTime?: Date
   selectedMachines: Machine[]
   amountOfPeople?: number
+  preloadedData?: Map<number, [Time, Time]>[]
+  generated: boolean
 }
 
 const timeRecs = ref<Map<number, TimeSuggestion>>(new Map())
 
+const currentGeneratedIndex = ref(0)
+const currentGeneration = computed(() => {
+  return props.preloadedData?.[currentGeneratedIndex.value]
+})
 const props = defineProps<Props>()
 
+const sortedSelectedMachines = computed(() => {
+  // TODO: SOMEHOW FIGURE OUT HOW TO FILTER THOSE
+  if (props.preloadedData === undefined) {
+    return props.selectedMachines
+  }
+
+  const result = []
+  const ids = props.preloadedData.keys()
+  for (const id of ids) {
+    result.push(props.selectedMachines.filter((x) => x.MachineId === id)[0])
+  }
+  return result
+})
 const builderText = ref({
   heading: 'Now pick time for each machine',
   text: "<p>In this step you need to pick a time and amount of work you'll be doing on this specific machine</p>",
@@ -184,13 +204,37 @@ const prev = () => {
   emit('prev')
 }
 
+const regenerate = () => {
+  if (!props.generated) {
+    return
+  }
+  if (props.preloadedData === undefined) {
+    return
+  }
+
+  currentGeneratedIndex.value += 1
+}
+
 onMounted(async () => {
   await fetchConcurrentPlans()
 })
 </script>
 
 <template>
-  <Step v-if="selectedMachines.length > 0" :builderText="builderText">
+  <Step
+    v-if="selectedMachines.length > 0"
+    :builderText="builderText"
+    builderItemClasses="flex-col"
+  >
+    <Button
+      variant="outline"
+      class="ml-auto flex gap-2"
+      v-if="preloadedData && generated"
+      @click.prevent="regenerate"
+    >
+      <span>Regenerate</span>
+      <RefreshCw />
+    </Button>
     <form class="justify-center flex flex-col gap-4" @submit="onSubmit">
       <div
         class="grid grid-cols-2 md:grid-cols-3 grid-auto-columns-1/2 md:grid-auto-columns-1/3 gap-4"
@@ -202,6 +246,14 @@ onMounted(async () => {
               :set-field-value="setFieldValue"
               :index="index"
               :time-recs="timeRecs"
+              :preloaded-data="
+                preloadedData
+                  ? currentGeneration?.get(machine.MachineId) || [
+                      new Time(0, 0),
+                      new Time(0, 0),
+                    ]
+                  : [new Time(0, 0), new Time(0, 0)]
+              "
             />
           </div>
           <!-- <FormMessage /> -->

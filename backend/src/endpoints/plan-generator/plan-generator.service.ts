@@ -6,13 +6,10 @@ import { GeneratorPost } from './plan-generator-request.model'
 import { logger } from '../../utils'
 import { GraphService, DataSetType } from './graph'
 import { TimeUtils } from '../../utils'
+import { Reservation } from '../reservation'
 
 export class PlanGeneratorService {
-    // TODO
-
     static async FetchPlanInformation(input: GeneratorPost) {
-        //
-        // TODO
         try {
             const data = await new PlanGeneratorDatabase().Select(input)
             const nodeValues: NodeValue[] = data.Body.map((x) => {
@@ -33,47 +30,52 @@ export class PlanGeneratorService {
         startTime: Time
     ): NodeValue[][] {
         const first = [...new Set(occupiedData.map((x) => x.machine.MachineId))]
-        const upravene: NodeValue[][] = []
+        const dataSortedByMachines: NodeValue[][] = []
         for (const f of first) {
-            upravene.push(occupiedData.filter((x) => x.machine.MachineId === f))
+            dataSortedByMachines.push(
+                occupiedData.filter((x) => x.machine.MachineId === f)
+            )
         }
         const data: NodeValue[][] = []
         // create gaps
-        for (let i = 0; i < upravene.length; ++i) {
+        for (let i = 0; i < dataSortedByMachines.length; ++i) {
             let lastJ = 0
             const dat: NodeValue[] = []
 
-            for (let j = 0; j < upravene[i].length; ++j) {
+            for (let j = 0; j < dataSortedByMachines[i].length; ++j) {
                 if (
                     j === 0 &&
                     TimeUtils.compareTime(
-                        upravene[i][j].start_time,
+                        dataSortedByMachines[i][j].start_time,
                         startTime,
                         '>'
                     )
                 ) {
                     dat.push(
                         new NodeValue({
-                            machine: upravene[i][j].machine,
+                            machine: dataSortedByMachines[i][j].machine,
                             start_time: startTime,
-                            end_time: upravene[i][j].start_time,
+                            end_time: dataSortedByMachines[i][j].start_time,
+                            can_disturb: dataSortedByMachines[i][j].can_collide,
+                            reservation: dataSortedByMachines[i][j].reservation,
                         })
                     )
                 }
-                dat.push(upravene[i][j])
+                dat.push(dataSortedByMachines[i][j])
                 if (
-                    j + 1 < upravene[i].length &&
+                    j + 1 < dataSortedByMachines[i].length &&
                     TimeUtils.compareTime(
-                        upravene[i][j].end_time,
-                        upravene[i][j + 1].start_time,
+                        dataSortedByMachines[i][j].end_time,
+                        dataSortedByMachines[i][j + 1].start_time,
                         '<'
                     )
                 ) {
                     dat.push(
                         new NodeValue({
-                            machine: upravene[i][j].machine,
-                            start_time: upravene[i][j].end_time,
-                            end_time: upravene[i][j + 1].start_time,
+                            machine: dataSortedByMachines[i][j].machine,
+                            start_time: dataSortedByMachines[i][j].end_time,
+                            end_time: dataSortedByMachines[i][j + 1].start_time,
+                            reservation: dataSortedByMachines[i][j].reservation,
                         })
                     )
                 }
@@ -81,14 +83,15 @@ export class PlanGeneratorService {
             }
             const lastTime = 23 * 60 + 59
             const currentTime =
-                upravene[i][lastJ].end_time.hour * 60 +
-                upravene[i][lastJ].end_time.minute
+                dataSortedByMachines[i][lastJ].end_time.hour * 60 +
+                dataSortedByMachines[i][lastJ].end_time.minute
             if (currentTime < lastTime) {
                 dat.push(
                     new NodeValue({
-                        machine: upravene[i][lastJ].machine,
-                        start_time: upravene[i][lastJ].end_time,
+                        machine: dataSortedByMachines[i][lastJ].machine,
+                        start_time: dataSortedByMachines[i][lastJ].end_time,
                         end_time: new Time(23, 59),
+                        can_disturb: dataSortedByMachines[i][lastJ].can_collide,
                     })
                 )
             }
@@ -152,8 +155,11 @@ export class PlanGeneratorService {
             end_time,
         }
     }
+
     private getNonCollidingDataSet(input: NodeValue[][]): NodeValue[][] {
-        return input.map((x) => [...x.filter((y) => !y.reservation)])
+        return input.map((x) => [
+            ...x.filter((y) => !y.reservation || !y.can_collide),
+        ])
     }
 
     async CreateDataset(
@@ -162,12 +168,18 @@ export class PlanGeneratorService {
         datasetType: DataSetType
     ) {
         try {
+            // console.log(input)
             const data = this.prepareDataset(input, start_time)
-            const col = this.getCollidingDataSet(data)
 
             if (datasetType === DataSetType.COLLIDING) {
-                return await GraphService.CreateGraphNodes(col)
+                return await GraphService.CreateGraphNodes(
+                    this.getCollidingDataSet(data)
+                )
             }
+            //
+            // console.log(this.getNonCollidingDataSet(data))
+            // console.log(data)
+
             return await GraphService.CreateGraphNodes(
                 this.getNonCollidingDataSet(data)
             )

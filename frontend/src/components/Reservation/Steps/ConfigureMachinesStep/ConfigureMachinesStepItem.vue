@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Time } from '@internationalized/date'
 import { TypedSchema } from 'vee-validate'
 
 import {
@@ -26,11 +27,13 @@ import {
 import { Machine, TimeSuggestion } from '@/support'
 
 import { computed } from 'vue'
+import { onMounted } from 'vue'
 
 interface Props {
   machine: Machine
   setFieldValue: (field: any, value: any) => void
   timeRecs: Map<number, TimeSuggestion>
+  preloadedData: [Time, Time]
   index: number
 }
 
@@ -109,6 +112,25 @@ function formatPrevTime(time: TimeSuggestion | undefined): string {
 
   return `${prevHours}:${prevMinutes} - ${prevHoursTwo}:${prevMinutesTwo}`
 }
+
+onMounted(() => {
+  props.setFieldValue(
+    `machinesInPlan.${props.index}.StartTime.hour`,
+    props.preloadedData[0].hour || 0
+  )
+  props.setFieldValue(
+    `machinesInPlan.${props.index}.StartTime.minute`,
+    props.preloadedData[0].minute || 0
+  )
+  props.setFieldValue(
+    `machinesInPlan.${props.index}.EndTime.hour`,
+    props.preloadedData[1].hour || 0
+  )
+  props.setFieldValue(
+    `machinesInPlan.${props.index}.EndTime.minute`,
+    props.preloadedData[1].minute || 0
+  )
+})
 </script>
 
 <template>
