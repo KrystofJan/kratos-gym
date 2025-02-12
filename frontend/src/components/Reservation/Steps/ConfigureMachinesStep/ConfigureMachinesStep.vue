@@ -7,19 +7,16 @@ import {
   Machine,
   Plan,
   PlanPost,
-  MachinesInPlan,
   PlanService,
   MachineService,
   MachinesInPlanPost,
   TimeSuggestion,
 } from '@/support'
-import { FormMessage, Button } from '@/components'
+import { Button } from '@/components'
 import { FieldArray } from 'vee-validate'
 import { z } from 'zod'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
-import { format, max, parse } from 'date-fns'
-import { reservation } from '@/store/ReservationStore'
 import { Time } from '@internationalized/date'
 
 const emit = defineEmits(['submit', 'prev'])
@@ -38,6 +35,8 @@ const currentGeneration = computed(() => {
   return props.preloadedData?.[currentGeneratedIndex.value]
 })
 const props = defineProps<Props>()
+
+const wrongTime = ref<Map<number, boolean>>(new Map())
 
 const sortedSelectedMachines = computed(() => {
   if (
@@ -86,11 +85,21 @@ const schema = toTypedSchema(
                 data.StartTime.minute
               )
               const endTime = new Time(data.EndTime.hour, data.EndTime.minute)
+
               return startTime < endTime
             },
             { message: 'Start time cannot be after End Time' }
           )
       )
+      .refine((data) => {
+        data.forEach((item, index) => {
+          const startTime = new Time(item.StartTime.hour, item.StartTime.minute)
+          const endTime = new Time(item.EndTime.hour, item.EndTime.minute)
+          wrongTime.value.set(index, startTime >= endTime)
+        })
+
+        return false
+      })
       .refine(
         (data) => {
           timeRecs.value.clear()
@@ -246,6 +255,7 @@ onMounted(async () => {
               :set-field-value="setFieldValue"
               :index="index"
               :time-recs="timeRecs"
+              :wrong-time="wrongTime.get(index) || false"
               :preloaded-data="
                 preloadedData
                   ? currentGeneration?.get(machine.MachineId) || [
@@ -254,6 +264,7 @@ onMounted(async () => {
                     ]
                   : [new Time(0, 0), new Time(0, 0)]
               "
+              :generated="generated"
             />
           </div>
           <!-- <FormMessage /> -->

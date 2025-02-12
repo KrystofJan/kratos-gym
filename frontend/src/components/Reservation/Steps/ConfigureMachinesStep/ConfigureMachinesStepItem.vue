@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { watch, computed, onMounted } from 'vue'
 import { Time } from '@internationalized/date'
-import { TypedSchema } from 'vee-validate'
-
 import {
   Card,
   CardContent,
@@ -26,14 +24,13 @@ import {
 
 import { Machine, TimeSuggestion } from '@/support'
 
-import { computed } from 'vue'
-import { onMounted } from 'vue'
-
 interface Props {
   machine: Machine
   setFieldValue: (field: any, value: any) => void
   timeRecs: Map<number, TimeSuggestion>
   preloadedData: [Time, Time]
+  generated: boolean
+  wrongTime: boolean
   index: number
 }
 
@@ -48,7 +45,10 @@ const collision = computed(() => {
   return false
 })
 
-const setPrevTime = (time: TimeSuggestion) => {
+const setPrevTime = (time: TimeSuggestion | undefined) => {
+  if (!time) {
+    throw new Error('Cannot set undefined prev time')
+  }
   props.setFieldValue(
     `machinesInPlan.${props.index}.StartTime.hour`,
     time.Previous.time[0].hour
@@ -67,7 +67,10 @@ const setPrevTime = (time: TimeSuggestion) => {
   )
 }
 
-const setNextTime = (time: TimeSuggestion) => {
+const setNextTime = (time: TimeSuggestion | undefined) => {
+  if (!time) {
+    throw new Error('Cannot set undefined next time')
+  }
   props.setFieldValue(
     `machinesInPlan.${props.index}.StartTime.hour`,
     time.Next.time[0].hour
@@ -92,7 +95,8 @@ const reactivePreloadedData = computed(() => props.preloadedData)
 watch(
   reactivePreloadedData,
   (newPreloadedData) => {
-    if (!newPreloadedData) return
+    console.log('watching')
+    if (!newPreloadedData || !props.generated) return
 
     props.setFieldValue(
       `machinesInPlan.${props.index}.StartTime.hour`,
@@ -171,7 +175,7 @@ onMounted(() => {
     </CardHeader>
 
     <CardContent>
-      <FormField v-slot="{ value }" :name="`machinesInPlan[${index}]`">
+      <FormField :name="`machinesInPlan[${index}]`">
         <FormItem>
           <FormField v-slot="{ value }" :name="`machinesInPlan[${index}].Reps`">
             <FormItem>
@@ -252,10 +256,7 @@ onMounted(() => {
           </FormField>
           <div class="flex gap-8">
             <!-- make a field form group -->
-            <FormField
-              v-slot="{ value }"
-              :name="`machinesInPlan[${index}].StartTime`"
-            >
+            <FormField :name="`machinesInPlan[${index}].StartTime`">
               <FormItem>
                 <FormLabel> Start Time </FormLabel>
                 <div class="flex items-center gap-1">
@@ -335,10 +336,7 @@ onMounted(() => {
               </FormItem>
             </FormField>
 
-            <FormField
-              v-slot="{ value }"
-              :name="`machinesInPlan[${index}].EndTime`"
-            >
+            <FormField :name="`machinesInPlan[${index}].EndTime`">
               <FormItem>
                 <FormLabel> EndTime </FormLabel>
                 <div class="flex items-center gap-1">
@@ -399,7 +397,7 @@ onMounted(() => {
                             } else {
                               setFieldValue(
                                 `machinesInPlan[${index}].EndTime.minute`,
-                                undefined
+                                0
                               )
                             }
                           }
@@ -423,34 +421,39 @@ onMounted(() => {
     </CardContent>
 
     <CardFooter>
-      <div
-        :class="{ 'opacity-0': timeRecs.get(machine.MachineId) === undefined }"
-      >
-        <template v-if="!collision">
-          <p>
-            Machine is occupied at this time, here are the free closest times
-          </p>
-          <a
-            class="mr-4 time-link"
-            @click.prevent="setPrevTime(timeRecs.get(machine.MachineId))"
-            href="#"
-          >
-            {{ formatPrevTime(timeRecs.get(machine.MachineId)) }}
-          </a>
+      <div class="h-16">
+        <div v-if="timeRecs.get(machine.MachineId) !== undefined">
+          <template v-if="!collision">
+            <p class="text-red-200">
+              Machine is occupied at this time, here are the free closest times
+            </p>
+            <a
+              class="mr-4 time-link"
+              @click.prevent="setPrevTime(timeRecs.get(machine.MachineId))"
+              href="#"
+            >
+              {{ formatPrevTime(timeRecs.get(machine.MachineId)) }}
+            </a>
 
-          <a
-            class="time-link"
-            @click.prevent="setNextTime(timeRecs.get(machine.MachineId))"
-            href="#"
-          >
-            {{ formatNextTime(timeRecs.get(machine.MachineId)) }}
-          </a>
-        </template>
-        <template v-else>
-          <span class="mr-4 time-link">
-            Selected time is coliding with another one
-          </span>
-        </template>
+            <a
+              class="time-link"
+              @click.prevent="setNextTime(timeRecs.get(machine.MachineId))"
+              href="#"
+            >
+              {{ formatNextTime(timeRecs.get(machine.MachineId)) }}
+            </a>
+          </template>
+          <template v-else>
+            <span class="text-orange-200">
+              Selected time is coliding with another one
+            </span>
+          </template>
+        </div>
+        <div v-else-if="wrongTime">
+          <p class="text-red-200">
+            Starting time needs to be before Ending time
+          </p>
+        </div>
       </div>
     </CardFooter>
   </Card>

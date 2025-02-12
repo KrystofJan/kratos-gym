@@ -222,8 +222,8 @@ const steps = [
                 />
               </template>
             </KeepAlive>
-
             <template v-if="stepIndex === 3">
+              <!-- Not cashing due to constant changes -->
               <PickMachineOrderStep
                 @prev="stepIndex = 2"
                 :selectedMachines="selectedMachines"
@@ -246,6 +246,7 @@ const steps = [
               />
             </template>
             <template v-if="stepIndex === 4">
+              <!-- Not cashing due to constant changes -->
               <ConfigureMachinesStep
                 :reservation-time="reservation.ReservationTime"
                 @prev="stepIndex = 3"
