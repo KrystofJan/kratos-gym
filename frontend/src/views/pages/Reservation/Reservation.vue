@@ -1,21 +1,17 @@
 <script setup lang="ts">
-import { ref, watch, computed, h } from 'vue'
+import { ref, watch, h } from 'vue'
 import { Time } from '@internationalized/date'
 import { SignedOut, SignedIn } from 'vue-clerk'
 import { currentAccount } from '@/store/accountStore'
-import { format, parse } from 'date-fns'
+import { parse } from 'date-fns'
 import { ReservationSummary } from '.'
+import { PlanGeneratorResult } from '@/support/types/plan-generator.config'
+
+import { Circle, Check, Dot, Terminal } from 'lucide-vue-next'
 
 import {
   toast,
   Button,
-  Input,
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
   Stepper,
   StepperItem,
   StepperTrigger,
@@ -27,6 +23,9 @@ import {
   PickMachineOrderStep,
   PlanStep,
   TypeStep,
+  Alert,
+  AlertTitle,
+  AlertDescription,
 } from '@/components'
 
 import {
@@ -34,13 +33,16 @@ import {
   MachinesInPlan,
   ReservationPost,
   ReservationService,
-  PlanService,
-  Plan,
 } from '@/support'
 
 const reservation = ref<Partial<ReservationPost>>({})
 const stepIndex = ref<number>(1)
 const selectedMachines = ref<Machine[]>([])
+
+const generatedTime = ref<{
+  map: Map<number, [Time, Time]>[]
+  data: PlanGeneratorResult
+} | null>(null)
 
 // Exercise Category Schema
 const onSubmit = async () => {
@@ -56,9 +58,10 @@ const onSubmit = async () => {
       Plan: {
         ...reservation.value.Plan,
         AccountId: Number(currentAccount.value?.AccountId),
-        Machines: reservation.value.Plan.Machines.map((mip, index) => {
+        Machines: reservation.value.Plan.Machines?.map((mip, index) => {
           const StartTime = new Time(mip.StartTime.hour, mip.StartTime.minute)
           const EndTime = new Time(mip.EndTime.hour, mip.EndTime.minute)
+          console.log(StartTime, EndTime)
           return {
             ...mip,
             MachineId: selectedMachines.value[index].MachineId,
@@ -203,12 +206,14 @@ const steps = [
                   @submit="
                     (value) => {
                       selectedMachines = [
-                        ...value.machines.map((machine) => {
-                          return {
-                            ...machine,
-                            ExerciseTypes: [],
+                        ...value.machines.map(
+                          (machine: Partial<MachinesInPlan>) => {
+                            return {
+                              ...machine,
+                              ExerciseTypes: [],
+                            }
                           }
-                        }),
+                        ),
                       ]
 
                       stepIndex++
@@ -222,36 +227,45 @@ const steps = [
               <PickMachineOrderStep
                 @prev="stepIndex = 2"
                 :selectedMachines="selectedMachines"
+                :amountOfPeople="Number(reservation.AmountOfPeople)"
+                :reservation-date="reservation.ReservationTime as Date"
                 @submit="
                   (value) => {
                     console.log(value)
                     stepIndex++
                     selectedMachines = value
+                    generatedTime = null
+                  }
+                "
+                @generated="
+                  (value) => {
+                    stepIndex++
+                    generatedTime = value
                   }
                 "
               />
             </template>
-            <KeepAlive>
-              <template v-if="stepIndex === 4">
-                <ConfigureMachinesStep
-                  :reservation-time="reservation.ReservationTime"
-                  @prev="stepIndex = 3"
-                  :selectedMachines="selectedMachines"
-                  :amount-of-people="reservation.AmountOfPeople"
-                  @submit="
-                    (value) => {
-                      const plan = reservation.Plan
-                      reservation.Plan = {
-                        ...plan,
-                        Machines: value,
-                      }
-
-                      stepIndex++
+            <template v-if="stepIndex === 4">
+              <ConfigureMachinesStep
+                :reservation-time="reservation.ReservationTime"
+                @prev="stepIndex = 3"
+                :selectedMachines="selectedMachines"
+                :amount-of-people="reservation.AmountOfPeople"
+                :preloaded-data="generatedTime.map"
+                :generated="generatedTime !== null"
+                @submit="
+                  (value) => {
+                    const plan = reservation.Plan
+                    reservation.Plan = {
+                      ...plan,
+                      Machines: value,
                     }
-                  "
-                />
-              </template>
-            </KeepAlive>
+
+                    stepIndex++
+                  }
+                "
+              />
+            </template>
             <KeepAlive>
               <template v-if="stepIndex === 5">
                 <TypeStep

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { ConfigureMachinesStepItem } from '.'
+import { RefreshCw } from 'lucide-vue-next'
 import { Step } from '..'
 import {
   Machine,
@@ -26,11 +27,33 @@ interface Props {
   reservationTime?: Date
   selectedMachines: Machine[]
   amountOfPeople?: number
+  preloadedData?: Map<number, [Time, Time]>[]
+  generated: boolean
 }
 
 const timeRecs = ref<Map<number, TimeSuggestion>>(new Map())
 
+const currentGeneratedIndex = ref(0)
+const currentGeneration = computed(() => {
+  return props.preloadedData?.[currentGeneratedIndex.value]
+})
 const props = defineProps<Props>()
+
+const sortedSelectedMachines = computed(() => {
+  if (
+    !props.preloadedData ||
+    !props.preloadedData[currentGeneratedIndex.value]
+  ) {
+    return props.selectedMachines
+  }
+
+  const currentGenData = props.preloadedData[currentGeneratedIndex.value]
+  return Array.from(currentGenData.keys())
+    .map((id) =>
+      props.selectedMachines.find((machine) => machine.MachineId === id)
+    )
+    .filter(Boolean) as Machine[]
+})
 
 const builderText = ref({
   heading: 'Now pick time for each machine',
@@ -184,24 +207,53 @@ const prev = () => {
   emit('prev')
 }
 
+const regenerate = () => {
+  if (!props.generated || !props.preloadedData) return
+
+  const maxIndex = props.preloadedData.length - 1
+  currentGeneratedIndex.value =
+    (currentGeneratedIndex.value + 1) % (maxIndex + 1)
+}
+
 onMounted(async () => {
   await fetchConcurrentPlans()
 })
 </script>
 
 <template>
-  <Step v-if="selectedMachines.length > 0" :builderText="builderText">
+  <Step
+    v-if="selectedMachines.length > 0"
+    :builderText="builderText"
+    builderItemClasses="flex-col"
+  >
+    <Button
+      variant="outline"
+      class="ml-auto flex gap-2"
+      v-if="preloadedData && generated"
+      @click.prevent="regenerate"
+    >
+      <span>Regenerate</span>
+      <RefreshCw />
+    </Button>
     <form class="justify-center flex flex-col gap-4" @submit="onSubmit">
       <div
         class="grid grid-cols-2 md:grid-cols-3 grid-auto-columns-1/2 md:grid-auto-columns-1/3 gap-4"
       >
         <FieldArray name="machinesInPlan">
-          <div v-for="(machine, index) in selectedMachines" :key="index">
+          <div v-for="(machine, index) in sortedSelectedMachines" :key="index">
             <ConfigureMachinesStepItem
               :machine="machine"
               :set-field-value="setFieldValue"
               :index="index"
               :time-recs="timeRecs"
+              :preloaded-data="
+                preloadedData
+                  ? currentGeneration?.get(machine.MachineId) || [
+                      new Time(0, 0),
+                      new Time(0, 0),
+                    ]
+                  : [new Time(0, 0), new Time(0, 0)]
+              "
             />
           </div>
           <!-- <FormMessage /> -->

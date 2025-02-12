@@ -36,9 +36,13 @@ export class PlanGeneratorController {
             return
         }
 
-        let datasetType = DataSetType.COLLIDING
-        if (collisions === false) {
-            datasetType = DataSetType.NON_COLLIDING
+        let datasetType =
+            collisions === true
+                ? DataSetType.COLLIDING
+                : DataSetType.NON_COLLIDING
+
+        if (collisions === undefined) {
+            datasetType = DataSetType.COLLIDING
         }
 
         const start_time = new Time(

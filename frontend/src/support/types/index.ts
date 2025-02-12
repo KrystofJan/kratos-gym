@@ -16,3 +16,4 @@ export type {
 export type { BuilderText } from './step-text.ts'
 export type { TimeSuggestion } from './time-suggestion'
 export { FormType } from './form-types.ts'
+export type { PlanGenerator } from './plan-generator.config'

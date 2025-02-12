@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { Time } from '@internationalized/date'
 import { TypedSchema } from 'vee-validate'
 
 import {
@@ -26,11 +27,13 @@ import {
 import { Machine, TimeSuggestion } from '@/support'
 
 import { computed } from 'vue'
+import { onMounted } from 'vue'
 
 interface Props {
   machine: Machine
   setFieldValue: (field: any, value: any) => void
   timeRecs: Map<number, TimeSuggestion>
+  preloadedData: [Time, Time]
   index: number
 }
 
@@ -83,6 +86,34 @@ const setNextTime = (time: TimeSuggestion) => {
   )
 }
 
+const reactivePreloadedData = computed(() => props.preloadedData)
+
+// Watch for changes in preloadedData and update form values
+watch(
+  reactivePreloadedData,
+  (newPreloadedData) => {
+    if (!newPreloadedData) return
+
+    props.setFieldValue(
+      `machinesInPlan.${props.index}.StartTime.hour`,
+      newPreloadedData[0].hour || 0
+    )
+    props.setFieldValue(
+      `machinesInPlan.${props.index}.StartTime.minute`,
+      newPreloadedData[0].minute || 0
+    )
+    props.setFieldValue(
+      `machinesInPlan.${props.index}.EndTime.hour`,
+      newPreloadedData[1].hour || 0
+    )
+    props.setFieldValue(
+      `machinesInPlan.${props.index}.EndTime.minute`,
+      newPreloadedData[1].minute || 0
+    )
+  },
+  { immediate: true }
+)
+
 function formatNextTime(time: TimeSuggestion | undefined): string {
   if (!time) {
     return ''
@@ -109,6 +140,25 @@ function formatPrevTime(time: TimeSuggestion | undefined): string {
 
   return `${prevHours}:${prevMinutes} - ${prevHoursTwo}:${prevMinutesTwo}`
 }
+
+onMounted(() => {
+  props.setFieldValue(
+    `machinesInPlan.${props.index}.StartTime.hour`,
+    props.preloadedData[0].hour || 0
+  )
+  props.setFieldValue(
+    `machinesInPlan.${props.index}.StartTime.minute`,
+    props.preloadedData[0].minute || 0
+  )
+  props.setFieldValue(
+    `machinesInPlan.${props.index}.EndTime.hour`,
+    props.preloadedData[1].hour || 0
+  )
+  props.setFieldValue(
+    `machinesInPlan.${props.index}.EndTime.minute`,
+    props.preloadedData[1].minute || 0
+  )
+})
 </script>
 
 <template>
@@ -368,8 +418,6 @@ function formatPrevTime(time: TimeSuggestion | undefined): string {
               </FormItem>
             </FormField>
           </div>
-
-          <Formssage />
         </FormItem>
       </FormField>
     </CardContent>

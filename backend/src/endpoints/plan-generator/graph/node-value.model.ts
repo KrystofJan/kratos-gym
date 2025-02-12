@@ -35,6 +35,8 @@ export class NodeValue extends Model {
         }
 
         if (jsonData['reservation']) {
+            this.reservation = jsonData['reservation']
+        } else if (jsonData['reservation_id']) {
             this.reservation = new Reservation(jsonData)
         }
 
