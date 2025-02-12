@@ -2,7 +2,7 @@ import { Time } from '@internationalized/date'
 import { format } from 'date-fns'
 import {
   PlanGenerator,
-  PlanGeneratorResult,
+  PlanGeneratorResults,
 } from '../types/plan-generator.config'
 
 const KRATOS_API_URL = import.meta.env.VITE_KRATOS_API_URL
@@ -11,7 +11,7 @@ export class PlanGeneratorService {
   constructor() {}
 
   private fillData(
-    input: PlanGeneratorResult[][]
+    input: PlanGeneratorResults[][]
   ): Map<number, [Time, Time]>[] {
     return input.map(
       (x) => new Map(x.map((y) => [y.MachineId, [y.StartTime, y.EndTime]]))
@@ -20,7 +20,7 @@ export class PlanGeneratorService {
 
   async Generate(
     planConfig: PlanGenerator
-  ): Promise<[Map<number, [Time, Time]>[], PlanGeneratorResult[]]> {
+  ): Promise<[Map<number, [Time, Time]>[], PlanGeneratorResults[]]> {
     const cfg = {
       amount_of_people: planConfig.amount_of_people,
       start_time: {

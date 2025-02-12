@@ -5,7 +5,7 @@ import { SignedOut, SignedIn } from 'vue-clerk'
 import { currentAccount } from '@/store/accountStore'
 import { parse } from 'date-fns'
 import { ReservationSummary } from '.'
-import { PlanGeneratorResult } from '@/support/types/plan-generator.config'
+import { PlanGeneratorResults } from '@/support/types/plan-generator.config'
 
 import { Circle, Check, Dot, Terminal } from 'lucide-vue-next'
 
@@ -41,7 +41,7 @@ const selectedMachines = ref<Machine[]>([])
 
 const generatedTime = ref<{
   map: Map<number, [Time, Time]>[]
-  data: PlanGeneratorResult
+  data: PlanGeneratorResults
 } | null>(null)
 
 // Exercise Category Schema
@@ -251,7 +251,9 @@ const steps = [
                 @prev="stepIndex = 3"
                 :selectedMachines="selectedMachines"
                 :amount-of-people="reservation.AmountOfPeople"
-                :preloaded-data="generatedTime.map"
+                :preloaded-data="
+                  generatedTime === null ? undefined : generatedTime.map
+                "
                 :generated="generatedTime !== null"
                 @submit="
                   (value) => {
