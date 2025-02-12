@@ -1,41 +1,11 @@
 <script setup lang="ts">
-import { ref, watch, computed, h } from 'vue'
-import { toTypedSchema } from '@vee-validate/zod'
-import { useForm } from 'vee-validate'
-import * as z from 'zod'
+import { computed } from 'vue'
+import { PartialReservation } from '@/support'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components'
 import { Time } from '@internationalized/date'
-import {
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignOutButton,
-} from 'vue-clerk'
-import { currentAccount } from '@/store/accountStore'
-import {
-  Machine,
-  MachinesInPlan,
-  ReservationPost,
-  ReservationService,
-} from '@/support'
-import {
-  Button,
-  Input,
-  toast,
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  ConfigureMachinesStep,
-  PlanStep,
-  PickMachineStep,
-  TypeStep,
-} from '@/components'
 
 interface Props {
-  reservation: Partial<ReservationPost>
+  reservation: Partial<PartialReservation>
 }
 
 const props = defineProps<Props>()
@@ -51,7 +21,7 @@ const formattedReservationTime = computed(() => {
   })
 })
 
-const formatTime = (time) => {
+const formatTime = (time: Time) => {
   return `${time.hour.toString().padStart(2, '0')}:${time.minute.toString().padStart(2, '0')}`
 }
 </script>
