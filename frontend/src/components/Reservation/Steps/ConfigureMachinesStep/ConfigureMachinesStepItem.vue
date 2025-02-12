@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Time } from '@internationalized/date'
 import { TypedSchema } from 'vee-validate'
 
@@ -85,6 +85,34 @@ const setNextTime = (time: TimeSuggestion) => {
     time.Next.time[1].minute
   )
 }
+
+const reactivePreloadedData = computed(() => props.preloadedData)
+
+// Watch for changes in preloadedData and update form values
+watch(
+  reactivePreloadedData,
+  (newPreloadedData) => {
+    if (!newPreloadedData) return
+
+    props.setFieldValue(
+      `machinesInPlan.${props.index}.StartTime.hour`,
+      newPreloadedData[0].hour || 0
+    )
+    props.setFieldValue(
+      `machinesInPlan.${props.index}.StartTime.minute`,
+      newPreloadedData[0].minute || 0
+    )
+    props.setFieldValue(
+      `machinesInPlan.${props.index}.EndTime.hour`,
+      newPreloadedData[1].hour || 0
+    )
+    props.setFieldValue(
+      `machinesInPlan.${props.index}.EndTime.minute`,
+      newPreloadedData[1].minute || 0
+    )
+  },
+  { immediate: true }
+)
 
 function formatNextTime(time: TimeSuggestion | undefined): string {
   if (!time) {
@@ -390,8 +418,6 @@ onMounted(() => {
               </FormItem>
             </FormField>
           </div>
-
-          <Formssage />
         </FormItem>
       </FormField>
     </CardContent>

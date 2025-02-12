@@ -40,18 +40,21 @@ const currentGeneration = computed(() => {
 const props = defineProps<Props>()
 
 const sortedSelectedMachines = computed(() => {
-  // TODO: SOMEHOW FIGURE OUT HOW TO FILTER THOSE
-  if (props.preloadedData === undefined) {
+  if (
+    !props.preloadedData ||
+    !props.preloadedData[currentGeneratedIndex.value]
+  ) {
     return props.selectedMachines
   }
 
-  const result = []
-  const ids = props.preloadedData.keys()
-  for (const id of ids) {
-    result.push(props.selectedMachines.filter((x) => x.MachineId === id)[0])
-  }
-  return result
+  const currentGenData = props.preloadedData[currentGeneratedIndex.value]
+  return Array.from(currentGenData.keys())
+    .map((id) =>
+      props.selectedMachines.find((machine) => machine.MachineId === id)
+    )
+    .filter(Boolean) as Machine[]
 })
+
 const builderText = ref({
   heading: 'Now pick time for each machine',
   text: "<p>In this step you need to pick a time and amount of work you'll be doing on this specific machine</p>",
@@ -205,14 +208,11 @@ const prev = () => {
 }
 
 const regenerate = () => {
-  if (!props.generated) {
-    return
-  }
-  if (props.preloadedData === undefined) {
-    return
-  }
+  if (!props.generated || !props.preloadedData) return
 
-  currentGeneratedIndex.value += 1
+  const maxIndex = props.preloadedData.length - 1
+  currentGeneratedIndex.value =
+    (currentGeneratedIndex.value + 1) % (maxIndex + 1)
 }
 
 onMounted(async () => {
@@ -240,7 +240,7 @@ onMounted(async () => {
         class="grid grid-cols-2 md:grid-cols-3 grid-auto-columns-1/2 md:grid-auto-columns-1/3 gap-4"
       >
         <FieldArray name="machinesInPlan">
-          <div v-for="(machine, index) in selectedMachines" :key="index">
+          <div v-for="(machine, index) in sortedSelectedMachines" :key="index">
             <ConfigureMachinesStepItem
               :machine="machine"
               :set-field-value="setFieldValue"
