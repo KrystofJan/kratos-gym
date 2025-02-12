@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, watch } from 'vue'
 
 import { useUser } from 'vue-clerk'
 import { currentAccount, fetchAccount } from './store/accountStore'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { computed } from 'vue'
 import { Toaster, Footer, Header } from '@/components'
 
-const router = useRouter()
 const route = useRoute()
 
 const { user, isLoaded: isUserLoaded } = useUser()

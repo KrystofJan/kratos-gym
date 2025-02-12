@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
-
 type LogoType = 'vertical' | 'horizontal'
 
-const props = defineProps<{
+defineProps<{
   type: LogoType
 }>()
 const horpath = '/src/assets/logo/logo-hor.svg'

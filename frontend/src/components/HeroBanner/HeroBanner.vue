@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import content from '@/siteContent/_hp-hero-banner-content.json'
-const banners = ref([])
+const banners = ref<{ heading: string; text: string; img_path: string }[]>([])
 
 const fetchData = () => {
   banners.value = content

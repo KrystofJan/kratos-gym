@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components'
@@ -13,7 +12,7 @@ interface Props {
   reservation: Reservation
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>
 <template>
   <Card>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, watch, h } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { Machine, ExerciseType, MachineService } from '@/support'
 import {
   FormControl,
@@ -9,7 +9,6 @@ import {
   FormMessage,
   Checkbox,
   Button,
-  toast,
   Step,
 } from '@/components'
 import { toTypedSchema } from '@vee-validate/zod'
@@ -39,7 +38,7 @@ const schema = toTypedSchema(
   })
 )
 
-const { handleSubmit, setFieldValue, errors } = useForm({
+const { handleSubmit, errors } = useForm({
   validationSchema: schema,
 })
 

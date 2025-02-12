@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components'
+import { Card, CardContent } from '@/components'
 import { APINinjasService } from '@/support/services/api-ninja.service'
 import { onMounted, ref } from 'vue'
 import type { Ref } from 'vue'
@@ -19,7 +12,7 @@ interface Quote {
   category: string
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const quote: Ref<Quote | undefined> = ref()
 
 onMounted(async () => {
