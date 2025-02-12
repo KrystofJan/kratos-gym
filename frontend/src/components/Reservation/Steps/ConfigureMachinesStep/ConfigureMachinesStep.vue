@@ -98,7 +98,7 @@ const schema = toTypedSchema(
           wrongTime.value.set(index, startTime >= endTime)
         })
 
-        return false
+        return true
       })
       .refine(
         (data) => {
