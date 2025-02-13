@@ -3,7 +3,7 @@ import { StickyTextData } from '@/support'
 interface Props {
   data: StickyTextData
 }
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>
 
 <template>

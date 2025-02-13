@@ -2,8 +2,7 @@
 import { onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Ref } from 'vue'
-import { SignedIn, SignedOut, useUser } from 'vue-clerk'
-import { toTypedSchema } from '@vee-validate/zod'
+import { SignedIn, useUser } from 'vue-clerk'
 import * as z from 'zod'
 import { AutoForm } from '@/components'
 import {
@@ -47,10 +46,10 @@ const createAccount = async () => {
   if (user.value) {
     const accountCreateModel: AccountCreate = {
       Email: user.value.emailAddresses[0].emailAddress,
-      FirstName: user.value.firstName,
-      LastName: user.value.lastName,
+      FirstName: user.value.firstName as string,
+      LastName: user.value.lastName as string,
       ClerkId: user.value.id,
-      Login: user.value.username,
+      Login: user.value.username as string,
       ProfilePictureUrl: user.value.imageUrl,
     }
     try {
@@ -72,6 +71,10 @@ const createAccount = async () => {
 const createAddress = async (values: Record<string, any>) => {
   // Maybe make this a transaction
   let data: Record<string, any>
+
+  if (currentAccount.value === null) {
+    return
+  }
   try {
     const addressService = new AddressService()
     const addressBody: Address = {
@@ -97,7 +100,8 @@ const createAddress = async (values: Record<string, any>) => {
 
   try {
     const accountService = new AccountService()
-    const data = await accountService.AddAddressToAccount(
+
+    await accountService.AddAddressToAccount(
       address.value,
       currentAccount.value.AccountId
     )
@@ -110,7 +114,7 @@ const createAddress = async (values: Record<string, any>) => {
 
   try {
     const accService = new AccountService()
-    const _ = accService.UpdateAccount(
+    accService.UpdateAccount(
       { PhoneNumber: phoneNumber.value },
       currentAccount.value.AccountId
     )

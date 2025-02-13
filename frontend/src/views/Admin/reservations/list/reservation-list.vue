@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { columns, values, deleteSelected } from './reservation-columns'
 import { DataGrid } from '@/components'
-import { ReservationService, Machine } from '@/support'
+import { ReservationService } from '@/support'
 
 async function getData() {
   // Fetch data from your API here.

@@ -1,7 +1,7 @@
 import { h, ref } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 import { ArrowUpDown } from 'lucide-vue-next'
-import { Account, ExerciseCategory, ExerciseCategoryService } from '@/support'
+import { ExerciseCategory, ExerciseCategoryService } from '@/support'
 import { toast, Button, Checkbox, DataGridActions } from '@/components'
 
 export const values = ref<ExerciseCategory[]>([])

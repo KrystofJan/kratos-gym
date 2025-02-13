@@ -1,6 +1,12 @@
 import { h, ref } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
-import { Account, ExerciseCategory, Machine, Plan } from '@/support'
+import {
+  Account,
+  ExerciseCategory,
+  Machine,
+  Plan,
+  PlanService,
+} from '@/support'
 import { ArrowUpDown /* ChevronDown */ } from 'lucide-vue-next'
 import { Checkbox, Button, DataGridActions, toast } from '@/components'
 
@@ -179,10 +185,21 @@ export const columns: ColumnDef<Plan>[] = [
     cell: ({ row }) => {
       const prop: Plan = row.original
       const deleteFunc = async (id: number) => {
-        toast({
-          title: 'Cannot delete accounts',
-        })
-        return -1
+        try {
+          const data = await new PlanService().Delete(id)
+          toast({
+            title: 'Successfully deleted plan',
+            description: `Reservation id: ${data.DeletedId}`,
+          })
+          values.value = values.value.filter((x) => x.PlanId !== data.DeletedId)
+          return row.index
+        } catch (err) {
+          toast({
+            title: 'Error while deleting data',
+            description: h(`${err}`, { class: 'text-red' }),
+          })
+          return -1
+        }
       }
 
       return h(
@@ -199,7 +216,21 @@ export const columns: ColumnDef<Plan>[] = [
 ]
 
 export async function deleteSelected(ids: number[]) {
+  for (const id of ids) {
+    try {
+      const responseData = await new PlanService().Delete(id)
+      values.value = values.value.filter(
+        (x) => x.PlanId !== responseData.DeletedId
+      )
+    } catch (err) {
+      toast({
+        title: 'Error while deleting data',
+        description: h(`ADD ERROR`, { class: 'text-red' }),
+      })
+    }
+  }
   toast({
-    title: 'Cannot delete accounts',
+    title: 'Deleted all seleceted rows',
+    description: h('deleted rows: ${ids.join(", ").toString()}', { class: '' }),
   })
 }

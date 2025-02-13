@@ -4,8 +4,8 @@ import { useRoute } from 'vue-router'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
-import { AutoForm, Button } from '@/components'
-import { ExerciseCategoryService, FormType } from '@/support'
+import { AutoForm, Button, toast } from '@/components'
+import { ExerciseCategory, ExerciseCategoryService, FormType } from '@/support'
 
 const categorySchema = z.object({
   CategoryName: z.string().min(2).max(50),
@@ -28,6 +28,10 @@ const createCategory = async (values: Record<string, any>) => {
 }
 
 const updateCategory = async (values: Record<string, any>) => {
+  if (category.value === undefined) {
+    toast({ title: 'ERROR', description: 'Could not find reservation' })
+    return
+  }
   try {
     await new ExerciseCategoryService().Update(
       values,
@@ -38,7 +42,7 @@ const updateCategory = async (values: Record<string, any>) => {
   }
 }
 
-const category = ref<category | undefined>()
+const category = ref<ExerciseCategory | undefined>()
 const formType = ref<FormType>(FormType.Create)
 
 const handleSubmit = async (values: Record<string, any>) => {
@@ -61,7 +65,7 @@ const fetchCategory = async (id: number) => {
 
 watch(
   () => route.params.id,
-  async (newId, oldId) => {
+  async (newId, _) => {
     await fetchCategory(Number(newId))
   }
 )
@@ -71,10 +75,6 @@ onMounted(async () => {
 
   if (category.value) {
     form.setFieldValue('CategoryName', category.value.CategoryName)
-    form.setFieldValue('MaxWeight', category.value.MaxWeight)
-    form.setFieldValue('MinWeight', category.value.MinWeight)
-    form.setFieldValue('MaxPeople', category.value.MaxPeople)
-    form.setFieldValue('AvgTimeTaken', category.value.AvgTimeTaken)
     formType.value = FormType.Update
   } else {
     formType.value = FormType.Create

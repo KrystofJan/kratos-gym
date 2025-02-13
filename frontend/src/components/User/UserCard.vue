@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
   Avatar,
@@ -50,8 +49,14 @@ const handleRole = () => {
       <ul>
         <li>Phone: {{ currentAccount.PhoneNumber ?? '-' }}</li>
         <li>Email: {{ currentAccount.Email }}</li>
-        <li>Joinded on: {{ currentAccount.CreateDate.split('T')[0] }}</li>
-        <li>Last online: {{ currentAccount.LastOnline.split('T')[0] }}</li>
+        <li>
+          Joinded on:
+          {{ currentAccount.CreateDate.toString().split('T')[0] }}
+        </li>
+        <li>
+          Last online:
+          {{ currentAccount.LastOnline.toString().split('T')[0] }}
+        </li>
         <li>Credits: {{ currentAccount.Credits }}</li>
         <li v-if="currentAccount.Address">
           Address:

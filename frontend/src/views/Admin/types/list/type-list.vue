@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { columns, values, deleteSelected } from './type-columns'
 import { DataGrid } from '@/components'
-import type { Machine } from '@/support'
 import { ExerciseTypeService } from '@/support'
 
 async function getData() {

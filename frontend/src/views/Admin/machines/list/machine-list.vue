@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { Machine } from '@/support'
 import { MachineService } from '@/support'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { columns, values, deleteSelected } from './machine-columns'
 import { DataGrid } from '@/components'
 

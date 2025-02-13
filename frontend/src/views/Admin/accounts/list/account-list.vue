@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Machine, AccountService } from '@/support'
-import { onMounted, ref } from 'vue'
-import { columns, values } from './account-columns'
+import { AccountService } from '@/support'
+import { onMounted } from 'vue'
+import { columns, values, deleteSelected } from './account-columns'
 import { DataGrid } from '@/components'
 
 async function getData() {

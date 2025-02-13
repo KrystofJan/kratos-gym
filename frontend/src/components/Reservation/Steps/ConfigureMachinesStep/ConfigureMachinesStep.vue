@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import type { Ref } from 'vue'
 import { ConfigureMachinesStepItem } from '.'
 import { RefreshCw } from 'lucide-vue-next'
 import { Step } from '..'
@@ -28,7 +29,7 @@ interface Props {
   generated: boolean
 }
 
-const timeRecs = ref<Map<number, TimeSuggestion>>(new Map())
+const timeRecs: Ref<Map<number, TimeSuggestion>> = ref(new Map())
 
 const currentGeneratedIndex = ref(0)
 const currentGeneration = computed(() => {

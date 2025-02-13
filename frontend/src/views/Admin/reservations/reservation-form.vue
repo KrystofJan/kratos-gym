@@ -4,13 +4,8 @@ import { useRoute } from 'vue-router'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
-import { AutoForm, Button } from '@/components'
-import {
-  ReservationService,
-  Reservation,
-  ReservationPost,
-  FormType,
-} from '@/support'
+import { AutoForm, Button, toast } from '@/components'
+import { ReservationService, Reservation } from '@/support'
 import { format } from 'date-fns'
 
 const route = useRoute()
@@ -28,6 +23,10 @@ const form = useForm({
 })
 
 const updateReservation = async (values: Record<string, any>) => {
+  if (reservation.value === undefined) {
+    toast({ title: 'ERROR', description: 'Could not find reservation' })
+    return
+  }
   try {
     await new ReservationService().Update(
       values,
@@ -56,7 +55,7 @@ const fetchReservation = async (id: number) => {
 
 watch(
   () => route.params.id,
-  async (newId, oldId) => {
+  async (newId, _) => {
     await fetchReservation(Number(newId))
   }
 )
@@ -70,15 +69,14 @@ onMounted(async () => {
       'ReservationTime',
       format(reservation.value.ReservationTime, 'yyyy-MM-dd')
     )
-    form.setFieldValue('PlanId', reservation.value.Plan.PlanId)
-    form.setFieldValue('CustomerId', reservation.value.Customer.AccountId)
-    form.setFieldValue('TrainerId', reservation.value.Trainer.AccountId)
+    form.setFieldValue('PlanId', reservation.value.Plan?.PlanId)
+    form.setFieldValue('CustomerId', reservation.value.Customer?.AccountId)
+    form.setFieldValue('TrainerId', reservation.value.Trainer?.AccountId)
   }
 })
 </script>
 
 <template>
-  {{ formType }}
   <AutoForm
     class="w-2/3 space-y-6"
     :form="form"
