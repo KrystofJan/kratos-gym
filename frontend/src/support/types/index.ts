@@ -4,7 +4,11 @@ export type { Address } from './address'
 export { roleDictionary, roleMap, roleCharMap } from './account'
 export type { AccountCreate } from './account-create'
 export type { Plan, PlanPost } from './plan'
-export type { Reservation, ReservationPost } from './reservation'
+export type {
+  Reservation,
+  PartialReservation,
+  ReservationPost,
+} from './reservation'
 export type { StickyTextData } from './sticky-text-data'
 export type { ExerciseType, ExerciseTypePost } from './exercise-type'
 export type { MachinesInPlan, MachinesInPlanPost } from './machines-in-plan'

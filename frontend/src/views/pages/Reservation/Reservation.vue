@@ -31,11 +31,12 @@ import {
 import {
   Machine,
   MachinesInPlan,
+  PartialReservation,
   ReservationPost,
   ReservationService,
 } from '@/support'
 
-const reservation = ref<Partial<ReservationPost>>({})
+const reservation = ref<Partial<PartialReservation>>({})
 const stepIndex = ref<number>(1)
 const selectedMachines = ref<Machine[]>([])
 
@@ -59,14 +60,11 @@ const onSubmit = async () => {
         ...reservation.value.Plan,
         AccountId: Number(currentAccount.value?.AccountId),
         Machines: reservation.value.Plan.Machines?.map((mip, index) => {
-          const StartTime = new Time(mip.StartTime.hour, mip.StartTime.minute)
-          const EndTime = new Time(mip.EndTime.hour, mip.EndTime.minute)
-          console.log(StartTime, EndTime)
           return {
             ...mip,
             MachineId: selectedMachines.value[index].MachineId,
-            StartTime: StartTime.toString(),
-            EndTime: EndTime.toString(),
+            StartTime: `${mip.StartTime.hour}:${mip.StartTime.minute}`,
+            EndTime: `${mip.EndTime.hour}:${mip.EndTime.minute}`,
           }
         }),
       },

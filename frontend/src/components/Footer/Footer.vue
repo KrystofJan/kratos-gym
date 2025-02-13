@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import content from '@/siteContent/_footer-content.json'
-import { currentAccount } from '../../store/accountStore'
 import { Separator } from '@/components'
-const footer_cols = ref([])
+const footer_cols = ref<
+  {
+    footerColHeading: string
+    footerColLinks: { text: string; link: string }[]
+  }[]
+>([])
 
 const fetchData = () => {
   footer_cols.value = content

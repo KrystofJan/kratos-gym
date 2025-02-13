@@ -139,7 +139,7 @@ const removeItem = (item: ExerciseCategory) => {
                           :key="category.CategoryId"
                           :value="category.CategoryName"
                           @select.prevent="
-                            (ev) => {
+                            (_) => {
                               modelValue.push(category)
 
                               setFieldValue(`exerciseCategories`, modelValue)

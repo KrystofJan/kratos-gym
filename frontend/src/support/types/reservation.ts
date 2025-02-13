@@ -10,6 +10,14 @@ export interface Reservation {
   Plan: Plan | undefined
 }
 
+export interface PartialReservation {
+  AmountOfPeople: number
+  ReservationTime: Date
+  CustomerId: number
+  TrainerId?: number
+  Plan: Partial<Plan>
+}
+
 export interface ReservationPost {
   AmountOfPeople: number
   ReservationTime: Date

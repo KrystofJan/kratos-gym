@@ -1,21 +1,7 @@
 <script setup lang="ts">
-import { Machine, Reservation, UserRoleOptions } from '../../support/types'
+import { Reservation, UserRoleOptions } from '../../support/types'
 
-import {
-  InspirationalQuote,
-  PlanInfo,
-  UserCard,
-  MachinesInPlan,
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/components'
+import { PlanInfo, UserCard } from '@/components'
 
 interface Props {
   reservation: Reservation

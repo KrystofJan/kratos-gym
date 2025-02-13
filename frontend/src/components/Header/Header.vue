@@ -1,16 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue'
-import TopHeader from './TopHeader.vue'
-import { currentAccount } from '../../store/'
-import { cn } from '@/lib/utils'
 import { MainNav, UserMenu } from '.'
-import {
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignOutButton,
-} from 'vue-clerk'
 </script>
 
 <template>

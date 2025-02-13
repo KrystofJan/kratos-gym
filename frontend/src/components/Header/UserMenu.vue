@@ -2,11 +2,9 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
   Button,
   Avatar,
@@ -53,10 +51,10 @@ import { UserRoleOptions } from '@/support'
         <DropdownMenuLabel class="font-normal flex">
           <div class="flex flex-col space-y-1">
             <p class="text-sm font-medium leading-none">
-              {{ currentAccount.FirstName + ' ' + currentAccount.LastName }}
+              {{ currentAccount?.FirstName + ' ' + currentAccount?.LastName }}
             </p>
             <p class="text-xs leading-none text-muted-foreground">
-              {{ currentAccount.Email }}
+              {{ currentAccount?.Email }}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -74,7 +72,7 @@ import { UserRoleOptions } from '@/support'
         </DropdownMenuItem>
         <DropdownMenuItem
           class="p-0"
-          v-if="currentAccount.Role === UserRoleOptions.EMPLOYEE"
+          v-if="currentAccount?.Role === UserRoleOptions.EMPLOYEE"
         >
           <router-link to="/admin" class="py-1.5 px-2 w-full h-full"
             >Administration</router-link

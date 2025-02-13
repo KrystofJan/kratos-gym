@@ -19,6 +19,7 @@ export class PlanGeneratorController {
     static async Generate(req: Request, res: Response) {
         const { collisions } = req.query as PlanGeneratorQueryParams
         const postData = req.body as GeneratorPost
+        console.log(postData)
 
         const [err, data] = await safeAwait(
             PlanGeneratorService.FetchPlanInformation(postData)

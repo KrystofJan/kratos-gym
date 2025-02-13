@@ -6,28 +6,13 @@ import {} from '../../support/types'
 import { Detail } from '.'
 import { onMounted } from 'vue'
 
-import {
-  InspirationalQuote,
-  PlanInfo,
-  UserCard,
-  MachinesInPlan,
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/components'
+import { InspirationalQuote, MachinesInPlan } from '@/components'
 
 import {
   ReservationService,
   PlanService,
   Machine,
   Reservation,
-  UserRoleOptions,
 } from '@/support'
 
 const route = useRoute()
@@ -58,7 +43,7 @@ const fetchMachines = async () => {
 
 watch(
   () => route.params.id,
-  async (newId, oldId) => {
+  async (newId) => {
     await fetchReservation(Number(newId))
     await fetchMachines()
   }

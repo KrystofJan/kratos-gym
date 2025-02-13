@@ -99,6 +99,11 @@ watch(
     if (!newPreloadedData || !props.generated) return
 
     props.setFieldValue(
+      `machinesInPlan.${props.index}.MachineId`,
+      props.machine.MachineId
+    )
+
+    props.setFieldValue(
       `machinesInPlan.${props.index}.StartTime.hour`,
       newPreloadedData[0].hour || 0
     )
@@ -146,6 +151,11 @@ function formatPrevTime(time: TimeSuggestion | undefined): string {
 }
 
 onMounted(() => {
+  props.setFieldValue(
+    `machinesInPlan.${props.index}.MachineId`,
+    props.machine.MachineId
+  )
+
   props.setFieldValue(
     `machinesInPlan.${props.index}.StartTime.hour`,
     props.preloadedData[0].hour || 0

@@ -32,7 +32,7 @@ export class PlanGeneratorService {
     }
     try {
       const res = await fetch(
-        `${KRATOS_API_URL}/api/plan-generator/generate?collisions=${planConfig.collisions}`,
+        `${KRATOS_API_URL}/api/plan-generator/generate?colliding=${planConfig.collisions}`,
         {
           method: 'POST',
           headers: {
