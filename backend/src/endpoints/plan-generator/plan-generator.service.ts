@@ -91,7 +91,7 @@ export class PlanGeneratorService {
                         machine: dataSortedByMachines[i][lastJ].machine,
                         start_time: dataSortedByMachines[i][lastJ].end_time,
                         end_time: new Time(23, 59),
-                        can_disturb: dataSortedByMachines[i][lastJ].can_collide,
+                        can_disturb: true,
                     })
                 )
             }
@@ -168,8 +168,16 @@ export class PlanGeneratorService {
         datasetType: DataSetType
     ) {
         try {
-            // console.log(input)
+            console.log(
+                datasetType === DataSetType.COLLIDING
+                    ? 'colliding'
+                    : 'nonCOliding'
+            )
+
             const data = this.prepareDataset(input, start_time)
+
+            console.log(input)
+            console.log(data)
 
             if (datasetType === DataSetType.COLLIDING) {
                 return await GraphService.CreateGraphNodes(
@@ -178,7 +186,6 @@ export class PlanGeneratorService {
             }
             //
             // console.log(this.getNonCollidingDataSet(data))
-            // console.log(data)
 
             return await GraphService.CreateGraphNodes(
                 this.getNonCollidingDataSet(data)

@@ -66,6 +66,7 @@ const schema = toTypedSchema(
       .array(
         z
           .object({
+            MachineId: z.number(),
             Reps: z.number().default(6),
             Sets: z.number().default(4),
             StartTime: z.object({
@@ -101,9 +102,10 @@ const schema = toTypedSchema(
         return true
       })
       .refine(
-        (data) => {
+        async (data) => {
           timeRecs.value.clear()
           for (let i = 0; i < data.length; ++i) {
+            const machineId = data[i].MachineId
             const startTime =
               data[i].StartTime.hour * 60 + data[i].StartTime.minute
             const endTime = data[i].EndTime.hour * 60 + data[i].EndTime.minute
@@ -116,6 +118,14 @@ const schema = toTypedSchema(
                   (machine) =>
                     machine.MachineId === props.selectedMachines[i].MachineId
                 )
+
+            // NOTE: Need to skip the time suggestion if the
+            //   machine is not in the concurrent machines
+            if (
+              !concurrentMachines.map((x) => x.MachineId).includes(machineId)
+            ) {
+              continue
+            }
             for (const machine of concurrentMachines) {
               const startMachineTime = machine.StartTime.split(':').map((x) =>
                 Number(x)
@@ -130,6 +140,10 @@ const schema = toTypedSchema(
                 machineEndTime <= endTime ? machineEndTime : endTime
               const maxStartTime =
                 machineStartTime >= startTime ? machineStartTime : startTime
+              console.log(maxStartTime < minEndTime)
+              console.log(maxStartTime)
+              console.log(minEndTime)
+              console.log(data[i].MachineId)
 
               if (maxStartTime < minEndTime) {
                 const startTimeTime = new Time(
@@ -140,7 +154,7 @@ const schema = toTypedSchema(
                   data[i].EndTime.hour,
                   data[i].EndTime.minute
                 )
-                suggestTime(machine.MachineId, {
+                await suggestTime(machine.MachineId, {
                   desired_date: props.reservationTime ?? new Date(),
                   desired_start_time: startTimeTime,
                   desired_end_time: endTimeTime,
@@ -196,7 +210,7 @@ const suggestTime = async (
 ) => {
   try {
     const data = await new MachineService().SuggestTime(id, vars)
-
+    console.log(JSON.stringify(data))
     timeRecs.value.set(id, data)
   } catch (error) {
     console.error('Error fetching account:', error)

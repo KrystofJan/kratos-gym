@@ -63,8 +63,8 @@ const onSubmit = async () => {
           return {
             ...mip,
             MachineId: selectedMachines.value[index].MachineId,
-            StartTime: mip.StartTime.toString(),
-            EndTime: mip.EndTime.toString(),
+            StartTime: `${mip.StartTime.hour}:${mip.StartTime.minute}`,
+            EndTime: `${mip.EndTime.hour}:${mip.EndTime.minute}`,
           }
         }),
       },
