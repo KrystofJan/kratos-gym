@@ -1,1 +1,1 @@
-export { columns, values } from './machine-columns'
+export { columns, values } from './list/machine-columns'

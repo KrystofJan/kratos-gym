@@ -4,8 +4,8 @@ import { useRoute } from 'vue-router'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
-import { AutoForm, Button } from '@/components'
-import { MachineService, Machine, MachinePost, FormType } from '@/support'
+import { AutoForm, Button, toast } from '@/components'
+import { MachineService, Machine, FormType } from '@/support'
 
 const route = useRoute()
 
@@ -23,13 +23,17 @@ const form = useForm({
 
 const createMachine = async (values: Record<string, any>) => {
   try {
-    await new MachineService().CreateMachine(values)
+    await new MachineService().CreateMachine(values as Machine)
   } catch (err) {
     throw err
   }
 }
 
 const updateMachine = async (values: Record<string, any>) => {
+  if (machine.value === undefined) {
+    toast({ title: 'ERROR', description: 'Could not find reservation' })
+    return
+  }
   try {
     await new MachineService().UpdateMachine(values, machine.value.MachineId)
   } catch (err) {
@@ -61,7 +65,7 @@ const fetchMachine = async (id: number) => {
 
 watch(
   () => route.params.id,
-  async (newId, oldId) => {
+  async (newId, _) => {
     await fetchMachine(Number(newId))
   }
 )

@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import type { Machine } from '@/support'
 import { PlanService } from '@/support'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { columns, values, deleteSelected } from './plan-columns'
 import { DataGrid } from '@/components'
 
 async function getData() {
-  // Fetch data from your API here.
   try {
     const data = await new PlanService().FetchAll({ limit: 100 })
     values.value = data

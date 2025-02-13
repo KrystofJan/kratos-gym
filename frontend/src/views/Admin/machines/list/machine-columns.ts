@@ -1,7 +1,7 @@
 import { h, ref } from 'vue'
 import type { ColumnDef } from '@tanstack/vue-table'
 
-import { ArrowUpDown, ChevronDown } from 'lucide-vue-next'
+import { ArrowUpDown } from 'lucide-vue-next'
 
 import { toast, Button, Checkbox, DataGridActions } from '@/components'
 

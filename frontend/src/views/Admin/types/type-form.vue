@@ -4,8 +4,13 @@ import { useRoute } from 'vue-router'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
-import { AutoForm, Button } from '@/components'
-import { FormType, ExerciseType, ExerciseTypeService } from '@/support'
+import { AutoForm, Button, toast } from '@/components'
+import {
+  FormType,
+  ExerciseType,
+  ExerciseTypeService,
+  ExerciseTypePost,
+} from '@/support'
 
 const route = useRoute()
 
@@ -21,13 +26,17 @@ const form = useForm({
 
 const createExerciseType = async (values: Record<string, any>) => {
   try {
-    await new ExerciseTypeService().Create(values)
+    await new ExerciseTypeService().Create(values as ExerciseTypePost)
   } catch (err) {
     throw err
   }
 }
 
 const updateExerciseType = async (values: Record<string, any>) => {
+  if (type.value === undefined) {
+    toast({ title: 'COULD NOT FIND TYPE' })
+    return
+  }
   try {
     await new ExerciseTypeService().Update(values, type.value.ExerciseTypeId)
   } catch (err) {
@@ -59,7 +68,7 @@ const fetchExerciseType = async (id: number) => {
 
 watch(
   () => route.params.id,
-  async (newId, oldId) => {
+  async (newId, _) => {
     await fetchExerciseType(Number(newId))
   }
 )

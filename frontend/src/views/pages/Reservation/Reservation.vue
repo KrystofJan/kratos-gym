@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, h } from 'vue'
+import type { Ref } from 'vue'
 import { Time } from '@internationalized/date'
 import { SignedOut, SignedIn } from 'vue-clerk'
 import { currentAccount } from '@/store/accountStore'
@@ -36,14 +37,15 @@ import {
   ReservationService,
 } from '@/support'
 
-const reservation = ref<Partial<PartialReservation>>({})
+const reservation: Ref<Partial<PartialReservation>> = ref({})
+
 const stepIndex = ref<number>(1)
 const selectedMachines = ref<Machine[]>([])
 
-const generatedTime = ref<{
+const generatedTime: Ref<{
   map: Map<number, [Time, Time]>[]
   data: PlanGeneratorResults
-} | null>(null)
+} | null> = ref(null)
 
 // Exercise Category Schema
 const onSubmit = async () => {

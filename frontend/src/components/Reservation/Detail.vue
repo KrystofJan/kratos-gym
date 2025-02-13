@@ -6,7 +6,7 @@ import { PlanInfo, UserCard } from '@/components'
 interface Props {
   reservation: Reservation
 }
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>
 <template>
   <div class="grid gap-8 grid-cols-5 col-span-3">

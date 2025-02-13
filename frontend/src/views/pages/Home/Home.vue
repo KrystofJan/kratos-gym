@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import { currentAccount, fetchAccount } from '../../../store/accountStore'
 import { useUser } from 'vue-clerk'
 import { HeroBanner, StickyTextComposite } from '@/components'

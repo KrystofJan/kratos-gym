@@ -4,11 +4,10 @@ import { useRoute } from 'vue-router'
 import { toTypedSchema } from '@vee-validate/zod'
 import { useForm } from 'vee-validate'
 import * as z from 'zod'
-import { AutoForm, Button } from '@/components'
+import { AutoForm, Button, toast } from '@/components'
 import {
   AccountService,
   AddressService,
-  FormType,
   UserRoleOptions,
   Account,
   roleCharMap,
@@ -42,11 +41,18 @@ const form = useForm({
 const route = useRoute()
 
 const updateAccount = async (values: Record<string, any>) => {
+  if (account.value === undefined) {
+    toast({ title: 'ERROR', description: 'Could not find accountNorFound' })
+    return
+  }
+
   try {
-    const result = new AddressService().Update(
-      values['Address'],
-      account.value.Address.AddressId
-    )
+    if (account.value.Address !== undefined) {
+      new AddressService().Update(
+        values['Address'],
+        account.value.Address.AddressId || 0
+      )
+    }
   } catch (err) {
     throw err
   }
@@ -73,7 +79,7 @@ const fetchAccount = async (id: number) => {
 
 watch(
   () => route.params.id,
-  async (newId, oldId) => {
+  async (newId, _) => {
     await fetchAccount(Number(newId))
   }
 )
@@ -87,14 +93,8 @@ onMounted(async () => {
     form.setFieldValue('Role', roleCharMap.get(account.value.Role))
     form.setFieldValue('Email', account.value.Email)
     form.setFieldValue('PhoneNumber', account.value.PhoneNumber)
-    form.setFieldValue('IsActive', account.value.IsActive)
+    form.setFieldValue('IsActive', Boolean(account.value.IsActive))
     form.setFieldValue('Address', account.value.Address)
-    //        form.setFieldValue('Street', account.value.Street)
-    //        form.setFieldValue('City', account.value.City)
-    //        form.setFieldValue('PostalCode', account.value.PostalCode)
-    //        form.setFieldValue('Country', account.value.Country)
-    //        form.setFieldValue('BuildingNumber', account.value.BuildingNumber)
-    //        form.setFieldValue('ApartmentNumber', account.value.ApartmentNumber)
     form.setFieldValue('Credits', account.value.Credits)
     form.setFieldValue('Login', account.value.Login)
     form.setFieldValue('ClerkId', account.value.ClerkId)

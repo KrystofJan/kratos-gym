@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, h, ref, computed } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { z } from 'zod'
 import { useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
@@ -7,7 +7,6 @@ import { parse, format } from 'date-fns'
 import { cn } from '@/lib/utils'
 import { Calendar as CalendarIcon, CircleX } from 'lucide-vue-next'
 import {
-  NumberInput,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -31,7 +30,6 @@ import {
   Button,
   Calendar,
   Input,
-  toast,
   Step,
 } from '@/components'
 
@@ -39,7 +37,6 @@ import { Check, ChevronsUpDown } from 'lucide-vue-next'
 
 import {
   CalendarDate,
-  DateFormatter,
   getLocalTimeZone,
   parseDate,
   today,
@@ -110,13 +107,9 @@ const selectTrainer = (trainer: Account) => {
   setFieldValue('trainer', trainer)
 }
 
-const removeTrainer = (trainer: Account) => {
+const removeTrainer = () => {
   selectedTrainer.value = null
   setFieldValue('trainer', undefined)
-}
-
-const getFullName = (trainer: Account | null) => {
-  return trainer ? `${trainer.FirstName} ${trainer.LastName}` : ''
 }
 
 const onSubmit = handleSubmit((values) => {
@@ -209,7 +202,6 @@ const placeholder = ref()
               </FormControl>
             </PopoverTrigger>
             <PopoverContent class="p-0">
-              <!-- TODO: Make this work -->
               <Calendar
                 v-model:placeholder="placeholder"
                 v-model="val"
@@ -230,7 +222,7 @@ const placeholder = ref()
           <FormMessage />
         </FormItem>
       </FormField>
-      <FormField v-slot="{ value }" name="trainer">
+      <FormField name="trainer">
         <FormItem>
           <FormLabel>Trainer</FormLabel>
           <Popover>

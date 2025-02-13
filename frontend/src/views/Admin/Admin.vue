@@ -1,15 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import {
-  Check,
-  ChevronsUpDown,
-  GalleryVerticalEnd,
-  Search,
-} from 'lucide-vue-next'
+import { ref, computed } from 'vue'
 import { Terminal } from 'lucide-vue-next'
 
-// Import components from the custom library
-import {} from '@/components/shadcn/ui/breadcrumb'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,19 +9,13 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-  Label,
   Separator,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarInput,
   SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
@@ -39,7 +25,7 @@ import {
   SidebarTrigger,
 } from '@/components'
 
-import { SignedIn, SignedOut, useUser } from 'vue-clerk'
+import { SignedIn, SignedOut } from 'vue-clerk'
 
 import { currentAccount } from '@/store/accountStore'
 import { UserRoleOptions } from '@/support'
@@ -133,14 +119,13 @@ const data = ref<MainNav>({
   ],
 })
 
-const search = ref('')
 const activeCategory = computed(() =>
   data.value.navMain.find((item) =>
     item.items.some((subItem) => subItem.isActive)
   )
 )
 const activeLink = computed(
-  () => activeCategory.value?.items.find((item) => item.isActive) || {}
+  () => activeCategory.value?.items.find((item) => item.isActive) || null
 )
 
 // Update switchLink to reset all isActive flags and set the clicked link to active

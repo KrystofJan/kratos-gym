@@ -180,7 +180,24 @@ export const columns: ColumnDef<ExerciseType>[] = [
 ]
 
 export async function deleteSelected(ids: number[]) {
-  toast({
-    title: 'Cannot delete accounts',
-  })
+  for (const id of ids) {
+    try {
+      const responseData = await new ExerciseTypeService().Delete(id)
+      values.value = values.value.filter(
+        (x) => x.ExerciseTypeId !== responseData.DeletedId
+      )
+    } catch (err) {
+      toast({
+        title: 'Error while deleting data',
+        description: h(`ADD ERROR`, { class: 'text-red' }),
+      })
+    }
+
+    toast({
+      title: 'Deleted all seleceted rows',
+      description: h('deleted rows: ${ids.join(", ").toString()}', {
+        class: '',
+      }),
+    })
+  }
 }
