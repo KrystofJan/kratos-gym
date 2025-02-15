@@ -37,9 +37,6 @@ docker compose up -d
 
 2. <a id="docker-db-setup">After starting all the necessary containers, you need to run the sql script that will create the database, create the tables and insert data in</a>
 
-> [!WARNING]
-    The database script will be changed in the future to contain more suitable data, for now it contains random data :)
-> 
 ```
 cat ./backend/db/full_db_neon.sql | docker exec -i {{POSTGRES_CONTAINER_ID}} psql -U postgres -d kratos-dev
 ```
@@ -47,6 +44,10 @@ cat ./backend/db/full_db_neon.sql | docker exec -i {{POSTGRES_CONTAINER_ID}} psq
 > [!WARNING]
     You'll need to substiture the `{{POSTGRES_CONTAINER_ID}}` with the actual postgres `CONTAINER ID`
     You can find `CONTAINER ID` using: `docker ps` and look for the `postgres` container
+> 
+
+> [!WARNING]
+    The database script will be changed in the future to contain more suitable data, for now it contains random data :)
 > 
 
 At this point you should be able to visit `http://localhost:5173/` and be on the site, you can access the api `http://localhost:7000`.
