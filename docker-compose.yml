@@ -18,3 +18,11 @@ services:
     ports:
       - 7000:7000
 
+  frontend:
+    image: krystofjan/kratos-gym-fe:latest
+    depends_on:
+      - api
+    network_mode: "host"
+    ports:
+      - 5173:5173
+
