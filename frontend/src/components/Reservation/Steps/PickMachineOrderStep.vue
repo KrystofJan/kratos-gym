@@ -241,26 +241,26 @@ const { value: isDisabled } = useField('generate')
               </FormItem>
             </FormField>
 
-            <FormField
-              v-slot="{ value, handleChange }"
-              type="checkbox"
-              name="continuous"
-              v-if="isDisabled"
-            >
-              <FormItem
-                v-auto-animate
-                class="grid grid-cols-2 -order-1 w-full items-center gap-2 space-y-0"
-              >
-                <FormLabel
-                  >Can there be gaps between your exercises? TODO: Add maximum
-                  gap length
-                </FormLabel>
-                <FormControl>
-                  <Checkbox :checked="value" @update:checked="handleChange" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            </FormField>
+            <!-- <FormField -->
+            <!--   v-slot="{ value, handleChange }" -->
+            <!--   type="checkbox" -->
+            <!--   name="continuous" -->
+            <!--   v-if="isDisabled" -->
+            <!-- > -->
+            <!--   <FormItem -->
+            <!--     v-auto-animate -->
+            <!--     class="grid grid-cols-2 -order-1 w-full items-center gap-2 space-y-0" -->
+            <!--   > -->
+            <!--     <FormLabel -->
+            <!--       >Can there be gaps between your exercises? TODO: Add maximum -->
+            <!--       gap length -->
+            <!--     </FormLabel> -->
+            <!--     <FormControl> -->
+            <!--       <Checkbox :checked="value" @update:checked="handleChange" /> -->
+            <!--     </FormControl> -->
+            <!--     <FormMessage /> -->
+            <!--   </FormItem> -->
+            <!-- </FormField> -->
           </div>
         </KeepAlive>
       </div>
