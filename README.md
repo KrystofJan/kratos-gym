@@ -3,12 +3,12 @@
 # Kratos gym
 ##### A gym reservation system
 
+[//]: <> (Gonna need to change picture based on the theme later on :D)
+<img alt="Kratos" height="280" src="./frontend/public/logo-vert-cropped.svg" />
+
 [![Typescript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vue.js](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)](https://vuejs.org/)
 [![Postgres](https://img.shields.io/badge/postgresql-4169e1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-
-[//]: <> (Gonna need to change picture based on the theme later on :D)
-<img alt="Kratos" height="280" src="./frontend/public/logo-vert-cropped.svg" />
 </div>
 
 ## Installation
