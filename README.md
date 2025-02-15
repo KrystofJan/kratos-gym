@@ -37,7 +37,9 @@ Using docker you'll need to do 2 steps
 docker compose up -d
 ```
 > [!NOTE]
-    docker compose is the new `GO` implementation of the old `python` docker-compose and it is managed by docker itself
+    docker compose is the new `GO` implementation of the old `python` docker-compose.
+    docker-compose is a standalone app, but docker compose is a plugin.
+    To install docker compose/docker-compose, checkout this [tutorial](https://docs.docker.com/compose/install/)
 > 
 
 2. After starting all the necessary containers, you need to run the sql script that will create the database, create the tables and insert data in
@@ -46,6 +48,14 @@ docker compose up -d
     The database script will be changed in the future to contain more suitable data, for now it contains random data :)
 > 
 ```
-cat ./backend/db/full_db_neon.sql | docker exec -i 696159c0eb7b psql -U postgres -d kratos-dev
+cat ./backend/db/full_db_neon.sql | docker exec -i {{POSTGRES_CONTAINER_ID}} psql -U postgres -d kratos-dev
 ```
+
+> [!WARNING]
+    You'll need to substiture the `{{POSTGRES_CONTAINER_ID}}` with the actual postgres container id
+    You can find `CONTAINER ID` using:
+    ```
+docker ps
+    ```
+> 
 At this point you should be able to visit `http://localhost:5173/` and be on the site, you can access the api `http://localhost:7000`.
