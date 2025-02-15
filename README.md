@@ -11,6 +11,11 @@
 [![Postgres](https://img.shields.io/badge/postgresql-4169e1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 </div>
 
+## Table of contents
+- [Installation](#installation)
+  - [Using docker](#using-docker)
+  - [Manual installation](#manual-installation)
+
 ## Installation
 
 ### Using docker
@@ -51,6 +56,8 @@ cat ./backend/db/full_db_neon.sql | docker exec -i {{POSTGRES_CONTAINER_ID}} psq
 > 
 
 At this point you should be able to visit `http://localhost:5173/` and be on the site, you can access the api `http://localhost:7000`.
+
+
 ### Manual installation
 
 #### Dependencies
