@@ -1,79 +1,108 @@
-# gym-reservation-system
-## Update Nov 21. 2024
-* refactor backend to use the new structure
-* refactor frontend to utilize shadcn and typescript
-* Reservations won't work now, but this will be resolved in another PR
-* Made a docker image of the backend
-* Using Clerk for frontend authentication
-* dumped neon db for local dev
+<div align="center" style="background: black; color: white;">
 
-### Next steps
-* [ ] Dockerize frontend
-* [x] Make docker-compose for the backend with the database and the app
-* [ ] Make it so that the endpoints that require authentication get authenticated
-* [ ] The rest is in Clickup
+# Kratos gym
+##### A gym reservation system
 
-## Update APR 01. 2024
-* Refactored the whole backend to typescript
-* Split Reservation to multiple components on the fe
-* the rest in commit msgs
+[//]: <> (Gonna need to change picture based on the theme later on :D)
+<img alt="Kratos" height="280" src="./frontend/public/logo-vert-cropped.svg" />
 
-## Update Feb 06. 2024
-* Adding WrkOutPlanTypes and WrkOutPlanMachine endpoints
-* Adding requests to Reservations endpoint
-* Refractoring models and controllers
+[![Typescript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vue.js](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)](https://vuejs.org/)
+[![Postgres](https://img.shields.io/badge/postgresql-4169e1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+</div>
 
-## Update Feb 05. 2024
-* Adding MachineExerciseTypes and ExerciseType endpoints
-* Adding requests to WrkOutMachine and Address endpoints
+## Installation
 
-## Update Dec 23. 2023
-* Added remote databse
-* Started writing the docs
-* Refractoring FE to use composition API
+### Using docker
 
-## Update Nov 30. 2023
-* Refractored the whole backend
-* Fixed some issues in frontend
+#### Dependencies
+- **Docker engine**
+    - To install **Docker Engine**, follow steps in [Docker Engine installation guide](https://docs.docker.com/engine/install/)
+    - You can also use **Docker Desktop**, if you prefer it. [Docker Desktop installation guide](https://docs.docker.com/get-started/get-docker/)
 
-## Update Nov 21. 2023
-* Optimising frontend components
-* fixed footer links
-* Made a logo
+- **Docker compose**
+    - To install **Docker Compose**, follow steps in [Overview of installing Docker Compose](https://docs.docker.com/compose/install/)
 
-## Update Nov 20. 2023
-* Refractoring -> Implemented models, which represent endpoint data. I also Access db with these models. Might put to a separate class later (for now I have 2 requests that work like this. get all Addresses and get reservation by ip)
-* Fetching db key names from json
+#### Setup
+Using docker you'll need to do 2 steps
 
-## Update Nov 17. 2023
-* Added more functionality to db - canDisturb, TimeTaken etc.
-* Fetching data from separate files
+1. Run docker compose to start all `api`, `frontend` and the `postgres` database
+```
+docker compose up -d
+```
+> [!NOTE]
+    docker compose is the new `GO` implementation of the old `python` docker-compose.
+    docker-compose is a standalone app, but docker compose is a plugin. Depending on your installation this step may change
+> 
 
-## Update Nov 5. 2023
-* Added HeroBanner, Footer and Appheader Components
-* Added basic Admin, AboutUs, Contacts, Home and Reservation Views
-* Dynamicaly changing content
+2. <a id="docker-db-setup">After starting all the necessary containers, you need to run the sql script that will create the database, create the tables and insert data in</a>
 
-## Update Oct 24. 2023
-* Init Vue.js frontend
-* Added ```run.sh``` bash script that runs api and frontend at the same time
+```
+cat ./backend/db/full_db_neon.sql | docker exec -i {{POSTGRES_CONTAINER_ID}} psql -U postgres -d kratos-dev
+```
 
-## Update Oct 22. 2023
-* Added AddCredits Procedure
-* Added DatabaseValidators class where all the validation is going to be in
-* Added get specific reservation endpoint
-  
-## Update Oct 18. 2023
-* Added WrkOutTime to WekOutPlanMachine table for time suggestion
-* Added presets to db
-* Created a ReduceCredits procedure
+> [!WARNING]
+    You'll need to substiture the `{{POSTGRES_CONTAINER_ID}}` with the actual postgres `CONTAINER ID`
+    You can find `CONTAINER ID` using: `docker ps` and look for the `postgres` container
+> 
 
-## Update Oct 16. 2023
-* Added one more endpoint with an id parameter that suggests a Machine
-* Refractoring
-* UseCase Model
+> [!WARNING]
+    The database script will be changed in the future to contain more suitable data, for now it contains random data :)
+> 
 
-## Update Oct 2. 2023
+At this point you should be able to visit `http://localhost:5173/` and be on the site, you can access the api `http://localhost:7000`.
+### Manual installation
 
-* Added a get request for a reservation endpoint
-* Connected to the DB
+#### Dependencies
+You can skip dependencies if you want to use nix ;)
+
+- **Node.js 22**
+- **Postgres**/Or Docker
+    - I won't be going over the steps on how to set up the database, you can use the one provided in `docker-compose.yml`
+```
+docker compose up postgres -d
+```
+
+##### Nix
+You can use [Nix](https://nixos.org/) to the needed versions of node, etc. A `nix shell` is provided. If you didn't hear about nix yet, go check it out it's really cool!
+Here's an installation guide: [Download Nix | NixOs](https://nixos.org/download/#download-nix)
+
+To open a nix shell use
+```
+nix develop
+```
+This should install typescript, ts language server, node 22 etc.
+
+If you do not use nix, you can refer to packages section in `flake.nix` and install everything except harlequin (you dont need that one)
+
+
+#### Setup
+
+##### DB
+1. Run the script in `backend/db/full_db_neon.sql`
+To run using docker refer to [docker db setup](#docker-db-setup)
+
+##### Backend
+1. Go to the backend folder and install packages:
+```
+cd backend
+npm i
+```
+
+2. After you successfully install packages, you can start the HTTP server using
+```
+npm run dev
+```
+
+##### Frontend
+1. Go to the frontend folder and install packages:
+```
+cd frontend
+npm i
+```
+
+2. After you successfully install packages, you can start the HTTP server using
+```
+npm run dev
+```
+At this point you should be able to visit `http://localhost:5173/` and be on the site, you can access the api `http://localhost:7000`.

@@ -7,7 +7,7 @@ services:
       POSTGRES_DB: kratos-dev
 
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - ./backend/pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
   api:
@@ -17,3 +17,12 @@ services:
     network_mode: "host"
     ports:
       - 7000:7000
+
+  frontend:
+    image: krystofjan/kratos-gym-fe:latest
+    depends_on:
+      - api
+    network_mode: "host"
+    ports:
+      - 5173:5173
+
