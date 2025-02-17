@@ -65,7 +65,7 @@ You can skip dependencies if you want to use nix ;)
 
 - **Node.js 22**
 - **Postgres**/Or Docker
-    - I won't be going over the steps on how to set up the database, you can use the one provided in `docker-compose.yml`
+    - I won't be going over the steps on how to set up the database, you can use the one provided in `docker-compose.yml`, you can do so by using `docker compose up postgres -d`
 ```
 docker compose up postgres -d
 ```
