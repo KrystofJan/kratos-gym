@@ -21,7 +21,7 @@ export class Auth extends Model {
     Login: string
 
     @Column('profile_picture_url')
-    public ProfilePictureUrl?: string
+    public ProfilePictureUrl: string | null
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(data: IDictionary<any>) {
@@ -31,7 +31,14 @@ export class Auth extends Model {
         this.FirstName = data['FirstName']
         this.LastName = data['LastName']
         this.Login = data['Login']
-        this.ProfilePictureUrl =
-            data['profile_picture_url'] ?? data['ProfilePictureUrl']
+        if (
+            data['profile_picture_url'] ??
+            data['ProfilePictureUrl'] === undefined
+        ) {
+            this.ProfilePictureUrl = null
+        } else {
+            this.ProfilePictureUrl =
+                data['profile_picture_url'] ?? data['ProfilePictureUrl']
+        }
     }
 }

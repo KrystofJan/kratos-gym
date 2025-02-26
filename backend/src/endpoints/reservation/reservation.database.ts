@@ -108,11 +108,12 @@ export class ReservationDatabase extends Database {
         }
         const [planTableName, planProcessedData, planColumnNames] =
             await this.ProcessInsertData(Plan, body.Plan)
+
         try {
             const res = await this.sql.begin(async (sql) => {
                 const [planErr, pl] = await safeAwait(sql<Plan[]>`
                     insert into ${sql(planTableName)} 
-                    ${this.sql(planProcessedData, planColumnNames)}
+                    ${sql(planProcessedData, planColumnNames)}
                     returning *
                 `)
 
@@ -148,7 +149,7 @@ export class ReservationDatabase extends Database {
                     logger.info(mProcessedData)
                     const [machineErr, ma] = await safeAwait(sql<Model[]>`
                         insert into ${sql(mTableName)} 
-                        ${this.sql(mProcessedData, mColumnNames)}
+                        ${sql(mProcessedData, mColumnNames)}
                         returning *
                     `)
 
@@ -173,7 +174,7 @@ export class ReservationDatabase extends Database {
                 for (const exType of body.Plan.ExerciseCategories) {
                     const [typeErr, tp] = await safeAwait(sql<Model[]>`
                         insert into ${sql('plan_category')} 
-                        (${this.sql(typePKey)}, ${this.sql('plan_id')})
+                        (${sql(typePKey)}, ${sql('plan_id')})
                         values (${exType.CategoryId}, ${planModel.PlanId})
                         returning *
                     `)
@@ -197,7 +198,7 @@ export class ReservationDatabase extends Database {
                     await this.ProcessInsertData(Reservation, body)
                 const [reservationErr, re] = await safeAwait(sql<Reservation[]>`
                     insert into ${sql(resTableName)} 
-                    ${this.sql(resProcessedData, resColumnNames)}
+                    ${sql(resProcessedData, resColumnNames)}
                     returning *
                 `)
 
