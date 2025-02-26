@@ -64,7 +64,7 @@ jobs:
       
       - name: Start Backend container
         run: |
-          docker run -d --name backend-container --env-file .env -p 8000:8000 krystofjan/kratos-gym-be:${{ env.tag }}
+          docker run -d --name backend-container 7000:7000 krystofjan/kratos-gym-be:${{ env.tag }}
       
       - name: Wait for PostgreSQL to be ready
         run: |
