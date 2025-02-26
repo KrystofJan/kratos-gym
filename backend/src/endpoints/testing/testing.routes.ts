@@ -4,8 +4,14 @@ import { SelectQuery } from '../../database/query-builder'
 import { TestingController } from './testing.controller'
 import { clerkClient, requireAuth } from '@clerk/express'
 
-export const TestingTable: Router = express.Router()
+export const DBRouter: Router = express.Router()
 
-TestingTable.get('/', async (req: Request, res: Response) => {
+DBRouter.get('/', async (req: Request, res: Response) => {
     await TestingController.FindAll(req, res)
+})
+
+export const testRouter: Router = express.Router()
+
+testRouter.get('/', async (req: Request, res: Response) => {
+    res.status(200).json({ status: 'up' })
 })
