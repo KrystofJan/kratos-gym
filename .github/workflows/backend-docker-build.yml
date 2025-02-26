@@ -36,6 +36,7 @@ jobs:
           elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
             echo "tag=pr-${{ github.event.number }}" >> $GITHUB_ENV
             echo "tag=pr-${{ github.event.number }}" >> $GITHUB_OUTPUT
+          fi
       
       - name: Build docker image
         run: |
