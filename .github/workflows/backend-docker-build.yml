@@ -77,7 +77,7 @@ jobs:
       - name: Start Backend container
         run: |
           docker build -t krystofjan/kratos-gym-be:test ./backend
-          docker run -p 7000:7000 --net=host krystofjan/kratos-gym-be:test
+          docker run -d -p 7000:7000 --net=host krystofjan/kratos-gym-be:test
       
       - name: Install dependencies
         run: |
