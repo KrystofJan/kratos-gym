@@ -498,6 +498,7 @@ export class ReservationController {
             response.buildResponse(req, res)
             return
         }
+
         const [err, id] = await safeAwait(
             ReservationService.CreateFullReservation(model)
         )

@@ -20,25 +20,29 @@ export class Model {
     }
 
     checkForUnneededData(json: IDictionary<DatabaseType>) {
-        const thisProps = Object.keys(this)
-        const foreignKeys = Reflect.getMetadata(
-            DecoratorType.FOREIGN_KEYS_KEYS,
-            Object.getPrototypeOf(this)
-        )
-        const differentlyNamedForeignKeys = Reflect.getMetadata(
-            DecoratorType.DIFERENTLY_NAMED_FOREIGN_KEYS,
-            Object.getPrototypeOf(this)
-        )
-        for (const prop of Object.keys(json)) {
-            if (
-                !thisProps.includes(prop) &&
-                !foreignKeys.includes(prop) &&
-                !differentlyNamedForeignKeys.includes(prop)
-            ) {
-                logger.warn(prop)
-                return false
+        try {
+            const thisProps = Object.keys(this)
+            const foreignKeys = Reflect.getMetadata(
+                DecoratorType.FOREIGN_KEYS_KEYS,
+                Object.getPrototypeOf(this)
+            )
+            const differentlyNamedForeignKeys = Reflect.getMetadata(
+                DecoratorType.DIFERENTLY_NAMED_FOREIGN_KEYS,
+                Object.getPrototypeOf(this)
+            )
+            for (const prop of Object.keys(json)) {
+                if (
+                    !thisProps.includes(prop) &&
+                    !foreignKeys.includes(prop) &&
+                    !differentlyNamedForeignKeys.includes(prop)
+                ) {
+                    logger.warn(prop)
+                    return false
+                }
             }
+            return true
+        } catch {
+            return false
         }
-        return true
     }
 }

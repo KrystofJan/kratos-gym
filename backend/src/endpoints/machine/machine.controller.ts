@@ -18,6 +18,7 @@ import { safeAwait } from '../../utils/utilities'
 import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response'
 import { ExerciseTypeService } from '../exercise-type'
 import { PlanService } from '../plan'
+import { StatusCodes } from 'http-status-codes'
 
 export class MachineController {
     static async FindAll(req: Request, res: Response) {
@@ -380,6 +381,28 @@ export class MachineController {
         const desiredStartTime = new Time(start_h, start_m)
         const [end_h, end_m] = desired_end_time.split(':').map(Number)
         const desiredEndTime = new Time(end_h, end_m)
+
+        if (data.length === 0) {
+            logger.info('did not find any colliding machines')
+            const response = new OkResponse(
+                'did not find any colliding machines',
+                {
+                    PrevSuggestion: {
+                        StartTime: desiredStartTime,
+                        EndTime: desiredEndTime,
+                        isColiding: false,
+                    },
+                    NextSuggestion: {
+                        StartTime: desiredStartTime,
+                        EndTime: desiredEndTime,
+                        isColiding: false,
+                    },
+                }
+            )
+            response.buildResponse(req, res)
+            return
+        }
+
         const [resErr, result] = await safeAwait(
             MachineService.SuggestTimes(
                 data,

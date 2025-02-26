@@ -1,7 +1,13 @@
 import { IDictionary } from '../../utils'
 import { Address } from '../address/address.model'
 import { Model } from '../base'
-import { Column, ForeignKey, PrimaryKey, Table } from '../../database'
+import {
+    Column,
+    DifferentlyNamedForeignKey,
+    ForeignKey,
+    PrimaryKey,
+    Table,
+} from '../../database'
 import { UnInsertable } from '../../database/decorators/database-decorators'
 
 export enum UserRole {
@@ -46,6 +52,7 @@ export class Account extends Model {
     public Password: string
 
     @ForeignKey(Address)
+    @DifferentlyNamedForeignKey('AddressId')
     @Column('address_id')
     public Address: Address | undefined
 
@@ -103,12 +110,15 @@ export class Account extends Model {
         this.Login = jsonData['login'] ?? jsonData['Login']
         if (jsonData['address']) {
             this.Address = jsonData['address']
+        } else if (jsonData['AddressId']) {
+            this.Address = new Address({ AddressId: jsonData['AddressId'] })
         } else {
             this.Address = new Address(jsonData)
             if (!this.Address.AddressId) {
                 this.Address = undefined
             }
         }
+
         this.ClerkId = jsonData['clerk_id'] ?? jsonData['ClerkId']
         this.ProfilePictureUrl =
             jsonData['profile_picture_url'] ?? jsonData['ProfilePictureUrl']

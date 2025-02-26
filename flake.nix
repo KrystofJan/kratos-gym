@@ -35,6 +35,7 @@
             nodePackages.typescript 
             nodePackages.typescript-language-server
             prettierd
+	    eslint
 
             nodePackages_latest.ts-node
             nodePackages_latest.nodemon    
@@ -45,6 +46,8 @@
             python311Packages.numpy
             python311Packages.pyarrow
             python311Packages.pytest
+	    python311Packages.faker
+	    pyright
 	    harlequin
 
 	  ];

@@ -99,9 +99,10 @@ export class AccountService {
 
     static async SetAddressIdById(
         id: number,
-        body: Partial<Address>
+        body: Partial<Account>
     ): Promise<Account> {
         const db = new BasicQueryDatabase()
+        console.log(body)
 
         const [databaseErr, databaseResponse] = await safeAwait(
             db.Update(Account, id, body)

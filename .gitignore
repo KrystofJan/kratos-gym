@@ -1,5 +1,6 @@
 backend/db/.idea
 backend/node_modules
+backend/tests/myenv
 backend/pgdata
 Logs/
 node_modules

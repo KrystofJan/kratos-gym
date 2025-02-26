@@ -218,8 +218,8 @@ export class AccountController {
     static async SetAddressId(req: Request, res: Response) {
         const id = Number(req.params['id'])
         const body = req.body
-        const model: Partial<Address> = new Address(body)
-        const addressId = model.AddressId
+        const model: Partial<Account> = new Account(body)
+        const addressId = model.Address?.AddressId
         if (!addressId) {
             logger.error('Cannot insert this id ' + addressId)
             const error = new CodedError(
