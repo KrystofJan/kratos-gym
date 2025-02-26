@@ -78,19 +78,8 @@ jobs:
         run: |
           docker build -t krystofjan/kratos-gym-be:test ./backend
           docker run -d -p 7000:7000 --net=host krystofjan/kratos-gym-be:test
+          ./backend/wait.sh 
 
-          while true; do
-            STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}" "http://localhost:700/api/test/")
-            
-            if [ "$STATUS_CODE" -eq 200 ]; then
-              echo "OK response received! Status Code: 200"
-              break
-            else
-              echo "Not ready yet (Status: $STATUS_CODE). Retrying in 5 seconds..."
-              sleep 5
-            fi
-          done
-      
       - name: Install dependencies
         run: |
 
