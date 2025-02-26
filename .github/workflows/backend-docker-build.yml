@@ -64,15 +64,15 @@ jobs:
       
       - name: Wait for PostgreSQL to be ready
         run: |
-          # until docker exec postgres pg_isready -U postgres; do
-          #   echo "Waiting for PostgreSQL to be ready..."
-          #   sleep 2
-          # done
+          until docker exec kratos-gym-postgres-1 pg_isready -U postgres; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 2
+          done
           docker ps
       
       - name: Execute SQL script
         run: |
-          cat ./backend/db/full_db_neon.sql | docker exec -i postgres psql -U postgres -d kratos-dev
+          cat ./backend/db/full_db_neon.sql | docker exec -i kratos-gym-postgres-1 psql -U postgres -d kratos-dev
       
       - name: Start Backend container
         run: |
