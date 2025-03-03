@@ -15,6 +15,7 @@ import { AccountService } from '../account/account.service'
 import { MachinesInPlan } from './machines-in-plan.model'
 import { ExerciseCategory, ExerciseCategoryService } from '../exercise-category'
 import { PlanQueryParams } from './plan.params'
+import { parse } from 'date-fns'
 
 export class PlanController {
     static async FindAll(req: Request, res: Response) {
@@ -527,7 +528,10 @@ export class PlanController {
             return
         }
         const [err, data] = await safeAwait(
-            PlanService.GetPlansOnDate(machine_id, new Date(date))
+            PlanService.GetPlansOnDate(
+                machine_id,
+                parse(date, 'yyyy-MM-dd', new Date())
+            )
         )
         if (err !== null) {
             logger.error(err)

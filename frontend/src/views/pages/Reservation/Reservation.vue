@@ -184,12 +184,7 @@ const steps = [
                   @submit="
                     (value) => {
                       reservation.AmountOfPeople = value.amountOfPeople
-                      console.log(value.arrivalDate)
-                      reservation.ReservationTime = parse(
-                        value.arrivalDate,
-                        'yyyy-MM-dd',
-                        new Date()
-                      )
+                      reservation.ReservationTime = new Date(value.arrivalDate)
 
                       reservation.TrainerId = value.trainer?.AccountId
                       reservation.Plan = { PlanName: value.planName }
