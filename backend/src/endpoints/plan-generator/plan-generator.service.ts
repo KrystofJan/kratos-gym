@@ -168,24 +168,13 @@ export class PlanGeneratorService {
         datasetType: DataSetType
     ) {
         try {
-            console.log(
-                datasetType === DataSetType.COLLIDING
-                    ? 'colliding'
-                    : 'nonCOliding'
-            )
-
             const data = this.prepareDataset(input, start_time)
-
-            console.log(input)
-            console.log(data)
 
             if (datasetType === DataSetType.COLLIDING) {
                 return await GraphService.CreateGraphNodes(
                     this.getCollidingDataSet(data)
                 )
             }
-            //
-            // console.log(this.getNonCollidingDataSet(data))
 
             return await GraphService.CreateGraphNodes(
                 this.getNonCollidingDataSet(data)
