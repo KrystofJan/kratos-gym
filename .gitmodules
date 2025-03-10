@@ -1,0 +1,3 @@
+[submodule "latex"]
+	path = docs/latex
+	url = git@github.com:KrystofJan/kratos-gym-docs.git

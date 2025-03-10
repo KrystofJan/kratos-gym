@@ -50,13 +50,13 @@
 	    pyright
 	    harlequin
 
+	    texlive.combined.scheme-full
+	    texlab
 	  ];
 
           shellHook = ''
             echo "  Nix development flake   "
-            echo "Starting zsh, to exit you'll need to exit zsh first and then bash  "
             echo " Let's nix it up  "
-            zsh
           '';
 
         };

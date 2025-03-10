@@ -33,6 +33,7 @@ export class PlanGeneratorDatabase extends Database {
                 And machine.machine_id = ANY(${machine_ids})
                 ORDER BY start_time, end_time;
  */
+            // Maybe we dont check for max people?
             const result = await this.sql<Model[]>`
                 select * 
                 from ${this.sql('plan_machine')} 
