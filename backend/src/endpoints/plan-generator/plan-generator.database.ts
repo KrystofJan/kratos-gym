@@ -43,7 +43,6 @@ export class PlanGeneratorDatabase extends Database {
                         on ${this.sql('plan_machine')}.${this.sql('plan_id')} = ${this.sql('reservation')}.${this.sql('plan_id')}
                 WHERE reservation_time::date = ${reservation_date}::date
                 AND start_time >= ${formattedStartTime}::time
-                AND machine.max_people >= reservation.amount_of_people + ${amount_of_people}
                 And machine.machine_id = ANY(${machine_ids})
                 ORDER BY start_time, end_time;
 `
