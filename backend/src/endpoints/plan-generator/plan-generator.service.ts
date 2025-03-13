@@ -101,7 +101,10 @@ export class PlanGeneratorService {
         return data
     }
 
-    private getCollidingDataSet(input: NodeValue[][]): NodeValue[][] {
+    private getCollidingDataSet(
+        input: NodeValue[][],
+        amount_of_people: number
+    ): NodeValue[][] {
         const collisions_data: NodeValue[][] = []
         const collisions_dataset = []
         for (const col of input) {
@@ -131,7 +134,14 @@ export class PlanGeneratorService {
 
             collisions_data.push(gapable_area)
         }
-        return collisions_data
+        return collisions_data.map((x) =>
+            x.filter(
+                (y) =>
+                    !y.reservation ||
+                    y.reservation.AmountOfPeople + amount_of_people <=
+                        y.machine.MaxPeople
+            )
+        )
     }
 
     private findEndingGap(
@@ -165,6 +175,7 @@ export class PlanGeneratorService {
     async CreateDataset(
         input: NodeValue[],
         start_time: Time,
+        amount_of_people: number,
         datasetType: DataSetType
     ) {
         try {
@@ -172,7 +183,7 @@ export class PlanGeneratorService {
 
             if (datasetType === DataSetType.COLLIDING) {
                 return await GraphService.CreateGraphNodes(
-                    this.getCollidingDataSet(data)
+                    this.getCollidingDataSet(data, amount_of_people)
                 )
             }
 

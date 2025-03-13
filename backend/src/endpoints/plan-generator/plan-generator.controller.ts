@@ -85,6 +85,7 @@ export class PlanGeneratorController {
             new PlanGeneratorService().CreateDataset(
                 data,
                 start_time,
+                postData.amount_of_people,
                 datasetType
             )
         )
