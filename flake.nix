@@ -50,6 +50,9 @@
 	    pyright
 	    harlequin
 
+	    go
+	    gopls
+
 	    texlive.combined.scheme-full
 	    texlab
 	  ];

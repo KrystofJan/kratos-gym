@@ -152,7 +152,7 @@ const placeholder = ref()
           <NumberField
             class="gap-2"
             :min="1"
-            :max="11"
+            :max="5"
             :model-value="value"
             @update:model-value="
               (v) => {
