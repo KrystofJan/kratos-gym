@@ -104,7 +104,7 @@ onMounted(async () => {
             <DumbbellIcon class="mr-2" />
             Machines
           </h2>
-          <div class="grid grid-flow-col gap-3">
+          <div class="grid grid-cols-2 gap-3">
             <Card
               v-for="(machine, index) in reservation.Plan?.Machines"
               :key="index"
