@@ -17,8 +17,6 @@ import { CodedError, ErrorCode } from '../../errors'
 import { safeAwait } from '../../utils/utilities'
 import { DeletedResponse } from '../../request-utility/custom-responces/deleted-response'
 import { ExerciseTypeService } from '../exercise-type'
-import { PlanService } from '../plan'
-import { StatusCodes } from 'http-status-codes'
 
 export class MachineController {
     static async FindAll(req: Request, res: Response) {

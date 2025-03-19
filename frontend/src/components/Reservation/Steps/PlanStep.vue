@@ -126,7 +126,7 @@ const placeholder = ref()
 <template>
   <Step :builderText="builderText">
     <form
-      class="w-2/3 space-y-6 justify-center flex flex-col"
+      class="space-y-6 justify-center flex flex-col w-full mx-auto"
       @submit="onSubmit"
     >
       <FormField v-slot="{ componentField }" name="planName">
@@ -152,7 +152,7 @@ const placeholder = ref()
           <NumberField
             class="gap-2"
             :min="1"
-            :max="11"
+            :max="5"
             :model-value="value"
             @update:model-value="
               (v) => {
@@ -295,7 +295,7 @@ const placeholder = ref()
           <FormMessage />
         </FormItem>
       </FormField>
-      <Button type="submit"> Next </Button>
+      <Button type="submit" class="ml-auto w-fit"> Next </Button>
     </form>
   </Step>
 </template>

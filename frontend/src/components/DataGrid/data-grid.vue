@@ -33,6 +33,8 @@ const props = defineProps<{
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   deleteSelected: (ids: number[]) => Promise<void>
+  idName: string
+  nameName: string
 }>()
 
 const sorting = ref<SortingState>([])
@@ -40,7 +42,7 @@ const columnFilters = ref<ColumnFiltersState>([])
 const rowSelection = ref({})
 
 const selectedIds = computed<number[]>(() =>
-  table.getFilteredSelectedRowModel().rows.map((x) => x.getValue('MachineId'))
+  table.getFilteredSelectedRowModel().rows.map((x) => x.getValue(props.idName))
 )
 
 const table = useVueTable({
@@ -82,9 +84,9 @@ async function deleteSelectedRows() {
     <Input
       class="max-w-sm"
       placeholder="Filter name..."
-      :model-value="table.getColumn('MachineName')?.getFilterValue() as string"
+      :model-value="table.getColumn(props.nameName)?.getFilterValue() as string"
       @update:model-value="
-        table.getColumn('MachineName')?.setFilterValue($event)
+        table.getColumn(props.nameName)?.setFilterValue($event)
       "
     />
     <Button

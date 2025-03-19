@@ -17,23 +17,6 @@ export class PlanGeneratorDatabase extends Database {
             ops
         try {
             const formattedStartTime = `${String(start_time.hour).padStart(2, '0')}:${String(start_time.minute).padStart(2, '0')}:00`
-            /**
- *
- *
-                select * 
-                from ${this.sql('plan_machine')} 
-                    inner join ${this.sql('machine')} 
-                        on ${this.sql('plan_machine')}.${this.sql('machine_id')} = ${this.sql('machine')}.${this.sql('machine_id')}
-                    inner join ${this.sql('reservation')} 
-                        on ${this.sql('plan_machine')}.${this.sql('plan_id')} = ${this.sql('reservation')}.${this.sql('plan_id')}
-                WHERE reservation_time::date = ${reservation_date}::date
-                AND start_time >= ${formattedStartTime}::time
-                AND machine.max_people >= reservation.amount_of_people + ${amount_of_people}
-                AND (end_time - start_time) > (machine.avg_time_taken || ' seconds')::INTERVAL
-                And machine.machine_id = ANY(${machine_ids})
-                ORDER BY start_time, end_time;
- */
-            // Maybe we dont check for max people?
             const result = await this.sql<Model[]>`
                 select * 
                 from ${this.sql('plan_machine')} 

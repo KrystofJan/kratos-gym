@@ -24,6 +24,8 @@ onMounted(async () => {
     <DataGrid
       :columns="columns"
       :data="values"
+      id-name="MachineId"
+      name-name="MachineName"
       :delete-selected="deleteSelected"
     />
   </div>

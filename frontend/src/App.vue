@@ -45,9 +45,11 @@ const showHeaderAndFooter = computed(() => {
 </script>
 <template>
   <Header v-if="showHeaderAndFooter" />
-  <router-view v-slot="{ Component }">
-    <component :is="Component" />
-  </router-view>
+  <div class="py-8">
+    <router-view v-slot="{ Component }">
+      <component :is="Component" />
+    </router-view>
+  </div>
   <Footer v-if="showHeaderAndFooter" />
   <Toaster />
 </template>

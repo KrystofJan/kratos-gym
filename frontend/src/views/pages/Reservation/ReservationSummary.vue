@@ -1,36 +1,57 @@
 <script setup lang="ts">
+import { Machine, MachineService } from '@/support'
+import { DumbbellIcon, ClipboardIcon, InfoIcon } from 'lucide-vue-next'
 import { computed } from 'vue'
 import { PartialReservation } from '@/support'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components'
 import { Time } from '@internationalized/date'
+import { onMounted, ref } from 'vue'
+import type { Ref } from 'vue'
 
 interface Props {
   reservation: Partial<PartialReservation>
 }
 
 const props = defineProps<Props>()
+const machines: Ref<Machine[]> = ref([])
 
 const formattedReservationTime = computed(() => {
   return props.reservation.ReservationTime?.toLocaleString('en-US', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
   })
 })
 
 const formatTime = (time: Time) => {
   return `${time.hour.toString().padStart(2, '0')}:${time.minute.toString().padStart(2, '0')}`
 }
+
+onMounted(async () => {
+  if (!props.reservation.Plan) {
+    throw new Error('Could not find plan')
+  }
+
+  if (!props.reservation.Plan.Machines) {
+    throw new Error('Could not find machines')
+  }
+
+  for (const machine of props.reservation.Plan?.Machines) {
+    try {
+      const data = await new MachineService().FetchMachine(machine.MachineId)
+      machines.value.push(data)
+    } catch (error) {
+      throw new Error('Could not find this machine')
+    }
+  }
+})
 </script>
 
 <template>
   <div
-    class="min-h-screen bg-background text-foreground flex items-center justify-center p-4"
+    class="bg-background text-foreground flex items-center justify-center p-4"
   >
-    <Card class="w-full max-w-2xl">
+    <Card class="w-full max-w-4xl">
       <CardHeader class="bg-primary text-primary-foreground">
         <CardTitle class="flex items-center text-2xl">
           <CalendarIcon class="mr-2" />
@@ -83,29 +104,35 @@ const formatTime = (time: Time) => {
             <DumbbellIcon class="mr-2" />
             Machines
           </h2>
-          <Card
-            v-for="(machine, index) in reservation.Plan?.Machines"
-            :key="index"
-            class="mb-4"
-          >
-            <CardHeader>
-              <CardTitle>Machine {{ index + 1 }}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p><strong>Reps:</strong> {{ machine.Reps }}</p>
-              <p><strong>Sets:</strong> {{ machine.Sets }}</p>
-              <p>
-                <strong>Start Time:</strong> {{ formatTime(machine.StartTime) }}
-              </p>
-              <p>
-                <strong>End Time:</strong> {{ formatTime(machine.EndTime) }}
-              </p>
-              <p>
-                <strong>Can Disturb:</strong>
-                {{ machine.CanDisturb ? 'Yes' : 'No' }}
-              </p>
-            </CardContent>
-          </Card>
+          <div class="grid grid-flow-col gap-3">
+            <Card
+              v-for="(machine, index) in reservation.Plan?.Machines"
+              :key="index"
+              class="mb-4"
+            >
+              <CardHeader>
+                <CardTitle>{{
+                  machines.find((x) => x.MachineId === machine.MachineId)
+                    ?.MachineName
+                }}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p><strong>Reps:</strong> {{ machine.Reps }}</p>
+                <p><strong>Sets:</strong> {{ machine.Sets }}</p>
+                <p>
+                  <strong>Start Time:</strong>
+                  {{ formatTime(machine.StartTime) }}
+                </p>
+                <p>
+                  <strong>End Time:</strong> {{ formatTime(machine.EndTime) }}
+                </p>
+                <p>
+                  <strong>Can Disturb:</strong>
+                  {{ machine.CanDisturb ? 'Yes' : 'No' }}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </CardContent>
     </Card>

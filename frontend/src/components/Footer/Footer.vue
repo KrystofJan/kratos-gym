@@ -5,7 +5,7 @@ import { Separator } from '@/components'
 const footer_cols = ref<
   {
     footerColHeading: string
-    footerColLinks: { text: string; link: string }[]
+    footerColLinks: { text: string; link: string; external?: boolean }[]
   }[]
 >([])
 
@@ -18,76 +18,46 @@ onMounted(fetchData)
 
 <template>
   <Separator />
-  <footer class="FooterWrapper">
-    <div class="Footer frame">
-      <div class="Footer-col" v-for="col in footer_cols">
-        <h3 class="Footer-col-heading">{{ col.footerColHeading }}</h3>
-        <ul class="Footer-col-links">
-          <li class="FooterColItem" v-for="link in col.footerColLinks">
-            <router-link class="FooterColItem-link" :to="link.link">
-              {{ link.text }}
-            </router-link>
-          </li>
-        </ul>
+  <footer class="py-8">
+    <div class="mx-auto px-4 w-full">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 min-h-[25vh]">
+        <div
+          v-for="col in footer_cols"
+          :key="col.footerColHeading"
+          class="pl-8"
+        >
+          <h3 class="text-2xl text-white mb-4">{{ col.footerColHeading }}</h3>
+          <ul class="w-full">
+            <li
+              v-for="link in col.footerColLinks"
+              :key="link.link"
+              class="list-none"
+            >
+              <router-link
+                :to="link.link"
+                class="text-lg text-gray-400 hover:text-white hover:pl-4 hover:uppercase transition-all duration-200"
+                v-if="!link.external"
+              >
+                {{ link.text }}
+              </router-link>
+              <a
+                v-else
+                :href="link.link"
+                class="text-lg text-gray-400 hover:text-white hover:pl-4 hover:uppercase transition-all duration-200"
+              >
+                {{ link.text }}
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </footer>
+  <Separator />
+  <div class="text-gray-400 py-4">
+    <div class="mx-auto px-4 flex justify-between items-center">
+      <p>&copy; {{ new Date().getFullYear() }} Kratos Gym</p>
+      <p>All rights reserved</p>
+    </div>
+  </div>
 </template>
-
-<style scoped lang="scss">
-.FooterWrapper {
-  background: var(--baseRed);
-}
-
-.Footer {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  min-height: 25dvh;
-
-  &-col {
-    padding-left: 3rem;
-
-    &-heading {
-      color: white;
-      font-size: 2rem;
-    }
-
-    &-links {
-      padding: 0;
-      width: 100%;
-    }
-  }
-
-  //border-bottom: 1px solid black;
-}
-
-.FooterColItem {
-  text-decoration: none;
-  list-style: none;
-
-  &-link {
-    font-size: 1.5rem;
-    color: #c0c0c0;
-    text-decoration: none;
-    transition: all 0.2s linear;
-
-    &:hover {
-      color: #fff;
-      padding-left: 1rem;
-      text-transform: uppercase;
-    }
-  }
-}
-
-.copyright {
-  display: flex;
-  width: 90%;
-  padding: 0 5%;
-  height: 4rem;
-  background: #1d1d1d;
-  border-top: 0.25rem solid rgb(0, 255, 200);
-  color: #d1d1d1;
-  justify-content: space-between;
-  align-items: center;
-}
-</style>

@@ -77,10 +77,6 @@ const onSubmit = handleSubmit(async (values) => {
       planGeneratorConfig
     )
 
-    toast({
-      title: 'e',
-      description: JSON.stringify(map, null, 4),
-    })
     emit('generated', { data, map })
   } catch (err) {
     toast({

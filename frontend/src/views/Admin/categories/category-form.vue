@@ -22,6 +22,10 @@ const createCategory = async (values: Record<string, any>) => {
     await new ExerciseCategoryService().Create({
       CategoryName: values['CategoryName'],
     })
+    toast({
+      title: 'Success',
+      description: 'Successfully created category',
+    })
   } catch (err) {
     throw err
   }
@@ -37,6 +41,11 @@ const updateCategory = async (values: Record<string, any>) => {
       values,
       category.value.CategoryId
     )
+
+    toast({
+      title: 'Success',
+      description: 'Successfully updated category',
+    })
   } catch (err) {
     throw err
   }

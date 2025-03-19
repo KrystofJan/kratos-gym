@@ -9,6 +9,9 @@ import { format } from 'date-fns'
 
 export const values = ref<Reservation[]>([])
 
+export const idName = 'ReservationId'
+export const nameName = 'Plan'
+
 export const columns: ColumnDef<Reservation>[] = [
   {
     id: 'select',

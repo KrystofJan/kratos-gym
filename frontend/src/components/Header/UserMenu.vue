@@ -64,12 +64,6 @@ import { UserRoleOptions } from '@/support'
             >Profile</router-link
           >
         </DropdownMenuItem>
-
-        <DropdownMenuItem class="p-0">
-          <router-link to="/profile" class="py-1.5 px-2 w-full h-full"
-            >Settings</router-link
-          >
-        </DropdownMenuItem>
         <DropdownMenuItem
           class="p-0"
           v-if="currentAccount?.Role === UserRoleOptions.EMPLOYEE"

@@ -24,6 +24,10 @@ const form = useForm({
 const createMachine = async (values: Record<string, any>) => {
   try {
     await new MachineService().CreateMachine(values as Machine)
+    toast({
+      title: 'Success',
+      description: 'Successfully created machine',
+    })
   } catch (err) {
     throw err
   }
@@ -36,6 +40,11 @@ const updateMachine = async (values: Record<string, any>) => {
   }
   try {
     await new MachineService().UpdateMachine(values, machine.value.MachineId)
+
+    toast({
+      title: 'Success',
+      description: 'Successfully updated machine',
+    })
   } catch (err) {
     throw err
   }

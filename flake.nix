@@ -34,6 +34,7 @@
 
             nodePackages.typescript 
             nodePackages.typescript-language-server
+	    tailwindcss-language-server
             prettierd
 	    eslint
 
@@ -49,6 +50,9 @@
 	    python311Packages.faker
 	    pyright
 	    harlequin
+
+	    go
+	    gopls
 
 	    texlive.combined.scheme-full
 	    texlab

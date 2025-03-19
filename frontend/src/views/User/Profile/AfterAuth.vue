@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import type { Ref } from 'vue'
 import { SignedIn, useUser } from 'vue-clerk'
 import * as z from 'zod'
-import { AutoForm } from '@/components'
+import { AutoForm, Button } from '@/components'
 import {
   currentAccount,
   createAccount as createAccountRequest,

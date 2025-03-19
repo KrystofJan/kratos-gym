@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { watch, ref } from 'vue'
+import { watch, ref, computed } from 'vue'
 import type { Ref } from 'vue'
-import { useRoute } from 'vue-router'
-import {} from '../../support/types'
+import { useRoute, useRouter } from 'vue-router'
 import { Detail } from '.'
 import { onMounted } from 'vue'
-
-import { InspirationalQuote, MachinesInPlan } from '@/components'
+import { NotFound } from '@/views/pages/WIP'
+import {
+  InspirationalQuote,
+  MachinesInPlan,
+  Button as span,
+  toast,
+} from '@/components'
+import { CircleX } from 'lucide-vue-next'
 
 import {
   ReservationService,
@@ -15,7 +20,11 @@ import {
   Reservation,
 } from '@/support'
 
+import { currentAccount } from '@/store/accountStore'
+import { isFuture } from 'date-fns'
+
 const route = useRoute()
+const router = useRouter()
 const reservation: Ref<Reservation | undefined> = ref()
 const machines: Ref<Machine[]> = ref([])
 
@@ -41,6 +50,27 @@ const fetchMachines = async () => {
   }
 }
 
+const cancelReservation = async () => {
+  if (!reservation.value) {
+    return
+  }
+  try {
+    const data = await new ReservationService().Delete(
+      reservation.value.ReservationId
+    )
+    toast({
+      title: 'Successfully deleted plan',
+      description: `Reservation id: ${data.DeletedId}`,
+    })
+    await router.push('/profile')
+  } catch (error) {
+    toast({
+      title: 'Error',
+      description: `Internal server error`,
+    })
+  }
+}
+
 watch(
   () => route.params.id,
   async (newId) => {
@@ -48,6 +78,16 @@ watch(
     await fetchMachines()
   }
 )
+const canDelete = computed(() => {
+  if (currentAccount.value && reservation.value) {
+    return (
+      currentAccount.value.AccountId ===
+        reservation.value.Customer?.AccountId &&
+      isFuture(reservation.value.ReservationTime)
+    )
+  }
+  return false
+})
 
 onMounted(async () => {
   await fetchReservation(Number(route.params.id))
@@ -56,14 +96,25 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="grid grid-cols-3 gap-8 p-16" v-if="reservation">
-    <InspirationalQuote class="col-span-3" />
-    <Detail :reservation="reservation" />
-    <MachinesInPlan
-      v-if="reservation.Plan"
-      :machines="machines"
-      :machinesInPlan="reservation.Plan?.Machines"
-    />
+  <NotFound v-if="!reservation" />
+  <div v-else class="p-16">
+    <div class="grid grid-cols-3 gap-8" v-if="reservation">
+      <InspirationalQuote class="col-span-3" />
+      <Detail :reservation="reservation" />
+      <MachinesInPlan
+        v-if="reservation.Plan"
+        :machines="machines"
+        :machinesInPlan="reservation.Plan?.Machines"
+      />
+    </div>
+    <span
+      v-if="canDelete"
+      @click="cancelReservation"
+      class="inline-flex items-center px-4 py-2 border border-red-500 text-red-500 rounded-md cursor-pointer hover:bg-red-100 transition-colors duration-200 mt-8"
+    >
+      Cancel reservation
+      <CircleX class="ml-1" />
+    </span>
   </div>
 </template>
 

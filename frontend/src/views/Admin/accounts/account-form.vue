@@ -52,8 +52,14 @@ const updateAccount = async (values: Record<string, any>) => {
         values['Address'],
         account.value.Address.AddressId || 0
       )
+
+      toast({
+        title: 'Success',
+        description: 'Successfully updated accounts address',
+      })
     }
   } catch (err) {
+    toast({ title: 'Error', description: 'Internal server error' })
     throw err
   }
 
@@ -61,7 +67,9 @@ const updateAccount = async (values: Record<string, any>) => {
 
   try {
     await new AccountService().UpdateAccount(values, account.value.AccountId)
+    toast({ title: 'Success', description: 'Successfully updated account' })
   } catch (err) {
+    toast({ title: 'Error', description: 'Internal server error' })
     throw err
   }
 }
