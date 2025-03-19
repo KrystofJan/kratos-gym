@@ -4,10 +4,8 @@ import type { Ref } from 'vue'
 import { Time } from '@internationalized/date'
 import { SignedOut, SignedIn } from 'vue-clerk'
 import { currentAccount } from '@/store/accountStore'
-import { parse } from 'date-fns'
 import { ReservationSummary } from '.'
 import { PlanGeneratorResults } from '@/support/types/plan-generator.config'
-
 import { Circle, Check, Dot, Terminal } from 'lucide-vue-next'
 
 import {
@@ -36,7 +34,9 @@ import {
   ReservationPost,
   ReservationService,
 } from '@/support'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const reservation: Ref<Partial<PartialReservation>> = ref({})
 
 const stepIndex = ref<number>(1)
@@ -76,6 +76,7 @@ const onSubmit = async () => {
       title: 'Sucessfully created a reservation',
       description: `Reservation id: ${data.CreatedId}`,
     })
+    await router.push(`/reservation/${data.CreatedId}`)
   } catch (err) {
     toast({
       title: 'Error when trying to create reservation',
@@ -177,7 +178,7 @@ const steps = [
           </StepperItem>
         </div>
         <form class="w-full space-y-6" @submit.prevent="onSubmit">
-          <div class="flex flex-col gap-4">
+          <div class="flex flex-col justify-center items-center gap-4">
             <KeepAlive>
               <template v-if="stepIndex === 1">
                 <PlanStep
@@ -283,13 +284,18 @@ const steps = [
               </template>
             </KeepAlive>
             <template v-if="stepIndex === 6">
-              <ReservationSummary :reservation="reservation" />
-              <!-- <pre class="mt-2 w-[340px] rounded-md bg-slate-950 p-4"> -->
-              <!--     <code class="text-white"> -->
-              <!--         {{ JSON.stringify(reservation, null, 4) }} -->
-              <!--     </code> -->
-              <!-- </pre> -->
-              <Button type="submit"> Submit </Button>
+              <div class="flex flex-col w-3/4">
+                <ReservationSummary :reservation="reservation" />
+                <!-- <pre class="mt-2 w-[340px] rounded-md bg-slate-950 p-4"> -->
+                <!--     <code class="text-white"> -->
+                <!--         {{ JSON.stringify(reservation, null, 4) }} -->
+                <!--     </code> -->
+                <!-- </pre> -->
+                <div class="ml-auto flex gap-2">
+                  <Button @click="stepIndex--" class="w-fit">Prev</Button>
+                  <Button type="submit" class="w-fit">Submit</Button>
+                </div>
+              </div>
             </template>
           </div>
         </form>

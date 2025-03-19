@@ -126,7 +126,7 @@ const placeholder = ref()
 <template>
   <Step :builderText="builderText">
     <form
-      class="w-2/3 space-y-6 justify-center flex flex-col"
+      class="space-y-6 justify-center flex flex-col w-full mx-auto"
       @submit="onSubmit"
     >
       <FormField v-slot="{ componentField }" name="planName">
@@ -295,7 +295,7 @@ const placeholder = ref()
           <FormMessage />
         </FormItem>
       </FormField>
-      <Button type="submit"> Next </Button>
+      <Button type="submit" class="ml-auto w-fit"> Next </Button>
     </form>
   </Step>
 </template>

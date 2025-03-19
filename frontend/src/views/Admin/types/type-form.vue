@@ -27,6 +27,10 @@ const form = useForm({
 const createExerciseType = async (values: Record<string, any>) => {
   try {
     await new ExerciseTypeService().Create(values as ExerciseTypePost)
+    toast({
+      title: 'Success',
+      description: 'Successfully created exerciset type',
+    })
   } catch (err) {
     throw err
   }
@@ -39,6 +43,10 @@ const updateExerciseType = async (values: Record<string, any>) => {
   }
   try {
     await new ExerciseTypeService().Update(values, type.value.ExerciseTypeId)
+    toast({
+      title: 'Success',
+      description: 'Successfully updated exerciset type',
+    })
   } catch (err) {
     throw err
   }

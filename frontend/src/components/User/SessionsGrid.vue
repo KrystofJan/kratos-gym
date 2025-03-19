@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { format, isFuture } from 'date-fns'
 import { onMounted, ref } from 'vue'
 
 import { currentAccount } from '@/store/accountStore'
@@ -67,10 +68,10 @@ onMounted(async () => {
             }}
           </TableCell>
           <TableCell>
-            {{ reservation.ReservationTime }}
+            {{ format(reservation.ReservationTime, 'MM/dd/yyyy') }}
           </TableCell>
           <TableCell>
-            {{ reservation.ReservationTime > new Date() }}
+            {{ isFuture(reservation.ReservationTime) ? 'yes' : 'no' }}
           </TableCell>
           <TableCell class="text-right">
             <Button as-child>

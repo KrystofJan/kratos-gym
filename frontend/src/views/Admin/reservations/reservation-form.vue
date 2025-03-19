@@ -32,6 +32,11 @@ const updateReservation = async (values: Record<string, any>) => {
       values,
       reservation.value.ReservationId
     )
+
+    toast({
+      title: 'Success',
+      description: 'Successfully updated reservation',
+    })
   } catch (err) {
     throw err
   }

@@ -7,10 +7,6 @@
         "link": "/"
       },
       {
-        "text": "Reservations",
-        "link": "/reservations"
-      },
-      {
         "text": "About us",
         "link": "/about-us"
       },
@@ -19,16 +15,8 @@
         "link": "/contacts"
       },
       {
-        "text": "icon",
-        "link": "/"
-      },
-      {
-        "text": "icon",
-        "link": "/"
-      },
-      {
-        "text": "icon",
-        "link": "/"
+        "text": "Reservations",
+        "link": "/reservations"
       }
     ]
   },
@@ -37,11 +25,13 @@
     "footerColLinks": [
       {
         "text": "Email: info@kratos.com",
-        "link": "/"
+        "link": "mailto:info@kratos.com",
+	"external": true
       },
       {
         "text": "Phone: +420 777 888 999",
-        "link": "/"
+        "link": "tel:+420777888999",
+	"external": true
       }
     ]
   },
@@ -50,11 +40,11 @@
     "footerColLinks": [
       {
         "text": "GDPR",
-        "link": "/"
+        "link": "/gdpr"
       },
       {
         "text": "Cookies",
-        "link": "/"
+        "link": "/cookies"
       }
     ]
   }

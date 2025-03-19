@@ -295,6 +295,13 @@ export async function deleteSelected(ids: number[]) {
       values.value = values.value.filter(
         (x) => x.AccountId !== responseData.AccountId
       )
+
+      toast({
+        title: 'Deleted all seleceted rows',
+        description: h('deleted rows: ${ids.join(", ").toString()}', {
+          class: '',
+        }),
+      })
     } catch (err) {
       toast({
         title: 'Error while deleting data',
@@ -302,8 +309,4 @@ export async function deleteSelected(ids: number[]) {
       })
     }
   }
-  toast({
-    title: 'Deleted all seleceted rows',
-    description: h('deleted rows: ${ids.join(", ").toString()}', { class: '' }),
-  })
 }

@@ -34,6 +34,7 @@
 
             nodePackages.typescript 
             nodePackages.typescript-language-server
+	    tailwindcss-language-server
             prettierd
 	    eslint
 

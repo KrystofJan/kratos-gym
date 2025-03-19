@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { Terminal } from 'lucide-vue-next'
 
 import {
+  Toaster,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,

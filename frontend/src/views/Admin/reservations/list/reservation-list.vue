@@ -23,6 +23,8 @@ onMounted(async () => {
   <div class="container py-10 mx-auto">
     <DataGrid
       :columns="columns"
+      id-name="ReservationId"
+      bane-name="Plan"
       :data="values"
       :delete-selected="deleteSelected"
     />
