@@ -19,6 +19,10 @@
 
 ## Installation
 
+> [!NOTE]
+    To verify that you have successfully set up the api, you can try to make a GET request on the `http://localhost:7000/api/test/version` endpoint. You shoud get a 200 status code with this response body: `{"version": "1.0}`
+> 
+
 ### Using docker
 
 #### Dependencies
