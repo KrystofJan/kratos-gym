@@ -72,7 +72,7 @@ jobs:
       
       - name: Execute SQL script
         run: |
-          cat ./backend/db/full_db_neon.sql | docker exec -i kratos-gym-postgres-1 psql -U postgres -d kratos-dev
+          cat ./backend/db/setup_script.sql | docker exec -i kratos-gym-postgres-1 psql -U postgres -d kratos-dev
       
       - name: Start Backend container
         run: |
