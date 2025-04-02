@@ -15,3 +15,7 @@ export const testRouter: Router = express.Router()
 testRouter.get('/', async (req: Request, res: Response) => {
     res.status(200).json({ status: 'up' })
 })
+
+testRouter.get('/version', async (req: Request, res: Response) => {
+    res.status(200).json({ version: '1.0' })
+})

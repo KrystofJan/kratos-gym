@@ -21,5 +21,5 @@ export const setRoutes = (app: Express) => {
     app.use('/api/plan-generator', generatorRouter)
     app.use('/api/exercise-category', ExerciseCategoryRouter)
     app.use('/api/db-lts/', DBRouter)
-    app.use('/api/test/', testRouter)
+    app.use('/api/test', testRouter)
 }
