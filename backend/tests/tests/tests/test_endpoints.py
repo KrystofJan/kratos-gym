@@ -33,7 +33,7 @@ GET_ENDPOINTS = [
     "/api/account?role=trainer",
     "/api/account/1",
     "/api/account/1/reservations",
-    "/api/account/clerk/user_2mcZZtJs0f4vZVWv8qIaqSLsoa4",
+    "/api/account/clerk/user_2vBMQKvZ44dtMwJcJLbzWXvHdng",
     "/api/exercise-type/",
     "/api/exercise-type/1",
     "/api/exercise-type/machine/1",
@@ -73,45 +73,45 @@ POST_ENDPOINTS = {
         "PlanId": 1
     },
     "/api/reservation/full": {
-       "AmountOfPeople":2,
-       "ReservationTime":"2025-02-23T23:00:00.000Z",
+       "AmountOfPeople":1,
+       "ReservationTime":"2025-04-19T00:00:00.000Z",
        "Plan":{
-          "PlanName":"Esketit",
+          "PlanName":"1Plan",
           "Machines":[
              {
-                "MachineId":25,
+                "MachineId":4,
                 "Reps":6,
                 "Sets":4,
-                "StartTime":"9:0",
-                "EndTime":"9:5",
+                "StartTime":"0:0",
+                "EndTime":"0:8",
                 "CanDisturb":False
              },
              {
-                "MachineId":30,
+                "MachineId":10,
                 "Reps":6,
                 "Sets":4,
-                "StartTime":"9:5",
-                "EndTime":"9:10",
+                "StartTime":"0:8",
+                "EndTime":"0:13",
                 "CanDisturb":False
              },
              {
-                "MachineId":36,
+                "MachineId":16,
                 "Reps":6,
                 "Sets":4,
-                "StartTime":"9:10",
-                "EndTime":"9:15",
+                "StartTime":"0:13",
+                "EndTime":"0:28",
                 "CanDisturb":False
              }
           ],
           "ExerciseCategories":[
              {
                 "CategoryId":2,
-                "CategoryName":"Lower body"
+                "CategoryName":"Back"
              }
           ],
-          "AccountId":1
+          "AccountId":4
        },
-       "CustomerId":1
+       "CustomerId":4
     },
     "/api/auth/new-account" : {
         "FirstName": "Test",
@@ -121,17 +121,17 @@ POST_ENDPOINTS = {
         "ClerkId": fake.uuid4()
     },
     "/api/plan-generator/generate": {
-        "amount_of_people": 1,
-        "start_time": {
-            "hour": 0,
-            "minute": 0
-        },
-        "machine_ids": [
-            25,
-            28,
-            32
-        ],
-        "reservation_date": "2025-02-19"
+       "amount_of_people":1,
+       "start_time":{
+          "hour":0,
+          "minute":0
+       },
+       "machine_ids":[
+          4,
+          10,
+          16
+       ],
+       "reservation_date":"2025-04-19"
     },
     "/api/exercise-category": {
         "CategoryName": "Bickules"
