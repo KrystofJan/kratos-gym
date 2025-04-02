@@ -27,8 +27,8 @@ const schema = toTypedSchema(
         z.object({
           MachineId: z.number(),
           MachineName: z.string(),
-          MaxWeight: z.number(),
-          MinWeight: z.number(),
+          MaxWeight: z.number().nullable(),
+          MinWeight: z.number().nullable(),
           MaxPeople: z.number(),
           AvgTimeTaken: z.number(),
           PopularityScore: z.number(),
