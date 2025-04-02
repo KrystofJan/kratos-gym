@@ -2,8 +2,6 @@ name: Docker CI
 on:
   push:
     branches: [master, main]
-    paths:
-      - 'backend/**'
   pull_request:
     types: [opened, synchronize]
     paths:
