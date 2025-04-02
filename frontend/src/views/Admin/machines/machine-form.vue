@@ -96,7 +96,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  {{ formType }}
   <AutoForm
     class="w-2/3 space-y-6"
     :form="form"

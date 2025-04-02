@@ -15,6 +15,7 @@
 - [Installation](#installation)
   - [Using docker](#using-docker)
   - [Manual installation](#manual-installation)
+- [Data](#data)
 
 ## Installation
 
@@ -43,7 +44,7 @@ docker compose up -d
 2. <a id="docker-db-setup">After starting all the necessary containers, you need to run the sql script that will create the database, create the tables and insert data in</a>
 
 ```
-cat ./backend/db/full_db_neon.sql | docker exec -i {{POSTGRES_CONTAINER_ID}} psql -U postgres -d kratos-dev
+cat ./backend/db/setup_script.sql | docker exec -i {{POSTGRES_CONTAINER_ID}} psql -U postgres -d kratos-dev
 ```
 
 > [!WARNING]
@@ -86,7 +87,7 @@ If you do not use nix, you can refer to packages section in `flake.nix` and inst
 #### Setup
 
 ##### DB
-1. Run the script in `backend/db/full_db_neon.sql`
+1. Run the script in `backend/db/setup_script.sql`
 To run using docker refer to [docker db setup](#docker-db-setup)
 
 ##### Backend
@@ -113,3 +114,70 @@ npm i
 npm run dev
 ```
 At this point you should be able to visit `http://localhost:5173/` and be on the site, you can access the api `http://localhost:7000`.
+
+## Data
+
+There are data to showcase the functionality of the system already in the setup sql script. There are 30 machines, 12 exercise categories, 50 exercise types (exercises you can do on the machines), and multiple reservations.
+
+
+### Accounts
+
+#### Admin (Employee)
+- username: "admin"
+- password: "SuperSecretPassword123."
+
+#### Trainer
+
+- username: "trainer01"
+- password: "SuperSecretTrainerPassword123."
+
+#### Customers
+
+__Customer01__
+- username: "customer01"
+- password: "SuperSecretCustomerPassword123."
+
+__Customer02__
+- username: "customer02"
+- password: "SuperSecretCustomerPassword123."
+
+### Reservations
+
+There are 3 reservations, which are done for different machines. All of these are done by the same account (**customer01**), and are happening on the same date (**May 25th, 2026**).
+
+Here are the reservation plans with their time windows:
+
+#### Plan name: PPL - Push
+
+- Focus Categories: Chest, Shoulders, Biceps
+- Time Block: 09:00 – 09:37
+- Machines used:
+  - Bench Press – 09:00 to 09:08 (Chest)
+  - Cable Machine – 09:08 to 09:14 (Chest/Biceps)
+  - Dumbbells – 09:14 to 09:19 (Biceps/Shoulders)
+  - Incline Press Machine – 09:19 to 09:26 (Upper Chest)
+  - Pec Deck – 09:26 to 09:31 (Inner Chest)
+  - Shoulder Press Machine – 09:31 to 09:37 (Deltoids)
+
+#### Plan name: PPL - Pull
+
+- Focus Categories: Back, Triceps, Shoulders
+- Time Block: 11:00 – 11:29
+- Machines used:
+  - Dip Station – 11:00 to 11:05 (Triceps, Shoulders)
+  - Dumbbells – 11:05 to 11:10 (Accessory lifts)
+  - Kettlebells – 11:10 to 11:15 (Accessory/back)
+  - Tricep Pushdown Station – 11:15 to 11:20 (Triceps)
+  - Smith Machine – 11:20 to 11:29 (Pulling variations, rows, etc.)
+
+#### Plan name: PPL - Legs
+
+- Focus Categories: Legs, Cardio
+- Time Block: 13:00 – 13:47
+- Machines used:
+  - Squat Rack – 13:00 to 13:10 (Barbell Squats)
+  - Hack Squat Machine – 13:10 to 13:19 (Quad-dominant leg press)
+  - Leg Press – 13:19 to 13:27 (Glutes, hamstrings, quads)
+  - Leg Extension Machine – 13:27 to 13:32 (Isolated quad work)
+  - Treadmill – 13:32 to 13:47 (Cardio/leg burnout)
+
