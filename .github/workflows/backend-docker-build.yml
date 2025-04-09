@@ -4,9 +4,6 @@ on:
     branches: [master, main]
   pull_request:
     types: [opened, synchronize]
-    paths:
-      - 'backend/**'
-      - 'frontend/**'
 
 jobs:
   build-be:
