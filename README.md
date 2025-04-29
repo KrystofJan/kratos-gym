@@ -185,3 +185,5 @@ Here are the reservation plans with their time windows:
   - Leg Extension Machine – 13:27 to 13:32 (Isolated quad work)
   - Treadmill – 13:32 to 13:47 (Cardio/leg burnout)
 
+## Secrets
+If you'd like to recieve secrets to run this manually, please contact me on jendazah@gmail.com
